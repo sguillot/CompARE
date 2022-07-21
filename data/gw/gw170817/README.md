@@ -13,3 +13,4 @@ $ python3 get_data.py
 
 This script analyses the data and produces pdf and confidence levels.
 
+$ python3 gw170817.py
