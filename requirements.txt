@@ -1,0 +1,14 @@
+from OS:
+python3
+wget
+
+from pip3:
+os
+sys
+zipfile
+pandas
+numpy
+scipy
+h5py
+matplotlib
+corner
