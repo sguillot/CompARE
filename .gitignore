@@ -128,8 +128,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# mac
+# mac stuff
 .DS_store
+
+# no data
+*.gz
+*.tgz
+*.tar.gz
+*.dat
 
 # Pycharm
 .idea/
