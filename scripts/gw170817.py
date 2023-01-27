@@ -32,7 +32,7 @@ def main():
     # Plot Lambda_1 - Lambda_2 for low spin
     # ++++++++++++++++++++++++++++++++++++++
     #
-    plotname='gw170817-L1-L2-lowspin.pdf'
+    plotname='../plots/gw170817-L1-L2-lowspin.pdf'
     print('plot:',plotname)
     #
     # Low spin
@@ -40,7 +40,8 @@ def main():
     # compute 2d histogram
     bins_x = 50
     bins_y = 50
-    H, xedges, yedges = np.histogram2d(low_spin['lambda1']*(1+z), low_spin['lambda2']*(1+z), [bins_x, bins_y])
+    H, xedges, yedges = np.histogram2d(low_spin['lambda1'], low_spin['lambda2'], [bins_x, bins_y])
+    #H, xedges, yedges = np.histogram2d(low_spin['lambda1']*(1+z), low_spin['lambda2']*(1+z), [bins_x, bins_y])
     X, Y = np.meshgrid(xedges[1:],yedges[1:])
     H=H.T
     #

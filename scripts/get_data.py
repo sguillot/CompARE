@@ -21,11 +21,18 @@ def main():
     print()
     #
     print()
+    print('- Do you want to upload all data files (0) or only a few of them (1-6)')
+    print('  (0) ')
+    print()
+    #
+    print()
     print('- Creates new folder: data')
     print()
     #
     print(30*'#')
     runcmd('mkdir -p ../data', verbose = True)
+    runcmd('mkdir -p ../plots', verbose = True)
+    runcmd('mkdir -p ../results', verbose = True)
     print(30*'#')
     #
     # =================================================
