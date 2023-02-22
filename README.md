@@ -27,7 +27,7 @@ It is the present file.
 
 ## /webpage/
 
-contains the 
+Contains the queryable database and web interface.
 
 
 
