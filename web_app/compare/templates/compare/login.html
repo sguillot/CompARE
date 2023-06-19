@@ -1,0 +1,45 @@
+{% extends "compare/layout.html" %}
+{% block title %}
+Login
+{% endblock %}
+{% block content %}
+<div class="box-login">
+    <div class="lgn">
+        <h1>Login</h1>
+        
+            {% if messages %}
+            <div class="err" style="display: block;">
+                {% for message in messages %}
+                    {{message}}
+                {% endfor %}
+            </div>
+            {% endif %}
+       
+            <form method="POST" >
+                {% csrf_token %}
+                <div class="box">
+                    <div class="user">
+                        <div class="img-person"><img src="../static/compare/person.svg"></div>
+                        <input type="text" name="username" placeholder="Username">
+                    </div>
+
+                    <div class="psw">
+                        <div class="img-lock"><img src="../static/compare/lock.svg"></div>
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+
+                    <div class="btn-log">
+                        <button id="log"type="submit">Login</button>
+                    </div>
+                </div>
+
+            
+            </form>
+
+</  div>
+
+
+</div>
+
+
+{% endblock %}

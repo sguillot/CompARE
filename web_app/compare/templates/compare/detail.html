@@ -1,0 +1,111 @@
+{% extends "compare/layout.html" %}
+{% block title %}
+Detail 
+{% endblock %}
+{% block content %}
+
+<div class="bodydetail">
+
+<div class="titlefile">
+        <h1>{{queryall.filename}}</h1>
+    <div class="btn">
+        <button type="button" id="btndwnl" value="Download">Download</button>
+
+        {% if user.is_authenticated %}
+            <button type="button" id="btnremove" value="{{queryall.filename}}" onclick="confirmDelete()" >Remove</button>
+            <form action="{% url 'modify' queryall.filename %}">
+                <input type="submit" value="Modify"id="btnmodify"></button>
+            </form>
+        {% endif %}
+        
+    </div>
+</div>
+
+
+<div class="contentfile">
+<div class="divmodel">
+
+    <p class="titlecat">Models</p>
+    <ul>
+    {% for mo in queryMo %}
+        <li><span>{{mo.id_model.dependenciesprimary}} : {{mo.id_model.dependenciessecondary }} :<br> </span> {{mo.id_model.dependeciesdescription}} <br> {{mo.id_model.caveatsReferences}}</li>
+        <br>
+    {% endfor %}
+
+    {% for lmo in querylmo %}
+        <li> {{lmo}} </li>
+        <br>
+    {% endfor %}
+    </ul>
+</div>
+
+<div class="divassumptions">
+
+    <p class="titlecat">Assumptions</p>
+    <ul>
+    {% for as in queryAs %}
+        <li><span>{{as.id_assumptions.assumptionsprimary}} : {{as.id_assumptions.assumptionssecondary}} : <br></span> {{as.id_assumptions.assumptionsdescription}} </li>
+        <br>
+    {% endfor %}
+</ul>
+</div>
+
+<div class="divcompact">
+
+<div class="divname">
+
+<p class="titlecat">NAME</p>
+
+    <p>{{queryall.id_name.namedb}}</p>
+    <p>{{queryall.id_name.classdb}}</p>
+    <p>{{queryall.id_name.namesimbad}}</p>
+    <p>{{queryall.id_name.classsimbad}}</p>
+    <p>{{queryall.id_name.ra}}</p>
+    <p>{{queryall.id_name.declination}}</p>
+    <p>{{queryall.id_name.localisationfile}}</p>
+    <p>{{queryall.id_name.eventdate}}</p>
+
+
+</div>
+
+<div class="divmethod">
+
+    <p class="titlecat">METHOD</p>
+    
+        <p>{{queryall.id_method.method}}</p>
+        <p>{{queryall.id_method.method_specific}}</p>
+        <p>{{queryall.id_method.datadate}}</p>
+        <p>{{queryall.id_method.processinfinfo}}</p>
+    
+</div>
+
+<div class="divref">
+
+    <p class="titlecat">REF</p>
+    
+        <p><a href="{{queryall.id_ref.doi}}" target="_blank">DOI : {{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
+        <p>Short :{{queryall.id_ref.short}}</p>
+        <p>Bibitex : {{queryall.id_ref.bibtex}}</p>
+        <p>Repositorydoi : {{queryall.id_ref.repositorydoi}}</p>
+        <p>Datalink : {{queryall.id_ref.datalink}}</p>
+    
+</div>
+
+<div class="divconstrain">
+    
+    <p class="titlecat">CONSTRAIN</p>
+    
+        <p>Type :{{queryall.id_constrain.constraintype}}</p>
+        <p>Version: {{queryall.id_constrain.constrainversion}}</p>
+        <p>Variable : {{queryall.id_constrain.constrainvariable}}</p>
+        <p>Description : {{queryall.id_constrain.constraindescription}}</p>
+    
+    
+</div>
+
+
+</div>
+</div>
+</div>
+{% endblock %}
+

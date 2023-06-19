@@ -1,0 +1,276 @@
+{% extends "compare/layout.html" %}
+{% block title %}
+Add
+{% endblock %}
+{% block content %}
+
+{% if messages %}
+    {% for m in messages %}
+        <div class="error" id={{m}}>{{m}}</div>
+    {%endfor%}
+{% endif %}
+
+<div id="errorInsert">
+    <p id='test'></p>
+</div>
+
+<div class="allcontent">
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="myfile">
+        <button type="submit">Send</button>
+    </form>
+    <div class="nscontent">
+        <hr>
+        <div class="formfilename">
+            <label>File Name</label>
+            <input type="text" name="filename" placeholder="File Name" id="filename" maxlength="100" minlength="5">
+        </div>
+        <div class="formfilepath">
+            <label>FilePath</label>
+            <textarea name="filepath" placeholder="File Path"id="filepath"></textarea>
+        </div>
+    </div>
+
+    <div class="namecontent">
+        <div class="nameselect">
+            <div class="divslct">
+                <select name="name" id="nList"  onchange="changeFuncName(value)">
+                    <option value="opt">select a Name</option>
+                    {% for n in queryname %}
+                        <option value="{{n.id_name}}">{{n.namedb }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="table-select">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Name Simbad</th>
+                            <th>Class Simbad</th>
+                            <th>RA</th>
+                            <th>DEC</th>
+                            <th>Localisation File</th>
+                            <th>Eventdate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nameTable"> </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="btnadd">
+            <button onclick="showHide(this)" class="addN" >ADD Name</button>
+            <div id="addN">
+                <div class="nameadd">
+                    <form action='' id="test" method="POST">
+                        {% csrf_token %}
+                        <div class="inputadd">
+                            <div class="divsepar">
+                                <label>Namedb</label>
+                                <input type="text" name="name" placeholder="Namedb" maxlength="50" minlength="5">
+                            </div>
+                            <div class="divsepar">
+                                <label>NameSimbad</label>
+                                <input type="text" name="nameS" placeholder="NameSimbad" maxlength="50" minlength="1">
+                            </div>
+                            <div class="divsepar">
+                                <label>Class</label>
+                                <select name="class">
+                                    {% for grp in groupList %}
+                                        <option value="{{grp}}">{{grp}}</option>
+                                    {%endfor%}
+                                </select>    
+                            </div> 
+                            <div class="divsepar">
+                                <label>ClassSimbad</label>
+                                <input type="text" name="classS" placeholder="ClassSimbad" maxlength="50" minlength="1">
+                            </div>
+                            <div class="divsepar">
+                                <label>RA</label>
+                                <input type="number" name="ra" placeholder="RA" step="any" min="-999999999" max="9999999999">
+                            </div>
+                            <div class="divsepar">
+                                <label>DEC</label>
+                                <input type="number" name="dec" placeholder="DEC" step="any" min="-999999999" max="9999999999">
+                            </div>
+                            <div class="divsepar">
+                                <label>Localisation File</label>
+                                <textarea name="localisationfile" placeholder="Localisation File"></textarea>
+                            </div>
+                            <div class="divsepar">
+                                <label>Event Date</label>
+                                <input type="date" name="eventdate" placeholder="eventdate">
+                            </div>
+                            <input type="hidden" name="hid" value="formAddName">
+                        </div>
+
+                        <button type="submit">Send</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="methodcontent">
+        <p>Method</p>
+
+        <div id="addM">
+            <form action='' id="test" method="POST">
+                {% csrf_token %}
+                <label>Method</label>
+                <select name="method" id="selMethN">
+                    {% for lm in listmethod %}
+                        <option value="{{lm}}">{{lm}}</option>
+                    {%endfor%}
+                </select>
+                <label>Method Specific</label>
+                <textarea name="methodspe" placeholder="Method Specific" id="methSpe"></textarea>
+                <label>Data Date</label>
+                <input type="text" name="datadate" id="methodD" placeholder="Data Date" maxlength="70" minlength="5">
+                <label>Processing Info</label>
+                <input type="text" name="processinfinfo" id="methodP" placeholder="Processing Info">
+                <input type="hidden" name="hid" value="formAddMethod">
+            </form>
+        </div>
+    </div>
+
+    <hr>
+   
+    <div class="constraincontent">
+        <p>Constrain</p>
+       
+        <div id="addC">
+            <form action='' id="test" method="POST">
+                {% csrf_token %}
+                <label>Constrain Type</label>
+                <select name="constraint" id="selConsT">
+                    {% for lc in listconstrain %}
+                        <option value="{{lc}}">{{lc}}</option>
+                    {%endfor%}
+                </select>
+                <label>Constrain Variable</label>
+                <select name="constrainvar" id="selConsV">
+                    {% for lcv in listconstrainvar %}
+                        <option value="{{lcv}}">{{lcv}}</option>
+                    {%endfor%}
+                </select>
+                <label>Constrain Version</label>
+                <input type="number" name="constrainv" id="consVers" placeholder="Constrain Version">
+                <input type="hidden" name="hid" value="formAddConstrain">
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="refcontent">
+        <p>Ref</p>
+        <select name="ref" id="rList" onchange="changeFuncRef(value)">
+            <option value="opt">select a Ref</option>
+            {% for qr in queryref %}
+                <option value="{{qr.id_ref}}">{{qr.author}} | {{qr.refyear}}</option>
+            {% endfor %}
+        </select>
+        <table>
+            <thead>
+                <tr>
+                    <th>Author</th>
+                    <th>Ref Year</th>
+                    <th>Short</th>
+                    <th>Repository DOI</th>
+                    <th>Data Link</th>
+                </tr>
+            </thead>
+            <tbody id="refTable"> </tbody>
+        </table>
+        <button onclick="showHide(this)" class="addR">ADD Ref</button>
+        <div id="addR">
+            <form action='' id="test" method="POST">
+                {% csrf_token %}
+                <label>Author</label>
+                <input type="text" name="author" placeholder="Author">
+                <label>Ref Year</label>
+                <input type="number" name="refyear" placeholder="Ref Year">
+                <label>Short</label>
+                <input type="text" name="short" placeholder="Short">
+                <label>Bibtex</label>
+                <textarea name="bibtex" placeholder="bibtex"></textarea>
+                <label>Doi</label>
+                <textarea name="doi" placeholder="Doi"></textarea>
+                <label>Repository Doi</label>
+                <input type="text" name="repositorydoi" placeholder="Repository Doi">
+                <label>Data Link</label>
+                <input type="text" name="datalink" placeholder="Data Link">
+                <input type="hidden" name="hid" value="formAddRef">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+    
+    <div class="modelcontent">
+        <p>Dependencies</p>
+       
+        <div id="addMo">
+                <label>Dependencies Primary</label>
+                <input type="text" name="dependenciesprimary" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5">
+                <label>Dependencies Secondary</label>
+                <input type="text" name="dependenciessecondary" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5">
+                <label>Dependecies Description</label>
+                <textarea name="dependeciesdescription" id="dependeciesdescription" placeholder="Dependecies Description"></textarea>
+                <label>Caveats References</label>
+                <textarea name="MocaveatsReferences" id="MocaveatsReferences" placeholder="Caveats References"></textarea>
+                <input type="hidden" name="hid" value="formAddModel">
+                <button onclick="inTableMod()">Send</button>
+                <button onclick="returndep()" class="addC" >Return</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dependencies Primary</th>
+                        <th>Dependencies Secondary</th>
+                        <th>Dependecies Descriptionn</th>
+                        <th>Caveats References</th>
+                    </tr>
+                </thead>
+                <tbody id="modelTable"> </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="asscontent">
+        <p>Assumptions</p>
+        <div id="addA">
+                <label>Assumptions Primary</label>
+                <input type="text" name="assumptionsprimary" id="assumptionsprimary" placeholder="Assumptions Primary" maxlength="60" minlength="5">
+                <label>Assumptions Secondary</label>
+                <input type="text" name="assumptionssecondary" id="assumptionssecondary" placeholder="Assumptions Secondary" maxlength="60" minlength="5">
+                <label>Assumptions Description</label>
+                <textarea name="assumptionsdescription"  id="assumptionsdescription" placeholder="Assumptions Description"></textarea>
+                <input type="hidden" name="hid" value="formAddAssumptions">
+                <button onclick="inTableAss()">Send</button>
+                <button onclick="returnass()" class="addA" >Return</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Assumptions Primary</th>
+                            <th>Assumptions Secondary</th>
+                            <th>Assumptions Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assumptionTable"> </tbody>
+                </table>
+        </div>
+        <button type="submit" onclick="createNs()">Validate</button>
+    </div>
+</div>
+{% endblock %}
