@@ -17,64 +17,89 @@ from django.db import IntegrityError
 def home(request):
     return render(request, "compare/home.html")
 
+"""
+This function is a great function
+
+Each time we send a request in the Visualisation Page  we run this fucntion 
+
+We check for GET request from the user 
+
+"""
 def visu_data(request):
 
+    #We select all the Ns from the database without models and assumptions but whith "ref" ,"name" ,"constrain" and "method" thanks to the selected related method
     select_ns_all = Ns.objects.select_related().all().order_by('filename')
-    #select all the Ns from the database without models and assumptions
-
+    
+    #we check for GET request
     if request.method == 'GET':
+
+        #In case the user send a Get Request We get the values sent
         
-        # On recupere les données envoyé en AJAX 
+        # We recover the data sent in AJAX
         jsonCheckList = request.GET.get('dataCheckList', '')
         stringSearch = request.GET.get('dataSearch','')
         dictSelect = request.GET.get('dataSelect','')
         fileBibtex = request.GET.get('bibtexfile')
         fileDwnl = request.GET.get('filedwnl')
         
-        #On recupere les filename et renvoi les filepath des fichiers si l'utilisateur a envoyé une requete 
-        if fileDwnl :
-            dwnl = json.loads(fileDwnl) # liste avec les "filename" que l'utilisateur a selectionné
-            selectfilepath = select_ns_all.filter(filename__in=dwnl).values('filepath') #On recupere seulement les filepath des filename
+        
+        #We retrieve the filenames and return the filepaths of the files to the succes part of the Ajax request 
+        #if the variable fileDwnl has a value
+        if fileDwnl :  
+            dwnl = json.loads(fileDwnl) # python list with the "filenames" that the user has selected
+            selectfilepath = select_ns_all.filter(filename__in=dwnl).values('filepath') #We only retrieve the filepaths of the filenames
 
-            #On extrait le resultat dans une liste 
+            #We extract the result in a list thanks to a loop 
             listFilePath = []
             for f in selectfilepath:
                 listFilePath.append(f['filepath'])
-
+            #We return the list to the succes part of Ajax request
             return HttpResponse(json.dumps(listFilePath), content_type='application/json')
 
-        #On recupere les filename et ecris dans un fichier les Bibtex
+        #We retrieve the filenames and write the Bibtex in a file
+        #if the variable fileBibtex has a value
         if fileBibtex:
-             bib = json.loads(fileBibtex) # liste avec les filename que l'utilisateur a selectionné
-             selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')#On recupere les Bibtex en lien avec notre liste de filename
+             bib = json.loads(fileBibtex) #python list with the filenames that the user has selected
+             selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')#We recover the Bibtex in connection with our filename list 
 
-             #Ecriture des Bitex dans un fichier 
-             fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w") #Ouverture du fichier en mode ecriture (w)
-             for b in selectbib:
-                fichierBib.write(b['id_ref__bibtex'])#Ecriture dans bibtex dans le fichier 
-             fichierBib.close() #Fermeture du fichier
+             #Writing Bitex to a file
+             fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w") #Open file in write mode (w)
 
+             for b in selectbib:#Loop to write each bibtex of the list
+                fichierBib.write(b['id_ref__bibtex'])#Writing the bibtex to the file 
+             fichierBib.close() #Closing the file
+
+             #We return the path of the Bibtex file to the succes part off the AJAX request
              return HttpResponse(json.dumps("..\static\compare\Bibtex.txt"), content_type='application/json')
         
-        #On filtre avec le resultat de la barre de recherche si l'utilisateur a envoyé une requete 
+        #We filter with the result of the search bar if the user has sent a request
+        #if the variable stringSearch has a value
         if stringSearch :
-            #on regarde si les champs contiennent le string envoyé (inssensible a la casse)
+            #We filter the select variable that contains all the Ns from the database
+            #we check if the fields contain the sent string (case insensitive)
             select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains = stringSearch) | Q(id_name__classdb__icontains = stringSearch) 
                                         | Q(id_method__method__icontains = stringSearch) | Q(id_method__datadate__icontains = stringSearch) 
                                         | Q(id_method__processinfinfo__icontains = stringSearch) | Q(id_constrain__constraintype__icontains = stringSearch) 
                                         | Q(id_constrain__constrainversion__icontains = stringSearch)| Q(id_constrain__constrainvariable__icontains = stringSearch))
         
-        #We filter with the result of the       
+        #We filter with the result of the side checkbox panel if the user has sent a request  
+        #if the variable jsonCheckList has a value   
         if jsonCheckList:
-            checkList = json.loads(jsonCheckList)
+            checkList = json.loads(jsonCheckList) #python list with the checkboxes that are checked
+            #if checklist is empty we do like all the checkboxes were checked
             if not checkList:
-                checkList = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","coldMSP","Thermal INSs","Type-I X-ray bursts"]
+                checkList = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","coldMSP","Thermal INSs","Type-I X-ray bursts"] #list with all types of sources
 
+            #We filter the select variable that contains all the Ns from the database ( it can be already filter from the above condition )
+            #we select the ns who have a values from the list 
             select_ns_all = select_ns_all.filter(id_name__classdb__in=checkList)
 
+        #We filter with the select box selected if the user has sent a request  
+        #if the variable dictSelect has a value
         if dictSelect : 
-            sel = json.loads(dictSelect)
+            sel = json.loads(dictSelect) #dictionnary python list  whith the values selected (key = the selecte box , value = the selected item )
             
+            #We check if the keys have a value if they have we filter the select variable already filtered above with the values 
             if sel['MethList']:
                 select_ns_all = select_ns_all.filter(id_method__method__in=sel['MethList'])
             if sel['ConsVList']:
@@ -82,16 +107,20 @@ def visu_data(request):
             if sel['ConsTList']:
                 select_ns_all = select_ns_all.filter(id_constrain__constraintype__in=sel['ConsTList'])
 
+            #For the dependencies and assumptions select box
+            #we check if the keys have a value
             if sel['DepList']:
                 filListDep = []
-                for fil in select_ns_all:
-                    filListDep.append(fil.filename)
+                for fil in select_ns_all:#Loop to get all filename from the filtered select 
+                    filListDep.append(fil.filename)#We put in a list the filenames 
+                #We select the filenames that have the primary dependencies and the filenames     
                 selectDep = NsToModel.objects.select_related().filter(Q(filename__in=filListDep)& 
                                                                       Q(id_model__dependenciesprimary__in = sel['DepList'])).values_list('filename',flat=True).distinct()
-                depList = list(selectDep)
-                depFilter = Ns.objects.select_related().filter(filename__in = depList)
-                select_ns_all = depFilter
+                depList = list(selectDep)#We put in a list the filenames of the select 
+                depFilter = Ns.objects.select_related().filter(filename__in = depList)#We select the NS who have the filenames 
+                select_ns_all = depFilter #we change our main select variable 
 
+            #We do the same for these 3 select box
             if sel['DepSList']:
                 fil2ListDep = []
                 for fil2 in select_ns_all:
@@ -112,19 +141,19 @@ def visu_data(request):
                 assFilter = Ns.objects.select_related().filter(filename__in = assList)
                 select_ns_all = assFilter
 
-
             if sel['Ass2List']:
                 fil2ListAss = []
                 for fil2 in select_ns_all:
                     fil2ListAss.append(fil2.filename)
                 
-
                 selectModS = NsToAssumptions.objects.select_related().filter(Q(filename__in=fil2ListAss)
                                                                 & Q(id_assumptions__assumptionssecondary__in = sel['Ass2List'])).values_list('filename',flat=True).distinct()
                 assListS = list(selectModS)
                 assSFilter = Ns.objects.select_related().filter(filename__in = assListS)
                 select_ns_all = assSFilter
 
+
+            #je pense que je peux supprimer tout ca 
             lMeth = []
             lAss = []   
             lDep =[]
@@ -258,7 +287,7 @@ def visu_data(request):
                 
                 #send to the template 
                 return render(request,"compare/visu_data.html",selectAll)
-
+#fini
 def detail(request, id):
     if request.method == 'POST':
         filename = json.loads(request.POST.get('filename'))
@@ -706,6 +735,7 @@ def modify(request,id):
     
     return render(request, "compare/modify.html",select)
 
+#fini
 def login(request):
     #We check if a POST request is send
     if request.method == 'POST':
@@ -729,6 +759,7 @@ def login(request):
     else:
         return render(request, "compare/login.html")  
 
+#fini
 def logout(request):
     #We logged out and redirect to the Visualisation page
     logout_user(request)
@@ -1329,6 +1360,6 @@ def insert_data(request):
                  }
     return render(request, "compare/insert.html", query)  
 
-#pas grand choses
+#pas grand chose
 def info(request):  
     return render(request, "compare/info.html",)
