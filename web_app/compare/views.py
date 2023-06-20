@@ -17,9 +17,9 @@ from django.db import IntegrityError
 def home(request):
     return render(request, "compare/home.html")
 
-"""
+"""             
 This function is a great function
-
+ddd
 Each time we send a request in the Visualisation Page  we run this fucntion 
 
 We check for GET request from the user 
