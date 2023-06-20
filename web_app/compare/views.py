@@ -25,6 +25,7 @@ Each time we send a request in the Visualisation Page  we run this fucntion
 We check for GET request from the user 
 
 """
+#fini
 def visu_data(request):
 
     #We select all the Ns from the database without models and assumptions but whith "ref" ,"name" ,"constrain" and "method" thanks to the selected related method
@@ -153,130 +154,113 @@ def visu_data(request):
                 select_ns_all = assSFilter
 
 
-            #je pense que je peux supprimer tout ca 
-            lMeth = []
-            lAss = []   
-            lDep =[]
-            lConsV = []
-            lConsT = []
-            lAssS = []
-            lDepS =[]
+            #we are out the if statements 
+            #we put in a list all the NS with the model and assumptions
             listFilt = []
 
             for all in select_ns_all:
+                #we put in the list only the elements that we show in the table in a dictionnary
                 loop = {}    
                 
-                namedb = all.id_name.namedb
+                #we get the name and put it in the dictionaray of the NS
+                namedb = all.id_name.namedb 
                 loop['namedb']=namedb
 
+                #we get the filename and put it in the dictionaray of the NS
                 filens = all.filename
                 loop['filename']=filens
 
+                #we get the filepath and put it in the dictionaray of the NS
                 filpath = all.filepath
                 loop['filpath']=filpath
 
-
+                #we get the class and put it in the dictionaray of the NS
                 namecla = all.id_name.classdb
                 loop['classdb']=namecla
 
+                #we get the method and put it in the dictionaray of the NS
                 method = all.id_method.method
                 loop['method']=method
-                lMeth.append(method)
 
+                #we get the method specific and put it in the dictionaray of the NS
                 methodspe = all.id_method.method_specific
                 loop['method_specific']=methodspe
 
+                #we get the constrain type and put it in the dictionaray of the NS
                 constrainty = all.id_constrain.constraintype
                 loop['constraintype']=constrainty
-                lConsT.append(constrainty)
 
-                 
+                #we get the constrain version  and put it in the dictionaray of the NS
                 constrainver = all.id_constrain.constrainversion
                 loop['constrainversion']=constrainver
-                lConsV.append(str(constrainver))
                 
-
+                #we get the constrain variable and put it in the dictionaray of the NS
                 constrainvar = all.id_constrain.constrainvariable
                 loop['constrainvariable']= str(constrainvar)
 
-                select_ns_model =  NsToModel.objects.select_related().filter(filename = all.filename)
-
+                #we get the DOI and put it in the dictionaray of the NS
                 refdoi = all.id_ref.doi
                 loop['doi']= refdoi
 
+                #we get the author and put it in the dictionaray of the NS
                 refauthor = all.id_ref.author
                 loop['author']= refauthor
 
+                #we get the year and put it in the dictionaray of the NS
                 refyear = all.id_ref.refyear
                 loop['year']= refyear
 
-                path = all.filepath
-                loop['filepath']= path
+                #We select the filenames linked to models 
+                select_ns_model =  NsToModel.objects.select_related().filter(filename = all.filename)
 
+                #we put in a list all the models linked to a filename 
                 list_temp = []
                 for snm in select_ns_model:
+                    #we get the model and put it in a list and after the dictionaray of the NS
                      list_temp.append(snm.id_model.dependenciesprimary)
                      loop['model']=list_temp
-                     lDep.append(snm.id_model.dependenciesprimary)
-                     lDepS.append(snm.id_model.dependenciessecondary)
 
+                #We select the filenames linked to assumptions 
                 select_ns_ass = NsToAssumptions.objects.select_related().filter(filename = all.filename)
 
+                #we put in a list all the assumptions linked to a filename 
                 list_temp2 = []
                 for snm in select_ns_ass:
+                     #we get the assumption and put it in a list and after the dictionaray of the NS
                      list_temp2.append(snm.id_assumptions.assumptionsprimary)
                      loop['assumptions']=list_temp2
-                     lAss.append(snm.id_assumptions.assumptionsprimary)
-                     lAssS.append(snm.id_assumptions.assumptionssecondary)
-
-
-                listFilt.append(loop)
-
-            lMeth = pd.unique(lMeth).tolist()
-            lAss = pd.unique(lAss).tolist()
-            lDep = pd.unique(lDep).tolist()
-            lConsV = pd.unique(lConsV).tolist()
-            lConsT = pd.unique(lConsT).tolist()
-            lAssS = pd.unique(lAssS).tolist()
-            lDepS = pd.unique(lDepS).tolist()
-
-            allFilter = [lMeth,lAss,lDep,lConsV,lConsT,lAssS,lDepS]
-
-            allFinalFilter = [listFilt,allFilter]            
-            return HttpResponse(json.dumps(allFinalFilter), content_type='application/json',)
+                
+                listFilt.append(loop) #we had the dictionnary to the list    
+            #We return the list with the ns 
+            return HttpResponse(json.dumps(listFilt), content_type='application/json',)
         
-
         else:
             
-                #add the models to each NS 
+                #We add the models to each NS 
                 list_ns_model = []
+                list_ns_assumptions = []
                 for n in select_ns_all:
+                    #We select the filenames linked to models 
                     select_ns_model =  NsToModel.objects.select_related().filter(filename = n.filename)
+                    #We select the filenames linked to assumptions
+                    select_ns_ass =  NsToAssumptions.objects.select_related().filter(filename = n.filename)
+
                     list_temp = []
                     for snm in select_ns_model:
                         list_temp.append(snm.id_model.dependenciesprimary)   
                     list_ns_model.append(list_temp)
 
-
-                #add the assumptions to each NS
-                list_ns_assumptions = []
-                for n in select_ns_all:
-                    select_ns_ass =  NsToAssumptions.objects.select_related().filter(filename = n.filename)
-                    list_temp = []
+                    list_temp2 = []
                     for sass in select_ns_ass:
-                        list_temp.append(sass.id_assumptions.assumptionsprimary)   
-                    list_ns_assumptions.append(list_temp)
+                        list_temp2.append(sass.id_assumptions.assumptionsprimary)   
+                    list_ns_assumptions.append(list_temp2)
 
+                #we select the data who will be in the select box 
                 selectMethod = MethodNs.objects.values('method').distinct()
-
                 selectConstrainV = ConstrainNs.objects.values('constrainvariable').distinct()
-
                 selectConstrainT = ConstrainNs.objects.values('constraintype').distinct()
-
                 selectModel = ModelNs.objects.values('dependenciesprimary').distinct()
-                
                 selectModelSec = ModelNs.objects.values('dependenciessecondary').distinct()
-
                 selectAssumptions = AssumptionsNs.objects.values('assumptionsprimary').distinct()
                 selectAssumptions2 = AssumptionsNs.objects.values('assumptionssecondary').distinct()
                 

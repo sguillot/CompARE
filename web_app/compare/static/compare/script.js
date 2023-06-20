@@ -109,12 +109,12 @@ function ajaxRequest(checkList , select , search){
           dataSearch:stringSearch,
           dataSelect:jsonSelect},
     success: function(data) {
-
+      console.log(data)
       $("#firstTable tr").remove() 
       $("#secondTable tr").remove() 
 
       let table = document.getElementById("secondTable")
-      data[0].forEach(d => {
+      data.forEach(d => {
         let row  = table.insertRow()
 
         let more = row.insertCell(0)
@@ -147,8 +147,7 @@ function ajaxRequest(checkList , select , search){
           model.insertAdjacentHTML("beforeend","<li>"+ mod +"</li>");
         });
         }
-        
-        
+             
         let assump = row.insertCell(9)
         if (typeof d.assumptions !== 'undefined') {
           d.assumptions.forEach(ass => {
