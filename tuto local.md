@@ -27,7 +27,29 @@ in a terminal :
 
     pip install -r .\requirementsDjango.txt   
 
-### 5. Run the application 
+
+### 5.Change the settings
+Go to the file **web_app/web_app/settings.py** At the line (75) :
+
+If you don't have password to your local mysql database put this settings:
+
+
+<img width="186" alt="image" src="https://github.com/sguillot/CompARE/assets/122777194/d35714d9-42ad-49e7-91f5-11637d7a882c">
+
+
+NAME = database Name
+
+HOST = Server address (here local)
+
+USER = Mysql Username
+
+PASSWORD = Mysql Password
+
+PORT = Mysql Port (default used by mysql is 3306)
+
+
+
+### 6. Run the application 
 from vscode : 
 
 
