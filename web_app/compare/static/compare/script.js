@@ -109,7 +109,6 @@ function ajaxRequest(checkList , select , search){
           dataSearch:stringSearch,
           dataSelect:jsonSelect},
     success: function(data) {
-      console.log(data)
       $("#firstTable tr").remove() 
       $("#secondTable tr").remove() 
 
@@ -147,7 +146,8 @@ function ajaxRequest(checkList , select , search){
           model.insertAdjacentHTML("beforeend","<li>"+ mod +"</li>");
         });
         }
-             
+         
+        
         let assump = row.insertCell(9)
         if (typeof d.assumptions !== 'undefined') {
           d.assumptions.forEach(ass => {
@@ -171,7 +171,6 @@ function ajaxRequest(checkList , select , search){
 
 function hideShow(div) {
   var iddiv = document.getElementById(div.className)
-  console.log(iddiv)
     if (iddiv.style.display !== 'block') {
         iddiv.style.display = 'block';
     }

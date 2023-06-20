@@ -14,6 +14,7 @@ from django.contrib.auth import logout as logout_user
 from decimal import Decimal , InvalidOperation
 from django.db import IntegrityError
 
+
 def home(request):
     return render(request, "compare/home.html")
 
@@ -457,7 +458,6 @@ def modify(request,id):
                 if (repdoi is not None) and (len(repdoi)<1):
                     repdoi = None
                 datal = request.POST.get('datalink')
-                print(type(datal))
                 if (datal is not None) and (len(datal)<1):
                     datal = None
                 if(datal == "None"):
@@ -1103,8 +1103,7 @@ def insert_data(request):
                     dat = None
 
                 if (NameNs.objects.filter(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS, ra=r, declination=dec, localisationfile=loc, eventdate=dat)):  
-                    print(NameNs.objects.filter(namedb=na,classdb=classdb,namesimbad=nameS,classsimbad=classS,ra=r,
-                                            declination=dec,localisationfile=loc))
+                
                     mess = "Name already exists"
                     messages.error(request,"Name already exists")
                 else:
@@ -1115,7 +1114,6 @@ def insert_data(request):
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(name)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
-                    print("prout")
                 
      #insertion de ref
     if (request.POST.get('hid') == 'formAddRef' ):
