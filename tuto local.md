@@ -1,3 +1,4 @@
+
 # How to install the project in local 
 
  ## 1. Prendre le projet depuis git (pull ?)
@@ -27,7 +28,10 @@ in a terminal :
     pip install -r .\requirementsDjango.txt   
 
 ### 5. Run the application 
-from vscode : mettre image
+from vscode : 
+
+
+<img width="124" alt="gsfdgd" src="https://github.com/sguillot/CompARE/assets/122777194/e9a146d8-cce4-477b-8a80-2708743ab7a8">
 
 
 in a terminal :
