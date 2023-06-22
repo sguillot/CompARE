@@ -69,6 +69,7 @@ def visu_data(request):
 
              for b in selectbib:#Loop to write each bibtex of the list
                 fichierBib.write(b['id_ref__bibtex'])#Writing the bibtex to the file 
+                fichierBib.write('\n\n')
              fichierBib.close() #Closing the file
 
              #We return the path of the Bibtex file to the succes part off the AJAX request

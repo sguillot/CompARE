@@ -1,3 +1,10 @@
+   
+  /*
+  When a checkboxes of a side panel is checked 
+  We get checkboxes checked
+  We get all filter 
+  We call the AjaxRequest function 
+  */
    $(document).ready(function(){
     var checkList = []
     $(document).on("click", 'input.check[type="checkbox"]', function(){
@@ -16,6 +23,11 @@
     })
 })
 
+
+/* 
+Select all checked checkboxes off the table 
+Return a list
+*/
 function getCheckboxesTab(){
   var checkboxes = document.querySelectorAll('input[type="checkbox"].dwnl:checked');
   var values = [];
@@ -25,6 +37,10 @@ function getCheckboxesTab(){
   return(values)
 }
 
+/* 
+Select all checked checkboxes off the side panel 
+Return a list
+*/
 function getCheckboxesFilter(){
   var checkboxes = document.querySelectorAll('input[type="checkbox"].check:checked');
   var values = [];
@@ -34,11 +50,20 @@ function getCheckboxesFilter(){
   return(values)
 }
 
+/*
+Get the value of the searchBar 
+Return a string 
+*/
 function getSearch(){
   var searchString = document.getElementById('Search').value
   return (searchString)
 }
 
+
+/*
+Get the value of all the selectBox
+Return a list of dictionnary 
+*/
 function getSelect(){
   var selectorValues = {}
   const ListOptions = ["MethList","ConsVList","ConsTList","DepList","DepSList","AssList","Ass2List"]
@@ -51,16 +76,24 @@ function getSelect(){
     }
     selectorValues[lO] = select
   });
+  console.log(selectorValues)
   return(selectorValues)
 }
 
+
+/*
+Get the value of checkboxes checked
+We sent to the views the filename 
+We get  the filepath
+Download selected files
+*/
 function downloadFile(){
-  var values = getCheckboxesTab();
-  var values2 = JSON.stringify(values);  
+  var check = getCheckboxesTab();
+  var checkString = JSON.stringify(check);  
   $.ajax({
     url: '',
     type: 'GET',
-    data:{filedwnl: values2},
+    data:{filedwnl: checkString},
     success: function(data) {
       data.forEach(path => {
         let linkpath = document.createElement("a");
@@ -73,6 +106,13 @@ function downloadFile(){
   })
 }
 
+
+/*
+Get the value of checkboxes checked
+We sent to the views the filename 
+We get bibtex
+Download the file created
+*/
 function bibtexFile(){
   var values = getCheckboxesTab()
   if(values.length >0){
@@ -91,12 +131,21 @@ function bibtexFile(){
     })
 }}
 
+
+/* 
+when user click on the loop
+Select all filter
+We call the ajaxRequest function
+*/
 function searchFilter(){
   var searchCheck = getCheckboxesFilter()
   var select = getSelect()
   var search = getSearch()
   ajaxRequest(searchCheck , select , search);
 }
+
+
+
 
 function ajaxRequest(checkList , select , search){
   var jsonCheckList = JSON.stringify(checkList);   
@@ -180,7 +229,6 @@ function hideShow(div) {
 }
 
 function selectall(){
-
   var tabcheck = document.getElementsByName("che")
   for (var i = 0; i < tabcheck.length; i++) {
     tabcheck[i].checked = true;
@@ -193,6 +241,12 @@ function unselectall(){
     tabcheck[i].checked = false;
   }
 }
+
+
+
+
+
+
 
 //details
 
