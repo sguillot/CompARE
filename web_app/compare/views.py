@@ -19,14 +19,11 @@ def home(request):
     return render(request, "compare/home.html")
 
 """             
-This function is a great function
-ddd
 Each time we send a request in the Visualisation Page  we run this fucntion 
 
 We check for GET request from the user 
 
 """
-#fini
 def visu_data(request):
 
     #We select all the Ns from the database without models and assumptions but whith "ref" ,"name" ,"constrain" and "method" thanks to the selected related method
@@ -273,7 +270,7 @@ def visu_data(request):
                 
                 #send to the template 
                 return render(request,"compare/visu_data.html",selectAll)
-#fini
+
 def detail(request, id):
     if request.method == 'POST':
         filename = json.loads(request.POST.get('filename'))
@@ -317,12 +314,19 @@ def modify(request,id):
     #We recup all the Assumptions linked to the id(filename) of the NS
     ns_As = NsToAssumptions.objects.select_related('id_assumptions').filter(filename = id)
 
+    #We recup the Name linked to the id(filename) of the NS
     name_file = Ns.objects.filter(id_name = ns_list.id_name)
 
+    #We recup the Ref linked to the id(filename) of the NS
     ref_file = Ns.objects.filter(id_ref = ns_list.id_ref)
+
+    #We recup the method linked to the id(filename) of the NS
     method_file = Ns.objects.filter(id_method = ns_list.id_method)
+
+    #We recup the constrain linked to the id(filename) of the NS
     constrain_file = Ns.objects.filter(id_constrain = ns_list.id_constrain)
 
+    #We put in a list the filenames linked to this Model
     molist = []
     for mo in ns_Mo:
         molist.append(ModelNs.objects.filter(id_model = mo.id_model.id_model))
@@ -332,6 +336,7 @@ def modify(request,id):
         for i in m:
             filemo[i.id_model]=NsToModel.objects.filter(id_model = i.id_model)
 
+    #We put in a list the filenames linked to this assumptions
     asslist = []
     for ass in ns_As:
         asslist.append(AssumptionsNs.objects.filter(id_assumptions = ass.id_assumptions.id_assumptions))
@@ -341,24 +346,31 @@ def modify(request,id):
         for j in a:
             fileass[j.id_assumptions]=NsToAssumptions.objects.filter(id_assumptions = j.id_assumptions)
 
+
+    #We get the value off the method enum in a list
     methodoptions = MethodNs.method.field.choices
-    
     listmethod =[]
     for mo in methodoptions:
         listmethod.append(mo[0])
 
+    #We get the value off the constraintype enum in a list
     constrainoptions = ConstrainNs.constraintype.field.choices
     listconstrain =[]
     for co in constrainoptions:
         listconstrain.append(co[0])
 
+    #We get the value off the constrain variable enum in a list
     constrainvar = ConstrainNs.constrainvariable.field.choices
     listconstrainvar =[]
     for cov in constrainvar:
         listconstrainvar.append(cov[0])
 
+    #We check for Post request 
     if request.method == 'POST':
+        #We check what table the user want to modify 
         if 'name' in request.POST:
+
+            # We get all the field and verify if they are correct
             nameNS = NameNs.objects.get(id_name=ns_list.id_name.id_name)
             
             name = request.POST.get('namens')
@@ -397,6 +409,7 @@ def modify(request,id):
                 if (event is not None) and (len(event)<1):
                     event = None
             
+                #if the user clic on the update button we change the name of the ns 
                 if 'update' in request.POST :
                     nameNS.namedb = name
                     nameNS.classdb = classNs
@@ -409,20 +422,22 @@ def modify(request,id):
                     nameNS.save()
                     messages.success(request,"Yes")
 
+                    #to write in the log file
                     fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(nameNS)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-
+                #if the user clic on the add button 
                 elif 'add' in request.POST :
+                    #We check if the name alreday exist  and linked it if its the case
                     if (NameNs.objects.filter(namedb=name,classdb=classNs,namesimbad=nameSin,classsimbad=classSin,ra=ra,declination=dec,localisationfile=loc)):
                         nameExist =NameNs.objects.filter(namedb=name,classdb=classNs,namesimbad=nameSin,classsimbad=classSin,ra=ra,declination=dec,localisationfile=loc)
                         nameExist= nameExist[0]
                         ns_list.id_name = nameExist
                         ns_list.save()
                         messages.success(request,"jajajaja")
-                        
+                    #we add the name 
                     else:
                         nameAdd = NameNs(namedb=name, classdb=classNs, namesimbad=nameSin, classsimbad=classSin, ra=ra, declination=dec, localisationfile=loc, eventdate=event)
                         nameAdd.save()
@@ -430,6 +445,7 @@ def modify(request,id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
+                    #to write in the logo file
                     fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: Name ',str(ns_list.id_name)+'\n\n']
                     fichierlog.writelines(wri)
@@ -437,6 +453,7 @@ def modify(request,id):
 
             return redirect('modify',id)       
 
+        #We do the same things for all field of the table 
 
         if 'ref' in request.POST:
 
@@ -720,7 +737,6 @@ def modify(request,id):
     
     return render(request, "compare/modify.html",select)
 
-#fini
 def login(request):
     #We check if a POST request is send
     if request.method == 'POST':
@@ -744,7 +760,6 @@ def login(request):
     else:
         return render(request, "compare/login.html")  
 
-#fini
 def logout(request):
     #We logged out and redirect to the Visualisation page
     logout_user(request)
@@ -1343,6 +1358,5 @@ def insert_data(request):
                  }
     return render(request, "compare/insert.html", query)  
 
-#pas grand chose
 def info(request):  
     return render(request, "compare/info.html",)
