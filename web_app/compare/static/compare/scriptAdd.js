@@ -52,35 +52,27 @@ function changeFuncName(value){
 
                 let name = row.insertCell(0)
                 name.innerHTML = data.namedb
-                console.log(name)
 
                 let classns = row.insertCell(1)
                 classns.innerHTML = data.classdb
-                console.log(classns)
                     
                 let namesim = row.insertCell(2)
                 namesim.innerHTML = data.namesimbad
-                console.log(namesim)
 
                 let classim = row.insertCell(3)
                 classim.innerHTML = data.classsimbad
-                console.log(classim)
 
                 let r = row.insertCell(4)
                 r.innerHTML = data.ra
-                console.log(r)
 
                 let dec = row.insertCell(5)
                 dec.innerHTML = data.declination
-                console.log(dec)
 
                 let loc = row.insertCell(6)
                 loc.innerHTML = data.localisationfile
-                console.log(loc)
 
                 let event = row.insertCell(7)
                 event.innerHTML = data.eventdate
-                console.log(event)
             }
         })
     }
@@ -124,7 +116,6 @@ function createNs(){
     insertvalue={}
     insertvalue['filename']=document.getElementById('filename').value
     insertvalue['filepath']=document.getElementById('filepath').value
-    console.log(insertvalue)
     insertvalue['name']=document.getElementById('nList').value
     insertvalue['method']=getMethod()
     insertvalue['constrain']=getConstrain()
@@ -161,7 +152,6 @@ function selecttab(tab){
         }
         tabdict[i]=select
     }
-    console.log(tabdict)
     return tabdict
 }
 

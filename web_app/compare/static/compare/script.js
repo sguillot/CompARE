@@ -76,7 +76,6 @@ function getSelect(){
     }
     selectorValues[lO] = select
   });
-  console.log(selectorValues)
   return(selectorValues)
 }
 
