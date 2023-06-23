@@ -18,12 +18,6 @@ from django.db import IntegrityError
 def home(request):
     return render(request, "compare/home.html")
 
-"""             
-Each time we send a request in the Visualisation Page  we run this fucntion 
-
-We check for GET request from the user 
-
-"""
 def visu_data(request):
 
     #We select all the Ns from the database without models and assumptions but whith "ref" ,"name" ,"constrain" and "method" thanks to the selected related method
@@ -768,38 +762,46 @@ def logout(request):
 @login_required
 def insert_data(request):
 
+    #We check if a Get request is sent from the user (get for the selectlist for nama and ref)
     if request.method == 'GET':
          idName = request.GET.get('idname', '')
          idRef = request.GET.get('idref', '')
+
+         #we get the id of the name selected and select the information of this name
          if idName:
              queryTabName = NameNs.objects.filter(pk=idName)
              querylistName = list(queryTabName.values())
              jsonName = json.dumps((querylistName),default=str)
              return HttpResponse(jsonName, content_type='application/json',)
          
+         #we get the id of the ref selected and select the information of this ref
          if idRef :
              queryTabRef = RefNs.objects.filter(pk=idRef)
              querylistRef = list(queryTabRef.values())
              jsonRef = json.dumps((querylistRef),default=str)
              return HttpResponse(jsonRef, content_type='application/json',)
          
+    #We check if its a Post request      
     if request.method == 'POST':
+
+        #we check if ist a file send 
         if 'myfile' in request.FILES:
             if(request.FILES['myfile']):  
                 test = request.FILES['myfile']
+                #we put in a dataframe the value of the file
                 d=pd.DataFrame(pd.read_csv(test))  
-
-                listco = d.columns
+                listco = d.columns #columns in a list
                 listNoPoint =[]
+                #we remove .1 for the elements that are multiple times in the file
                 for l in listco:
                     if '.1' in l:
                         l = l.replace('.1','')
                     listNoPoint.append(l)
 
-                d = d.T
-                
-                d.reset_index(drop=True, inplace=True)
+                d = d.T #transpose the dataframe to have the columns at the top 
+                d.reset_index(drop=True, inplace=True)#remove the auto index
                 d.insert(0,'NameDB',listNoPoint)
+                #we put the columns at 1 row and they are the index
                 d = d.set_axis(d.iloc[0], axis=1)
                 d = d[1:]
                 d = d.replace('\n','', regex=True)
@@ -807,8 +809,11 @@ def insert_data(request):
                 d = d.replace('\r\n','', regex=True)
                 d= d.fillna('')
                 
+                #list with type of sources
                 NsClass = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","coldMSP","Thermal INSs","Type-I X-ray bursts"]
                 
+
+                #we get the enum types in lists
                 me =[]
                 for m in MethodNs.method.field.choices:
                     me.append(m[0])
@@ -825,8 +830,10 @@ def insert_data(request):
                 inserted = []
                 notinserted = {}           
 
+                #for each row of the dataframe
                 for i in range(1,len(d)):
-
+                    
+                    #we put in list the models and assumptions
                     filename = d['FileName'][i]
 
                     listmopri = list(d['ModelDependenciesPrimary'])[i]
@@ -850,25 +857,26 @@ def insert_data(request):
                     listassdescription = list(d['AssumptionsDescription'])[i]
                     listassdesc = listassdescription.split(",")
                     
-
+                    #we verify if the filename dont alreday exist
                     if Ns.objects.filter(filename = d['FileName'][i]):
                         notinserted[filename] = " already in"
                         continue
-
+                    #we verify the non null field
                     elif ((len(d['NameDB'][i]) <= 0  or len(d['ClassDB'][i]) <= 0 or len(d['Method'][i])<= 0) or (len(d['MethodSpecific'][i])<=0) 
                         or (len(d['DataDate'][i])<=0) or (len(d['ProcessingInfo'][i])<=0) or (len(d['ConstrainVariable'][i])<= 0) 
                         or (len(d['ConstrainType'][i])<=0) or (len(d['Ref1stAuthor'][i])<= 0) or (len(d['RefYear'][i])<=0) 
                         or (len(d['RefShort'][i])<=0) or (len(d['RefBibtex'][i])<=0) or (len(d['RefDOI'][i])<=0)):
                         notinserted[filename] = " missing mandatory elements"
                         continue
-
+                    
+                    #more verifications
                     elif((len(d['AssumptionsPrimary'][i])<=0) and (len(d['AssumptionsSecondary'][i])<=0) and (len(d['AssumptionsDescription'][i])<=0)):
-                        notinserted[filename] = " jsp"
+                        notinserted[filename] = " assumptions have to have minimum one field "
                         continue
 
                     elif((len(d['ModelDependenciesPrimary'][i])<=0) and (len(d['ModelDependenciesSecondary'][i])<=0) and (len(d['ModelDependencyDescription'][i])<=0)):
 
-                        notinserted[filename] = " jsp"
+                        notinserted[filename] = " model have to have minimum one field"
                         continue
 
                     elif(len(listmo)!= len(listmosec)) or (len(listmo)!= len(listmodesc)):
@@ -916,6 +924,7 @@ def insert_data(request):
                             notinserted[filename] = d['RefYear'][i] + " can not be a converted in integer"
                             continue       
                     
+                    #we get the value of the name 
                     namen=d['NameDB'][i]
                     classn = d['ClassDB'][i]
                     nameS = d['NameSimbad'][i]
@@ -924,6 +933,8 @@ def insert_data(request):
                     dec = d['DEC'][i]
                     dat = d['EventDate'][i]
                     loc = d['LocalisationFile'][i]
+
+                    #verifications in case
 
                     if len(nameS) < 1:
                         nameS = None
@@ -947,16 +958,20 @@ def insert_data(request):
                     if len(dat)<1:
                         dat = None
 
+                    #if the name alreday exist we select it 
                     if (NameNs.objects.filter(namedb=namen,classdb=classn,namesimbad=nameS,classsimbad=classS,ra=r,
                                             declination=dec,localisationfile=loc)):
                             
                         idN = NameNs.objects.filter(namedb=namen,classdb=classn,namesimbad=nameS,classsimbad=classS,ra=r,
                                             declination=dec,localisationfile=loc)
                         idN= idN[0]
+                    #else We add the new name
                     else:
                         name = NameNs(namedb=namen, classdb=classn, namesimbad=nameS, classsimbad=classS, ra=r, declination=dec, localisationfile=loc, eventdate=dat)
                         name.save()
-                        idN =NameNs.objects.latest('id_name')
+                        idN =NameNs.objects.latest('id_name') #we stock the object that we insert to link it after  
+
+                    #we do the same for the other columns of the dataframe
 
                     methodN = d['Method'][i]
                     methodS = d['MethodSpecific'][i]
@@ -976,12 +991,6 @@ def insert_data(request):
                     consT=d['ConstrainType'][i]
                     consVe =d['ConstrainVersion'][i]
                                 
-                    # a enlever plus tard
-                    if (len(consVe) <=0):
-                        consVe = 1
-
-                    if (len(consV) <=0):
-                        consV = "R"
                 
                     if (ConstrainNs.objects.filter(constraintype =consT , constrainvariable = consV,
                                             constrainversion = int(consVe))):
@@ -1016,9 +1025,11 @@ def insert_data(request):
                         ref.save()   
                         idR =RefNs.objects.latest('id_ref')
 
+
+                    # we create the new NS (filepath have to change)
                     file = Ns(filename=filename,filepath="qdsdsqdsqdsq.txt",id_ref=idR,id_name=idN,id_method=idM,id_constrain=idC)  
                     file.save()
-                    nsInstance = Ns.objects.get(filename=filename)
+                    nsInstance = Ns.objects.get(filename=filename) #we stock the ns for the assumptions and models
 
                     for j in range(len(listmo)):
                         modelpri = listmo[j]
@@ -1045,6 +1056,7 @@ def insert_data(request):
                             modelN = ModelNs(dependenciesprimary=modelpri ,dependenciessecondary=modelsec ,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)
                             modelN.save()
                             idMo = ModelNs.objects.latest('id_model')
+                        #we create the link between ns and model
                         nsmodel = NsToModel(filename=nsInstance, id_model=idMo)
                         nsmodel.save()
                     
@@ -1070,20 +1082,22 @@ def insert_data(request):
                             assumptions = AssumptionsNs(assumptionsprimary=asspri ,assumptionssecondary=asssec ,assumptionsdescription=assdesc)
                             assumptions.save()
                             idAs = AssumptionsNs.objects.latest('id_assumptions')
-
+                        #we create the link between ns and assumptions
                         nsass = NsToAssumptions(filename=nsInstance,id_assumptions=idAs)
                         nsass.save()
                     nbinsert +=  1
                     inserted.append(filename)
+                #message for the user 
                 mes = "You inserted "+str(nbinsert)+"/"+str(len(d)-1)+" elements"
                 mes2 = "Element inserted :"+str(inserted)
                 mes3 = "Element not inserted:"+str(notinserted)
                 messages.success(request, mes)
                 messages.success(request, mes2)
                 messages.success(request, mes3)
-
+        #for insertion manual we check the what the user wants to insert
         elif (request.POST.get('hid') == 'formAddName' ):
-
+            
+            #verifications of the value
             na =  request.POST.get('name')
             classdb = request.POST.get('class')
 
@@ -1123,15 +1137,17 @@ def insert_data(request):
                     mess = "Name already exists"
                     messages.error(request,"Name already exists")
                 else:
+                    #we create the new name
                     name = NameNs(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS, ra=r, declination=dec, localisationfile=loc, eventdate=dat)
                     name.save()
 
+                    #to write in the log file
                     fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(name)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
                 
-     #insertion de ref
+     #same things for ref
     if (request.POST.get('hid') == 'formAddRef' ):
 
         auth = request.POST.get('author')
@@ -1166,8 +1182,10 @@ def insert_data(request):
                 fichierlog.writelines(wri)
                 fichierlog.close()
 
-    #insertion de tout
+    #when the user validete the insertion 
     if (request.POST.get('insert')):
+
+        #we verify all the values
         insert = json.loads(request.POST.get('insert'))
 
         if((len(insert['filename'])<= 0) or (len(insert['filepath'])<=0 )):
@@ -1183,14 +1201,15 @@ def insert_data(request):
             return HttpResponse(json.dumps(mess), content_type='application/json',)
         
         elif((len(insert['constrain']['constrainVer'])<= 0)):
-            mess = "/!\ ERROR /!\ : Please enter a valid Constrain"
+            mess = "/!\ ERROR /!\ : Please enter a valid Constrain"     
             return HttpResponse(json.dumps(mess), content_type='application/json',)
             
         else:
 
             ref = RefNs.objects.get(id_ref=insert['ref'])
             name = NameNs.objects.get(id_name=insert['name'])
-
+            
+            #we check if method and constrain already exist
             if (MethodNs.objects.filter(method =insert['method']['methodN'], method_specific =insert['method']['methodS'],
                                datadate = insert['method']['methodD'],processinfinfo =insert['method']['methodP'])):  
                 
@@ -1224,13 +1243,14 @@ def insert_data(request):
                 fichierlog.writelines(wri)
                 fichierlog.close()
         
+            #we create the new ns with all the field
             ns = Ns(filename=insert['filename'],filepath=insert['filepath'], id_ref = ref, id_name = name, id_method = methodId, id_constrain = constrainId)
             ns.save()
 
         if(len(insert['model']) > 0):
 
             ns = Ns.objects.get(filename=insert['filename'])
-
+            #for all the model we verify the value and create the object , if alreday exiqt we linked it , same as the others
             for mod in insert['model']:
 
                 if(len(insert['model'][mod][0]) < 1 ):
@@ -1269,7 +1289,7 @@ def insert_data(request):
         if(len(insert['assumptions']) > 0):
 
             ns = Ns.objects.get(filename=insert['filename'])
-
+            #Same for assumptions
             for ass in insert['assumptions']:
 
                 if(len(insert['assumptions'][ass][0]) < 1 ):
@@ -1311,6 +1331,7 @@ def insert_data(request):
         redirect = 'add'
         return HttpResponse(json.dumps(redirect), content_type='application/json',)
                     
+    #we select the value for the dropdown list 
     group = request.user.groups.values_list('name',flat = True)
     groupList = list(group)
 
@@ -1318,15 +1339,7 @@ def insert_data(request):
 
     queryname = NameNs.objects.filter(classdb__in = group)
 
-    querymethod = MethodNs.objects.all().distinct
-
-    queryconstrain = ConstrainNs.objects.all().distinct()
-
     queryref = RefNs.objects.all().distinct()
-
-    querymod = ModelNs.objects.all().distinct()
-
-    queryass = AssumptionsNs.objects.all().distinct()
 
     methodoptions = MethodNs.method.field.choices
     listmethod =[]
@@ -1346,11 +1359,7 @@ def insert_data(request):
     query = {
         "queryall":queryall,
         "queryname":queryname ,
-        'querymethod':querymethod,
-        'queryconstrain':queryconstrain,
         'queryref':queryref,
-        'querymod':querymod,
-        'queryass':queryass,
         'groupList' : groupList,
         'listmethod' :listmethod,
         'listconstrain':listconstrain,
