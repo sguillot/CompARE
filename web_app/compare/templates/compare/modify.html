@@ -3,6 +3,15 @@
 Modify
 {% endblock %}
 {% block content %}
+
+<!--
+
+        {%   %} : for loop statement and if condition 
+
+        {{   }} : to display variable 
+        
+-->
+
 {% if messages %}
     {% for m in messages %}
         <div class="error">{{m}}</div>
