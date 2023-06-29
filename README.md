@@ -11,15 +11,23 @@ It creates a local copy of CompARE in the folder $HOME/mylib with the following 
 
 ### /data/
 
-Containts the data.
+Containts the data files (organized by type of source)
+
+### /docs/
+
+Contains tutorials. Also contains files for 'Looping' (database development software)
 
 ## /scripts/
 
-Contains the scripts.
+Contains the scripts (plotting, fetching data, managing database)
 
 ## requirements.txt
 
 Contains the list of requirements to run the scripts in the CompARE library.
+
+## requirementsDjango.txt
+
+Contains the list of requirements to run the web app of CompARE.
 
 ## README.md
 
@@ -27,7 +35,7 @@ It is the present file.
 
 ## /webpage/
 
-Contains the queryable database and web interface.
+Contains the web app and the database interface files.
 
 
 
