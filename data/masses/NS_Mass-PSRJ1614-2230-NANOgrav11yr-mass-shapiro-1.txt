@@ -1,0 +1,2 @@
+# Msun    1sigma_error
+1.908     0.016
