@@ -141,4 +141,7 @@ dmypy.json
 .idea/
 
 # VSCODE
-.vscode/
+/.vscode/
+
+# database log
+web_app/web_app/compare/static/compare/log.txt
