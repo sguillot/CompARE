@@ -12,3 +12,4 @@ scipy
 h5py
 matplotlib
 corner
+django

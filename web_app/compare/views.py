@@ -11,7 +11,7 @@ from django.contrib import messages
 import pandas as pd
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as logout_user
-from decimal import Decimal , InvalidOperation
+from decimal import Decimal, InvalidOperation
 from django.db import IntegrityError
 
 
@@ -107,14 +107,14 @@ def visu_data(request):
                 filListDep = []
                 for fil in select_ns_all:#Loop to get all filename from the filtered select 
                     filListDep.append(fil.filename)#We put in a list the filenames 
-                #We select the filenames that have the primary dependencies and the filenames     
+                # We select the filenames that have the primary dependencies and the filenames
                 selectDep = NsToModel.objects.select_related().filter(Q(filename__in=filListDep)& 
                                                                       Q(id_model__dependenciesprimary__in = sel['DepList'])).values_list('filename',flat=True).distinct()
-                depList = list(selectDep)#We put in a list the filenames of the select 
+                depList = list(selectDep) # We put in a list the filenames of the select
                 depFilter = Ns.objects.select_related().filter(filename__in = depList)#We select the NS who have the filenames 
-                select_ns_all = depFilter #we change our main select variable 
+                select_ns_all = depFilter # we change our main select variable
 
-            #We do the same for these 3 select box
+            # We do the same for these 3 select box
             if sel['DepSList']:
                 fil2ListDep = []
                 for fil2 in select_ns_all:
@@ -789,7 +789,12 @@ def insert_data(request):
             if(request.FILES['myfile']):  
                 test = request.FILES['myfile']
                 #we put in a dataframe the value of the file
-                d=pd.DataFrame(pd.read_csv(test))  
+                d=pd.DataFrame(pd.read_csv(test))
+
+                #print("TRYING TO READ FILE NAME")
+                #print(d['FileName'])
+                #print("-----------------------------")
+
                 listco = d.columns #columns in a list
                 listNoPoint =[]
                 #we remove .1 for the elements that are multiple times in the file
@@ -831,30 +836,30 @@ def insert_data(request):
                 notinserted = {}           
 
                 #for each row of the dataframe
-                for i in range(1,len(d)):
+                for i in range(1,len(d)+1):
                     
                     #we put in list the models and assumptions
                     filename = d['FileName'][i]
 
-                    listmopri = list(d['ModelDependenciesPrimary'])[i]
+                    listmopri = list(d['ModelDependenciesPrimary'])[i-1]
                     listmo = listmopri.split(",")
 
-                    listmosecondary = list(d['ModelDependenciesSecondary'])[i]
+                    listmosecondary = list(d['ModelDependenciesSecondary'])[i-1]
                     listmosec = listmosecondary.split(",")
 
-                    listmodescription = list(d['ModelDependencyDescription'])[i]
+                    listmodescription = list(d['ModelDependencyDescription'])[i-1]
                     listmodesc = listmodescription.split(",")
 
-                    listmocaveats = list(d['CaveatReferences'])[i]
+                    listmocaveats = list(d['CaveatReferences'])[i-1]
                     listmocav = listmocaveats.split(",")
 
-                    listasspri = list(d['AssumptionsPrimary'])[i]
+                    listasspri = list(d['AssumptionsPrimary'])[i-1]
                     listass = listasspri.split(",")
                     
-                    listasssecondary = list(d['AssumptionsSecondary'])[i]
+                    listasssecondary = list(d['AssumptionsSecondary'])[i-1]
                     listasssec = listasssecondary.split(",")
 
-                    listassdescription = list(d['AssumptionsDescription'])[i]
+                    listassdescription = list(d['AssumptionsDescription'])[i-1]
                     listassdesc = listassdescription.split(",")
                     
                     #we verify if the filename dont alreday exist
@@ -862,10 +867,19 @@ def insert_data(request):
                         notinserted[filename] = " already in"
                         continue
                     #we verify the non null field
-                    elif ((len(d['NameDB'][i]) <= 0  or len(d['ClassDB'][i]) <= 0 or len(d['Method'][i])<= 0) or (len(d['MethodSpecific'][i])<=0) 
-                        or (len(d['DataDate'][i])<=0) or (len(d['ProcessingInfo'][i])<=0) or (len(d['ConstrainVariable'][i])<= 0) 
-                        or (len(d['ConstrainType'][i])<=0) or (len(d['Ref1stAuthor'][i])<= 0) or (len(d['RefYear'][i])<=0) 
-                        or (len(d['RefShort'][i])<=0) or (len(d['RefBibtex'][i])<=0) or (len(d['RefDOI'][i])<=0)):
+                    elif ((len(d['NameDB'][i]) <= 0  or
+                           len(d['ClassDB'][i]) <= 0 or
+                           len(d['Method'][i]) <= 0) or
+                          (len(d['MethodSpecific'][i])<=0) or
+                          (len(d['DataDate'][i])<=0) or
+                          (len(d['ProcessingInfo'][i])<=0) or
+                          (len(d['ConstrainVariable'][i])<= 0) or
+                          (len(d['ConstrainType'][i])<=0) or
+                          (len(d['Ref1stAuthor'][i])<= 0) or
+                          (len(d['RefYear'][i])<=0) or
+                          (len(d['RefShort'][i])<=0) or
+                          #(len(d['RefBibtex'][i])<=0) or
+                          (len(d['RefDOI'][i])<=0)):
                         notinserted[filename] = " missing mandatory elements"
                         continue
                     
@@ -879,11 +893,11 @@ def insert_data(request):
                         notinserted[filename] = " model have to have minimum one field"
                         continue
 
-                    elif(len(listmo)!= len(listmosec)) or (len(listmo)!= len(listmodesc)):
+                    elif(len(listmo)!= len(listmosec)): # or (len(listmo)!= len(listmodesc)):
                         notinserted[filename] = " missing elements for a dependencie"
                         continue
 
-                    elif(len(listass)!= len(listasssec)) or (len(listass)!= len(listassdesc)):
+                    elif(len(listass)!= len(listasssec)):# or (len(listass)!= len(listassdesc)):
                         notinserted[filename] = " missing elements for an assumption"
                         continue
                     
@@ -892,11 +906,11 @@ def insert_data(request):
                         continue
 
                     elif d['ConstrainType'][i] not in ct :
-                        notinserted[filename] = d['Method'][i] + " can not be a constrain type"
+                        notinserted[filename] = d['ConstrainType'][i] + " can not be a constrain type"
                         continue
 
                     elif d['ConstrainVariable'][i] not in cv :
-                        notinserted[filename] = d['Method'][i] + " can not be a constrain variable"
+                        notinserted[filename] = d['ConstrainVariable'][i] + " can not be a constrain variable"
                         continue
 
                     elif d['ClassDB'][i] not in NsClass :
