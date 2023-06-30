@@ -2,12 +2,19 @@
 
 Repository of observational constraints on the dense matter equation of state from neutron stars.
 
-We recommend the developer to work on a local version of CompARE.
-To do so, simply run:
+To contribute, please use the `develop` branch of the GitHub repository.
 
-$ bash install.sh
+Local installation instructions of the database and web app are in the tutorial `/docs/tuto local.md`
 
-It creates a local copy of CompARE in the folder $HOME/mylib with the following files and folders:
+[//]: # (We recommend the developer to work on a local version of CompARE.)
+
+[//]: # (To do so, simply run:)
+
+[//]: # ($ bash install.sh)
+
+[//]: # (It creates a local copy of CompARE in the folder $HOME/mylib with the following files and folders:)
+
+Here are some details of the existing folders:
 
 ### /data/
 
@@ -39,4 +46,4 @@ Contains the web app and the database interface files.
 
 
 
-We thank ECT*/EMMI/Strong2020/INFN/INSU-PNHE
+We thank ECT*, EMMI, Strong2020, INFN, INSU-PNHE and CNES for their support in the early stage of development of this work.
