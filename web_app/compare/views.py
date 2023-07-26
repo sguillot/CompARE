@@ -82,7 +82,7 @@ def visu_data(request):
             checkList = json.loads(jsonCheckList) #python list with the checkboxes that are checked
             #if checklist is empty we do like all the checkboxes were checked
             if not checkList:
-                checkList = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","coldMSP","Thermal INSs","Type-I X-ray bursts"] #list with all types of sources
+                checkList = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"] #list with all types of sources
 
             #We filter the select variable that contains all the Ns from the database ( it can be already filter from the above condition )
             #we select the ns who have a values from the list 
