@@ -90,7 +90,7 @@ def visu_data(request):
 
         #We filter with the select box selected if the user has sent a request  
         #if the variable dictSelect has a value
-        if dictSelect : 
+        if dictSelect :
             sel = json.loads(dictSelect) #dictionnary python list  whith the values selected (key = the selecte box , value = the selected item )
             
             #We check if the keys have a value if they have we filter the select variable already filtered above with the values 
@@ -222,53 +222,52 @@ def visu_data(request):
                      #we get the assumption and put it in a list and after the dictionaray of the NS
                      list_temp2.append(snm.id_assumptions.assumptionsprimary)
                      loop['assumptions']=list_temp2
-                
-                listFilt.append(loop) #we had the dictionnary to the list    
+                listFilt.append(loop) #we had the dictionnary to the list
             #We return the list with the ns 
             return HttpResponse(json.dumps(listFilt), content_type='application/json',)
         
         else:
-            
-                #We add the models to each NS 
-                list_ns_model_prim = []
-                #list_ns_model_sec = []
-                list_ns_assumptions_prim = []
-                #list_ns_assumptions_sec = []
-                for n in select_ns_all:
-                    #We select the filenames linked to models 
-                    select_ns_model =  NsToModel.objects.select_related().filter(filename = n.filename)
-                    #We select the filenames linked to assumptions
-                    select_ns_ass =  NsToAssumptions.objects.select_related().filter(filename = n.filename)
+            #We add the models to each NS
+            list_ns_model_prim = []
+            #list_ns_model_sec = []
+            list_ns_assumptions_prim = []
+            #list_ns_assumptions_sec = []
+            for n in select_ns_all:
+                #We select the filenames linked to models
+                select_ns_model =  NsToModel.objects.select_related().filter(filename = n.filename)
+                #We select the filenames linked to assumptions
+                select_ns_ass =  NsToAssumptions.objects.select_related().filter(filename = n.filename)
 
-                    list_temp_prim = []
-                    #list_temp_sec  = []
-                    for snm in select_ns_model:
-                        list_temp_prim.append(snm.id_model.dependenciesprimary)
-                        #list_temp_sec.append(snm.id_model.dependenciessecondary)
-                    list_ns_model_prim.append(list_temp_prim)
-                    #list_ns_model_prim.append([list_temp_prim,list_temp_sec])
+                list_temp_prim = []
+                #list_temp_sec  = []
+                for snm in select_ns_model:
+                    list_temp_prim.append(snm.id_model.dependenciesprimary)
+                    #list_temp_sec.append(snm.id_model.dependenciessecondary)
+                list_ns_model_prim.append(list_temp_prim)
+                #list_ns_model_prim.append([list_temp_prim,list_temp_sec])
 
-                    list_temp2 = []
-                    for sass in select_ns_ass:
-                        list_temp2.append(sass.id_assumptions.assumptionsprimary)   
-                    list_ns_assumptions_prim.append(list_temp2)
+                list_temp2 = []
+                for sass in select_ns_ass:
+                    list_temp2.append(sass.id_assumptions.assumptionsprimary)
+                list_ns_assumptions_prim.append(list_temp2)
 
-                #we select the data who will be in the select box 
-                selectMethod = MethodNs.objects.values('method').distinct()
-                selectConstrainV = ConstrainNs.objects.values('constrainvariable').distinct()
-                selectConstrainT = ConstrainNs.objects.values('constraintype').distinct()
-                selectModel = ModelNs.objects.values('dependenciesprimary').distinct()
-                selectModelSec = ModelNs.objects.values('dependenciessecondary').distinct()
-                selectAssumptions = AssumptionsNs.objects.values('assumptionsprimary').distinct()
-                selectAssumptions2 = AssumptionsNs.objects.values('assumptionssecondary').distinct()
-                
-                #compact in one object all the data
-                select_ns_all_zip = zip(select_ns_all,list_ns_model_prim,list_ns_assumptions_prim)
-                
-                selectAll = {"queryall":select_ns_all_zip,"queryMeth":selectMethod,"queryAss":selectAssumptions,"queryDep":selectModel , "queryConV":selectConstrainV , "queryConT":selectConstrainT ,"queryDepS":selectModelSec,"queryAssS":selectAssumptions2}
-                
-                #send to the template 
-                return render(request, "compare/visu_data.html",selectAll)
+            #we select the data who will be in the select box
+            selectMethod = MethodNs.objects.values('method').distinct()
+            selectConstrainV = ConstrainNs.objects.values('constrainvariable').distinct()
+            selectConstrainT = ConstrainNs.objects.values('constraintype').distinct()
+            selectModel = ModelNs.objects.values('dependenciesprimary').distinct()
+            selectModelSec = ModelNs.objects.values('dependenciessecondary').distinct()
+            selectAssumptions = AssumptionsNs.objects.values('assumptionsprimary').distinct()
+            selectAssumptions2 = AssumptionsNs.objects.values('assumptionssecondary').distinct()
+
+            #compact in one object all the data
+            select_ns_all_zip = zip(select_ns_all,list_ns_model_prim,list_ns_assumptions_prim)
+
+            selectAll = {"queryall":select_ns_all_zip,"queryMeth":selectMethod,"queryAss":selectAssumptions,"queryDep":selectModel ,
+                         "queryConV":selectConstrainV , "queryConT":selectConstrainT ,"queryDepS":selectModelSec,"queryAssS":selectAssumptions2}
+
+            #send to the template
+            return render(request, "compare/visu_data.html",selectAll)
 
 def detail(request, id):
     if request.method == 'POST':
@@ -281,8 +280,6 @@ def detail(request, id):
         fichierlog.close()
 
         file.delete()
-
-        
 
         truc='yes'
         return HttpResponse(json.dumps(truc), content_type='application/json',)
