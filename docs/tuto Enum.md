@@ -17,11 +17,11 @@ Select the database you want to use:
     use compare3;
 
 ## Alter Table 
-First we are going to **modificate the database** . To add a variable at an **ENUM** we have to alter the table , herre the script :
+First we are going to **modify the database** . To add a variable at an **ENUM** we have to alter the table , herre the script :
 
     ALTER TABLE constrain_ns 
     MODIFY COLUMN constrainvariable 
-    ENUM('R','M-R','R value+errors','New Value') NOT NULL;
+    ENUM('M', 'R', 'M-R', 'F', 'L', 'M-L', 'new var') NOT NULL;
 
 The first line states which table will be modified, the second line which column will be modified, 
 and the third line list the values.
@@ -39,12 +39,14 @@ If you want to check what are the values already existing you can display them w
 
 Go to the model.py page and change list that look like this :
 
-    CONSTRAIN_VAR = [
-	    ("R", "R"),
-	    ("M-R", "M-R"),
-	    ("R value+errors","R value+errors"),
-	    ("New Value","New Value")
-    ]
+        CONSTRAIN_VAR = [("M", "M"),
+                         ("R", "R"),
+                         ("M-R", "M-R"),
+                         ("F", "F"),
+                         ("L", "L"),
+                         ("M-L", "M-L"),
+                         ("New var","New var")
+                        ]
 
 Add the new value (2 times) that  you added in the database 
 	
