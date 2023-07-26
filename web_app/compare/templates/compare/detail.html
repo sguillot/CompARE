@@ -8,7 +8,8 @@ Detail
 <div class="bodydetail">
 
 <div class="titlefile">
-        <h1>{{queryall.filename}}</h1>
+        <h1>{{queryall.id_name.namedb}}</h1>
+        <h2>{{queryall.filename}}</h2>
     <div class="btn">
         <button type="button" id="btndwnl" value="Download">Download</button>
 
@@ -29,14 +30,17 @@ Detail
     <p class="titlecat">Models</p>
     <ul>
     {% for mo in queryMo %}
-        <li><span>{{mo.id_model.dependenciesprimary}} : {{mo.id_model.dependenciessecondary }} :<br> </span> {{mo.id_model.dependeciesdescription}} <br> {{mo.id_model.caveatsReferences}}</li>
+        <li><span>{{mo.id_model.dependenciesprimary}} : {{mo.id_model.dependenciessecondary }} <br> </span>
+            {{mo.id_model.dependeciesdescription}} <br> {{mo.id_model.caveatsReferences}}
+        </li>
         <br>
     {% endfor %}
 
-    {% for lmo in querylmo %}
-        <li> {{lmo}} </li>
-        <br>
-    {% endfor %}
+<!--    {% for lmo in querylmo %}-->
+<!--        <li> TEST {{lmo}} </li>-->
+<!--        <br>-->
+<!--    {% endfor %}-->
+
     </ul>
 </div>
 
@@ -45,7 +49,9 @@ Detail
     <p class="titlecat">Assumptions</p>
     <ul>
     {% for as in queryAs %}
-        <li><span>{{as.id_assumptions.assumptionsprimary}} : {{as.id_assumptions.assumptionssecondary}} : <br></span> {{as.id_assumptions.assumptionsdescription}} </li>
+        <li><span>{{as.id_assumptions.assumptionsprimary}} : {{as.id_assumptions.assumptionssecondary}} <br></span>
+            {{as.id_assumptions.assumptionsdescription}}
+        </li>
         <br>
     {% endfor %}
 </ul>
@@ -66,7 +72,6 @@ Detail
     <p>{{queryall.id_name.localisationfile}}</p>
     <p>{{queryall.id_name.eventdate}}</p>
 
-
 </div>
 
 <div class="divmethod">
@@ -84,7 +89,7 @@ Detail
 
     <p class="titlecat">REF</p>
     
-        <p><a href="{{queryall.id_ref.doi}}" target="_blank">DOI : {{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
+        <p><a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">DOI : {{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
         <p>Short :{{queryall.id_ref.short}}</p>
         <p>Bibitex : {{queryall.id_ref.bibtex}}</p>
         <p>Repositorydoi : {{queryall.id_ref.repositorydoi}}</p>
