@@ -66,16 +66,15 @@ class NameNs(models.Model):
 
 class MethodNs(models.Model):
 
-    METHOD_CHOICES = [
-    ("Pulsar timing", "Pulsar timing"),
-    ("Thermal emission", "Thermal emission"),
-    ("Gravitational wave merger", "Gravitational wave merger")
-    ]
+    METHOD_CHOICES = [("Pulsar timing", "Pulsar timing"),
+                      ("Thermal emission", "Thermal emission")
+                       ]
 
     id_method = models.AutoField(db_column='id_Method', primary_key=True)  # Field name made lowercase.
     method = models.CharField(db_column='Method', max_length=25,choices=METHOD_CHOICES)  # Field name made lowercase.
     method_specific = models.TextField(db_column='Method_Specific')  # Field name made lowercase.
-    datadate = models.CharField(db_column='DataDate', max_length=70)  # Field name made lowercase.
+    #datadate = models.CharField(db_column='DataDate', max_length=70)  # Field name made lowercase.
+    datadate = models.TextField(db_column='DataDate')  # Field name made lowercase.
     processinfinfo = models.TextField(db_column='ProcessinfInfo')  # Field name made lowercase.
    
     class Meta:
@@ -83,21 +82,20 @@ class MethodNs(models.Model):
         db_table = 'method_ns'
 
 class ConstrainNs(models.Model):
+    ('MCMC samples', 'Posterior samples', 'Quantiles', 'mean +/- 1 sigma')
+    CONSTRAIN_CHOICES = [("MCMC samples", "MCMC samples"),
+                         ("Posterior samples", "Posterior samples"),
+                         ("Quantiles", "Quantiles"),
+                         ("mean +/- 1 sigma", "mean +/- 1 sigma")
+                         ]
 
-    CONSTRAIN_CHOICES = [
-    ("Likelihood", "Lielihood"),
-    ("MCMC samples", "MCMC samples"),
-    ("Confidence Interval", "Confidence Interval"),
-    ("value+errors","value+errors"),
-    ("R value+errors","R value+errors"),
-    ("M-R values+errors","M-R values+errors")
-    ]
-
-    CONSTRAIN_VAR = [
-    ("R", "R"),
-    ("M-R", "M-R"),
-    ("R value+errors","R value+errors")
-    ]
+    CONSTRAIN_VAR = [("M", "M"),
+                     ("R", "R"),
+                     ("M-R", "M-R"),
+                     ("F", "F"),
+                     ("L", "L"),
+                     ("M-L", "M-L")
+                     ]
 
     id_constrain = models.AutoField(db_column='id_Constrain', primary_key=True)  # Field name made lowercase.
     constraintype = models.CharField(db_column='ConstrainType', max_length=19 ,choices=CONSTRAIN_CHOICES)  # Field name made lowercase.

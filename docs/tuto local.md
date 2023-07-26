@@ -10,9 +10,9 @@ Define your SQL localhost root password:
 
     ALTER USER ‘root’@‘localhost' IDENTIFIED WITH mysql_native_password BY ‘pass1234’;
 
-Create the database (it will prompt your password: 'pass1234' in the example above)
+Create the database from the existing `database_compare3.sql` file. Note that `database_draft.sql` is outdated and will not work with the current version of the code (python and html). It will prompt your password: 'pass1234' in the example above)
 
-    mysql -u root -p < scripts/database/database_draft.sql
+    mysql -u root -p < scripts/database/database_compare3.sql
 
 Add the environment variable `PWD_MYSQL` with your password (e.g. `pass1234` in the example above) with the following line in your `.bashrc` or `.bash_profile`.
 
