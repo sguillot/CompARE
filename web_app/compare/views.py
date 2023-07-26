@@ -260,11 +260,21 @@ def visu_data(request):
             selectAssumptions = AssumptionsNs.objects.values('assumptionsprimary').distinct()
             selectAssumptions2 = AssumptionsNs.objects.values('assumptionssecondary').distinct()
 
+            test_selectMethod = [{'method': 'Thermal emission'}, {'method': 'Pulsar timing'}, {'method': 'TEST3'}]
+            print(test_selectMethod)
+            print("JSON SELECTED: ", jsonCheckList)
+            print('--------------------------')
+
             #compact in one object all the data
             select_ns_all_zip = zip(select_ns_all,list_ns_model_prim,list_ns_assumptions_prim)
 
             selectAll = {"queryall":select_ns_all_zip,"queryMeth":selectMethod,"queryAss":selectAssumptions,"queryDep":selectModel ,
                          "queryConV":selectConstrainV , "queryConT":selectConstrainT ,"queryDepS":selectModelSec,"queryAssS":selectAssumptions2}
+
+            selectAll = {"queryall": select_ns_all_zip, "queryMeth": test_selectMethod, "queryAss": selectAssumptions,
+                         "queryDep": selectModel,
+                         "queryConV": selectConstrainV, "queryConT": selectConstrainT, "queryDepS": selectModelSec,
+                         "queryAssS": selectAssumptions2}
 
             #send to the template
             return render(request, "compare/visu_data.html",selectAll)
