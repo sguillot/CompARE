@@ -230,23 +230,28 @@ def visu_data(request):
         else:
             
                 #We add the models to each NS 
-                list_ns_model = []
-                list_ns_assumptions = []
+                list_ns_model_prim = []
+                #list_ns_model_sec = []
+                list_ns_assumptions_prim = []
+                #list_ns_assumptions_sec = []
                 for n in select_ns_all:
                     #We select the filenames linked to models 
                     select_ns_model =  NsToModel.objects.select_related().filter(filename = n.filename)
                     #We select the filenames linked to assumptions
                     select_ns_ass =  NsToAssumptions.objects.select_related().filter(filename = n.filename)
 
-                    list_temp = []
+                    list_temp_prim = []
+                    #list_temp_sec  = []
                     for snm in select_ns_model:
-                        list_temp.append(snm.id_model.dependenciesprimary)   
-                    list_ns_model.append(list_temp)
+                        list_temp_prim.append(snm.id_model.dependenciesprimary)
+                        #list_temp_sec.append(snm.id_model.dependenciessecondary)
+                    list_ns_model_prim.append(list_temp_prim)
+                    #list_ns_model_prim.append([list_temp_prim,list_temp_sec])
 
                     list_temp2 = []
                     for sass in select_ns_ass:
                         list_temp2.append(sass.id_assumptions.assumptionsprimary)   
-                    list_ns_assumptions.append(list_temp2)
+                    list_ns_assumptions_prim.append(list_temp2)
 
                 #we select the data who will be in the select box 
                 selectMethod = MethodNs.objects.values('method').distinct()
@@ -258,12 +263,12 @@ def visu_data(request):
                 selectAssumptions2 = AssumptionsNs.objects.values('assumptionssecondary').distinct()
                 
                 #compact in one object all the data
-                select_ns_all_zip = zip(select_ns_all,list_ns_model,list_ns_assumptions)
+                select_ns_all_zip = zip(select_ns_all,list_ns_model_prim,list_ns_assumptions_prim)
                 
                 selectAll = {"queryall":select_ns_all_zip,"queryMeth":selectMethod,"queryAss":selectAssumptions,"queryDep":selectModel , "queryConV":selectConstrainV , "queryConT":selectConstrainT ,"queryDepS":selectModelSec,"queryAssS":selectAssumptions2}
                 
                 #send to the template 
-                return render(request,"compare/visu_data.html",selectAll)
+                return render(request, "compare/visu_data.html",selectAll)
 
 def detail(request, id):
     if request.method == 'POST':
@@ -791,10 +796,6 @@ def insert_data(request):
                 #we put in a dataframe the value of the file
                 d=pd.DataFrame(pd.read_csv(test))
 
-                #print("TRYING TO READ FILE NAME")
-                #print(d['FileName'])
-                #print("-----------------------------")
-
                 listco = d.columns #columns in a list
                 listNoPoint =[]
                 #we remove .1 for the elements that are multiple times in the file
@@ -809,14 +810,14 @@ def insert_data(request):
                 #we put the columns at 1 row and they are the index
                 d = d.set_axis(d.iloc[0], axis=1)
                 d = d[1:]
-                d = d.replace('\n','', regex=True)
-                d = d.replace('\r','', regex=True)
-                d = d.replace('\r\n','', regex=True)
-                d= d.fillna('')
+                #d = d.replace('\n','', regex=True)
+                #d = d.replace('\r','', regex=True)
+                #d = d.replace('\r\n','', regex=True)
+                d = d.fillna('')
                 
                 #list with type of sources
-                NsClass = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","coldMSP","Thermal INSs","Type-I X-ray bursts"]
-                
+                NsClass = ["NS spin","Transiently_Accreting_NS","NS mass","NS-NS mergers",
+                           "PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"]
 
                 #we get the enum types in lists
                 me =[]
@@ -841,28 +842,43 @@ def insert_data(request):
                     #we put in list the models and assumptions
                     filename = d['FileName'][i]
 
-                    listmopri = list(d['ModelDependenciesPrimary'])[i-1]
-                    listmo = listmopri.split(",")
+                    # listmopri = list(d['ModelDependenciesPrimary'])[i-1]
+                    # listmo = listmopri.split(",")
+                    # listmosecondary = list(d['ModelDependenciesSecondary'])[i-1]
+                    # listmosec = listmosecondary.split(",")
+                    # listmodescription = list(d['ModelDependencyDescription'])[i-1]
+                    # listmodesc = listmodescription.split(",")
+                    # listmocaveats = list(d['CaveatReferences'])[i-1]
+                    # listmocav = listmocaveats.split(",")
+                    # listasspri = list(d['AssumptionsPrimary'])[i-1]
+                    # listass = listasspri.split(",")
+                    # listasssecondary = list(d['AssumptionsSecondary'])[i-1]
+                    # listasssec = listasssecondary.split(",")
+                    # listassdescription = list(d['AssumptionsDescription'])[i-1]
+                    # listassdesc = listassdescription.split(",")
 
-                    listmosecondary = list(d['ModelDependenciesSecondary'])[i-1]
-                    listmosec = listmosecondary.split(",")
 
-                    listmodescription = list(d['ModelDependencyDescription'])[i-1]
-                    listmodesc = listmodescription.split(",")
+                    listmo = d['ModelDependenciesPrimary'][i].split(",")
 
-                    listmocaveats = list(d['CaveatReferences'])[i-1]
-                    listmocav = listmocaveats.split(",")
+                    listmosec = d['ModelDependenciesSecondary'][i].split(",")
 
-                    listasspri = list(d['AssumptionsPrimary'])[i-1]
-                    listass = listasspri.split(",")
-                    
-                    listasssecondary = list(d['AssumptionsSecondary'])[i-1]
-                    listasssec = listasssecondary.split(",")
+                    listmodesc = d['ModelDependencyDescription'][i].split("\n")
+                    listmodesc = [i for i in listmodesc if i]
+                    if (len(listmodesc)==0):
+                        listmodesc = ['']  # Just a hack to avoid an empty list if there are no description provided
 
-                    listassdescription = list(d['AssumptionsDescription'])[i-1]
-                    listassdesc = listassdescription.split(",")
-                    
-                    #we verify if the filename dont alreday exist
+                    listmocav = d['CaveatReferences'][i].split(",")
+
+                    listass = d['AssumptionsPrimary'][i].split(",")
+
+                    listasssec = d['AssumptionsSecondary'][i].split(",")
+
+                    listassdesc = d['AssumptionsDescription'][i].split("\n")
+                    listassdesc = [i for i in listassdesc if i]
+                    if (len(listassdesc)==0):
+                        listassdesc = ['']  # Just a hack to avoid an empty list if there are no description provided
+
+                    #we verify if the filename do not alreday exist
                     if Ns.objects.filter(filename = d['FileName'][i]):
                         notinserted[filename] = " already in"
                         continue
@@ -882,26 +898,40 @@ def insert_data(request):
                           (len(d['RefDOI'][i])<=0)):
                         notinserted[filename] = " missing mandatory elements"
                         continue
-                    
+
+
+
                     #more verifications
-                    elif((len(d['AssumptionsPrimary'][i])<=0) and (len(d['AssumptionsSecondary'][i])<=0) and (len(d['AssumptionsDescription'][i])<=0)):
-                        notinserted[filename] = " assumptions have to have minimum one field "
+
+                    #elif( (len(d['AssumptionsPrimary'][i])<=0) and (len(d['AssumptionsSecondary'][i])<=0) and (len(d['AssumptionsDescription'][i])<=0)):
+                    #     notinserted[filename] = " assumptions have to have minimum one field "
+                    #     continue
+                    #
+                    # elif((len(d['ModelDependenciesPrimary'][i])<=0) and (len(d['ModelDependenciesSecondary'][i])<=0) and (len(d['ModelDependencyDescription'][i])<=0)):
+                    #     notinserted[filename] = " model have to have minimum one field"
+                    #     continue
+
+                    elif( (len(listmo)!= len(listmosec)) or
+                          (len(listmo)!= len(listmodesc)) or
+                          (len(listmo) != len(listmocav))
+                        ):
+                        notinserted[filename] = " has a mismatch in input model dependencies " \
+                                                "( {} primary, {} secondary, {} descriptions, and {} caveat references)".format(len(listmo),
+                                                                                                                                len(listmosec),
+                                                                                                                                len(listmodesc),
+                                                                                                                                len(listmocav))
                         continue
 
-                    elif((len(d['ModelDependenciesPrimary'][i])<=0) and (len(d['ModelDependenciesSecondary'][i])<=0) and (len(d['ModelDependencyDescription'][i])<=0)):
-
-                        notinserted[filename] = " model have to have minimum one field"
-                        continue
-
-                    elif(len(listmo)!= len(listmosec)): # or (len(listmo)!= len(listmodesc)):
-                        notinserted[filename] = " missing elements for a dependencie"
-                        continue
-
-                    elif(len(listass)!= len(listasssec)):# or (len(listass)!= len(listassdesc)):
-                        notinserted[filename] = " missing elements for an assumption"
+                    elif( (len(listass)!= len(listasssec)) or
+                          (len(listass)!= len(listassdesc))
+                        ):
+                        notinserted[filename] = " has a mismatch in input assumptions " \
+                                                "( {} primary, {} secondary and {} descriptions)".format(len(listass),
+                                                                                                         len(listasssec),
+                                                                                                         len(listassdesc))
                         continue
                     
-                    elif d['Method'][i] not in me :
+                    elif str(d['Method'][i]) not in me :
                         notinserted[filename] = d['Method'][i] + " can not be a method"
                         continue
 
@@ -991,13 +1021,12 @@ def insert_data(request):
                     methodS = d['MethodSpecific'][i]
                     dDate = d['DataDate'][i]
                     ProcInfo = d['ProcessingInfo'][i]
-                            
-                    if (MethodNs.objects.filter(method =methodN, method_specific =methodS,datadate = dDate,processinfinfo =ProcInfo)):
+
+                    if (MethodNs.objects.filter(method =methodN, method_specific =methodS,datadate = dDate,processinfinfo=ProcInfo)):
                         idM = MethodNs.objects.filter(method =methodN, method_specific =methodS,datadate = dDate,processinfinfo =ProcInfo)
                         idM = idM[0]
                     else:
-                        method = MethodNs(method =methodN, method_specific =methodS,
-                                    datadate = dDate,processinfinfo =ProcInfo)
+                        method = MethodNs(method =methodN, method_specific =methodS,datadate = dDate,processinfinfo=ProcInfo)
                         method.save()
                         idM =MethodNs.objects.latest('id_method')
 
@@ -1063,7 +1092,7 @@ def insert_data(request):
                         if len(mocaveats)<1:
                             mocaveats = None
 
-                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc)):
+                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)):
                             idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)
                             idMo = idMo[0]
                         else:
@@ -1104,7 +1133,7 @@ def insert_data(request):
                 #message for the user 
                 mes = "You inserted "+str(nbinsert)+"/"+str(len(d)-1)+" elements"
                 mes2 = "Element inserted :"+str(inserted)
-                mes3 = "Element not inserted:"+str(notinserted)
+                mes3 = "Element not inserted: "+str(notinserted)
                 messages.success(request, mes)
                 messages.success(request, mes2)
                 messages.success(request, mes3)
