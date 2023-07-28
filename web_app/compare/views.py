@@ -56,7 +56,7 @@ def visu_data(request):
              selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')#We recover the Bibtex in connection with our filename list 
 
              #Writing Bitex to a file
-             fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w") #Open file in write mode (w)
+             fichierBib = open('web_app/compare/static/compare/Bibtex.txt', "w") #Open file in write mode (w)
 
              for b in selectbib:#Loop to write each bibtex of the list
                 fichierBib.write(b['id_ref__bibtex'])#Writing the bibtex to the file 
@@ -64,7 +64,7 @@ def visu_data(request):
              fichierBib.close() #Closing the file
 
              #We return the path of the Bibtex file to the succes part off the AJAX request
-             return HttpResponse(json.dumps("..\static\compare\Bibtex.txt"), content_type='application/json')
+             return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
         
         #We filter with the result of the search bar if the user has sent a request
         #if the variable stringSearch has a value
@@ -274,7 +274,7 @@ def detail(request, id):
         filename = json.loads(request.POST.get('filename'))
         file = Ns.objects.get(filename = filename)
 
-        fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+        fichierlog = open('web_app/compare/static/compare/log.txt', "a")
         wri = ['Delete:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(file)+'\n\n']
         fichierlog.writelines(wri)
         fichierlog.close()
@@ -419,7 +419,7 @@ def modify(request,id):
                     messages.success(request,"Yes")
 
                     #to write in the log file
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(nameNS)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -442,7 +442,7 @@ def modify(request,id):
                         messages.success(request,"Yes")
 
                     #to write in the logo file
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: Name ',str(ns_list.id_name)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -487,7 +487,7 @@ def modify(request,id):
                     RefNS.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(RefNS)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -506,7 +506,7 @@ def modify(request,id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: Ref ',str(ns_list.id_ref)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -536,7 +536,7 @@ def modify(request,id):
                     MethNS.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(MethNS)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -556,7 +556,7 @@ def modify(request,id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:Method ',str(ns_list.id_method)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -582,7 +582,7 @@ def modify(request,id):
                     Constrainns.constrainversion = constrainV
                     Constrainns.save()
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: ',str(Constrainns)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -606,7 +606,7 @@ def modify(request,id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: ',str(ns_list.id_constrain)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -642,7 +642,7 @@ def modify(request,id):
                     model.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(model)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -660,7 +660,7 @@ def modify(request,id):
                         model.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: ',str(model)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -691,7 +691,7 @@ def modify(request,id):
                     assumption.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(assumption)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -708,7 +708,7 @@ def modify(request,id):
                         assumption.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:Assumptions ',str(assumption)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -763,6 +763,16 @@ def logout(request):
 
 @login_required
 def insert_data(request):
+
+    datafolder = {"NS spin": "fastest",
+                  "NS mass": "masses",
+                  "NS-NS mergers": "gw",
+                  "PPM": "msps",
+                  "qLMXB": "qlmxb",
+                  "Cold MSP": "coldmsps",
+                  "Thermal INSs": "ins",
+                  "Type-I X-ray bursts": "bursts",
+                  "Transiently_Accreting_NS": "cooling"}
 
     #We check if a Get request is sent from the user (get for the selectlist for nama and ref)
     if request.method == 'GET':
@@ -1182,7 +1192,7 @@ def insert_data(request):
                     name.save()
 
                     #to write in the log file
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(name)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -1217,7 +1227,7 @@ def insert_data(request):
                 ref = RefNs(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)
                 ref.save()
 
-                fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                 wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(ref)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
@@ -1261,7 +1271,7 @@ def insert_data(request):
                 method.save()
                 methodId = MethodNs.objects.latest('id_method')
 
-                fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                 wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(method)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
@@ -1278,7 +1288,7 @@ def insert_data(request):
                 constrain.save()
                 constrainId = ConstrainNs.objects.latest('id_constrain')
 
-                fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                 wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(constrain)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
@@ -1318,7 +1328,7 @@ def insert_data(request):
                     model.save()
                     modelId = ModelNs.objects.latest('id_model')
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(model)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -1355,7 +1365,7 @@ def insert_data(request):
                     assumptions.save()
                     assumptionsId = AssumptionsNs.objects.latest('id_assumptions')
 
-                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(assumptions)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -1363,7 +1373,7 @@ def insert_data(request):
                 nsass = NsToAssumptions(filename = ns , id_assumptions = assumptionsId)
                 nsass.save()
 
-        fichierlog = open('web_app\compare\static\compare\log.txt', "a")
+        fichierlog = open('web_app/compare/static/compare/log.txt', "a")
         wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(ns)+'\n\n']
         fichierlog.writelines(wri)
         fichierlog.close()   
