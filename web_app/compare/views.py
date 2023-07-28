@@ -4,6 +4,7 @@ import json
 from django.shortcuts import render , redirect
 import numpy as np
 from compare.models import Ns , NsToModel , NsToAssumptions , MethodNs , AssumptionsNs , ModelNs , ConstrainNs , NameNs , RefNs
+from compare.compare_utils import formatting_csv
 from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth import login as auth_login, authenticate
@@ -789,29 +790,11 @@ def insert_data(request):
         #we check if ist a file send 
         if 'myfile' in request.FILES:
             if(request.FILES['myfile']):  
-                test = request.FILES['myfile']
+                input_csv_filename = request.FILES['myfile']
                 #we put in a dataframe the value of the file
-                d=pd.DataFrame(pd.read_csv(test))
+                d= pd.DataFrame(pd.read_csv(input_csv_filename))
+                d = formatting_csv(d)
 
-                listco = d.columns #columns in a list
-                listNoPoint =[]
-                #we remove .1 for the elements that are multiple times in the file
-                for l in listco:
-                    if '.1' in l:
-                        l = l.replace('.1','')
-                    listNoPoint.append(l)
-
-                d = d.T #transpose the dataframe to have the columns at the top 
-                d.reset_index(drop=True, inplace=True)#remove the auto index
-                d.insert(0,'NameDB',listNoPoint)
-                #we put the columns at 1 row and they are the index
-                d = d.set_axis(d.iloc[0], axis=1)
-                d = d[1:]
-                #d = d.replace('\n','', regex=True)
-                #d = d.replace('\r','', regex=True)
-                #d = d.replace('\r\n','', regex=True)
-                d = d.fillna('')
-                
                 #list with type of sources
                 NsClass = ["NS spin","Transiently_Accreting_NS","NS mass","NS-NS mergers",
                            "PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"]
@@ -838,22 +821,6 @@ def insert_data(request):
                     
                     #we put in list the models and assumptions
                     filename = d['FileName'][i]
-
-                    # listmopri = list(d['ModelDependenciesPrimary'])[i-1]
-                    # listmo = listmopri.split(",")
-                    # listmosecondary = list(d['ModelDependenciesSecondary'])[i-1]
-                    # listmosec = listmosecondary.split(",")
-                    # listmodescription = list(d['ModelDependencyDescription'])[i-1]
-                    # listmodesc = listmodescription.split(",")
-                    # listmocaveats = list(d['CaveatReferences'])[i-1]
-                    # listmocav = listmocaveats.split(",")
-                    # listasspri = list(d['AssumptionsPrimary'])[i-1]
-                    # listass = listasspri.split(",")
-                    # listasssecondary = list(d['AssumptionsSecondary'])[i-1]
-                    # listasssec = listasssecondary.split(",")
-                    # listassdescription = list(d['AssumptionsDescription'])[i-1]
-                    # listassdesc = listassdescription.split(",")
-
 
                     listmo = d['ModelDependenciesPrimary'][i].split(",")
 
@@ -896,8 +863,6 @@ def insert_data(request):
                         notinserted[filename] = " missing mandatory elements"
                         continue
 
-
-
                     #more verifications
 
                     #elif( (len(d['AssumptionsPrimary'][i])<=0) and (len(d['AssumptionsSecondary'][i])<=0) and (len(d['AssumptionsDescription'][i])<=0)):
@@ -929,19 +894,19 @@ def insert_data(request):
                         continue
                     
                     elif str(d['Method'][i]) not in me :
-                        notinserted[filename] = d['Method'][i] + " can not be a method"
+                        notinserted[filename] = d['Method'][i] + " can not be a method (choose among {})".format(me)
                         continue
 
                     elif d['ConstrainType'][i] not in ct :
-                        notinserted[filename] = d['ConstrainType'][i] + " can not be a constrain type"
+                        notinserted[filename] = d['ConstrainType'][i] + " can not be a constrain type (choose among {})".format(ct)
                         continue
 
                     elif d['ConstrainVariable'][i] not in cv :
-                        notinserted[filename] = d['ConstrainVariable'][i] + " can not be a constrain variable"
+                        notinserted[filename] = d['ConstrainVariable'][i] + " can not be a constrain variable (choose among {})".format(cv)
                         continue
 
                     elif d['ClassDB'][i] not in NsClass :
-                        notinserted[filename] = d['ClassDB'][i] + " can not be a name class"
+                        notinserted[filename] = d['ClassDB'][i] + " can not be a name class (choose among {})".format(NsClass)
                         continue
 
                     elif(len(d['RA'][i])>1):
@@ -1010,7 +975,7 @@ def insert_data(request):
                     else:
                         name = NameNs(namedb=namen, classdb=classn, namesimbad=nameS, classsimbad=classS, ra=r, declination=dec, localisationfile=loc, eventdate=dat)
                         name.save()
-                        idN =NameNs.objects.latest('id_name') #we stock the object that we insert to link it after  
+                        idN =NameNs.objects.latest('id_name') # we store the object that we insert to link it after
 
                     #we do the same for the other columns of the dataframe
 
@@ -1069,7 +1034,7 @@ def insert_data(request):
                     # we create the new NS (filepath have to change)
                     file = Ns(filename=filename,filepath="qdsdsqdsqdsq.txt",id_ref=idR,id_name=idN,id_method=idM,id_constrain=idC)  
                     file.save()
-                    nsInstance = Ns.objects.get(filename=filename) #we stock the ns for the assumptions and models
+                    nsInstance = Ns.objects.get(filename=filename) # we store the ns for the assumptions and models
 
                     for j in range(len(listmo)):
                         modelpri = listmo[j]
