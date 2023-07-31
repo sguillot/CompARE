@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
                 ('id_model', models.AutoField(db_column='id_Model', primary_key=True, serialize=False)),
                 ('dependenciesprimary', models.CharField(blank=True, db_column='DependenciesPrimary', max_length=60, null=True)),
                 ('dependenciessecondary', models.CharField(blank=True, db_column='DependenciesSecondary', max_length=60, null=True)),
-                ('dependeciesdescription', models.TextField(blank=True, db_column='DependeciesDescription', null=True)),
+                ('dependenciesdescription', models.TextField(blank=True, db_column='DependenciesDescription', null=True)),
             ],
             options={
                 'db_table': 'model_ns',

@@ -4,6 +4,7 @@ import json
 from django.shortcuts import render , redirect
 import numpy as np
 from compare.models import Ns , NsToModel , NsToAssumptions , MethodNs , AssumptionsNs , ModelNs , ConstrainNs , NameNs , RefNs
+from compare.compare_utils import formatting_csv
 from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth import login as auth_login, authenticate
@@ -64,7 +65,7 @@ def visu_data(request):
              fichierBib.close() #Closing the file
 
              #We return the path of the Bibtex file to the succes part off the AJAX request
-             return HttpResponse(json.dumps("..\static\compare\Bibtex.txt"), content_type='application/json')
+             return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
         
         #We filter with the result of the search bar if the user has sent a request
         #if the variable stringSearch has a value
@@ -625,20 +626,20 @@ def modify(request,id):
             if len(depS)<1:
                 depS = None
 
-            depD = request.POST.get('dependeciesdescription')
+            depD = request.POST.get('dependenciesdescription')
             if len(depD)<1:
                 depD = None
 
-            depCav = request.POST.get('MocaveatsReferences')
-            if len(depCav)<1:
-                depCav = None
+            depR = request.POST.get('dependenciesreferences')
+            if len(depR)<1:
+                depR = None
 
             else:
                 if 'update' in request.POST :
                     model.dependenciesprimary = depP
                     model.dependenciessecondary = depS
-                    model.dependeciesdescription = depD
-                    model.caveatsReferences = depCav
+                    model.dependenciesdescription = depD
+                    model.dependenciesreferences = depR
                     model.save()
                     messages.success(request,"Yes")
 
@@ -648,15 +649,23 @@ def modify(request,id):
                     fichierlog.close()
 
                 elif 'add' in request.POST :
-                    if(ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)):
-
-                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)
+                    if(ModelNs.objects.filter(dependenciesprimary=depP,
+                                              dependenciessecondary=depS,
+                                              dependenciesdescription=depD,
+                                              dependenciesreferences=depR)):
+                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP,
+                                                            dependenciessecondary=depS,
+                                                            dependenciesdescription=depD,
+                                                            dependenciesreferences=depR)
                         modelExist = modelExist[0]
                         model.id_model = modelExist
                         model.save()
                         
                     else:
-                        model = ModelNs(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)
+                        model = ModelNs(dependenciesprimary=depP,
+                                        dependenciessecondary=depS,
+                                        dependenciesdescription=depD,
+                                        dependenciesreferences=depR)
                         model.save()
                         messages.success(request,"Yes")
 
@@ -683,11 +692,16 @@ def modify(request,id):
             if len(AssD)<1:
                 AssD = None
 
+            AssR = request.POST.get('assumptionsreferences')
+            if len(AssR)<1:
+                AssR = None
+
             else:
                 if 'update' in request.POST :
                     assumption.assumptionsprimary = AssP
                     assumption.assumptionssecondary = AssS
                     assumption.assumptionsdescription = AssD
+                    assumption.assumptionsreferences = AssR
                     assumption.save()
                     messages.success(request,"Yes")
 
@@ -697,14 +711,23 @@ def modify(request,id):
                     fichierlog.close()
 
                 elif 'add' in request.POST :
-                    if(AssumptionsNs.objects.filter(assumptionsprimary=AssP, assumptionssecondary=AssS, assumptionsdescription=AssD)):
+                    if(AssumptionsNs.objects.filter(assumptionsprimary=AssP,
+                                                    assumptionssecondary=AssS,
+                                                    assumptionsdescription=AssD,
+                                                    assumptionsreferences=AssR)):
                         
-                        assumptionExist = AssumptionsNs.objects.filter(assumptionsprimary=AssP, assumptionssecondary=AssS, assumptionsdescription=AssD)
+                        assumptionExist = AssumptionsNs.objects.filter(assumptionsprimary=AssP,
+                                                                       assumptionssecondary=AssS,
+                                                                       assumptionsdescription=AssD,
+                                                                       assumptionsreferences=AssR)
                         assumptionExist = assumptionExist[0]
                         assumption.id_assumptions = assumptionExist
                         assumption.save()
                     else:
-                        assumption = AssumptionsNs(assumptionsprimary=AssP, assumptionssecondary=AssS, assumptionsdescription=AssD)
+                        assumption = AssumptionsNs(assumptionsprimary=AssP,
+                                                   assumptionssecondary=AssS,
+                                                   assumptionsdescription=AssD,
+                                                   assumptionsreferences=AssR)
                         assumption.save()
                         messages.success(request,"Yes")
 
@@ -764,6 +787,16 @@ def logout(request):
 @login_required
 def insert_data(request):
 
+    datafolder = {"NS spin": "fastest",
+                  "NS mass": "masses",
+                  "NS-NS mergers": "gw",
+                  "PPM": "msps",
+                  "qLMXB": "qlmxb",
+                  "Cold MSP": "coldmsps",
+                  "Thermal INSs": "ins",
+                  "Type-I X-ray bursts": "bursts",
+                  "Transiently_Accreting_NS": "cooling"}
+
     #We check if a Get request is sent from the user (get for the selectlist for nama and ref)
     if request.method == 'GET':
          idName = request.GET.get('idname', '')
@@ -789,29 +822,11 @@ def insert_data(request):
         #we check if ist a file send 
         if 'myfile' in request.FILES:
             if(request.FILES['myfile']):  
-                test = request.FILES['myfile']
+                input_csv_filename = request.FILES['myfile']
                 #we put in a dataframe the value of the file
-                d=pd.DataFrame(pd.read_csv(test))
+                d= pd.DataFrame(pd.read_csv(input_csv_filename))
+                d = formatting_csv(d)
 
-                listco = d.columns #columns in a list
-                listNoPoint =[]
-                #we remove .1 for the elements that are multiple times in the file
-                for l in listco:
-                    if '.1' in l:
-                        l = l.replace('.1','')
-                    listNoPoint.append(l)
-
-                d = d.T #transpose the dataframe to have the columns at the top 
-                d.reset_index(drop=True, inplace=True)#remove the auto index
-                d.insert(0,'NameDB',listNoPoint)
-                #we put the columns at 1 row and they are the index
-                d = d.set_axis(d.iloc[0], axis=1)
-                d = d[1:]
-                #d = d.replace('\n','', regex=True)
-                #d = d.replace('\r','', regex=True)
-                #d = d.replace('\r\n','', regex=True)
-                d = d.fillna('')
-                
                 #list with type of sources
                 NsClass = ["NS spin","Transiently_Accreting_NS","NS mass","NS-NS mergers",
                            "PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"]
@@ -839,22 +854,6 @@ def insert_data(request):
                     #we put in list the models and assumptions
                     filename = d['FileName'][i]
 
-                    # listmopri = list(d['ModelDependenciesPrimary'])[i-1]
-                    # listmo = listmopri.split(",")
-                    # listmosecondary = list(d['ModelDependenciesSecondary'])[i-1]
-                    # listmosec = listmosecondary.split(",")
-                    # listmodescription = list(d['ModelDependencyDescription'])[i-1]
-                    # listmodesc = listmodescription.split(",")
-                    # listmocaveats = list(d['CaveatReferences'])[i-1]
-                    # listmocav = listmocaveats.split(",")
-                    # listasspri = list(d['AssumptionsPrimary'])[i-1]
-                    # listass = listasspri.split(",")
-                    # listasssecondary = list(d['AssumptionsSecondary'])[i-1]
-                    # listasssec = listasssecondary.split(",")
-                    # listassdescription = list(d['AssumptionsDescription'])[i-1]
-                    # listassdesc = listassdescription.split(",")
-
-
                     listmo = d['ModelDependenciesPrimary'][i].split(",")
 
                     listmosec = d['ModelDependenciesSecondary'][i].split(",")
@@ -864,7 +863,10 @@ def insert_data(request):
                     if (len(listmodesc)==0):
                         listmodesc = ['']  # Just a hack to avoid an empty list if there are no description provided
 
-                    listmocav = d['CaveatReferences'][i].split(",")
+                    listmodepref = d['ModelDependencyReferences'][i].split("\n")
+                    listmodepref = [i for i in listmodepref if i]
+                    if (len(listmodepref)==0):
+                        listmodepref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     listass = d['AssumptionsPrimary'][i].split(",")
 
@@ -874,6 +876,11 @@ def insert_data(request):
                     listassdesc = [i for i in listassdesc if i]
                     if (len(listassdesc)==0):
                         listassdesc = ['']  # Just a hack to avoid an empty list if there are no description provided
+
+                    listassref = d['AssumptionsReferences'][i].split("\n")
+                    listassref = [i for i in listassref if i]
+                    if (len(listassref)==0):
+                        listassref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     #we verify if the filename do not alreday exist
                     if Ns.objects.filter(filename = d['FileName'][i]):
@@ -896,8 +903,6 @@ def insert_data(request):
                         notinserted[filename] = " missing mandatory elements"
                         continue
 
-
-
                     #more verifications
 
                     #elif( (len(d['AssumptionsPrimary'][i])<=0) and (len(d['AssumptionsSecondary'][i])<=0) and (len(d['AssumptionsDescription'][i])<=0)):
@@ -910,38 +915,40 @@ def insert_data(request):
 
                     elif( (len(listmo)!= len(listmosec)) or
                           (len(listmo)!= len(listmodesc)) or
-                          (len(listmo) != len(listmocav))
+                          (len(listmo) != len(listmodepref))
                         ):
                         notinserted[filename] = " has a mismatch in input model dependencies " \
-                                                "( {} primary, {} secondary, {} descriptions, and {} caveat references)".format(len(listmo),
-                                                                                                                                len(listmosec),
-                                                                                                                                len(listmodesc),
-                                                                                                                                len(listmocav))
+                                                "( {} primary, {} secondary, {} descriptions, and {} references)".format(len(listmo),
+                                                                                                                         len(listmosec),
+                                                                                                                         len(listmodesc),
+                                                                                                                         len(listassref))
                         continue
 
                     elif( (len(listass)!= len(listasssec)) or
-                          (len(listass)!= len(listassdesc))
+                          (len(listass)!= len(listassdesc))or
+                          (len(listass) != len(listassdesc))
                         ):
                         notinserted[filename] = " has a mismatch in input assumptions " \
-                                                "( {} primary, {} secondary and {} descriptions)".format(len(listass),
-                                                                                                         len(listasssec),
-                                                                                                         len(listassdesc))
+                                                "( {} primary, {} secondary, {} descriptions, and {} references)".format(len(listass),
+                                                                                                                         len(listasssec),
+                                                                                                                         len(listassdesc),
+                                                                                                                         len(listassdesc))
                         continue
                     
                     elif str(d['Method'][i]) not in me :
-                        notinserted[filename] = d['Method'][i] + " can not be a method"
+                        notinserted[filename] = d['Method'][i] + " can not be a method (choose among {})".format(me)
                         continue
 
                     elif d['ConstrainType'][i] not in ct :
-                        notinserted[filename] = d['ConstrainType'][i] + " can not be a constrain type"
+                        notinserted[filename] = d['ConstrainType'][i] + " can not be a constrain type (choose among {})".format(ct)
                         continue
 
                     elif d['ConstrainVariable'][i] not in cv :
-                        notinserted[filename] = d['ConstrainVariable'][i] + " can not be a constrain variable"
+                        notinserted[filename] = d['ConstrainVariable'][i] + " can not be a constrain variable (choose among {})".format(cv)
                         continue
 
                     elif d['ClassDB'][i] not in NsClass :
-                        notinserted[filename] = d['ClassDB'][i] + " can not be a name class"
+                        notinserted[filename] = d['ClassDB'][i] + " can not be a name class (choose among {})".format(NsClass)
                         continue
 
                     elif(len(d['RA'][i])>1):
@@ -1010,7 +1017,7 @@ def insert_data(request):
                     else:
                         name = NameNs(namedb=namen, classdb=classn, namesimbad=nameS, classsimbad=classS, ra=r, declination=dec, localisationfile=loc, eventdate=dat)
                         name.save()
-                        idN =NameNs.objects.latest('id_name') #we stock the object that we insert to link it after  
+                        idN =NameNs.objects.latest('id_name') # we store the object that we insert to link it after
 
                     #we do the same for the other columns of the dataframe
 
@@ -1069,13 +1076,13 @@ def insert_data(request):
                     # we create the new NS (filepath have to change)
                     file = Ns(filename=filename,filepath="qdsdsqdsqdsq.txt",id_ref=idR,id_name=idN,id_method=idM,id_constrain=idC)  
                     file.save()
-                    nsInstance = Ns.objects.get(filename=filename) #we stock the ns for the assumptions and models
+                    nsInstance = Ns.objects.get(filename=filename) # we store the ns for the assumptions and models
 
                     for j in range(len(listmo)):
                         modelpri = listmo[j]
                         modelsec = listmosec[j]
                         modeldesc = listmodesc[j]
-                        mocaveats = listmocav[j]
+                        modelref = listmodepref[j]
 
                         if len(modelpri)<1:
                             modelpri = None
@@ -1086,14 +1093,23 @@ def insert_data(request):
                         if len(modeldesc)<1:
                             modeldesc = None
 
-                        if len(mocaveats)<1:
-                            mocaveats = None
+                        if len(modelref)<1:
+                            modelref = None
 
-                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)):
-                            idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)
+                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,
+                                                  dependenciessecondary=modelsec,
+                                                  dependenciesdescription=modeldesc,
+                                                  dependenciesreferences=modelref)):
+                            idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,
+                                                          dependenciessecondary=modelsec,
+                                                          dependenciesdescription=modeldesc,
+                                                          dependenciesreferences=modelref)
                             idMo = idMo[0]
                         else:
-                            modelN = ModelNs(dependenciesprimary=modelpri ,dependenciessecondary=modelsec ,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)
+                            modelN = ModelNs(dependenciesprimary=modelpri,
+                                             dependenciessecondary=modelsec,
+                                             dependenciesdescription=modeldesc,
+                                             dependenciesreferences=modelref)
                             modelN.save()
                             idMo = ModelNs.objects.latest('id_model')
                         #we create the link between ns and model
@@ -1105,6 +1121,7 @@ def insert_data(request):
                         asspri = listass[k]
                         asssec = listasssec[k]
                         assdesc = listassdesc[k]
+                        assref = listassref[k]
 
                         if len(asspri)<1:
                             asspri = None
@@ -1115,11 +1132,23 @@ def insert_data(request):
                         if len(assdesc)<1:
                             assdesc = None
 
-                        if(AssumptionsNs.objects.filter(assumptionsprimary=asspri,assumptionssecondary=asssec,assumptionsdescription=assdesc)):
-                            idAs = AssumptionsNs.objects.filter(assumptionsprimary=asspri,assumptionssecondary=asssec,assumptionsdescription=assdesc)
+                        if len(assref) < 1:
+                            assref = None
+
+                        if(AssumptionsNs.objects.filter(assumptionsprimary=asspri,
+                                                        assumptionssecondary=asssec,
+                                                        assumptionsdescription=assdesc,
+                                                        assumptionsreferences=assref)):
+                            idAs = AssumptionsNs.objects.filter(assumptionsprimary=asspri,
+                                                                assumptionssecondary=asssec,
+                                                                assumptionsdescription=assdesc,
+                                                                assumptionsreferences=assref)
                             idAs=idAs[0]
                         else:
-                            assumptions = AssumptionsNs(assumptionsprimary=asspri ,assumptionssecondary=asssec ,assumptionsdescription=assdesc)
+                            assumptions = AssumptionsNs(assumptionsprimary=asspri,
+                                                        assumptionssecondary=asssec,
+                                                        assumptionsdescription=assdesc,
+                                                        assumptionsreferences=assref)
                             assumptions.save()
                             idAs = AssumptionsNs.objects.latest('id_assumptions')
                         #we create the link between ns and assumptions
@@ -1142,7 +1171,7 @@ def insert_data(request):
             classdb = request.POST.get('class')
 
             if len(na) <= 0  or len(classdb) <= 0 :
-                messages.error(request,"L'insertion de Name n'est pas correct")
+                messages.error(request,"L'insertion de Name n'est pas correcte")
             else:
                 nameS = request.POST.get('nameS')
                 if len(nameS) < 1:
@@ -1228,6 +1257,7 @@ def insert_data(request):
         #we verify all the values
         insert = json.loads(request.POST.get('insert'))
 
+        # TO DO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
         if((len(insert['filename'])<= 0) or (len(insert['filepath'])<=0 )):
             mess = "/!\ ERROR /!\ : Please enter a Filename or/and a Filepath"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
@@ -1306,15 +1336,21 @@ def insert_data(request):
                     insert['model'][mod][3] = None
 
 
-                if (ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1]
-                                           ,dependeciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])):  
+                if (ModelNs.objects.filter(dependenciesprimary=insert['model'][mod][0],
+                                           dependenciessecondary=insert['model'][mod][1],
+                                           dependenciesdescription=insert['model'][mod][2],
+                                           dependenciesreferences=insert['model'][mod][3])):
                     
-                    modelId=ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1]
-                                                   ,dependeciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
+                    modelId=ModelNs.objects.filter(dependenciesprimary=insert['model'][mod][0],
+                                                   dependenciessecondary=insert['model'][mod][1],
+                                                   dependenciesdescription=insert['model'][mod][2],
+                                                   dependenciesreferences=insert['model'][mod][3])
                 else:
                    
-                    model = ModelNs(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependeciesdescription = insert['model'][mod][2],
-                                    caveatsReferences = insert['model'][mod][3])
+                    model = ModelNs(dependenciesprimary=insert['model'][mod][0],
+                                    dependenciessecondary=insert['model'][mod][1],
+                                    dependenciesdescription=insert['model'][mod][2],
+                                    dependenciesreferences=insert['model'][mod][3])
                     model.save()
                     modelId = ModelNs.objects.latest('id_model')
 
@@ -1341,17 +1377,24 @@ def insert_data(request):
                 if(len(insert['assumptions'][ass][2]) < 1 ):
                     insert['assumptions'][ass][2] = None
 
-                
+                if(len(insert['massumptionsodel'][ass][3]) < 1 ):
+                    insert['assumptions'][ass][3] = None
 
-                if (AssumptionsNs.objects.filter(assumptionsprimary = insert['assumptions'][ass][0], assumptionssecondary = insert['assumptions'][ass][1],
-                                    assumptionsdescription = insert['assumptions'][ass][2])):  
+                if (AssumptionsNs.objects.filter(assumptionsprimary=insert['assumptions'][ass][0],
+                                                 assumptionssecondary=insert['assumptions'][ass][1],
+                                                 assumptionsdescription=insert['assumptions'][ass][2],
+                                                 assumptionsreferences=insert['assumptions'][ass][3])):
                     
-                    assumptionsId=AssumptionsNs.objects.filter(assumptionsprimary = insert['assumptions'][ass][0], assumptionssecondary = insert['assumptions'][ass][1],
-                                    assumptionsdescription = insert['assumptions'][ass][2])
+                    assumptionsId=AssumptionsNs.objects.filter(assumptionsprimary=insert['assumptions'][ass][0],
+                                                               assumptionssecondary=insert['assumptions'][ass][1],
+                                                               assumptionsdescription=insert['assumptions'][ass][2],
+                                                               assumptionsreferences=insert['assumptions'][ass][3])
                 else:
                    
-                    assumptions = AssumptionsNs(assumptionsprimary = insert['assumptions'][ass][0], assumptionssecondary = insert['assumptions'][ass][1],
-                                    assumptionsdescription = insert['assumptions'][ass][2])
+                    assumptions = AssumptionsNs(assumptionsprimary=insert['assumptions'][ass][0],
+                                                assumptionssecondary=insert['assumptions'][ass][1],
+                                                assumptionsdescription=insert['assumptions'][ass][2],
+                                                assumptionsreferences=insert['assumptions'][ass][3])
                     assumptions.save()
                     assumptionsId = AssumptionsNs.objects.latest('id_assumptions')
 
@@ -1360,7 +1403,7 @@ def insert_data(request):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-                nsass = NsToAssumptions(filename = ns , id_assumptions = assumptionsId)
+                nsass = NsToAssumptions(filename=ns, id_assumptions=assumptionsId)
                 nsass.save()
 
         fichierlog = open('web_app\compare\static\compare\log.txt', "a")

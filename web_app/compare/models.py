@@ -14,8 +14,8 @@ class ModelNs(models.Model):
     id_model = models.AutoField(db_column='id_Model', primary_key=True)  # Field name made lowercase.
     dependenciesprimary = models.CharField(db_column='DependenciesPrimary', max_length=60, blank=True, null=True)  # Field name made lowercase.cd 
     dependenciessecondary = models.CharField(db_column='DependenciesSecondary', max_length=60, blank=True, null=True)  # Field name made lowercase.
-    dependeciesdescription = models.TextField(db_column='DependeciesDescription',blank=True, null=True)  # Field name made lowercase.
-    caveatsReferences = models.TextField(db_column='CaveatsReferences',blank=True, null=True)
+    dependenciesdescription = models.TextField(db_column='DependenciesDescription',blank=True, null=True)  # Field name made lowercase.
+    dependenciesreferences = models.TextField(db_column='DependenciesReferences', blank=True, null=True)
 
     class Meta:
         managed = True  
@@ -26,6 +26,7 @@ class AssumptionsNs(models.Model):
     assumptionsprimary = models.CharField(db_column='AssumptionsPrimary', max_length=60, blank=True, null=True)  # Field name made lowercase.
     assumptionssecondary = models.CharField(db_column='AssumptionsSecondary', max_length=60, blank=True, null=True)  # Field name made lowercase.
     assumptionsdescription = models.TextField(db_column='AssumptionsDescription',blank=True, null=True)  # Field name made lowercase.
+    assumptionsreferences = models.TextField(db_column='AssumptionsReferences', blank=True, null=True)
 
     class Meta:
         managed = True

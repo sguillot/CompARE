@@ -145,3 +145,4 @@ dmypy.json
 
 # database log
 web_app/web_app/compare/static/compare/log.txt
+web_app\web_app\compare\static\compare\log.txt
