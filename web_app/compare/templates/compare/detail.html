@@ -30,17 +30,14 @@ Detail
     <p class="titlecat">Models</p>
     <ul>
     {% for mo in queryMo %}
-        <li><span>{{mo.id_model.dependenciesprimary}} : {{mo.id_model.dependenciessecondary}} <br> </span>
-            {{mo.id_model.dependenciesdescription}} <br> {{mo.id_model.dependenciesreferences}}
+        <li><span>{{mo.id_model.dependenciesprimary}}: {{mo.id_model.dependenciessecondary}} <br> </span>
+            {{mo.id_model.dependenciesdescription}} <br>
+            {% for ads_short, ads_link in mo.id_model.reflist %}
+                <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+            {% endfor %}
         </li>
         <br>
     {% endfor %}
-
-<!--    {% for lmo in querylmo %}-->
-<!--        <li> TEST {{lmo}} </li>-->
-<!--        <br>-->
-<!--    {% endfor %}-->
-
     </ul>
 </div>
 
@@ -49,8 +46,12 @@ Detail
     <p class="titlecat">Assumptions</p>
     <ul>
     {% for as in queryAs %}
-        <li><span>{{as.id_assumptions.assumptionsprimary}} : {{as.id_assumptions.assumptionssecondary}} <br></span>
-            {{as.id_assumptions.assumptionsdescription}}  <br> {{as.id_assumptions.assumptionsreferences}}
+        <li><span>{{as.id_assumptions.assumptionsprimary}}: {{as.id_assumptions.assumptionssecondary}} <br></span>
+            {{as.id_assumptions.assumptionsdescription}} <br>
+            {% for ads_short, ads_link in as.id_assumptions.reflist %}
+                <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+
+            {% endfor %}
         </li>
         <br>
     {% endfor %}
@@ -61,7 +62,7 @@ Detail
 
 <div class="divname">
 
-<p class="titlecat">NAME</p>
+<p class="titlecat">Source info</p>
 
     <p>{{queryall.id_name.namedb}}</p>
     <p>{{queryall.id_name.classdb}}</p>
@@ -76,7 +77,7 @@ Detail
 
 <div class="divmethod">
 
-    <p class="titlecat">METHOD</p>
+    <p class="titlecat">Method</p>
     
         <p>{{queryall.id_method.method}}</p>
         <p>{{queryall.id_method.method_specific}}</p>
@@ -87,24 +88,25 @@ Detail
 
 <div class="divref">
 
-    <p class="titlecat">REF</p>
-    
-        <p><a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">DOI : {{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
-        <p>Short :{{queryall.id_ref.short}}</p>
-        <p>Bibitex : {{queryall.id_ref.bibtex}}</p>
-        <p>Repositorydoi : {{queryall.id_ref.repositorydoi}}</p>
-        <p>Datalink : {{queryall.id_ref.datalink}}</p>
+    <p class="titlecat">References</p>
+        <p>DOI: <a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">{{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
+        <p>ADS: <a href="https://ui.adsabs.harvard.edu/abs/{{queryall.id_ref.shortlink}}/abstract" target="_blank"> {{queryall.id_ref.short}}</a></p>
+        <details>
+            <summary>Bibtex</summary>
+            <p>{{queryall.id_ref.bibtex}}</p>
+        </details>
+        <p>Data Repository DOI: {{queryall.id_ref.repositorydoi}}</p>
+        <p>Data link: {{queryall.id_ref.datalink}}</p>
     
 </div>
 
 <div class="divconstrain">
     
-    <p class="titlecat">CONSTRAIN</p>
+    <p class="titlecat">Constraints</p>
     
-        <p>Type :{{queryall.id_constrain.constraintype}}</p>
+        <p>Type: {{queryall.id_constrain.constraintype}}</p>
+        <p>Variable: {{queryall.id_constrain.constrainvariable}}</p>
         <p>Version: {{queryall.id_constrain.constrainversion}}</p>
-        <p>Variable : {{queryall.id_constrain.constrainvariable}}</p>
-        <p>Description : {{queryall.id_constrain.constraindescription}}</p>
     
     
 </div>

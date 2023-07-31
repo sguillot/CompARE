@@ -293,12 +293,25 @@ def detail(request, id):
 
     #We recup all the Assumptions linked to the id(filename) of the NS
     ns_As = NsToAssumptions.objects.select_related('id_assumptions').filter(filename = id)
-   
+
+    # Trick to link to ADS page (need to replace the &, for ex in A&A)
+    ns_list.id_ref.shortlink = ns_list.id_ref.short.replace("&","%26")
+    for mo in ns_Mo:
+        mo.id_model.reflist = zip(mo.id_model.dependenciesreferences.split(", "),
+                                  mo.id_model.dependenciesreferences.replace("&","%26").split(", "))
+        # print(mo.id_model.dependenciesreferences)
+        # print(mo.id_model.dependenciesreferenceslink)
+    for ass in ns_As:
+        ass.id_assumptions.reflist = zip(ass.id_assumptions.assumptionsreferences.split(", "),
+                                         ass.id_assumptions.assumptionsreferences.replace("&","%26").split(", "))
+        # print(type(ass.id_assumptions.assumptionsreferences))
+        # print(type(ass.id_assumptions.assumptionsreferenceslink))
+
     #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template 
-    select = {"queryall":ns_list,
-                 "queryMo":ns_Mo,
-                 "queryAs":ns_As}
-    return render(request,'compare/detail.html',select)
+    select = {"queryall": ns_list,
+              "queryMo": ns_Mo,
+              "queryAs": ns_As}
+    return render(request, 'compare/detail.html', select)
 
 @login_required 
 def modify(request,id):  
