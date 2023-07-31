@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 5.7.24, for osx10.9 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for macos12.6 (x86_64)
 --
 -- Host: localhost    Database: compare3
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,14 +21,15 @@
 
 DROP TABLE IF EXISTS `assumptions_ns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assumptions_ns` (
   `id_Assumptions` int NOT NULL AUTO_INCREMENT,
   `AssumptionsPrimary` varchar(60) DEFAULT NULL,
   `AssumptionsSecondary` varchar(60) DEFAULT NULL,
   `AssumptionsDescription` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `AssumptionsReferences` text,
   PRIMARY KEY (`id_Assumptions`)
-) ENGINE=InnoDB AUTO_INCREMENT=770 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=815 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +38,7 @@ CREATE TABLE `assumptions_ns` (
 
 LOCK TABLES `assumptions_ns` WRITE;
 /*!40000 ALTER TABLE `assumptions_ns` DISABLE KEYS */;
-INSERT INTO `assumptions_ns` VALUES (757,'Atmosphere Composition','hydrogen','At the surface of a neutron star, elements stratify on time scales of minutes/hours leaving the lightest on top (Romani 1987). Also, the thickness of the last scattering layer of a NS is on the order of a few cm. Therefore, it is common to assume a single composition, being that of the lightest element. Hydrogen is therefore a reasonable assumption for the composition, especially for a NS that has accreted matter from a companion star. Other effects are in competition and may put some uncertainties on the surface composition, namely, accretion from the interstellar medium, diffuse nuclear burning of light of H into He (Chang & Bildsten 2003, 2004), and spallation of heavier elements into lighter ones (Bildsten et al. 1992).'),(758,'\nMagnetic field','\nnon-magnetic','This analyses also assume emission from a low-magnetic field neutron stars (as typically measured for MSPs, specifically B_dip ~ 2.8e8 G for PSR J0437-4715). The atmosphere model is that of a non-magnetised atmosphere, which is a good approximation as B-field effect (modified opacities) become important above 1e10 G. However, this neglects potential high-magnetic loop near the NS surface.'),(759,'\nRotation','\nnon-rotating','The relativistic effects of rotation on the emergent spectrum are neglected in this analysis. However, the effects on the radius are < 1 km at the rotational frequency of PSR J0437-4715 (173.6 Hz), see Baubock et al. 2015). '),(760,'\nEmitting fraction','\nuniform full surface','The analysis assumes that the full surface is emitting uniformly at the same temperature (modulo the contribution of the hot spots)'),(761,'\nInterstellar medium','\nsolar abundances','The modelling of the x-ray absorption (with the tbabs model) assumes solar abundances for the interstellar medium, a reasonable assumption for a pulsar located at 156 pc.'),(762,'\nPrior','\ndistance prior','The radio timing of the pulsar provided priors on the pulsar mass (1.44Msun), see Reardon et al. 2016. No uncertainties on this measurement was included in the analysis. '),(763,' Prior',' mass prior','The radio timing of the pulsar provided priors on the pulsar distance (156.79 pc), see Reardon et al. 2016. No uncertainties on this measurement was included in the analysis.'),(764,' Prior',' redenning prior','The reddening was also provided as a prior, using estimation for Galactic dust maps:  E(B-V) = 0.002+/-0.014 (Lallement et al. 2018).'),(765,'Atmosphere Composition','helium','At the surface of a neutron star, elements stratify on time scales of minutes/hours leaving the lightest on top (Romani 1987). Also, the thickness of the last scattering layer of a NS is on the order of a few cm. Therefore, it is common to assume a single composition, being that of the lightest element. If no Hydrogen is present in the system, the next expected element is Helium, which is a possibility if the NS has accreted only Helium from a companion star. Other effects are in competition and may put some uncertainties on the surface composition, namely, accretion from the interstellar medium, diffuse nuclear burning of light of H into He (Chang & Bildsten 2003, 2004), and spallation of heavier elements into lighter ones (Bildsten et al. 1992).'),(766,'\nRotation','\nnon-rotating','The relativistic effects of rotation on the emergent spectrum are neglected in this analysis. However, the effects on the radius are < 1 % at the rotational frequency of PSR J0437-4715 (173.6 Hz), see Baubock et al. 2015. '),(767,'\nEmitting fraction','\nuniform full surface','The analysis assumes that the full surface is emitting uniformly at the same temperature (modulo the contribution of the hot spots).'),(768,'Gravitation theory','General relativity','The estimation of the post-Keplerian parameters and Shapiro delay were done assuming general relativity as the theory of gravitation'),(769,NULL,NULL,NULL);
+INSERT INTO `assumptions_ns` VALUES (801,'Atmosphere Composition','hydrogen','At the surface of a neutron star, elements stratify on time scales of minutes/hours leaving the lightest on top (Romani 1987). Also, the thickness of the last scattering layer of a NS is on the order of a few cm. Therefore, it is common to assume a single composition, being that of the lightest element. Hydrogen is therefore a reasonable assumption for the composition, especially for a NS that has accreted matter from a companion star. Other effects are in competition and may put some uncertainties on the surface composition, namely, accretion from the interstellar medium, diffuse nuclear burning of light of H into He (Chang & Bildsten 2003, 2004), and spallation of heavier elements into lighter ones (Bildsten et al. 1992).','1987ApJ...313..718R, 1992ApJ...384..143B, 2003ApJ...585..464C, 2004ApJ...616L.147C'),(802,'\nMagnetic field','\nnon-magnetic','This analyses also assume emission from a low-magnetic field neutron stars (as typically measured for MSPs, specifically B_dip ~ 2.8e8 G for PSR J0437-4715). The atmosphere model is that of a non-magnetised atmosphere, which is a good approximation as B-field effect (modified opacities) become important above 1e10 G. However, this neglects potential high-magnetic loop near the NS surface.','1983Ap&SS..91..167K, 1996A&A...315..141Z, 2019MNRAS.490.5848G '),(803,'\nRotation','\nnon-rotating','The relativistic effects of rotation on the emergent spectrum are neglected in this analysis. However, the effects on the radius are < 1 km at the rotational frequency of PSR J0437-4715 (173.6 Hz), see Baubock et al. 2015). ','2015ApJ...799...22B'),(804,'\nEmitting fraction','\nuniform full surface','The analysis assumes that the full surface is emitting uniformly at the same temperature (modulo the contribution of the hot spots).','2019MNRAS.490.5848G '),(805,'\nInterstellar medium','\nsolar abundances','The modelling of the x-ray absorption (with the tbabs model) assumes solar abundances for the interstellar medium, a reasonable assumption for a pulsar located at 156 pc.','2000ApJ...542..914W'),(806,'\nPrior','\ndistance prior','The radio timing of the pulsar provided priors on the pulsar mass (1.44Msun), see Reardon et al. 2016. No uncertainties on this measurement was included in the analysis. ','2016MNRAS.455.1751R'),(807,' Prior',' mass prior','The radio timing of the pulsar provided priors on the pulsar distance (156.79 pc), see Reardon et al. 2016. No uncertainties on this measurement was included in the analysis.','2016MNRAS.455.1751R'),(808,' Prior',' reddening prior','The reddening was also provided as a prior, using estimation for Galactic dust maps: E(B-V) = 0.002+/-0.014 (Lallement et al. 2018).','2018A&A...616A.132L'),(809,'Atmosphere Composition','helium','At the surface of a neutron star, elements stratify on time scales of minutes/hours leaving the lightest on top (Romani 1987). Also, the thickness of the last scattering layer of a NS is on the order of a few cm. Therefore, it is common to assume a single composition, being that of the lightest element. If no Hydrogen is present in the system, the next expected element is Helium, which is a possibility if the NS has accreted only Helium from a companion star. Other effects are in competition and may put some uncertainties on the surface composition, namely, accretion from the interstellar medium, diffuse nuclear burning of light of H into He (Chang & Bildsten 2003, 2004), and spallation of heavier elements into lighter ones (Bildsten et al. 1992).','1987ApJ...313..718R, 1992ApJ...384..143B, 2003ApJ...585..464C, 2004ApJ...616L.147C'),(810,'\nRotation','\nnon-rotating','The relativistic effects of rotation on the emergent spectrum are neglected in this analysis. However, the effects on the radius are < 1 % at the rotational frequency of PSR J0437-4715 (173.6 Hz), see Baubock et al. 2015. ','2015ApJ...799...22B'),(811,'Gravitation theory','General relativity','The estimation of the post-Keplerian parameters and Shapiro delay were done assuming general relativity as the theory of gravitation.','Agazie et al. 2023, 2023ApJL..951...L9'),(812,'Gravitation theory','General relativity','The estimation of the post-Keplerian parameters and Shapiro delay were done assuming general relativity as the theory of gravitation.','Arzoumanian et al. 2018, 2018ApJS..235...37A'),(813,'Gravitation theory','General relativity','The estimation of the post-Keplerian parameters and Shapiro delay were done assuming general relativity as the theory of gravitation.','Fonseca et al. 2021, 2021ApJ...915L..12F'),(814,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `assumptions_ns` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -47,7 +48,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(150) NOT NULL,
@@ -72,7 +73,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_group_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_group_permissions` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `group_id` int NOT NULL,
@@ -100,7 +101,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_permission` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -128,7 +129,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `password` varchar(128) NOT NULL,
@@ -162,7 +163,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_groups` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -191,7 +192,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auth_user_user_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth_user_user_permissions` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
@@ -219,14 +220,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `constrain_ns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `constrain_ns` (
   `id_Constrain` int NOT NULL AUTO_INCREMENT,
   `ConstrainType` enum('MCMC samples','Posterior samples','Quantiles','mean +/- 1 sigma') NOT NULL,
   `constrainvariable` enum('M','R','M-R','F','L','M-L') NOT NULL,
   `ConstrainVersion` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_Constrain`)
-) ENGINE=InnoDB AUTO_INCREMENT=269 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +236,7 @@ CREATE TABLE `constrain_ns` (
 
 LOCK TABLES `constrain_ns` WRITE;
 /*!40000 ALTER TABLE `constrain_ns` DISABLE KEYS */;
-INSERT INTO `constrain_ns` VALUES (265,'MCMC samples','M-R',1),(266,'mean +/- 1 sigma','M',1),(267,'mean +/- 1 sigma','M',2),(268,'mean +/- 1 sigma','F',1);
+INSERT INTO `constrain_ns` VALUES (284,'MCMC samples','M-R',1),(285,'mean +/- 1 sigma','M',1),(286,'mean +/- 1 sigma','M',2),(287,'mean +/- 1 sigma','F',1);
 /*!40000 ALTER TABLE `constrain_ns` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -245,7 +246,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_admin_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_admin_log` (
   `id` int NOT NULL AUTO_INCREMENT,
   `action_time` datetime(6) NOT NULL,
@@ -280,7 +281,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_content_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_content_type` (
   `id` int NOT NULL AUTO_INCREMENT,
   `app_label` varchar(100) NOT NULL,
@@ -306,7 +307,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_migrations` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `app` varchar(255) NOT NULL,
@@ -332,7 +333,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `django_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
@@ -358,7 +359,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `method_ns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `method_ns` (
   `id_Method` int NOT NULL AUTO_INCREMENT,
   `Method` enum('Pulsar timing','Thermal emission') NOT NULL,
@@ -366,7 +367,7 @@ CREATE TABLE `method_ns` (
   `ProcessinfInfo` text NOT NULL,
   `DataDate` text NOT NULL,
   PRIMARY KEY (`id_Method`)
-) ENGINE=InnoDB AUTO_INCREMENT=474 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=499 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,7 +376,7 @@ CREATE TABLE `method_ns` (
 
 LOCK TABLES `method_ns` WRITE;
 /*!40000 ALTER TABLE `method_ns` DISABLE KEYS */;
-INSERT INTO `method_ns` VALUES (468,'Thermal emission','Spectral fitting (FUV and Xray data)','See Kargalstev2004, Durant2012, Guillot2016','FUV (Kargalstev2004 + Durant2012), X-ray (Rosat, up to 0.3 keV)'),(469,'Thermal emission','Spectral fitting (FUV and Xray data)','See Kargalstev2004, Durant2012, Guillot2016','FUV (Kargalstev2004 + Durant2012), X-ray (Guillot2016, Rosat, up to 0.3 keV)'),(470,'Pulsar timing','PK Parameters (Shapiro)','psrchive and Tempo2 packages','NANOGrav 15-year (2008-2022)'),(471,'Pulsar timing','PK Parameters (Shapiro)','psrchive and Tempo2 packages','NANOGrav 11-year (2008-2016)'),(472,'Pulsar timing','PK Parameters (Shapiro)','psrchive and Tempo packages','GBT 20131214-20200406 and CHIME 20190203-20200506'),(473,'Pulsar timing','Frequency measurement','psrchive and Tempo packages','June 2004 to May 2005');
+INSERT INTO `method_ns` VALUES (493,'Thermal emission','Spectral fitting (FUV and Xray data)','See Kargalstev2004, Durant2012, Guillot2016','FUV (Kargalstev2004 + Durant2012), X-ray (Rosat, up to 0.3 keV)'),(494,'Thermal emission','Spectral fitting (FUV and Xray data)','See Kargalstev2004, Durant2012, Guillot2016','FUV (Kargalstev2004 + Durant2012), X-ray (Guillot2016, Rosat, up to 0.3 keV)'),(495,'Pulsar timing','PK Parameters (Shapiro)','psrchive and Tempo2 packages','NANOGrav 15-year (2008-2022)'),(496,'Pulsar timing','PK Parameters (Shapiro)','psrchive and Tempo2 packages','NANOGrav 11-year (2008-2016)'),(497,'Pulsar timing','PK Parameters (Shapiro)','psrchive and Tempo packages','GBT 20131214-20200406 and CHIME 20190203-20200506'),(498,'Pulsar timing','Frequency measurement','psrchive and Tempo packages','June 2004 to May 2005');
 /*!40000 ALTER TABLE `method_ns` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -385,15 +386,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `model_ns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `model_ns` (
   `id_Model` int NOT NULL AUTO_INCREMENT,
   `DependenciesPrimary` varchar(60) DEFAULT NULL,
   `DependenciesSecondary` varchar(60) DEFAULT NULL,
-  `DependeciesDescription` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `CaveatsReferences` text,
+  `DependenciesDescription` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `DependenciesReferences` text,
   PRIMARY KEY (`id_Model`)
-) ENGINE=InnoDB AUTO_INCREMENT=419 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=455 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -402,7 +403,7 @@ CREATE TABLE `model_ns` (
 
 LOCK TABLES `model_ns` WRITE;
 /*!40000 ALTER TABLE `model_ns` DISABLE KEYS */;
-INSERT INTO `model_ns` VALUES (407,'atmosphere','Gonzalez2019','The atmosphere model used in this analysis was calculated for low-temperature atmosphere (<10^5.5 K) and includes the effect of plasma.','2019MNRAS.490.5848G 1987ApJ...313..718R 2003ApJ...585..464C 2004ApJ...616L.147C'),(408,'\nabsorption','\ntbabs','The absorption of X-rays was calculated using absorption tables based on the tbabs model of Wilms et al. 2020.',' 1992ApJ...384..143B'),(409,'\nredenning','\nClayton2003','The frequency-dependent reddenning has been implemented based on results of Clayton et al. 2003 (Fig.1).',' 2015ApJ...799...22B'),(410,'\nhot spots model','\n2 blackbodies','The contribution of the two hot spots to the X-ray spectrum analysed (<0.3 keV) was included using 2 blackbody components.',' 2018A&A...616A.132L'),(411,'atmosphere','Gonzalez2019','The atmosphere model used in this analysis was calculated for low-temperature atmosphere (<10^5.5 K) and includes the effect of plasma.','2019MNRAS.490.5848G 1987ApJ...313..718R 2003ApJ...585..464C'),(412,'\nabsorption','\ntbabs','The absorption of X-rays was calculated using absorption tables based on the tbabs model of Wilms et al. 2020.',' 2004ApJ...616L.147C'),(413,'\nredenning','\nClayton2003','The frequency-dependent reddenning has been implemented based on results of Clayton et al. 2003 (Fig.1).',' 1992ApJ...384..143B'),(414,'\nhot spots model','\nignored','The contribution of the hot spots to the X-ray spectrum analysed (<0.3 keV) was ignored.',' 2015ApJ...799...22B'),(415,'Shapiro delay','m_c sini parametrization','The Shapiro delay is estimated using the traditional Mcomp and sini parametrization','2023ApJL..951...L9'),(416,'Shapiro delay','m_c sini parametrization','The Shapiro delay is estimated using the traditional Mcomp and sini parametrization','2018ApJS..235...37A'),(417,'Dispersion measure','DMX','Three different piece-wise DMX models were employed in the analysis of Fonseca et al. 2021 and the averaged mass from these 3 analyses was reported.','2021ApJ...915L..12F'),(418,NULL,NULL,NULL,NULL);
+INSERT INTO `model_ns` VALUES (445,'atmosphere','Gonzalez2019','The atmosphere model used in this analysis was calculated for low-temperature atmosphere (<10^5.5 K) and includes the effect of plasma.','2019MNRAS.490.5848G '),(446,'\nabsorption','\ntbabs','The absorption of X-rays was calculated using absorption tables based on the tbabs model of Wilms et al. 2000 (updated in 2016).','2000ApJ...542..914W'),(447,'\nredenning','\nClayton2003','The frequency-dependent reddening has been implemented based on results of Clayton et al. 2003 (Fig. 1).','2003ApJ...585..464C'),(448,'\nhot spots model','\n2 blackbodies','The contribution of the two hot spots to the X-ray spectrum analysed (<0.3 keV) was included using 2 blackbody components.','2019MNRAS.490.5848G'),(449,'\nredenning','\nClayton2003','The frequency-dependent reddening has been implemented based on results of Clayton et al. 2003 (Fig.1).','2003ApJ...585..464C'),(450,'\nhot spots model','\nignored','The contribution of the hot spots to the X-ray spectrum analysed (<0.3 keV) was ignored.','2019MNRAS.490.5848G'),(451,'Shapiro delay','m_c sini parametrization','The Shapiro delay is estimated using the traditional Mcomp and sini parametrization.','Agazie et al. 2023, 2023ApJL..951...L9'),(452,'Shapiro delay','m_c sini parametrization','The Shapiro delay is estimated using the traditional Mcomp and sini parametrization.','Arzoumanian et al. 2018, 2018ApJS..235...37A'),(453,'Dispersion measure','DMX','Three different piece-wise DMX models were employed in the analysis of Fonseca et al. 2021 and the averaged mass from these 3 analyses was reported.','Fonseca et al. 2021, 2021ApJ...915L..12F'),(454,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `model_ns` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -412,7 +413,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `name_ns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `name_ns` (
   `id_Name` int NOT NULL AUTO_INCREMENT,
   `NameDB` varchar(50) NOT NULL,
@@ -424,7 +425,7 @@ CREATE TABLE `name_ns` (
   `LocalisationFile` text,
   `EventDate` date DEFAULT NULL,
   PRIMARY KEY (`id_Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=439 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=457 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -433,7 +434,7 @@ CREATE TABLE `name_ns` (
 
 LOCK TABLES `name_ns` WRITE;
 /*!40000 ALTER TABLE `name_ns` DISABLE KEYS */;
-INSERT INTO `name_ns` VALUES (435,'PSR J0437-4715','Cold MSP','PSR J0437-47','Psr',69.3158310000,-47.2523730000,NULL,NULL),(436,'PSR J1614-2230','NS mass','PSR J1614-2230','Psr',243.6521120000,-22.5086690000,NULL,NULL),(437,'PSR J0740+6620','NS mass','PSR J0740+6620','Psr',115.1908290000,66.3426670000,NULL,NULL),(438,'PSR J1748-2446ad','NS spin','PSR J1748-2446ad','Psr',267.0204170000,-24.7677780000,NULL,NULL);
+INSERT INTO `name_ns` VALUES (453,'PSR J0437-4715','Cold MSP','PSR J0437-47','Psr',69.3158310000,-47.2523730000,NULL,NULL),(454,'PSR J1614-2230','NS mass','PSR J1614-2230','Psr',243.6521120000,-22.5086690000,NULL,NULL),(455,'PSR J0740+6620','NS mass','PSR J0740+6620','Psr',115.1908290000,66.3426670000,NULL,NULL),(456,'PSR J1748-2446ad','NS spin','PSR J1748-2446ad','Psr',267.0204170000,-24.7677780000,NULL,NULL);
 /*!40000 ALTER TABLE `name_ns` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,7 +444,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ns` (
   `FileName` varchar(100) NOT NULL,
   `FilePath` text NOT NULL,
@@ -469,7 +470,7 @@ CREATE TABLE `ns` (
 
 LOCK TABLES `ns` WRITE;
 /*!40000 ALTER TABLE `ns` DISABLE KEYS */;
-INSERT INTO `ns` VALUES ('Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt','qdsdsqdsqdsq.txt',376,435,469,265),('Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt','qdsdsqdsqdsq.txt',376,435,468,265),('NS_Mass-PSRJ0740+6620-2020-mass-shapiro-1.txt','qdsdsqdsqdsq.txt',379,437,472,266),('NS_Mass-PSRJ1614-2230-NANOgrav11yr-mass-shapiro-1.txt','qdsdsqdsqdsq.txt',378,436,471,267),('NS_Mass-PSRJ1614-2230-NANOgrav15yr-mass-shapiro-2.txt','qdsdsqdsqdsq.txt',377,436,470,266),('NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt','qdsdsqdsqdsq.txt',380,438,473,268);
+INSERT INTO `ns` VALUES ('Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt','qdsdsqdsqdsq.txt',400,453,494,284),('Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt','qdsdsqdsqdsq.txt',400,453,493,284),('NS_Mass-PSRJ0740+6620-2020-mass-shapiro-1.txt','qdsdsqdsqdsq.txt',403,455,497,285),('NS_Mass-PSRJ1614-2230-NANOgrav11yr-mass-shapiro-1.txt','qdsdsqdsqdsq.txt',402,454,496,286),('NS_Mass-PSRJ1614-2230-NANOgrav15yr-mass-shapiro-2.txt','qdsdsqdsqdsq.txt',401,454,495,285),('NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt','qdsdsqdsqdsq.txt',404,456,498,287);
 /*!40000 ALTER TABLE `ns` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -479,7 +480,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ns_to_assumptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ns_to_assumptions` (
   `id_ns_to_assumptions` int NOT NULL AUTO_INCREMENT,
   `id_Assumptions` int NOT NULL,
@@ -489,7 +490,7 @@ CREATE TABLE `ns_to_assumptions` (
   KEY `FileName` (`FileName`),
   CONSTRAINT `ns_to_assumptions_ibfk_1` FOREIGN KEY (`id_Assumptions`) REFERENCES `assumptions_ns` (`id_Assumptions`),
   CONSTRAINT `ns_to_assumptions_ibfk_2` FOREIGN KEY (`FileName`) REFERENCES `ns` (`FileName`)
-) ENGINE=InnoDB AUTO_INCREMENT=2779 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2856 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -498,7 +499,7 @@ CREATE TABLE `ns_to_assumptions` (
 
 LOCK TABLES `ns_to_assumptions` WRITE;
 /*!40000 ALTER TABLE `ns_to_assumptions` DISABLE KEYS */;
-INSERT INTO `ns_to_assumptions` VALUES (2760,757,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2769,758,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2761,758,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2762,759,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2763,760,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2772,761,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2764,761,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2773,762,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2765,762,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2774,763,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2766,763,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2767,764,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2768,765,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2770,766,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2771,767,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2777,768,'NS_Mass-PSRJ0740+6620-2020-mass-shapiro-1.txt'),(2776,768,'NS_Mass-PSRJ1614-2230-NANOgrav11yr-mass-shapiro-1.txt'),(2775,768,'NS_Mass-PSRJ1614-2230-NANOgrav15yr-mass-shapiro-2.txt'),(2778,769,'NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt');
+INSERT INTO `ns_to_assumptions` VALUES (2837,801,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2846,802,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2838,802,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2839,803,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2848,804,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2840,804,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2849,805,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2841,805,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2850,806,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2842,806,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2851,807,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2843,807,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2844,808,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(2845,809,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2847,810,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(2852,811,'NS_Mass-PSRJ1614-2230-NANOgrav15yr-mass-shapiro-2.txt'),(2853,812,'NS_Mass-PSRJ1614-2230-NANOgrav11yr-mass-shapiro-1.txt'),(2854,813,'NS_Mass-PSRJ0740+6620-2020-mass-shapiro-1.txt'),(2855,814,'NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt');
 /*!40000 ALTER TABLE `ns_to_assumptions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -508,7 +509,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ns_to_model`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ns_to_model` (
   `id_ns_to_model` int NOT NULL AUTO_INCREMENT,
   `id_Model` int NOT NULL,
@@ -518,7 +519,7 @@ CREATE TABLE `ns_to_model` (
   KEY `FileName` (`FileName`),
   CONSTRAINT `ns_to_model_ibfk_1` FOREIGN KEY (`id_Model`) REFERENCES `model_ns` (`id_Model`),
   CONSTRAINT `ns_to_model_ibfk_2` FOREIGN KEY (`FileName`) REFERENCES `ns` (`FileName`)
-) ENGINE=InnoDB AUTO_INCREMENT=1127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1176 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -527,7 +528,7 @@ CREATE TABLE `ns_to_model` (
 
 LOCK TABLES `ns_to_model` WRITE;
 /*!40000 ALTER TABLE `ns_to_model` DISABLE KEYS */;
-INSERT INTO `ns_to_model` VALUES (1115,407,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1116,408,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1117,409,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1118,410,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1119,411,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1120,412,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1121,413,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1122,414,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1123,415,'NS_Mass-PSRJ1614-2230-NANOgrav15yr-mass-shapiro-2.txt'),(1124,416,'NS_Mass-PSRJ1614-2230-NANOgrav11yr-mass-shapiro-1.txt'),(1125,417,'NS_Mass-PSRJ0740+6620-2020-mass-shapiro-1.txt'),(1126,418,'NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt');
+INSERT INTO `ns_to_model` VALUES (1168,445,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1164,445,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1169,446,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1165,446,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1166,447,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1167,448,'Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt'),(1170,449,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1171,450,'Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt'),(1172,451,'NS_Mass-PSRJ1614-2230-NANOgrav15yr-mass-shapiro-2.txt'),(1173,452,'NS_Mass-PSRJ1614-2230-NANOgrav11yr-mass-shapiro-1.txt'),(1174,453,'NS_Mass-PSRJ0740+6620-2020-mass-shapiro-1.txt'),(1175,454,'NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt');
 /*!40000 ALTER TABLE `ns_to_model` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -537,7 +538,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ref_ns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ref_ns` (
   `id_Ref` int NOT NULL AUTO_INCREMENT,
   `Author` varchar(30) NOT NULL,
@@ -548,7 +549,7 @@ CREATE TABLE `ref_ns` (
   `RepositoryDOI` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `DataLink` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id_Ref`)
-) ENGINE=InnoDB AUTO_INCREMENT=381 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=405 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,7 +558,7 @@ CREATE TABLE `ref_ns` (
 
 LOCK TABLES `ref_ns` WRITE;
 /*!40000 ALTER TABLE `ref_ns` DISABLE KEYS */;
-INSERT INTO `ref_ns` VALUES (376,'Gonzalez-Canuilef',2019,'2019MNRAS.490.5848G','@ARTICLE{2019MNRAS.490.5848G,\n       author = {{Gonz{\\\'a}lez-Caniulef}, Denis and {Guillot}, Sebastien and {Reisenegger}, Andreas},\n        title = \"{Neutron star radius measurement from the ultraviolet and soft X-ray thermal emission of PSR J0437-4715}\",\n      journal = {\\mnras},\n     keywords = {dense matter, equation of state, plasmas, stars: atmospheres, stars: neutron, pulsars: individual (PSR J0437-4715), Astrophysics - High Energy Astrophysical Phenomena},\n         year = 2019,\n        month = dec,\n       volume = {490},\n       number = {4},\n        pages = {5848-5859},\n          doi = {10.1093/mnras/stz2941},\narchivePrefix = {arXiv},\n       eprint = {1904.12114},\n primaryClass = {astro-ph.HE},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2019MNRAS.490.5848G},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}\n\n','10.1093/mnras/stz2941',NULL,NULL),(377,'Agazie',2023,'2023ApJL..951...L9','@ARTICLE{2018ApJS..235...37A,\n       author = {{Arzoumanian}, Zaven and {Brazier}, Adam and {Burke-Spolaor}, Sarah and {Chamberlin}, Sydney and {Chatterjee}, Shami and {Christy}, Brian and {Cordes}, James M. and {Cornish}, Neil J. and {Crawford}, Fronefield and {Thankful Cromartie}, H. and {Crowter}, Kathryn and {DeCesar}, Megan E. and {Demorest}, Paul B. and {Dolch}, Timothy and {Ellis}, Justin A. and {Ferdman}, Robert D. and {Ferrara}, Elizabeth C. and {Fonseca}, Emmanuel and {Garver-Daniels}, Nathan and {Gentile}, Peter A. and {Halmrast}, Daniel and {Huerta}, E.~A. and {Jenet}, Fredrick A. and {Jessup}, Cody and {Jones}, Glenn and {Jones}, Megan L. and {Kaplan}, David L. and {Lam}, Michael T. and {Lazio}, T. Joseph W. and {Levin}, Lina and {Lommen}, Andrea and {Lorimer}, Duncan R. and {Luo}, Jing and {Lynch}, Ryan S. and {Madison}, Dustin and {Matthews}, Allison M. and {McLaughlin}, Maura A. and {McWilliams}, Sean T. and {Mingarelli}, Chiara and {Ng}, Cherry and {Nice}, David J. and {Pennucci}, Timothy T. and {Ransom}, Scott M. and {Ray}, Paul S. and {Siemens}, Xavier and {Simon}, Joseph and {Spiewak}, Ren{\\\'e}e and {Stairs}, Ingrid H. and {Stinebring}, Daniel R. and {Stovall}, Kevin and {Swiggum}, Joseph K. and {Taylor}, Stephen R. and {Vallisneri}, Michele and {van Haasteren}, Rutger and {Vigeland}, Sarah J. and {Zhu}, Weiwei and {NANOGrav Collaboration}},\n        title = \"{The NANOGrav 11-year Data Set: High-precision Timing of 45 Millisecond Pulsars}\",\n      journal = {\\apjs},\n     keywords = {binaries: general, gravitational waves, parallaxes, proper motions, pulsars: general, stars: neutron},\n         year = 2018,\n        month = apr,\n       volume = {235},\n       number = {2},\n          eid = {37},\n        pages = {37},\n          doi = {10.3847/1538-4365/aab5b0},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2018ApJS..235...37A},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.3847/2041-8213/acda9a',NULL,NULL),(378,'Arzoumanian',2018,'2018ApJS..235...37A','@ARTICLE{2018ApJS..235...37A,\n       author = {{Arzoumanian}, Zaven and {Brazier}, Adam and {Burke-Spolaor}, Sarah and {Chamberlin}, Sydney and {Chatterjee}, Shami and {Christy}, Brian and {Cordes}, James M. and {Cornish}, Neil J. and {Crawford}, Fronefield and {Thankful Cromartie}, H. and {Crowter}, Kathryn and {DeCesar}, Megan E. and {Demorest}, Paul B. and {Dolch}, Timothy and {Ellis}, Justin A. and {Ferdman}, Robert D. and {Ferrara}, Elizabeth C. and {Fonseca}, Emmanuel and {Garver-Daniels}, Nathan and {Gentile}, Peter A. and {Halmrast}, Daniel and {Huerta}, E.~A. and {Jenet}, Fredrick A. and {Jessup}, Cody and {Jones}, Glenn and {Jones}, Megan L. and {Kaplan}, David L. and {Lam}, Michael T. and {Lazio}, T. Joseph W. and {Levin}, Lina and {Lommen}, Andrea and {Lorimer}, Duncan R. and {Luo}, Jing and {Lynch}, Ryan S. and {Madison}, Dustin and {Matthews}, Allison M. and {McLaughlin}, Maura A. and {McWilliams}, Sean T. and {Mingarelli}, Chiara and {Ng}, Cherry and {Nice}, David J. and {Pennucci}, Timothy T. and {Ransom}, Scott M. and {Ray}, Paul S. and {Siemens}, Xavier and {Simon}, Joseph and {Spiewak}, Ren{\\\'e}e and {Stairs}, Ingrid H. and {Stinebring}, Daniel R. and {Stovall}, Kevin and {Swiggum}, Joseph K. and {Taylor}, Stephen R. and {Vallisneri}, Michele and {van Haasteren}, Rutger and {Vigeland}, Sarah J. and {Zhu}, Weiwei and {NANOGrav Collaboration}},\n        title = \"{The NANOGrav 11-year Data Set: High-precision Timing of 45 Millisecond Pulsars}\",\n      journal = {\\apjs},\n     keywords = {binaries: general, gravitational waves, parallaxes, proper motions, pulsars: general, stars: neutron},\n         year = 2018,\n        month = apr,\n       volume = {235},\n       number = {2},\n          eid = {37},\n        pages = {37},\n          doi = {10.3847/1538-4365/aab5b0},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2018ApJS..235...37A},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.3847/1538-4365/aab5b0',NULL,NULL),(379,'Fonseca',2021,'2021ApJ...915L..12F','@ARTICLE{2021ApJ...915L..12F,\n       author = {{Fonseca}, E. and {Cromartie}, H.~T. and {Pennucci}, T.~T. and {Ray}, P.~S. and {Kirichenko}, A. Yu. and {Ransom}, S.~M. and {Demorest}, P.~B. and {Stairs}, I.~H. and {Arzoumanian}, Z. and {Guillemot}, L. and {Parthasarathy}, A. and {Kerr}, M. and {Cognard}, I. and {Baker}, P.~T. and {Blumer}, H. and {Brook}, P.~R. and {DeCesar}, M. and {Dolch}, T. and {Dong}, F.~A. and {Ferrara}, E.~C. and {Fiore}, W. and {Garver-Daniels}, N. and {Good}, D.~C. and {Jennings}, R. and {Jones}, M.~L. and {Kaspi}, V.~M. and {Lam}, M.~T. and {Lorimer}, D.~R. and {Luo}, J. and {McEwen}, A. and {McKee}, J.~W. and {McLaughlin}, M.~A. and {McMann}, N. and {Meyers}, B.~W. and {Naidu}, A. and {Ng}, C. and {Nice}, D.~J. and {Pol}, N. and {Radovan}, H.~A. and {Shapiro-Albert}, B. and {Tan}, C.~M. and {Tendulkar}, S.~P. and {Swiggum}, J.~K. and {Wahl}, H.~M. and {Zhu}, W.~W.},\n        title = \"{Refined Mass and Geometric Measurements of the High-mass PSR J0740+6620}\",\n      journal = {\\apjl},\n     keywords = {Neutron stars, Pulsars, General relativity, Compact objects, Binary pulsars, 1108, 1306, 641, 288, 153},\n         year = 2021,\n        month = jul,\n       volume = {915},\n       number = {1},\n          eid = {L12},\n        pages = {L12},\n          doi = {10.3847/2041-8213/ac03b8},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2021ApJ...915L..12F},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.3847/2041-8213/ac03b8',NULL,NULL),(380,'Hessels',2006,'2006Sci...311.1901H','@ARTICLE{2006Sci...311.1901H,\n       author = {{Hessels}, Jason W.~T. and {Ransom}, Scott M. and {Stairs}, Ingrid H. and {Freire}, Paulo C.~C. and {Kaspi}, Victoria M. and {Camilo}, Fernando},\n        title = \"{A Radio Pulsar Spinning at 716 Hz}\",\n      journal = {Science},\n     keywords = {ASTRONOMY},\n         year = 2006,\n        month = mar,\n       volume = {311},\n       number = {5769},\n        pages = {1901-1904},\n          doi = {10.1126/science.1123430},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2006Sci...311.1901H},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}\n','10.1126/science.1123430',NULL,NULL);
+INSERT INTO `ref_ns` VALUES (400,'Gonzalez-Canuilef',2019,'2019MNRAS.490.5848G','@ARTICLE{2019MNRAS.490.5848G,\n       author = {{Gonz{\\\'a}lez-Caniulef}, Denis and {Guillot}, Sebastien and {Reisenegger}, Andreas},\n        title = \"{Neutron star radius measurement from the ultraviolet and soft X-ray thermal emission of PSR J0437-4715}\",\n      journal = {\\mnras},\n     keywords = {dense matter, equation of state, plasmas, stars: atmospheres, stars: neutron, pulsars: individual (PSR J0437-4715), Astrophysics - High Energy Astrophysical Phenomena},\n         year = 2019,\n        month = dec,\n       volume = {490},\n       number = {4},\n        pages = {5848-5859},\n          doi = {10.1093/mnras/stz2941},\narchivePrefix = {arXiv},\n       eprint = {1904.12114},\n primaryClass = {astro-ph.HE},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2019MNRAS.490.5848G},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.1093/mnras/stz2941',NULL,NULL),(401,'Agazie',2023,'2023ApJL..951...L9','@ARTICLE{2018ApJS..235...37A,\n       author = {{Arzoumanian}, Zaven and {Brazier}, Adam and {Burke-Spolaor}, Sarah and {Chamberlin}, Sydney and {Chatterjee}, Shami and {Christy}, Brian and {Cordes}, James M. and {Cornish}, Neil J. and {Crawford}, Fronefield and {Thankful Cromartie}, H. and {Crowter}, Kathryn and {DeCesar}, Megan E. and {Demorest}, Paul B. and {Dolch}, Timothy and {Ellis}, Justin A. and {Ferdman}, Robert D. and {Ferrara}, Elizabeth C. and {Fonseca}, Emmanuel and {Garver-Daniels}, Nathan and {Gentile}, Peter A. and {Halmrast}, Daniel and {Huerta}, E.~A. and {Jenet}, Fredrick A. and {Jessup}, Cody and {Jones}, Glenn and {Jones}, Megan L. and {Kaplan}, David L. and {Lam}, Michael T. and {Lazio}, T. Joseph W. and {Levin}, Lina and {Lommen}, Andrea and {Lorimer}, Duncan R. and {Luo}, Jing and {Lynch}, Ryan S. and {Madison}, Dustin and {Matthews}, Allison M. and {McLaughlin}, Maura A. and {McWilliams}, Sean T. and {Mingarelli}, Chiara and {Ng}, Cherry and {Nice}, David J. and {Pennucci}, Timothy T. and {Ransom}, Scott M. and {Ray}, Paul S. and {Siemens}, Xavier and {Simon}, Joseph and {Spiewak}, Ren{\\\'e}e and {Stairs}, Ingrid H. and {Stinebring}, Daniel R. and {Stovall}, Kevin and {Swiggum}, Joseph K. and {Taylor}, Stephen R. and {Vallisneri}, Michele and {van Haasteren}, Rutger and {Vigeland}, Sarah J. and {Zhu}, Weiwei and {NANOGrav Collaboration}},\n        title = \"{The NANOGrav 11-year Data Set: High-precision Timing of 45 Millisecond Pulsars}\",\n      journal = {\\apjs},\n     keywords = {binaries: general, gravitational waves, parallaxes, proper motions, pulsars: general, stars: neutron},\n         year = 2018,\n        month = apr,\n       volume = {235},\n       number = {2},\n          eid = {37},\n        pages = {37},\n          doi = {10.3847/1538-4365/aab5b0},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2018ApJS..235...37A},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.3847/2041-8213/acda9a',NULL,NULL),(402,'Arzoumanian',2018,'2018ApJS..235...37A','@ARTICLE{2018ApJS..235...37A,\n       author = {{Arzoumanian}, Zaven and {Brazier}, Adam and {Burke-Spolaor}, Sarah and {Chamberlin}, Sydney and {Chatterjee}, Shami and {Christy}, Brian and {Cordes}, James M. and {Cornish}, Neil J. and {Crawford}, Fronefield and {Thankful Cromartie}, H. and {Crowter}, Kathryn and {DeCesar}, Megan E. and {Demorest}, Paul B. and {Dolch}, Timothy and {Ellis}, Justin A. and {Ferdman}, Robert D. and {Ferrara}, Elizabeth C. and {Fonseca}, Emmanuel and {Garver-Daniels}, Nathan and {Gentile}, Peter A. and {Halmrast}, Daniel and {Huerta}, E.~A. and {Jenet}, Fredrick A. and {Jessup}, Cody and {Jones}, Glenn and {Jones}, Megan L. and {Kaplan}, David L. and {Lam}, Michael T. and {Lazio}, T. Joseph W. and {Levin}, Lina and {Lommen}, Andrea and {Lorimer}, Duncan R. and {Luo}, Jing and {Lynch}, Ryan S. and {Madison}, Dustin and {Matthews}, Allison M. and {McLaughlin}, Maura A. and {McWilliams}, Sean T. and {Mingarelli}, Chiara and {Ng}, Cherry and {Nice}, David J. and {Pennucci}, Timothy T. and {Ransom}, Scott M. and {Ray}, Paul S. and {Siemens}, Xavier and {Simon}, Joseph and {Spiewak}, Ren{\\\'e}e and {Stairs}, Ingrid H. and {Stinebring}, Daniel R. and {Stovall}, Kevin and {Swiggum}, Joseph K. and {Taylor}, Stephen R. and {Vallisneri}, Michele and {van Haasteren}, Rutger and {Vigeland}, Sarah J. and {Zhu}, Weiwei and {NANOGrav Collaboration}},\n        title = \"{The NANOGrav 11-year Data Set: High-precision Timing of 45 Millisecond Pulsars}\",\n      journal = {\\apjs},\n     keywords = {binaries: general, gravitational waves, parallaxes, proper motions, pulsars: general, stars: neutron},\n         year = 2018,\n        month = apr,\n       volume = {235},\n       number = {2},\n          eid = {37},\n        pages = {37},\n          doi = {10.3847/1538-4365/aab5b0},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2018ApJS..235...37A},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.3847/1538-4365/aab5b0',NULL,NULL),(403,'Fonseca',2021,'2021ApJ...915L..12F','@ARTICLE{2021ApJ...915L..12F,\n       author = {{Fonseca}, E. and {Cromartie}, H.~T. and {Pennucci}, T.~T. and {Ray}, P.~S. and {Kirichenko}, A. Yu. and {Ransom}, S.~M. and {Demorest}, P.~B. and {Stairs}, I.~H. and {Arzoumanian}, Z. and {Guillemot}, L. and {Parthasarathy}, A. and {Kerr}, M. and {Cognard}, I. and {Baker}, P.~T. and {Blumer}, H. and {Brook}, P.~R. and {DeCesar}, M. and {Dolch}, T. and {Dong}, F.~A. and {Ferrara}, E.~C. and {Fiore}, W. and {Garver-Daniels}, N. and {Good}, D.~C. and {Jennings}, R. and {Jones}, M.~L. and {Kaspi}, V.~M. and {Lam}, M.~T. and {Lorimer}, D.~R. and {Luo}, J. and {McEwen}, A. and {McKee}, J.~W. and {McLaughlin}, M.~A. and {McMann}, N. and {Meyers}, B.~W. and {Naidu}, A. and {Ng}, C. and {Nice}, D.~J. and {Pol}, N. and {Radovan}, H.~A. and {Shapiro-Albert}, B. and {Tan}, C.~M. and {Tendulkar}, S.~P. and {Swiggum}, J.~K. and {Wahl}, H.~M. and {Zhu}, W.~W.},\n        title = \"{Refined Mass and Geometric Measurements of the High-mass PSR J0740+6620}\",\n      journal = {\\apjl},\n     keywords = {Neutron stars, Pulsars, General relativity, Compact objects, Binary pulsars, 1108, 1306, 641, 288, 153},\n         year = 2021,\n        month = jul,\n       volume = {915},\n       number = {1},\n          eid = {L12},\n        pages = {L12},\n          doi = {10.3847/2041-8213/ac03b8},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2021ApJ...915L..12F},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.3847/2041-8213/ac03b8',NULL,NULL),(404,'Hessels',2006,'2006Sci...311.1901H','@ARTICLE{2006Sci...311.1901H,\n       author = {{Hessels}, Jason W.~T. and {Ransom}, Scott M. and {Stairs}, Ingrid H. and {Freire}, Paulo C.~C. and {Kaspi}, Victoria M. and {Camilo}, Fernando},\n        title = \"{A Radio Pulsar Spinning at 716 Hz}\",\n      journal = {Science},\n     keywords = {ASTRONOMY},\n         year = 2006,\n        month = mar,\n       volume = {311},\n       number = {5769},\n        pages = {1901-1904},\n          doi = {10.1126/science.1123430},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2006Sci...311.1901H},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}','10.1126/science.1123430',NULL,NULL);
 /*!40000 ALTER TABLE `ref_ns` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -570,4 +571,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-26 17:33:11
+-- Dump completed on 2023-07-31 14:49:25
