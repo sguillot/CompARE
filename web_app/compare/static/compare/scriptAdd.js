@@ -162,6 +162,7 @@ function inTableAss(){
     dataprimary =  document.getElementById('assumptionsprimary').value
     datasecondary =  document.getElementById('assumptionssecondary').value
     datadescription =  document.getElementById('assumptionsdescription').value
+    datareference =  document.getElementById('assumptionsreferences').value
 
 
     let row  = table.insertRow()
@@ -172,12 +173,16 @@ function inTableAss(){
     let name = row.insertCell(1)
     name.innerHTML = datasecondary
                     
-    let classdb = row.insertCell(2)
-    classdb.innerHTML = datadescription
- 
+    let assdesc = row.insertCell(2)
+    assdesc.innerHTML = datadescription
+
+    let assref = row.insertCell(3)
+    assref.innerHTML = datareference
+
     document.getElementById('assumptionsprimary').value = ''
     document.getElementById('assumptionssecondary').value = ''
     document.getElementById('assumptionsdescription').value = ''
+    document.getElementById('assumptionsreferences').value = ''
 
 }
 
@@ -187,27 +192,27 @@ function inTableMod(){
 
     let dataprimary =  document.getElementById('dependenciesprimary').value
     let datasecondary =  document.getElementById('dependenciessecondary').value
-    let datadescription =  document.getElementById('dependeciesdescription').value
-    let MoCaveatsRef = document.getElementById('MocaveatsReferences').value
+    let datadescription =  document.getElementById('dependenciesdescription').value
+    let datareferences = document.getElementById('dependenciesreferences').value
 
     let row  = table.insertRow()
-        
+
     let moPri = row.insertCell(0)
     moPri.innerHTML = dataprimary
-        
+
     let moSec = row.insertCell(1)
     moSec.innerHTML = datasecondary
-                    
+
     let desc = row.insertCell(2)
     desc.innerHTML = datadescription
 
-    let MoCaveats = row.insertCell(3)
-    MoCaveats.innerHTML = MoCaveatsRef
- 
+    let depref = row.insertCell(3)
+    depref.innerHTML = datareferences
+
     document.getElementById('dependenciesprimary').value = ''
     document.getElementById('dependenciessecondary').value = ''
-    document.getElementById('dependeciesdescription').value = ''
-    document.getElementById('MocaveatsReferences').value = ''
+    document.getElementById('dependenciesdescription').value = ''
+    document.getElementById('dependenciesreferences').value = ''
 
 }
 
