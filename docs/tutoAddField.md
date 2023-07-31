@@ -48,7 +48,7 @@ List of the types of a MySQL Database :
 		id_model = models.AutoField(db_column='id_Model', primary_key=True)  # Field name made lowercase.
 		dependenciesprimary = models.CharField(db_column='DependenciesPrimary', max_length=60,blank=True, null=True)  # Field name made lowercase.cd 
 		dependenciessecondary = models.CharField(db_column='DependenciesSecondary', max_length=60,blank=True, null=True)  # Field name made lowercase.
-		dependeciesdescription = models.TextField(db_column='DependeciesDescription',blank=True,null=True)  # Field name made lowercase.
+		dependenciesdescription = models.TextField(db_column='DependenciesDescription',blank=True,null=True)  # Field name made lowercase.
 		caveatsReferences = models.TextField(db_column='CaveatsReferences',blank=True, null=True)
 		 
 		    class Meta:
@@ -108,7 +108,7 @@ In the file **views.py**  go to the **insert_data** function
 
 	You will have this :
 	
-		if (ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependeciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])):
+		if (ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependenciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])):
 
 	4.Add the same things to the select and create query 
 	
@@ -118,12 +118,12 @@ In the file **views.py**  go to the **insert_data** function
 	    
 	You will have this in case this model already exist :
 
-	    modelId=ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependeciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
+	    modelId=ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependenciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
 
 
 	You will have this in case this model does not exist :
 		
-	    model = ModelNs(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependeciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
+	    model = ModelNs(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependenciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
 
 
 ### 6. Adding the field in the automatic insertion of the insert page
@@ -156,11 +156,11 @@ In the file **views.py** go to the **insert_data** function
 	    
 	  You will have this :
 	
-	    if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc)):
-	    			    idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc)
+	    if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependenciesdescription=modeldesc)):
+	    			    idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependenciesdescription=modeldesc)
 6. Add the same things to the create query :
 
-	    modelN = ModelNs(dependenciesprimary=modelpri ,dependenciessecondary=modelsec ,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)
+	    modelN = ModelNs(dependenciesprimary=modelpri ,dependenciessecondary=modelsec ,dependenciesdescription=modeldesc,caveatsReferences=mocaveats)
 
 ### 6. Adding the field in the modification page
 In the file **modify.html** of the folder **templates/compare**
@@ -190,14 +190,14 @@ In the file **views.py** go to the **modify** function
 	    caveatsReferences=depCav
 	You will have this :
 	
-	    if(ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)):
+	    if(ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)):
 5. Add the same things to the create query :
 
-	    modelExist = ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)
+	    modelExist = ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)
 	    
 6. Same things for the else statement :
 							
-		`model=ModelNs(dependenciesprimary=depP,dependenciessecondary=depS,dependeciesdescription=depD,caveatsReferences=depCav)`
+		`model=ModelNs(dependenciesprimary=depP,dependenciessecondary=depS,dependenciesdescription=depD,caveatsReferences=depCav)`
 
  
  

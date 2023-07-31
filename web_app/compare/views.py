@@ -626,7 +626,7 @@ def modify(request,id):
             if len(depS)<1:
                 depS = None
 
-            depD = request.POST.get('dependeciesdescription')
+            depD = request.POST.get('dependenciesdescription')
             if len(depD)<1:
                 depD = None
 
@@ -638,7 +638,7 @@ def modify(request,id):
                 if 'update' in request.POST :
                     model.dependenciesprimary = depP
                     model.dependenciessecondary = depS
-                    model.dependeciesdescription = depD
+                    model.dependenciesdescription = depD
                     model.caveatsReferences = depCav
                     model.save()
                     messages.success(request,"Yes")
@@ -649,15 +649,14 @@ def modify(request,id):
                     fichierlog.close()
 
                 elif 'add' in request.POST :
-                    if(ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)):
-
-                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)
+                    if(ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)):
+                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)
                         modelExist = modelExist[0]
                         model.id_model = modelExist
                         model.save()
                         
                     else:
-                        model = ModelNs(dependenciesprimary=depP, dependenciessecondary=depS, dependeciesdescription=depD,caveatsReferences=depCav)
+                        model = ModelNs(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)
                         model.save()
                         messages.success(request,"Yes")
 
@@ -1064,11 +1063,11 @@ def insert_data(request):
                         if len(mocaveats)<1:
                             mocaveats = None
 
-                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)):
-                            idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)
+                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependenciesdescription=modeldesc,caveatsReferences=mocaveats)):
+                            idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependenciesdescription=modeldesc,caveatsReferences=mocaveats)
                             idMo = idMo[0]
                         else:
-                            modelN = ModelNs(dependenciesprimary=modelpri ,dependenciessecondary=modelsec ,dependeciesdescription=modeldesc,caveatsReferences=mocaveats)
+                            modelN = ModelNs(dependenciesprimary=modelpri ,dependenciessecondary=modelsec ,dependenciesdescription=modeldesc,caveatsReferences=mocaveats)
                             modelN.save()
                             idMo = ModelNs.objects.latest('id_model')
                         #we create the link between ns and model
@@ -1282,13 +1281,13 @@ def insert_data(request):
 
 
                 if (ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1]
-                                           ,dependeciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])):  
+                                           ,dependenciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])):
                     
                     modelId=ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1]
-                                                   ,dependeciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
+                                                   ,dependenciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
                 else:
                    
-                    model = ModelNs(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependeciesdescription = insert['model'][mod][2],
+                    model = ModelNs(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependenciesdescription = insert['model'][mod][2],
                                     caveatsReferences = insert['model'][mod][3])
                     model.save()
                     modelId = ModelNs.objects.latest('id_model')

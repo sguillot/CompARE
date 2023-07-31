@@ -187,7 +187,7 @@ function inTableMod(){
 
     let dataprimary =  document.getElementById('dependenciesprimary').value
     let datasecondary =  document.getElementById('dependenciessecondary').value
-    let datadescription =  document.getElementById('dependeciesdescription').value
+    let datadescription =  document.getElementById('dependenciesdescription').value
     let MoCaveatsRef = document.getElementById('MocaveatsReferences').value
 
     let row  = table.insertRow()
@@ -206,7 +206,7 @@ function inTableMod(){
  
     document.getElementById('dependenciesprimary').value = ''
     document.getElementById('dependenciessecondary').value = ''
-    document.getElementById('dependeciesdescription').value = ''
+    document.getElementById('dependenciesdescription').value = ''
     document.getElementById('MocaveatsReferences').value = ''
 
 }
