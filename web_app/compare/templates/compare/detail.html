@@ -30,8 +30,8 @@ Detail
     <p class="titlecat">Models</p>
     <ul>
     {% for mo in queryMo %}
-        <li><span>{{mo.id_model.dependenciesprimary}} : {{mo.id_model.dependenciessecondary }} <br> </span>
-            {{mo.id_model.dependeciesdescription}} <br> {{mo.id_model.caveatsReferences}}
+        <li><span>{{mo.id_model.dependenciesprimary}} : {{mo.id_model.dependenciessecondary}} <br> </span>
+            {{mo.id_model.dependenciesdescription}} <br> {{mo.id_model.dependenciesreferences}}
         </li>
         <br>
     {% endfor %}
@@ -50,7 +50,7 @@ Detail
     <ul>
     {% for as in queryAs %}
         <li><span>{{as.id_assumptions.assumptionsprimary}} : {{as.id_assumptions.assumptionssecondary}} <br></span>
-            {{as.id_assumptions.assumptionsdescription}}
+            {{as.id_assumptions.assumptionsdescription}}  <br> {{as.id_assumptions.assumptionsreferences}}
         </li>
         <br>
     {% endfor %}

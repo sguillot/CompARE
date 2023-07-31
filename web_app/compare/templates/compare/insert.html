@@ -29,7 +29,7 @@ Add
         </div>
         <div class="formfilepath">
             <label>FilePath</label>
-            <textarea name="filepath" placeholder="File Path"id="filepath"></textarea>
+            <textarea name="filepath" placeholder="File Path" id="filepath"></textarea>
         </div>
     </div>
 
@@ -218,30 +218,29 @@ Add
     
     <div class="modelcontent">
         <p>Dependencies</p>
-       
         <div id="addMo">
                 <label>Dependencies Primary</label>
                 <input type="text" name="dependenciesprimary" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5">
                 <label>Dependencies Secondary</label>
                 <input type="text" name="dependenciessecondary" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5">
                 <label>Dependecies Description</label>
-                <textarea name="dependeciesdescription" id="dependeciesdescription" placeholder="Dependecies Description"></textarea>
-                <label>Caveats References</label>
-                <textarea name="MocaveatsReferences" id="MocaveatsReferences" placeholder="Caveats References"></textarea>
-                <input type="hidden" name="hid" value="formAddModel">
+                <textarea name="dependenciesdescription" id="dependenciesdescription" placeholder="Dependencies Description"></textarea>
+                <label>Dependencies References</label>
+                <textarea name="dependenciesreferences" id="dependenciesreferences" placeholder="Dependencies References"></textarea>
+                <input type="hidden" name="hiddep" value="formAddModel">
                 <button onclick="inTableMod()">Send</button>
-                <button onclick="returndep()" class="addC" >Return</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Dependencies Primary</th>
-                        <th>Dependencies Secondary</th>
-                        <th>Dependecies Descriptionn</th>
-                        <th>Caveats References</th>
-                    </tr>
-                </thead>
-                <tbody id="modelTable"> </tbody>
-            </table>
+                <button onclick="returndep()" class="addMo" >Return</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dependencies Primary</th>
+                            <th>Dependencies Secondary</th>
+                            <th>Dependencies Description</th>
+                            <th>Dependencies References</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modelTable"> </tbody>
+                </table>
         </div>
     </div>
 
@@ -256,7 +255,9 @@ Add
                 <input type="text" name="assumptionssecondary" id="assumptionssecondary" placeholder="Assumptions Secondary" maxlength="60" minlength="5">
                 <label>Assumptions Description</label>
                 <textarea name="assumptionsdescription"  id="assumptionsdescription" placeholder="Assumptions Description"></textarea>
-                <input type="hidden" name="hid" value="formAddAssumptions">
+                <label>Assumptions References</label>
+                <textarea name="assumptionsreferences" id="assumptionsreferences" placeholder="Assumptions References"></textarea>
+                <input type="hidden" name="hidass" value="formAddAssumptions">
                 <button onclick="inTableAss()">Send</button>
                 <button onclick="returnass()" class="addA" >Return</button>
                 <table>
@@ -265,12 +266,20 @@ Add
                             <th>Assumptions Primary</th>
                             <th>Assumptions Secondary</th>
                             <th>Assumptions Description</th>
+                            <th>Assumptions References</th>
                         </tr>
                     </thead>
                     <tbody id="assumptionTable"> </tbody>
                 </table>
         </div>
-        <button type="submit" onclick="createNs()">Validate</button>
+
+    </div>
+
+    <hr>
+
+    <div>
+    When all is finish, click on validate
+    <button type="submit" onclick="createNs()">Validate</button>
     </div>
 </div>
 {% endblock %}
