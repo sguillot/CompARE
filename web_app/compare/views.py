@@ -57,7 +57,7 @@ def visu_data(request):
              selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')#We recover the Bibtex in connection with our filename list 
 
              #Writing Bitex to a file
-             fichierBib = open('web_app/compare/static/compare/Bibtex.txt', "w") #Open file in write mode (w)
+             fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w") #Open file in write mode (w)
 
              for b in selectbib:#Loop to write each bibtex of the list
                 fichierBib.write(b['id_ref__bibtex'])#Writing the bibtex to the file 
@@ -275,7 +275,7 @@ def detail(request, id):
         filename = json.loads(request.POST.get('filename'))
         file = Ns.objects.get(filename = filename)
 
-        fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+        fichierlog = open('web_app\compare\static\compare\log.txt', "a")
         wri = ['Delete:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(file)+'\n\n']
         fichierlog.writelines(wri)
         fichierlog.close()
@@ -420,7 +420,7 @@ def modify(request,id):
                     messages.success(request,"Yes")
 
                     #to write in the log file
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(nameNS)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -443,7 +443,7 @@ def modify(request,id):
                         messages.success(request,"Yes")
 
                     #to write in the logo file
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: Name ',str(ns_list.id_name)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -488,7 +488,7 @@ def modify(request,id):
                     RefNS.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(RefNS)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -507,7 +507,7 @@ def modify(request,id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: Ref ',str(ns_list.id_ref)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -537,7 +537,7 @@ def modify(request,id):
                     MethNS.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(MethNS)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -557,7 +557,7 @@ def modify(request,id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:Method ',str(ns_list.id_method)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -583,7 +583,7 @@ def modify(request,id):
                     Constrainns.constrainversion = constrainV
                     Constrainns.save()
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: ',str(Constrainns)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -607,7 +607,7 @@ def modify(request,id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: ',str(ns_list.id_constrain)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -630,37 +630,46 @@ def modify(request,id):
             if len(depD)<1:
                 depD = None
 
-            depCav = request.POST.get('MocaveatsReferences')
-            if len(depCav)<1:
-                depCav = None
+            depR = request.POST.get('dependenciesreferences')
+            if len(depR)<1:
+                depR = None
 
             else:
                 if 'update' in request.POST :
                     model.dependenciesprimary = depP
                     model.dependenciessecondary = depS
                     model.dependenciesdescription = depD
-                    model.caveatsReferences = depCav
+                    model.dependenciesreferences = depR
                     model.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(model)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
                 elif 'add' in request.POST :
-                    if(ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)):
-                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)
+                    if(ModelNs.objects.filter(dependenciesprimary=depP,
+                                              dependenciessecondary=depS,
+                                              dependenciesdescription=depD,
+                                              dependenciesreferences=depR)):
+                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP,
+                                                            dependenciessecondary=depS,
+                                                            dependenciesdescription=depD,
+                                                            dependenciesreferences=depR)
                         modelExist = modelExist[0]
                         model.id_model = modelExist
                         model.save()
                         
                     else:
-                        model = ModelNs(dependenciesprimary=depP, dependenciessecondary=depS, dependenciesdescription=depD,caveatsReferences=depCav)
+                        model = ModelNs(dependenciesprimary=depP,
+                                        dependenciessecondary=depS,
+                                        dependenciesdescription=depD,
+                                        dependenciesreferences=depR)
                         model.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content: ',str(model)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -683,32 +692,46 @@ def modify(request,id):
             if len(AssD)<1:
                 AssD = None
 
+            AssR = request.POST.get('assumptionsreferences')
+            if len(AssR)<1:
+                AssR = None
+
             else:
                 if 'update' in request.POST :
                     assumption.assumptionsprimary = AssP
                     assumption.assumptionssecondary = AssS
                     assumption.assumptionsdescription = AssD
+                    assumption.assumptionsreferences = AssR
                     assumption.save()
                     messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Modify:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(assumption)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
                 elif 'add' in request.POST :
-                    if(AssumptionsNs.objects.filter(assumptionsprimary=AssP, assumptionssecondary=AssS, assumptionsdescription=AssD)):
+                    if(AssumptionsNs.objects.filter(assumptionsprimary=AssP,
+                                                    assumptionssecondary=AssS,
+                                                    assumptionsdescription=AssD,
+                                                    assumptionsreferences=AssR)):
                         
-                        assumptionExist = AssumptionsNs.objects.filter(assumptionsprimary=AssP, assumptionssecondary=AssS, assumptionsdescription=AssD)
+                        assumptionExist = AssumptionsNs.objects.filter(assumptionsprimary=AssP,
+                                                                       assumptionssecondary=AssS,
+                                                                       assumptionsdescription=AssD,
+                                                                       assumptionsreferences=AssR)
                         assumptionExist = assumptionExist[0]
                         assumption.id_assumptions = assumptionExist
                         assumption.save()
                     else:
-                        assumption = AssumptionsNs(assumptionsprimary=AssP, assumptionssecondary=AssS, assumptionsdescription=AssD)
+                        assumption = AssumptionsNs(assumptionsprimary=AssP,
+                                                   assumptionssecondary=AssS,
+                                                   assumptionsdescription=AssD,
+                                                   assumptionsreferences=AssR)
                         assumption.save()
                         messages.success(request,"Yes")
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:Assumptions ',str(assumption)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -840,7 +863,10 @@ def insert_data(request):
                     if (len(listmodesc)==0):
                         listmodesc = ['']  # Just a hack to avoid an empty list if there are no description provided
 
-                    listmocav = d['CaveatReferences'][i].split(",")
+                    listmodepref = d['ModelDependencyReferences'][i].split("\n")
+                    listmodepref = [i for i in listmodepref if i]
+                    if (len(listmodepref)==0):
+                        listmodepref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     listass = d['AssumptionsPrimary'][i].split(",")
 
@@ -850,6 +876,11 @@ def insert_data(request):
                     listassdesc = [i for i in listassdesc if i]
                     if (len(listassdesc)==0):
                         listassdesc = ['']  # Just a hack to avoid an empty list if there are no description provided
+
+                    listassref = d['AssumptionsReferences'][i].split("\n")
+                    listassref = [i for i in listassref if i]
+                    if (len(listassref)==0):
+                        listassref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     #we verify if the filename do not alreday exist
                     if Ns.objects.filter(filename = d['FileName'][i]):
@@ -884,22 +915,24 @@ def insert_data(request):
 
                     elif( (len(listmo)!= len(listmosec)) or
                           (len(listmo)!= len(listmodesc)) or
-                          (len(listmo) != len(listmocav))
+                          (len(listmo) != len(listmodepref))
                         ):
                         notinserted[filename] = " has a mismatch in input model dependencies " \
-                                                "( {} primary, {} secondary, {} descriptions, and {} caveat references)".format(len(listmo),
-                                                                                                                                len(listmosec),
-                                                                                                                                len(listmodesc),
-                                                                                                                                len(listmocav))
+                                                "( {} primary, {} secondary, {} descriptions, and {} references)".format(len(listmo),
+                                                                                                                         len(listmosec),
+                                                                                                                         len(listmodesc),
+                                                                                                                         len(listassref))
                         continue
 
                     elif( (len(listass)!= len(listasssec)) or
-                          (len(listass)!= len(listassdesc))
+                          (len(listass)!= len(listassdesc))or
+                          (len(listass) != len(listassdesc))
                         ):
                         notinserted[filename] = " has a mismatch in input assumptions " \
-                                                "( {} primary, {} secondary and {} descriptions)".format(len(listass),
-                                                                                                         len(listasssec),
-                                                                                                         len(listassdesc))
+                                                "( {} primary, {} secondary, {} descriptions, and {} references)".format(len(listass),
+                                                                                                                         len(listasssec),
+                                                                                                                         len(listassdesc),
+                                                                                                                         len(listassdesc))
                         continue
                     
                     elif str(d['Method'][i]) not in me :
@@ -1049,7 +1082,7 @@ def insert_data(request):
                         modelpri = listmo[j]
                         modelsec = listmosec[j]
                         modeldesc = listmodesc[j]
-                        mocaveats = listmocav[j]
+                        modelref = listmodepref[j]
 
                         if len(modelpri)<1:
                             modelpri = None
@@ -1060,14 +1093,23 @@ def insert_data(request):
                         if len(modeldesc)<1:
                             modeldesc = None
 
-                        if len(mocaveats)<1:
-                            mocaveats = None
+                        if len(modelref)<1:
+                            modelref = None
 
-                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependenciesdescription=modeldesc,caveatsReferences=mocaveats)):
-                            idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,dependenciessecondary=modelsec,dependenciesdescription=modeldesc,caveatsReferences=mocaveats)
+                        if(ModelNs.objects.filter(dependenciesprimary=modelpri,
+                                                  dependenciessecondary=modelsec,
+                                                  dependenciesdescription=modeldesc,
+                                                  dependenciesreferences=modelref)):
+                            idMo = ModelNs.objects.filter(dependenciesprimary=modelpri,
+                                                          dependenciessecondary=modelsec,
+                                                          dependenciesdescription=modeldesc,
+                                                          dependenciesreferences=modelref)
                             idMo = idMo[0]
                         else:
-                            modelN = ModelNs(dependenciesprimary=modelpri ,dependenciessecondary=modelsec ,dependenciesdescription=modeldesc,caveatsReferences=mocaveats)
+                            modelN = ModelNs(dependenciesprimary=modelpri,
+                                             dependenciessecondary=modelsec,
+                                             dependenciesdescription=modeldesc,
+                                             dependenciesreferences=modelref)
                             modelN.save()
                             idMo = ModelNs.objects.latest('id_model')
                         #we create the link between ns and model
@@ -1079,6 +1121,7 @@ def insert_data(request):
                         asspri = listass[k]
                         asssec = listasssec[k]
                         assdesc = listassdesc[k]
+                        assref = listassref[k]
 
                         if len(asspri)<1:
                             asspri = None
@@ -1089,11 +1132,23 @@ def insert_data(request):
                         if len(assdesc)<1:
                             assdesc = None
 
-                        if(AssumptionsNs.objects.filter(assumptionsprimary=asspri,assumptionssecondary=asssec,assumptionsdescription=assdesc)):
-                            idAs = AssumptionsNs.objects.filter(assumptionsprimary=asspri,assumptionssecondary=asssec,assumptionsdescription=assdesc)
+                        if len(assref) < 1:
+                            assref = None
+
+                        if(AssumptionsNs.objects.filter(assumptionsprimary=asspri,
+                                                        assumptionssecondary=asssec,
+                                                        assumptionsdescription=assdesc,
+                                                        assumptionsreferences=assref)):
+                            idAs = AssumptionsNs.objects.filter(assumptionsprimary=asspri,
+                                                                assumptionssecondary=asssec,
+                                                                assumptionsdescription=assdesc,
+                                                                assumptionsreferences=assref)
                             idAs=idAs[0]
                         else:
-                            assumptions = AssumptionsNs(assumptionsprimary=asspri ,assumptionssecondary=asssec ,assumptionsdescription=assdesc)
+                            assumptions = AssumptionsNs(assumptionsprimary=asspri,
+                                                        assumptionssecondary=asssec,
+                                                        assumptionsdescription=assdesc,
+                                                        assumptionsreferences=assref)
                             assumptions.save()
                             idAs = AssumptionsNs.objects.latest('id_assumptions')
                         #we create the link between ns and assumptions
@@ -1116,7 +1171,7 @@ def insert_data(request):
             classdb = request.POST.get('class')
 
             if len(na) <= 0  or len(classdb) <= 0 :
-                messages.error(request,"L'insertion de Name n'est pas correct")
+                messages.error(request,"L'insertion de Name n'est pas correcte")
             else:
                 nameS = request.POST.get('nameS')
                 if len(nameS) < 1:
@@ -1156,7 +1211,7 @@ def insert_data(request):
                     name.save()
 
                     #to write in the log file
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(name)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -1191,7 +1246,7 @@ def insert_data(request):
                 ref = RefNs(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)
                 ref.save()
 
-                fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                 wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(ref)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
@@ -1202,6 +1257,7 @@ def insert_data(request):
         #we verify all the values
         insert = json.loads(request.POST.get('insert'))
 
+        # TO DO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
         if((len(insert['filename'])<= 0) or (len(insert['filepath'])<=0 )):
             mess = "/!\ ERROR /!\ : Please enter a Filename or/and a Filepath"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
@@ -1235,7 +1291,7 @@ def insert_data(request):
                 method.save()
                 methodId = MethodNs.objects.latest('id_method')
 
-                fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                 wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(method)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
@@ -1252,7 +1308,7 @@ def insert_data(request):
                 constrain.save()
                 constrainId = ConstrainNs.objects.latest('id_constrain')
 
-                fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                 wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(constrain)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
@@ -1280,19 +1336,25 @@ def insert_data(request):
                     insert['model'][mod][3] = None
 
 
-                if (ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1]
-                                           ,dependenciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])):
+                if (ModelNs.objects.filter(dependenciesprimary=insert['model'][mod][0],
+                                           dependenciessecondary=insert['model'][mod][1],
+                                           dependenciesdescription=insert['model'][mod][2],
+                                           dependenciesreferences=insert['model'][mod][3])):
                     
-                    modelId=ModelNs.objects.filter(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1]
-                                                   ,dependenciesdescription = insert['model'][mod][2],caveatsReferences = insert['model'][mod][3])
+                    modelId=ModelNs.objects.filter(dependenciesprimary=insert['model'][mod][0],
+                                                   dependenciessecondary=insert['model'][mod][1],
+                                                   dependenciesdescription=insert['model'][mod][2],
+                                                   dependenciesreferences=insert['model'][mod][3])
                 else:
                    
-                    model = ModelNs(dependenciesprimary = insert['model'][mod][0], dependenciessecondary = insert['model'][mod][1],dependenciesdescription = insert['model'][mod][2],
-                                    caveatsReferences = insert['model'][mod][3])
+                    model = ModelNs(dependenciesprimary=insert['model'][mod][0],
+                                    dependenciessecondary=insert['model'][mod][1],
+                                    dependenciesdescription=insert['model'][mod][2],
+                                    dependenciesreferences=insert['model'][mod][3])
                     model.save()
                     modelId = ModelNs.objects.latest('id_model')
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(model)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
@@ -1315,29 +1377,36 @@ def insert_data(request):
                 if(len(insert['assumptions'][ass][2]) < 1 ):
                     insert['assumptions'][ass][2] = None
 
-                
+                if(len(insert['massumptionsodel'][ass][3]) < 1 ):
+                    insert['assumptions'][ass][3] = None
 
-                if (AssumptionsNs.objects.filter(assumptionsprimary = insert['assumptions'][ass][0], assumptionssecondary = insert['assumptions'][ass][1],
-                                    assumptionsdescription = insert['assumptions'][ass][2])):  
+                if (AssumptionsNs.objects.filter(assumptionsprimary=insert['assumptions'][ass][0],
+                                                 assumptionssecondary=insert['assumptions'][ass][1],
+                                                 assumptionsdescription=insert['assumptions'][ass][2],
+                                                 assumptionsreferences=insert['assumptions'][ass][3])):
                     
-                    assumptionsId=AssumptionsNs.objects.filter(assumptionsprimary = insert['assumptions'][ass][0], assumptionssecondary = insert['assumptions'][ass][1],
-                                    assumptionsdescription = insert['assumptions'][ass][2])
+                    assumptionsId=AssumptionsNs.objects.filter(assumptionsprimary=insert['assumptions'][ass][0],
+                                                               assumptionssecondary=insert['assumptions'][ass][1],
+                                                               assumptionsdescription=insert['assumptions'][ass][2],
+                                                               assumptionsreferences=insert['assumptions'][ass][3])
                 else:
                    
-                    assumptions = AssumptionsNs(assumptionsprimary = insert['assumptions'][ass][0], assumptionssecondary = insert['assumptions'][ass][1],
-                                    assumptionsdescription = insert['assumptions'][ass][2])
+                    assumptions = AssumptionsNs(assumptionsprimary=insert['assumptions'][ass][0],
+                                                assumptionssecondary=insert['assumptions'][ass][1],
+                                                assumptionsdescription=insert['assumptions'][ass][2],
+                                                assumptionsreferences=insert['assumptions'][ass][3])
                     assumptions.save()
                     assumptionsId = AssumptionsNs.objects.latest('id_assumptions')
 
-                    fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+                    fichierlog = open('web_app\compare\static\compare\log.txt', "a")
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(assumptions)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-                nsass = NsToAssumptions(filename = ns , id_assumptions = assumptionsId)
+                nsass = NsToAssumptions(filename=ns, id_assumptions=assumptionsId)
                 nsass.save()
 
-        fichierlog = open('web_app/compare/static/compare/log.txt', "a")
+        fichierlog = open('web_app\compare\static\compare\log.txt', "a")
         wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(ns)+'\n\n']
         fichierlog.writelines(wri)
         fichierlog.close()   

@@ -208,10 +208,10 @@ Modify
                             <input type="text" name="dependenciesprimary" class="method{{i.id_model}}" value="{{i.dependenciesprimary}}" placeholder="{{i.dependenciesprimary}}" disabled>
                             <label>Dependencies Secondary</label>
                             <input type="text" name="dependenciessecondary" class="method{{i.id_model}}" value="{{i.dependenciessecondary}}" placeholder="{{i.dependenciessecondary}}" disabled>
-                            <label>Dependecies Description</label>
+                            <label>Dependencies Description</label>
                             <textarea name="dependenciesdescription" class="method{{i.id_model}}" placeholder="{{i.dependenciesdescription}}" disabled>{{i.dependenciesdescription}}</textarea>
-                            <label>Caveats References</label>
-                            <textarea name="MocaveatsReferences" class="method{{i.id_model}}" placeholder="{{i.caveatsReferences}}" disabled>{{i.caveatsReferences}}</textarea>
+                            <label>Dependencies References</label>
+                            <textarea name="dependenciesreferences" class="method{{i.id_model}}" placeholder="{{i.dependenciesreferences}}" disabled>{{i.dependenciesreferences}}</textarea>
                             <input type="hidden" name="model" value="{{i.id_model}}">
                             <input type="submit" class="method{{i.id_model}}" name="update" value="Update" disabled>
                             <input type="submit" class="method{{i.id_model}}" name="add"  value="Add a new Model" disabled>
@@ -255,6 +255,8 @@ Modify
                             <input type="text" name="assumptionssecondary" class="assumption{{j.id_assumptions}}" value="{{j.assumptionssecondary}}" placeholder="{{j.assumptionssecondary}}" disabled>
                             <label>Assumptions Description</label>
                             <textarea name="assumptionsdescription" class="assumption{{j.id_assumptions}}" placeholder="{{j.assumptionsdescription}}" disabled>{{j.assumptionsdescription}}</textarea>
+                            <label>Assumptions References</label>
+                            <textarea name="assumptionsreferences" class="assumption{{j.id_assumptions}}" placeholder="{{j.assumptionsreferences}}" disabled>{{j.assumptionsreferences}}</textarea>
                             <input type="hidden" name="assumption" value="{{j.id_assumptions}}">
                             <input type="submit" class="assumption{{j.id_assumptions}}" name="update" value="Update" disabled>
                             <input type="submit" class="assumption{{j.id_assumptions}}" name="add"  value="Add a new Model" disabled>
