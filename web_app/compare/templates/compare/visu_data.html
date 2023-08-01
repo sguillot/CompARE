@@ -165,7 +165,7 @@ Visu_data
                 </tr>
             </thead>
 
-            <tbody id="secondTable"> </tbody>
+            <tbody id="secondTable"></tbody>
 
             <tbody id="firstTable">
                 {% for q , m , a in queryall %}
@@ -179,14 +179,13 @@ Visu_data
                     <td>{{ q.id_constrain.constrainversion }}</td>
                     <td>{{ q.id_constrain.constrainvariable }}</td>
                     <td>
-                        {% for mm in m %}
-                            <li>{{mm}}</li>
+                        {% for mprim, msec in m %}
+                            <li><u>{{mprim}}</u>: {{msec}}</li>
                         {% endfor %}
                     </td>
-
                     <td>
-                        {% for aa in a %}
-                            <li>{{aa}}</li>
+                        {% for aprim, asec in a %}
+                            <li><u>{{aprim}}</u>: {{asec}}</li>
                         {% endfor %} 
                     </td>
                     <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>

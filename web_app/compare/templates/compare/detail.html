@@ -25,12 +25,14 @@ Detail
 
 
 <div class="contentfile">
+
 <div class="divmodel">
 
     <p class="titlecat">Models</p>
     <ul>
     {% for mo in queryMo %}
-        <li><span>{{mo.id_model.dependenciesprimary}}: {{mo.id_model.dependenciessecondary}} <br> </span>
+        <li>
+            <span><u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
             {{mo.id_model.dependenciesdescription}} <br>
             {% for ads_short, ads_link in mo.id_model.reflist %}
                 <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
@@ -46,7 +48,7 @@ Detail
     <p class="titlecat">Assumptions</p>
     <ul>
     {% for as in queryAs %}
-        <li><span>{{as.id_assumptions.assumptionsprimary}}: {{as.id_assumptions.assumptionssecondary}} <br></span>
+        <li><span><u>{{as.id_assumptions.assumptionsprimary}}</u>: {{as.id_assumptions.assumptionssecondary}} <br></span>
             {{as.id_assumptions.assumptionsdescription}} <br>
             {% for ads_short, ads_link in as.id_assumptions.reflist %}
                 <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
@@ -113,6 +115,7 @@ Detail
 
 
 </div>
+
 </div>
 </div>
 {% endblock %}
