@@ -19,53 +19,60 @@ from django.db import IntegrityError
 def home(request):
     return render(request, "compare/home.html")
 
+
 def visu_data(request):
 
-    #We select all the Ns from the database without models and assumptions but whith "ref" ,"name" ,"constrain" and "method" thanks to the selected related method
+    # We select all the Ns from the database without models and assumptions but
+    # with "ref" ,"name" ,"constrain" and "method" with method select_related
     select_ns_all = Ns.objects.select_related().all().order_by('filename')
 
-    #we check for GET request
+    # We check for GET request
     if request.method == 'GET':
 
-        #In case the user send a Get Request We get the values sent
-
+        # In case the user send a Get Request we extract the values
         # We recover the data sent in AJAX
         jsonCheckList = request.GET.get('dataCheckList', '')
-        stringSearch = request.GET.get('dataSearch','')
-        dictSelect = request.GET.get('dataSelect','')
+        stringSearch = request.GET.get('dataSearch', '')
+        dictSelect = request.GET.get('dataSelect', '')
         fileBibtex = request.GET.get('bibtexfile')
         fileDwnl = request.GET.get('filedwnl')
 
-
-        #We retrieve the filenames and return the filepaths of the files to the succes part of the Ajax request
-        #if the variable fileDwnl has a value
+        # For downloads, we retrieve the filenames and return the filepaths to the success part of the Ajax request
         if fileDwnl:
-            dwnl = json.loads(fileDwnl) # python list with the "filenames" that the user has selected
-            selectfilepath = select_ns_all.filter(filename__in=dwnl).values('filepath') #We only retrieve the filepaths of the filenames
+            # List with the "filenames" that the user has selected
+            dwnl = json.loads(fileDwnl)
 
-            #We extract the result in a list thanks to a loop
+            # We only retrieve the filepaths of the filenames
+            # TODO: May need to change if filepath are removed from DB
+            selectfilepath = select_ns_all.filter(filename__in=dwnl).values('filepath')
+
+            # We put these filepath in a list (instead of DjangoRequest)
             listFilePath = []
             for f in selectfilepath:
                 listFilePath.append(f['filepath'])
-            #We return the list to the succes part of Ajax request
+
+            # We return the list to the succes part of Ajax request
             return HttpResponse(json.dumps(listFilePath), content_type='application/json')
 
-        #We retrieve the filenames and write the Bibtex in a file
-        #if the variable fileBibtex has a value
+        # For BibTex info, we retrieve the filenames and write the Bibtex data in a file
         if fileBibtex:
-             bib = json.loads(fileBibtex) #python list with the filenames that the user has selected
-             selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')#We recover the Bibtex in connection with our filename list
+            # List with the "filenames" that the user has selected
+            bib = json.loads(fileBibtex)
 
-             #Writing Bitex to a file
-             fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w") #Open file in write mode (w)
+            # We retrieve the Bibtex info of the selected filenames
+            selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')
 
-             for b in selectbib:#Loop to write each bibtex of the list
-                fichierBib.write(b['id_ref__bibtex'])#Writing the bibtex to the file
-                fichierBib.write('\n\n')
-             fichierBib.close() #Closing the file
+            # We create the output bibtex file (opening in write mode)
+            # TODO: check if this is not a security issue!!!
+            fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w")
 
-             #We return the path of the Bibtex file to the succes part off the AJAX request
-             return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
+            # We sequentially write them in the output file, then close the file
+            for b in selectbib:
+                fichierBib.write("{}/n/n".format(b['id_ref__bibtex']))
+            fichierBib.close()
+
+            # We return the path of the Bibtex file to the success part off the AJAX request
+            return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
 
         #We filter with the result of the search bar if the user has sent a request
         #if the variable stringSearch has a value
@@ -223,20 +230,20 @@ def visu_data(request):
                 select_ns_ass = NsToAssumptions.objects.select_related().filter(filename = n.filename)
 
                 list_temp_prim = []
-                list_temp_sec  = []
+                list_temp_sec = []
                 for snm in select_ns_model:
                     list_temp_prim.append(snm.id_model.dependenciesprimary)
                     list_temp_sec.append(snm.id_model.dependenciessecondary)
                 list_ns_model.append(zip(list_temp_prim, list_temp_sec))
 
                 list_temp_prim = []
-                list_temp_sec  = []
+                list_temp_sec = []
                 for sass in select_ns_ass:
                     list_temp_prim.append(sass.id_assumptions.assumptionsprimary)
                     list_temp_sec.append(sass.id_assumptions.assumptionssecondary)
                 list_ns_assumptions.append(zip(list_temp_prim, list_temp_sec))
 
-            #we select the data who will be in the select box
+            # We select the data who will be in the select box
             selectMethod = MethodNs.objects.values('method').distinct()
             selectConstrainV = ConstrainNs.objects.values('constrainvariable').distinct()
             selectConstrainT = ConstrainNs.objects.values('constraintype').distinct()
@@ -245,7 +252,7 @@ def visu_data(request):
             selectAssumptions = AssumptionsNs.objects.values('assumptionsprimary').distinct()
             selectAssumptions2 = AssumptionsNs.objects.values('assumptionssecondary').distinct()
 
-            #compact in one object all the data
+            # Zip all the data into a tuple
             select_ns_all_zip = zip(select_ns_all,
                                     list_ns_model,
                                     list_ns_assumptions)
@@ -260,7 +267,7 @@ def visu_data(request):
                          "queryAssS": selectAssumptions2}
 
             # Send to the template
-            return render(request, "compare/visu_data.html",selectAll)
+            return render(request, "compare/visu_data.html", selectAll)
 
 def detail(request, id):
     if request.method == 'POST':
