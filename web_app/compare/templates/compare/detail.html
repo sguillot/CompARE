@@ -32,11 +32,15 @@ Detail
     <ul>
     {% for mo in queryMo %}
         <li>
-            <span><u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
-            {{mo.id_model.dependenciesdescription}} <br>
-            {% for ads_short, ads_link in mo.id_model.reflist %}
-                <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
-            {% endfor %}
+            {% if mo.id_model.dependenciesprimary != None %}
+                <span> TEST<u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
+                {{mo.id_model.dependenciesdescription}} <br>
+                {% for ads_short, ads_link in mo.id_model.reflist %}
+                    <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+                {% endfor %}
+            {% else %}
+                <span>No model dependencies...</span>
+            {% endif %}
         </li>
         <br>
     {% endfor %}
@@ -48,12 +52,16 @@ Detail
     <p class="titlecat">Assumptions</p>
     <ul>
     {% for as in queryAs %}
-        <li><span><u>{{as.id_assumptions.assumptionsprimary}}</u>: {{as.id_assumptions.assumptionssecondary}} <br></span>
-            {{as.id_assumptions.assumptionsdescription}} <br>
-            {% for ads_short, ads_link in as.id_assumptions.reflist %}
-                <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
-
-            {% endfor %}
+        <li>
+            {% if as.id_assumptions.assumptionsprimary != None %}
+                <span><u>{{as.id_assumptions.assumptionsprimary}}</u>: {{as.id_assumptions.assumptionssecondary}} <br></span>
+                {{as.id_assumptions.assumptionsdescription}} <br>
+                {% for ads_short, ads_link in as.id_assumptions.reflist %}
+                    <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+                {% endfor %}
+            {% else %}
+                <span>No assumptions...</span>
+            {% endif %}
         </li>
         <br>
     {% endfor %}
