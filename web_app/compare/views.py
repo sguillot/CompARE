@@ -1,19 +1,18 @@
 import datetime
-import decimal
 import json
-from django.shortcuts import render , redirect
-import numpy as np
-from compare.models import Ns , NsToModel , NsToAssumptions , MethodNs , AssumptionsNs , ModelNs , ConstrainNs , NameNs , RefNs
+import pandas as pd
+from decimal import Decimal
+
+from compare.models import Ns, NsToModel, NsToAssumptions, MethodNs, AssumptionsNs, ModelNs, ConstrainNs, NameNs, RefNs
 from compare.compare_utils import formatting_csv
+
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Q
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib import messages
-import pandas as pd
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as logout_user
-from decimal import Decimal, InvalidOperation
-from django.db import IntegrityError
 
 
 def home(request):
@@ -40,36 +39,36 @@ def visu_data(request):
         # For downloads, we retrieve the filenames and return the filepaths to the success part of the Ajax request
         if fileDwnl:
             # List with the "filenames" that the user has selected
-            dwnl = json.loads(fileDwnl)
+            to_download = json.loads(fileDwnl)
 
             # We only retrieve the filepaths of the filenames
             # TODO: May need to change if filepath are removed from DB
-            selectfilepath = select_ns_all.filter(filename__in=dwnl).values('filepath')
+            selected_filepath = select_ns_all.filter(filename__in=to_download).values('filepath')
 
             # We put these filepath in a list (instead of DjangoRequest)
-            listFilePath = []
-            for f in selectfilepath:
-                listFilePath.append(f['filepath'])
+            list_filepaths = []
+            for f in list_filepaths:
+                list_filepaths.append(f['filepath'])
 
             # We return the list to the succes part of Ajax request
-            return HttpResponse(json.dumps(listFilePath), content_type='application/json')
+            return HttpResponse(json.dumps(list_filepaths), content_type='application/json')
 
         # For BibTex info, we retrieve the filenames and write the Bibtex data in a file
         if fileBibtex:
             # List with the "filenames" that the user has selected
-            bib = json.loads(fileBibtex)
+            list_bibtex = json.loads(fileBibtex)
 
             # We retrieve the Bibtex info of the selected filenames
-            selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')
+            selected_bibtex = select_ns_all.filter(filename__in=list_bibtex).values('id_ref__bibtex')
 
             # We create the output bibtex file (opening in write mode)
             # TODO: check if this is not a security issue!!!
-            fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w")
+            output_bibtex = open('web_app\compare\static\compare\Bibtex.txt', "w")
 
             # We sequentially write them in the output file, then close the file
-            for b in selectbib:
-                fichierBib.write("{}/n/n".format(b['id_ref__bibtex']))
-            fichierBib.close()
+            for b in selected_bibtex:
+                output_bibtex.write("{}/n/n".format(b['id_ref__bibtex']))
+            output_bibtex.close()
 
             # We return the path of the Bibtex file to the success part off the AJAX request
             return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
