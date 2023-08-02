@@ -23,27 +23,27 @@ def visu_data(request):
 
     #We select all the Ns from the database without models and assumptions but whith "ref" ,"name" ,"constrain" and "method" thanks to the selected related method
     select_ns_all = Ns.objects.select_related().all().order_by('filename')
-    
+
     #we check for GET request
     if request.method == 'GET':
 
         #In case the user send a Get Request We get the values sent
-        
+
         # We recover the data sent in AJAX
         jsonCheckList = request.GET.get('dataCheckList', '')
         stringSearch = request.GET.get('dataSearch','')
         dictSelect = request.GET.get('dataSelect','')
         fileBibtex = request.GET.get('bibtexfile')
         fileDwnl = request.GET.get('filedwnl')
-        
-        
-        #We retrieve the filenames and return the filepaths of the files to the succes part of the Ajax request 
+
+
+        #We retrieve the filenames and return the filepaths of the files to the succes part of the Ajax request
         #if the variable fileDwnl has a value
-        if fileDwnl :  
+        if fileDwnl:
             dwnl = json.loads(fileDwnl) # python list with the "filenames" that the user has selected
             selectfilepath = select_ns_all.filter(filename__in=dwnl).values('filepath') #We only retrieve the filepaths of the filenames
 
-            #We extract the result in a list thanks to a loop 
+            #We extract the result in a list thanks to a loop
             listFilePath = []
             for f in selectfilepath:
                 listFilePath.append(f['filepath'])
@@ -54,22 +54,22 @@ def visu_data(request):
         #if the variable fileBibtex has a value
         if fileBibtex:
              bib = json.loads(fileBibtex) #python list with the filenames that the user has selected
-             selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')#We recover the Bibtex in connection with our filename list 
+             selectbib = select_ns_all.filter(filename__in=bib).values('id_ref__bibtex')#We recover the Bibtex in connection with our filename list
 
              #Writing Bitex to a file
              fichierBib = open('web_app\compare\static\compare\Bibtex.txt', "w") #Open file in write mode (w)
 
              for b in selectbib:#Loop to write each bibtex of the list
-                fichierBib.write(b['id_ref__bibtex'])#Writing the bibtex to the file 
+                fichierBib.write(b['id_ref__bibtex'])#Writing the bibtex to the file
                 fichierBib.write('\n\n')
              fichierBib.close() #Closing the file
 
              #We return the path of the Bibtex file to the succes part off the AJAX request
              return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
-        
+
         #We filter with the result of the search bar if the user has sent a request
         #if the variable stringSearch has a value
-        if stringSearch :
+        if stringSearch:
             #We filter the select variable that contains all the Ns from the database
             #we check if the fields contain the sent string (case insensitive)
             select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains = stringSearch) |
@@ -81,9 +81,9 @@ def visu_data(request):
                                                  Q(id_constrain__constrainversion__icontains = stringSearch)|
                                                  Q(id_constrain__constrainvariable__icontains = stringSearch)
                                                  )
-        
-        #We filter with the result of the side checkbox panel if the user has sent a request  
-        #if the variable jsonCheckList has a value   
+
+        #We filter with the result of the side checkbox panel if the user has sent a request
+        #if the variable jsonCheckList has a value
         if jsonCheckList:
             checkList = json.loads(jsonCheckList) #python list with the checkboxes that are checked
             #if checklist is empty we do like all the checkboxes were checked
@@ -91,15 +91,15 @@ def visu_data(request):
                 checkList = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"] #list with all types of sources
 
             #We filter the select variable that contains all the Ns from the database ( it can be already filter from the above condition )
-            #we select the ns who have a values from the list 
+            #we select the ns who have a values from the list
             select_ns_all = select_ns_all.filter(id_name__classdb__in=checkList)
 
-        #We filter with the select box selected if the user has sent a request  
+        #We filter with the select box selected if the user has sent a request
         #if the variable dictSelect has a value
-        if dictSelect :
+        if dictSelect:
             sel = json.loads(dictSelect) #dictionnary python list  whith the values selected (key = the selecte box , value = the selected item )
-            
-            #We check if the keys have a value if they have we filter the select variable already filtered above with the values 
+
+            #We check if the keys have a value if they have we filter the select variable already filtered above with the values
             if sel['MethList']:
                 select_ns_all = select_ns_all.filter(id_method__method__in=sel['MethList'])
             if sel['ConsVList']:
@@ -111,13 +111,13 @@ def visu_data(request):
             #we check if the keys have a value
             if sel['DepList']:
                 filListDep = []
-                for fil in select_ns_all:#Loop to get all filename from the filtered select 
-                    filListDep.append(fil.filename)#We put in a list the filenames 
+                for fil in select_ns_all:#Loop to get all filename from the filtered select
+                    filListDep.append(fil.filename)#We put in a list the filenames
                 # We select the filenames that have the primary dependencies and the filenames
                 selectDep = NsToModel.objects.select_related().filter(Q(filename__in=filListDep) &
-                                                                      Q(id_model__dependenciesprimary__in = sel['DepList'])).values_list('filename',flat=True).distinct()
+                                                                      Q(id_model__dependenciesprimary__in=sel['DepList'])).values_list('filename', flat=True).distinct()
                 depList = list(selectDep) # We put in a list the filenames of the select
-                depFilter = Ns.objects.select_related().filter(filename__in = depList)#We select the NS who have the filenames 
+                depFilter = Ns.objects.select_related().filter(filename__in=depList)#We select the NS who have the filenames
                 select_ns_all = depFilter # we change our main select variable
 
             # We do the same for these 3 select box
@@ -126,9 +126,9 @@ def visu_data(request):
                 for fil2 in select_ns_all:
                     fil2ListDep.append(fil2.filename)
                 selectDepS = NsToModel.objects.select_related().filter(Q(filename__in=fil2ListDep)
-                                                                & Q(id_model__dependenciessecondary__in = sel['DepSList'])).values_list('filename',flat=True).distinct()
+                                                                & Q(id_model__dependenciessecondary__in=sel['DepSList'])).values_list('filename', flat=True).distinct()
                 depListS = list(selectDepS)
-                depSFilter = Ns.objects.select_related().filter(filename__in = depListS)
+                depSFilter = Ns.objects.select_related().filter(filename__in=depListS)
                 select_ns_all = depSFilter
 
             if sel['AssList']:
@@ -136,20 +136,20 @@ def visu_data(request):
                 for fil in select_ns_all:
                     filListAss.append(fil.filename)
                 selectMod = NsToAssumptions.objects.select_related().filter(Q(filename__in=filListAss)
-                                                                & Q(id_assumptions__assumptionsprimary__in = sel['AssList'])).values_list('filename',flat=True).distinct()
+                                                                & Q(id_assumptions__assumptionsprimary__in=sel['AssList'])).values_list('filename', flat=True).distinct()
                 assList = list(selectMod)
-                assFilter = Ns.objects.select_related().filter(filename__in = assList)
+                assFilter = Ns.objects.select_related().filter(filename__in=assList)
                 select_ns_all = assFilter
 
             if sel['Ass2List']:
                 fil2ListAss = []
                 for fil2 in select_ns_all:
                     fil2ListAss.append(fil2.filename)
-                
+
                 selectModS = NsToAssumptions.objects.select_related().filter(Q(filename__in=fil2ListAss)
-                                                                & Q(id_assumptions__assumptionssecondary__in = sel['Ass2List'])).values_list('filename',flat=True).distinct()
+                                                                & Q(id_assumptions__assumptionssecondary__in=sel['Ass2List'])).values_list('filename', flat=True).distinct()
                 assListS = list(selectModS)
-                assSFilter = Ns.objects.select_related().filter(filename__in = assListS)
+                assSFilter = Ns.objects.select_related().filter(filename__in=assListS)
                 select_ns_all = assSFilter
 
             # Once the filtering is done, we put the necessary info of selected NS (select_ns_all) in a filtered_list
@@ -158,7 +158,7 @@ def visu_data(request):
             for all in select_ns_all:
                 # We put in the list only the elements that we show in the table in a dictionnary
                 ns_info = {}
-                
+
                 # We get all these attributes needed
                 namedb = all.id_name.namedb
                 filens = all.filename
@@ -210,7 +210,7 @@ def visu_data(request):
 
             # We return the list with the ns
             return HttpResponse(json.dumps(filtered_list), content_type='application/json',)
-        
+
         else:
             # We add the models to each NS
             list_ns_model = []
@@ -250,16 +250,16 @@ def visu_data(request):
                                     list_ns_model,
                                     list_ns_assumptions)
 
-            selectAll = {"queryall":select_ns_all_zip,
-                         "queryMeth":selectMethod,
-                         "queryAss":selectAssumptions,
-                         "queryDep":selectModel,
-                         "queryConV":selectConstrainV,
-                         "queryConT":selectConstrainT,
-                         "queryDepS":selectModelSec,
-                         "queryAssS":selectAssumptions2}
+            selectAll = {"queryall": select_ns_all_zip,
+                         "queryMeth": selectMethod,
+                         "queryAss": selectAssumptions,
+                         "queryDep": selectModel,
+                         "queryConV": selectConstrainV,
+                         "queryConT": selectConstrainT,
+                         "queryDepS": selectModelSec,
+                         "queryAssS": selectAssumptions2}
 
-            #send to the template
+            # Send to the template
             return render(request, "compare/visu_data.html",selectAll)
 
 def detail(request, id):
@@ -276,8 +276,8 @@ def detail(request, id):
 
         truc='yes'
         return HttpResponse(json.dumps(truc), content_type='application/json',)
-         
-    #We recup all the data(ref ,constrain ,name ,method ) linked to the id(filename) of the NS in a query set 
+
+    #We recup all the data(ref ,constrain ,name ,method ) linked to the id(filename) of the NS in a query set
     ns_list = Ns.objects.select_related().get(filename = id)
 
     #We recup all the Models linked to the id(filename) of the NS
@@ -303,14 +303,14 @@ def detail(request, id):
         else:
             ass.id_assumptions.reflist = None
 
-    #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template 
+    #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template
     select = {"queryall": ns_list,
               "queryMo": ns_Mo,
               "queryAs": ns_As}
     return render(request, 'compare/detail.html', select)
 
-@login_required 
-def modify(request,id):  
+@login_required
+def modify(request,id):
 
     ns_list = Ns.objects.select_related().get(filename = id)
 
@@ -371,14 +371,14 @@ def modify(request,id):
     for cov in constrainvar:
         listconstrainvar.append(cov[0])
 
-    #We check for Post request 
+    #We check for Post request
     if request.method == 'POST':
-        #We check what table the user want to modify 
+        #We check what table the user want to modify
         if 'name' in request.POST:
 
             # We get all the field and verify if they are correct
             nameNS = NameNs.objects.get(id_name=ns_list.id_name.id_name)
-            
+
             name = request.POST.get('namens')
             classNs = nameNS.classdb
             name = request.POST.get('namens')
@@ -392,7 +392,7 @@ def modify(request,id):
                     nameSin = None
 
                 classSin = request.POST.get('classsin')
-                if (classSin is not None) and (len(classSin) < 1): 
+                if (classSin is not None) and (len(classSin) < 1):
                     classSin = None
 
                 ra = request.POST.get('r')
@@ -414,9 +414,9 @@ def modify(request,id):
                 event = request.POST.get('event')
                 if (event is not None) and (len(event)<1):
                     event = None
-            
-                #if the user clic on the update button we change the name of the ns 
-                if 'update' in request.POST :
+
+                #if the user clic on the update button we change the name of the ns
+                if 'update' in request.POST:
                     nameNS.namedb = name
                     nameNS.classdb = classNs
                     nameNS.namesimbad = nameSin
@@ -434,8 +434,8 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-                #if the user clic on the add button 
-                elif 'add' in request.POST :
+                #if the user clic on the add button
+                elif 'add' in request.POST:
                     #We check if the name alreday exist  and linked it if its the case
                     if (NameNs.objects.filter(namedb=name,classdb=classNs,namesimbad=nameSin,classsimbad=classSin,ra=ra,declination=dec,localisationfile=loc)):
                         nameExist =NameNs.objects.filter(namedb=name,classdb=classNs,namesimbad=nameSin,classsimbad=classSin,ra=ra,declination=dec,localisationfile=loc)
@@ -443,7 +443,7 @@ def modify(request,id):
                         ns_list.id_name = nameExist
                         ns_list.save()
                         messages.success(request,"jajajaja")
-                    #we add the name 
+                    #we add the name
                     else:
                         nameAdd = NameNs(namedb=name, classdb=classNs, namesimbad=nameSin, classsimbad=classSin, ra=ra, declination=dec, localisationfile=loc, eventdate=event)
                         nameAdd.save()
@@ -457,14 +457,14 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-            return redirect('modify',id)       
+            return redirect('modify',id)
 
-        #We do the same things for all field of the table 
+        #We do the same things for all field of the table
 
         if 'ref' in request.POST:
 
             RefNS = RefNs.objects.get(id_ref=ns_list.id_ref.id_ref)
-            
+
             auth = request.POST.get('author')
 
             year = request.POST.get('refyear')
@@ -486,7 +486,7 @@ def modify(request,id):
                     datal = None
                 if(datal == "None"):
                     datal = None
-                if 'update' in request.POST :
+                if 'update' in request.POST:
                     RefNS.author = auth
                     RefNS.refyear = year
                     RefNS.short = short
@@ -502,14 +502,14 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-                elif 'add' in request.POST :
+                elif 'add' in request.POST:
                     if(RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)):
                         refExist = RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)
                         refExist = refExist[0]
                         ns_list.id_ref = refExist
                         ns_list.save()
                         messages.success(request,"jojojojo")
-                    else:   
+                    else:
                         ref = RefNs(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)
                         ref.save()
                         ns_list.id_ref = ref
@@ -521,7 +521,7 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-            return redirect('modify',id) 
+            return redirect('modify',id)
 
         if 'method' in request.POST:
 
@@ -537,8 +537,8 @@ def modify(request,id):
 
             if len(meth)<= 0 or len(methS)<=0 or len(datad)<=0 or len(proceInfo)<=0:
                 messages.error(request,"L'insertion de Method n'est pas correct")
-            else :
-                if 'update' in request.POST :
+            else:
+                if 'update' in request.POST:
                     MethNS.method = meth
                     MethNS.method_specific = methS
                     MethNS.datadate = datad
@@ -551,14 +551,14 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-                elif 'add' in request.POST :
+                elif 'add' in request.POST:
                     if (MethodNs.objects.filter(method =meth, method_specific =methS,datadate = datad,processinfinfo =proceInfo)):
                         methodExist = MethodNs.objects.filter(method =meth, method_specific =methS,datadate = datad,processinfinfo =proceInfo)
                         methodExist = methodExist[0]
                         ns_list.id_method = methodExist
                         ns_list.save()
                         messages.success(request,"Yes")
-                    else:   
+                    else:
 
                         method = MethodNs(method=meth, method_specific=methS, datadate=datad, processinfinfo=proceInfo)
                         method.save()
@@ -571,7 +571,7 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-            return redirect('modify',id) 
+            return redirect('modify',id)
 
         if 'constrain' in request.POST:
 
@@ -585,8 +585,8 @@ def modify(request,id):
 
             if len(constrainT)<= 0 or len(constrainV)<=0 or len(constrainVar)<=0:
                 messages.error(request,"L'insertion de Cons n'est pas correct")
-            else :
-                if 'update' in request.POST :
+            else:
+                if 'update' in request.POST:
                     Constrainns.constraintype = constrainT
                     Constrainns.constrainvariable = constrainVar
                     Constrainns.constrainversion = constrainV
@@ -599,7 +599,7 @@ def modify(request,id):
 
                     messages.success(request,"Yes")
 
-                elif 'add' in request.POST :
+                elif 'add' in request.POST:
                     if(ConstrainNs.objects.filter(constraintype =constrainT , constrainvariable = constrainVar,constrainversion = int(constrainV))):
 
                         constrainExist = ConstrainNs.objects.filter(constraintype =constrainT , constrainvariable = constrainVar,constrainversion = int(constrainV))
@@ -621,7 +621,7 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-            return redirect('modify',id) 
+            return redirect('modify',id)
 
         if 'model' in request.POST:
 
@@ -644,7 +644,7 @@ def modify(request,id):
                 depR = None
 
             else:
-                if 'update' in request.POST :
+                if 'update' in request.POST:
                     model.dependenciesprimary = depP
                     model.dependenciessecondary = depS
                     model.dependenciesdescription = depD
@@ -657,7 +657,7 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-                elif 'add' in request.POST :
+                elif 'add' in request.POST:
                     if(ModelNs.objects.filter(dependenciesprimary=depP,
                                               dependenciessecondary=depS,
                                               dependenciesdescription=depD,
@@ -669,7 +669,7 @@ def modify(request,id):
                         modelExist = modelExist[0]
                         model.id_model = modelExist
                         model.save()
-                        
+
                     else:
                         model = ModelNs(dependenciesprimary=depP,
                                         dependenciessecondary=depS,
@@ -683,7 +683,7 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-            return redirect('modify',id) 
+            return redirect('modify',id)
 
         if 'assumption' in request.POST:
 
@@ -706,7 +706,7 @@ def modify(request,id):
                 AssR = None
 
             else:
-                if 'update' in request.POST :
+                if 'update' in request.POST:
                     assumption.assumptionsprimary = AssP
                     assumption.assumptionssecondary = AssS
                     assumption.assumptionsdescription = AssD
@@ -719,12 +719,12 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-                elif 'add' in request.POST :
+                elif 'add' in request.POST:
                     if(AssumptionsNs.objects.filter(assumptionsprimary=AssP,
                                                     assumptionssecondary=AssS,
                                                     assumptionsdescription=AssD,
                                                     assumptionsreferences=AssR)):
-                        
+
                         assumptionExist = AssumptionsNs.objects.filter(assumptionsprimary=AssP,
                                                                        assumptionssecondary=AssS,
                                                                        assumptionsdescription=AssD,
@@ -744,10 +744,10 @@ def modify(request,id):
                     wri = ['Add:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:Assumptions ',str(assumption)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
-                        
-            return redirect('modify',id) 
 
-    #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template modify.html 
+            return redirect('modify',id)
+
+    #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template modify.html
     select = {"queryall":ns_list,
                  "queryMo":ns_Mo,
                  "queryAs":ns_As,
@@ -759,34 +759,34 @@ def modify(request,id):
                  "queryAssumption":asslist,
                  "queryModellinked":filemo,
                  "queryAssumptionlinked":fileass,
-                 'listmethod' :listmethod,
+                 'listmethod':listmethod,
                  'listconstrain':listconstrain,
-                 'listconstrainvar':listconstrainvar}  
-    
+                 'listconstrainvar':listconstrainvar}
+
     return render(request, "compare/modify.html",select)
 
 def login(request):
     #We check if a POST request is send
     if request.method == 'POST':
-            
+
             #We get the username and the password of the inputs fields
             username = request.POST['username']
             psw = request.POST['password']
 
-            # We check if the username and the password are of a user 
+            # We check if the username and the password are of a user
             user = authenticate(username=username, password=psw)
             if user is not None:
 
-                #We logged in the user and redirect to the Add page 
+                #We logged in the user and redirect to the Add page
                 auth_login(request,user)
                 return redirect('insert')
-            else :
+            else:
 
-                #We send a error message to inform the user that he missed 
+                #We send a error message to inform the user that he missed
                 messages.success(request, "incorrect Username or Password")
                 return redirect('login')
     else:
-        return render(request, "compare/login.html")  
+        return render(request, "compare/login.html")
 
 def logout(request):
     #We logged out and redirect to the Visualisation page
@@ -817,20 +817,20 @@ def insert_data(request):
              querylistName = list(queryTabName.values())
              jsonName = json.dumps((querylistName),default=str)
              return HttpResponse(jsonName, content_type='application/json',)
-         
+
          #we get the id of the ref selected and select the information of this ref
-         if idRef :
+         if idRef:
              queryTabRef = RefNs.objects.filter(pk=idRef)
              querylistRef = list(queryTabRef.values())
              jsonRef = json.dumps((querylistRef),default=str)
              return HttpResponse(jsonRef, content_type='application/json',)
-         
-    #We check if its a Post request      
+
+    #We check if its a Post request
     if request.method == 'POST':
 
-        #we check if ist a file send 
+        #we check if ist a file send
         if 'myfile' in request.FILES:
-            if(request.FILES['myfile']):  
+            if(request.FILES['myfile']):
                 input_csv_filename = request.FILES['myfile']
                 #we put in a dataframe the value of the file
                 d= pd.DataFrame(pd.read_csv(input_csv_filename))
@@ -853,13 +853,13 @@ def insert_data(request):
                 for v in ConstrainNs.constrainvariable.field.choices:
                     cv.append(v[0])
 
-                nbinsert=0   
+                nbinsert = 0
                 inserted = []
-                notinserted = {}           
+                notinserted = {}
 
                 #for each row of the dataframe
                 for i in range(1,len(d)+1):
-                    
+
                     #we put in list the models and assumptions
                     filename = d['FileName'][i]
 
@@ -943,20 +943,20 @@ def insert_data(request):
                                                                                                                          len(listassdesc),
                                                                                                                          len(listassdesc))
                         continue
-                    
-                    elif str(d['Method'][i]) not in me :
+
+                    elif str(d['Method'][i]) not in me:
                         notinserted[filename] = d['Method'][i] + " can not be a method (choose among {})".format(me)
                         continue
 
-                    elif d['ConstrainType'][i] not in ct :
+                    elif d['ConstrainType'][i] not in ct:
                         notinserted[filename] = d['ConstrainType'][i] + " can not be a constrain type (choose among {})".format(ct)
                         continue
 
-                    elif d['ConstrainVariable'][i] not in cv :
+                    elif d['ConstrainVariable'][i] not in cv:
                         notinserted[filename] = d['ConstrainVariable'][i] + " can not be a constrain variable (choose among {})".format(cv)
                         continue
 
-                    elif d['ClassDB'][i] not in NsClass :
+                    elif d['ClassDB'][i] not in NsClass:
                         notinserted[filename] = d['ClassDB'][i] + " can not be a name class (choose among {})".format(NsClass)
                         continue
 
@@ -979,13 +979,13 @@ def insert_data(request):
                             int(d['RefYear'][i])
                         except ValueError:
                             notinserted[filename] = d['RefYear'][i] + " can not be a converted in integer"
-                            continue       
-                    
-                    #we get the value of the name 
-                    namen=d['NameDB'][i]
+                            continue
+
+                    #we get the value of the name
+                    namen = d['NameDB'][i]
                     classn = d['ClassDB'][i]
                     nameS = d['NameSimbad'][i]
-                    classS=d['ClassSimbad'][i]
+                    classS = d['ClassSimbad'][i]
                     r = d['RA'][i]
                     dec = d['DEC'][i]
                     dat = d['EventDate'][i]
@@ -996,29 +996,29 @@ def insert_data(request):
                     if len(nameS) < 1:
                         nameS = None
 
-                    if len(classS) < 1 : 
+                    if len(classS) < 1:
                         classS = None
 
                     if len(r)>1:
                         r = Decimal(r)
                     else:
                         r = None
-                        
-                    if len(dec)>1 :
+
+                    if len(dec)>1:
                         dec = Decimal(dec)
                     else:
                         dec = None
-                    
+
                     if len(loc)<1:
                         loc = None
 
                     if len(dat)<1:
                         dat = None
 
-                    #if the name alreday exist we select it 
+                    #if the name alreday exist we select it
                     if (NameNs.objects.filter(namedb=namen,classdb=classn,namesimbad=nameS,classsimbad=classS,ra=r,
                                             declination=dec,localisationfile=loc)):
-                            
+
                         idN = NameNs.objects.filter(namedb=namen,classdb=classn,namesimbad=nameS,classsimbad=classS,ra=r,
                                             declination=dec,localisationfile=loc)
                         idN= idN[0]
@@ -1048,14 +1048,14 @@ def insert_data(request):
 
                     # TODO: Add check that constrain version is an integer
                     consVe =d['ConstrainVersion'][i]
-                                
-                
+
+
                     if (ConstrainNs.objects.filter(constraintype =consT , constrainvariable = consV,
                                             constrainversion = int(consVe))):
                         idC = ConstrainNs.objects.filter(constraintype =consT , constrainvariable = consV,
                                             constrainversion = int(consVe))
                         idC = idC[0]
-                    else:                    
+                    else:
                         constrain=ConstrainNs(constraintype =consT , constrainvariable = consV,
                                             constrainversion = int(consVe))
                         constrain.save()
@@ -1080,12 +1080,12 @@ def insert_data(request):
                         idR = idR[0]
                     else:
                         ref = RefNs(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)
-                        ref.save()   
+                        ref.save()
                         idR =RefNs.objects.latest('id_ref')
 
 
                     # we create the new NS (filepath have to change)
-                    file = Ns(filename=filename,filepath="qdsdsqdsqdsq.txt",id_ref=idR,id_name=idN,id_method=idM,id_constrain=idC)  
+                    file = Ns(filename=filename,filepath="qdsdsqdsqdsq.txt",id_ref=idR,id_name=idN,id_method=idM,id_constrain=idC)
                     file.save()
                     nsInstance = Ns.objects.get(filename=filename) # we store the ns for the assumptions and models
 
@@ -1126,8 +1126,8 @@ def insert_data(request):
                         #we create the link between ns and model
                         nsmodel = NsToModel(filename=nsInstance, id_model=idMo)
                         nsmodel.save()
-                    
-                    for k in range(len(listass)) :
+
+                    for k in range(len(listass)):
 
                         asspri = listass[k]
                         asssec = listasssec[k]
@@ -1167,21 +1167,21 @@ def insert_data(request):
                         nsass.save()
                     nbinsert +=  1
                     inserted.append(filename)
-                #message for the user 
+                #message for the user
                 mes = "You inserted "+str(nbinsert)+"/"+str(len(d)-1)+" elements"
-                mes2 = "Element inserted :"+str(inserted)
+                mes2 = "Element inserted:"+str(inserted)
                 mes3 = "Element not inserted: "+str(notinserted)
                 messages.success(request, mes)
                 messages.success(request, mes2)
                 messages.success(request, mes3)
         #for insertion manual we check the what the user wants to insert
         elif (request.POST.get('hid') == 'formAddName' ):
-            
+
             #verifications of the value
             na =  request.POST.get('name')
             classdb = request.POST.get('class')
 
-            if len(na) <= 0  or len(classdb) <= 0 :
+            if len(na) <= 0  or len(classdb) <= 0:
                 messages.error(request,"L'insertion de Name n'est pas correcte")
             else:
                 nameS = request.POST.get('nameS')
@@ -1189,7 +1189,7 @@ def insert_data(request):
                     nameS = None
 
                 classS = request.POST.get('classS')
-                if len(classS) < 1 : 
+                if len(classS) < 1:
                     classS = None
 
                 r = request.POST.get('ra')
@@ -1212,8 +1212,8 @@ def insert_data(request):
                 if len(dat)<1:
                     dat = None
 
-                if (NameNs.objects.filter(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS, ra=r, declination=dec, localisationfile=loc, eventdate=dat)):  
-                
+                if (NameNs.objects.filter(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS, ra=r, declination=dec, localisationfile=loc, eventdate=dat)):
+
                     mess = "Name already exists"
                     messages.error(request,"Name already exists")
                 else:
@@ -1226,7 +1226,7 @@ def insert_data(request):
                     wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(name)+'\n\n']
                     fichierlog.writelines(wri)
                     fichierlog.close()
-                
+
      #same things for ref
     if (request.POST.get('hid') == 'formAddRef' ):
 
@@ -1250,8 +1250,8 @@ def insert_data(request):
             datal = request.POST.get('datalink')
             if len(datal)<1:
                 datal = None
-            
-            if (RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)):  
+
+            if (RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)):
                 messages.error(request,"Ref already exists")
             else:
                 ref = RefNs(author=auth, refyear=year, short=short, bibtex=bibtex, doi=doi,repositorydoi=repdoi ,datalink=datal)
@@ -1262,7 +1262,7 @@ def insert_data(request):
                 fichierlog.writelines(wri)
                 fichierlog.close()
 
-    #when the user validete the insertion 
+    #when the user validete the insertion
     if (request.POST.get('insert')):
 
         #we verify all the values
@@ -1270,30 +1270,30 @@ def insert_data(request):
 
         # TODO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
         if((len(insert['filename'])<= 0) or (len(insert['filepath'])<=0 )):
-            mess = "/!\ ERROR /!\ : Please enter a Filename or/and a Filepath"
+            mess = "/!\ ERROR /!\: Please enter a Filename or/and a Filepath"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
-        elif((insert['name'] == "opt") or (insert['ref']== 'opt')) :
-            mess = "/!\ ERROR /!\ : Please select a Name or/and a Ref"
+        elif((insert['name'] == "opt") or (insert['ref']== 'opt')):
+            mess = "/!\ ERROR /!\: Please select a Name or/and a Ref"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
-        
+
         elif((len(insert['method']['methodS'])<= 0) or (len(insert['method']['methodD'])<=0 ) or (len(insert['method']['methodP'])<=0 ) ):
-            mess = "/!\ ERROR /!\ : Please enter a valid Method"
+            mess = "/!\ ERROR /!\: Please enter a valid Method"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
-        
+
         elif((len(insert['constrain']['constrainVer'])<= 0)):
-            mess = "/!\ ERROR /!\ : Please enter a valid Constrain"     
+            mess = "/!\ ERROR /!\: Please enter a valid Constrain"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
-            
+
         else:
 
             ref = RefNs.objects.get(id_ref=insert['ref'])
             name = NameNs.objects.get(id_name=insert['name'])
-            
+
             #we check if method and constrain already exist
             if (MethodNs.objects.filter(method =insert['method']['methodN'], method_specific =insert['method']['methodS'],
-                               datadate = insert['method']['methodD'],processinfinfo =insert['method']['methodP'])):  
-                
+                               datadate = insert['method']['methodD'],processinfinfo =insert['method']['methodP'])):
+
                 methodId=MethodNs.objects.filter(method =insert['method']['methodN'], method_specific =insert['method']['methodS'],
                                datadate = insert['method']['methodD'],processinfinfo =insert['method']['methodP'])
             else:
@@ -1309,8 +1309,8 @@ def insert_data(request):
 
 
             if (ConstrainNs.objects.filter(constraintype =insert['constrain']['constrainT'] , constrainvariable = insert['constrain']['constrainV'],
-                                    constrainversion = insert['constrain']['constrainVer'])):  
-                    
+                                    constrainversion = insert['constrain']['constrainVer'])):
+
                 constrainId=ConstrainNs.objects.filter(constraintype =insert['constrain']['constrainT'] , constrainvariable = insert['constrain']['constrainV'],
                                     constrainversion = insert['constrain']['constrainVer'])
             else:
@@ -1323,7 +1323,7 @@ def insert_data(request):
                 wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n',str(constrain)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
-        
+
             #we create the new ns with all the field
             ns = Ns(filename=insert['filename'],filepath=insert['filepath'], id_ref = ref, id_name = name, id_method = methodId, id_constrain = constrainId)
             ns.save()
@@ -1351,13 +1351,13 @@ def insert_data(request):
                                            dependenciessecondary=insert['model'][mod][1],
                                            dependenciesdescription=insert['model'][mod][2],
                                            dependenciesreferences=insert['model'][mod][3])):
-                    
+
                     modelId=ModelNs.objects.filter(dependenciesprimary=insert['model'][mod][0],
                                                    dependenciessecondary=insert['model'][mod][1],
                                                    dependenciesdescription=insert['model'][mod][2],
                                                    dependenciesreferences=insert['model'][mod][3])
                 else:
-                   
+
                     model = ModelNs(dependenciesprimary=insert['model'][mod][0],
                                     dependenciessecondary=insert['model'][mod][1],
                                     dependenciesdescription=insert['model'][mod][2],
@@ -1372,7 +1372,7 @@ def insert_data(request):
 
                 nsmodel = NsToModel(filename = ns , id_model = modelId)
                 nsmodel.save()
-    
+
         if(len(insert['assumptions']) > 0):
 
             ns = Ns.objects.get(filename=insert['filename'])
@@ -1384,7 +1384,7 @@ def insert_data(request):
 
                 if(len(insert['assumptions'][ass][1]) < 1 ):
                     insert['assumptions'][ass][1] = None
-                
+
                 if(len(insert['assumptions'][ass][2]) < 1 ):
                     insert['assumptions'][ass][2] = None
 
@@ -1395,13 +1395,13 @@ def insert_data(request):
                                                  assumptionssecondary=insert['assumptions'][ass][1],
                                                  assumptionsdescription=insert['assumptions'][ass][2],
                                                  assumptionsreferences=insert['assumptions'][ass][3])):
-                    
+
                     assumptionsId=AssumptionsNs.objects.filter(assumptionsprimary=insert['assumptions'][ass][0],
                                                                assumptionssecondary=insert['assumptions'][ass][1],
                                                                assumptionsdescription=insert['assumptions'][ass][2],
                                                                assumptionsreferences=insert['assumptions'][ass][3])
                 else:
-                   
+
                     assumptions = AssumptionsNs(assumptionsprimary=insert['assumptions'][ass][0],
                                                 assumptionssecondary=insert['assumptions'][ass][1],
                                                 assumptionsdescription=insert['assumptions'][ass][2],
@@ -1420,12 +1420,12 @@ def insert_data(request):
         fichierlog = open('web_app\compare\static\compare\log.txt', "a")
         wri = ['User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(ns)+'\n\n']
         fichierlog.writelines(wri)
-        fichierlog.close()   
+        fichierlog.close()
 
         redirect = 'add'
         return HttpResponse(json.dumps(redirect), content_type='application/json',)
-                    
-    #we select the value for the dropdown list 
+
+    #we select the value for the dropdown list
     group = request.user.groups.values_list('name',flat = True)
     groupList = list(group)
 
@@ -1436,30 +1436,30 @@ def insert_data(request):
     queryref = RefNs.objects.all().distinct()
 
     methodoptions = MethodNs.method.field.choices
-    listmethod =[]
+    listmethod = []
     for mo in methodoptions:
         listmethod.append(mo[0])
 
     constrainoptions = ConstrainNs.constraintype.field.choices
-    listconstrain =[]
+    listconstrain = []
     for co in constrainoptions:
         listconstrain.append(co[0])
 
     constrainvar = ConstrainNs.constrainvariable.field.choices
-    listconstrainvar =[]
+    listconstrainvar = []
     for cov in constrainvar:
         listconstrainvar.append(cov[0])
 
     query = {
-        "queryall":queryall,
-        "queryname":queryname ,
-        'queryref':queryref,
-        'groupList' : groupList,
-        'listmethod' :listmethod,
-        'listconstrain':listconstrain,
-        'listconstrainvar':listconstrainvar
+        "queryall": queryall,
+        "queryname": queryname,
+        'queryref': queryref,
+        'groupList': groupList,
+        'listmethod': listmethod,
+        'listconstrain': listconstrain,
+        'listconstrainvar': listconstrainvar
                  }
-    return render(request, "compare/insert.html", query)  
+    return render(request, "compare/insert.html", query)
 
-def info(request):  
-    return render(request, "compare/info.html",)
+def info(request):
+    return render(request, "compare/info.html", )
