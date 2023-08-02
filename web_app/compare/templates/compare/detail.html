@@ -33,7 +33,7 @@ Detail
     {% for mo in queryMo %}
         <li>
             {% if mo.id_model.dependenciesprimary != None %}
-                <span> TEST<u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
+                <span><u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
                 {{mo.id_model.dependenciesdescription}} <br>
                 {% for ads_short, ads_link in mo.id_model.reflist %}
                     <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
