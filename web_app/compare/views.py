@@ -1067,6 +1067,8 @@ def insert_data(request):
 
                     consV=d['ConstrainVariable'][i]
                     consT=d['ConstrainType'][i]
+
+                    # TODO: Add check that constrain version is an integer
                     consVe =d['ConstrainVersion'][i]
                                 
                 
@@ -1288,7 +1290,7 @@ def insert_data(request):
         #we verify all the values
         insert = json.loads(request.POST.get('insert'))
 
-        # TO DO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
+        # TODO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
         if((len(insert['filename'])<= 0) or (len(insert['filepath'])<=0 )):
             mess = "/!\ ERROR /!\ : Please enter a Filename or/and a Filepath"
             return HttpResponse(json.dumps(mess), content_type='application/json',)

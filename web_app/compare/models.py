@@ -83,11 +83,13 @@ class MethodNs(models.Model):
         db_table = 'method_ns'
 
 class ConstrainNs(models.Model):
-    ('MCMC samples', 'Posterior samples', 'Quantiles', 'mean +/- 1 sigma')
+
     CONSTRAIN_CHOICES = [("MCMC samples", "MCMC samples"),
                          ("Posterior samples", "Posterior samples"),
                          ("Quantiles", "Quantiles"),
-                         ("mean +/- 1 sigma", "mean +/- 1 sigma")
+                         ("mean +/- 1 sigma", "mean +/- 1 sigma"),
+                         ('Probability distribution', 'Probability distribution'),
+                         ('Chi2 contours', 'Chi2 contours')
                          ]
 
     CONSTRAIN_VAR = [("M", "M"),
@@ -99,8 +101,8 @@ class ConstrainNs(models.Model):
                      ]
 
     id_constrain = models.AutoField(db_column='id_Constrain', primary_key=True)  # Field name made lowercase.
-    constraintype = models.CharField(db_column='ConstrainType', max_length=19 ,choices=CONSTRAIN_CHOICES)  # Field name made lowercase.
-    constrainvariable = models.CharField(db_column='constrainvariable',max_length=19,choices=CONSTRAIN_VAR)  # Field name made lowercase.
+    constraintype = models.CharField(db_column='ConstrainType', max_length=30, choices=CONSTRAIN_CHOICES)  # Field name made lowercase.
+    constrainvariable = models.CharField(db_column='constrainvariable',max_length=19, choices=CONSTRAIN_VAR)  # Field name made lowercase.
     constrainversion = models.IntegerField(db_column='ConstrainVersion',default=1)  # Field name made lowercase.
     
 
