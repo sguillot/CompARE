@@ -30,39 +30,39 @@ def visu_data(request):
 
         # In case the user send a Get Request we extract the values
         # We recover the data sent in AJAX
-        jsonCheckList = request.GET.get('dataCheckList', '')
-        stringSearch = request.GET.get('dataSearch', '')
-        dictSelect = request.GET.get('dataSelect', '')
-        fileBibtex = request.GET.get('bibtexfile')
-        fileDwnl = request.GET.get('filedwnl')
+        json_checklist = request.GET.get('dataCheckList', '')
+        string_search = request.GET.get('dataSearch', '')
+        dict_select = request.GET.get('dataSelect', '')
+        bibtex_select = request.GET.get('bibtexfile')
+        download_select = request.GET.get('filedwnl')
 
         # For downloads, we retrieve the filenames and return the filepaths to the success part of the Ajax request
-        if fileDwnl:
+        if download_select:
             # List with the "filenames" that the user has selected
-            to_download = json.loads(fileDwnl)
+            to_download = json.loads(download_select)
 
             # We only retrieve the filepaths of the filenames
-            # TODO: May need to change if filepath are removed from DB
+            # TODO: CRITICAL: May need to change if filepath are removed from DB
             selected_filepath = select_ns_all.filter(filename__in=to_download).values('filepath')
 
             # We put these filepath in a list (instead of DjangoRequest)
             list_filepaths = []
-            for f in list_filepaths:
+            for f in selected_filepath:
                 list_filepaths.append(f['filepath'])
 
             # We return the list to the succes part of Ajax request
             return HttpResponse(json.dumps(list_filepaths), content_type='application/json')
 
         # For BibTex info, we retrieve the filenames and write the Bibtex data in a file
-        if fileBibtex:
+        if bibtex_select:
             # List with the "filenames" that the user has selected
-            list_bibtex = json.loads(fileBibtex)
+            list_bibtex = json.loads(bibtex_select)
 
             # We retrieve the Bibtex info of the selected filenames
             selected_bibtex = select_ns_all.filter(filename__in=list_bibtex).values('id_ref__bibtex')
 
             # We create the output bibtex file (opening in write mode)
-            # TODO: check if this is not a security issue!!!
+            # TODO: CRITICAL: check if this is not a security issue!!!
             output_bibtex = open('web_app\compare\static\compare\Bibtex.txt', "w")
 
             # We sequentially write them in the output file, then close the file
@@ -73,25 +73,26 @@ def visu_data(request):
             # We return the path of the Bibtex file to the success part off the AJAX request
             return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
 
+        ## TODO:  Next one to check and reformat
         #We filter with the result of the search bar if the user has sent a request
-        #if the variable stringSearch has a value
-        if stringSearch:
+        #if the variable string_search has a value
+        if string_search:
             #We filter the select variable that contains all the Ns from the database
             #we check if the fields contain the sent string (case insensitive)
-            select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains = stringSearch) |
-                                                 Q(id_name__classdb__icontains = stringSearch) |
-                                                 Q(id_method__method__icontains = stringSearch) |
-                                                 Q(id_method__datadate__icontains = stringSearch) |
-                                                 Q(id_method__processinfinfo__icontains = stringSearch) |
-                                                 Q(id_constrain__constraintype__icontains = stringSearch) |
-                                                 Q(id_constrain__constrainversion__icontains = stringSearch)|
-                                                 Q(id_constrain__constrainvariable__icontains = stringSearch)
+            select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains = string_search) |
+                                                 Q(id_name__classdb__icontains = string_search) |
+                                                 Q(id_method__method__icontains = string_search) |
+                                                 Q(id_method__datadate__icontains = string_search) |
+                                                 Q(id_method__processinfinfo__icontains = string_search) |
+                                                 Q(id_constrain__constraintype__icontains = string_search) |
+                                                 Q(id_constrain__constrainversion__icontains = string_search)|
+                                                 Q(id_constrain__constrainvariable__icontains = string_search)
                                                  )
 
         #We filter with the result of the side checkbox panel if the user has sent a request
         #if the variable jsonCheckList has a value
-        if jsonCheckList:
-            checkList = json.loads(jsonCheckList) #python list with the checkboxes that are checked
+        if json_checklist:
+            checkList = json.loads(json_checklist) #python list with the checkboxes that are checked
             #if checklist is empty we do like all the checkboxes were checked
             if not checkList:
                 checkList = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"] #list with all types of sources
@@ -101,9 +102,9 @@ def visu_data(request):
             select_ns_all = select_ns_all.filter(id_name__classdb__in=checkList)
 
         #We filter with the select box selected if the user has sent a request
-        #if the variable dictSelect has a value
-        if dictSelect:
-            sel = json.loads(dictSelect) #dictionnary python list  whith the values selected (key = the selecte box , value = the selected item )
+        #if the variable dict_select has a value
+        if dict_select:
+            sel = json.loads(dict_select) #dictionnary python list  whith the values selected (key = the selecte box , value = the selected item )
 
             #We check if the keys have a value if they have we filter the select variable already filtered above with the values
             if sel['MethList']:
