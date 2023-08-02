@@ -72,10 +72,15 @@ def visu_data(request):
         if stringSearch :
             #We filter the select variable that contains all the Ns from the database
             #we check if the fields contain the sent string (case insensitive)
-            select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains = stringSearch) | Q(id_name__classdb__icontains = stringSearch) 
-                                        | Q(id_method__method__icontains = stringSearch) | Q(id_method__datadate__icontains = stringSearch) 
-                                        | Q(id_method__processinfinfo__icontains = stringSearch) | Q(id_constrain__constraintype__icontains = stringSearch) 
-                                        | Q(id_constrain__constrainversion__icontains = stringSearch)| Q(id_constrain__constrainvariable__icontains = stringSearch))
+            select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains = stringSearch) |
+                                                 Q(id_name__classdb__icontains = stringSearch) |
+                                                 Q(id_method__method__icontains = stringSearch) |
+                                                 Q(id_method__datadate__icontains = stringSearch) |
+                                                 Q(id_method__processinfinfo__icontains = stringSearch) |
+                                                 Q(id_constrain__constraintype__icontains = stringSearch) |
+                                                 Q(id_constrain__constrainversion__icontains = stringSearch)|
+                                                 Q(id_constrain__constrainvariable__icontains = stringSearch)
+                                                 )
         
         #We filter with the result of the side checkbox panel if the user has sent a request  
         #if the variable jsonCheckList has a value   
@@ -109,7 +114,7 @@ def visu_data(request):
                 for fil in select_ns_all:#Loop to get all filename from the filtered select 
                     filListDep.append(fil.filename)#We put in a list the filenames 
                 # We select the filenames that have the primary dependencies and the filenames
-                selectDep = NsToModel.objects.select_related().filter(Q(filename__in=filListDep)& 
+                selectDep = NsToModel.objects.select_related().filter(Q(filename__in=filListDep) &
                                                                       Q(id_model__dependenciesprimary__in = sel['DepList'])).values_list('filename',flat=True).distinct()
                 depList = list(selectDep) # We put in a list the filenames of the select
                 depFilter = Ns.objects.select_related().filter(filename__in = depList)#We select the NS who have the filenames 
@@ -207,12 +212,13 @@ def visu_data(request):
                 #We select the filenames linked to models 
                 select_ns_model =  NsToModel.objects.select_related().filter(filename = all.filename)
 
-                #we put in a list all the models linked to a filename 
+                # We put in a list all the models linked to a filename
                 list_temp = []
                 for snm in select_ns_model:
                     #we get the model and put it in a list and after the dictionaray of the NS
-                     list_temp.append(snm.id_model.dependenciesprimary)
-                     loop['model']=list_temp
+                    # TODO - see if this can be returned as a tuple to be used by AJAX (script.js:line193)
+                    list_temp.append("{}: {}".format(snm.id_model.dependenciesprimary, snm.id_model.dependenciessecondary))
+                    loop['model'] = list_temp
 
                 #We select the filenames linked to assumptions 
                 select_ns_ass = NsToAssumptions.objects.select_related().filter(filename = all.filename)
@@ -220,37 +226,41 @@ def visu_data(request):
                 #we put in a list all the assumptions linked to a filename 
                 list_temp2 = []
                 for snm in select_ns_ass:
-                     #we get the assumption and put it in a list and after the dictionaray of the NS
-                     list_temp2.append(snm.id_assumptions.assumptionsprimary)
-                     loop['assumptions']=list_temp2
-                listFilt.append(loop) #we had the dictionnary to the list
-            #We return the list with the ns 
+                    # we get the assumption (prim. and sec.) and put it in a list and after the dictionaray of the NS
+                    # TODO - see if this can be returned as a tuple to be used by AJAX (script.js:line193)
+                    list_temp2.append("{}: {}".format(snm.id_assumptions.assumptionsprimary, snm.id_assumptions.assumptionssecondary))
+                    loop['assumptions'] = list_temp2
+
+                # We add the dictionary to the list
+                listFilt.append(loop)
+
+            # We return the list with the ns
             return HttpResponse(json.dumps(listFilt), content_type='application/json',)
         
         else:
-            #We add the models to each NS
-            list_ns_model_prim = []
-            #list_ns_model_sec = []
-            list_ns_assumptions_prim = []
-            #list_ns_assumptions_sec = []
+            # We add the models to each NS
+            list_ns_model = []
+            list_ns_assumptions = []
+
             for n in select_ns_all:
-                #We select the filenames linked to models
-                select_ns_model =  NsToModel.objects.select_related().filter(filename = n.filename)
-                #We select the filenames linked to assumptions
-                select_ns_ass =  NsToAssumptions.objects.select_related().filter(filename = n.filename)
+                # We select the filenames linked to models
+                select_ns_model = NsToModel.objects.select_related().filter(filename = n.filename)
+                # We select the filenames linked to assumptions
+                select_ns_ass = NsToAssumptions.objects.select_related().filter(filename = n.filename)
 
                 list_temp_prim = []
-                #list_temp_sec  = []
+                list_temp_sec  = []
                 for snm in select_ns_model:
                     list_temp_prim.append(snm.id_model.dependenciesprimary)
-                    #list_temp_sec.append(snm.id_model.dependenciessecondary)
-                list_ns_model_prim.append(list_temp_prim)
-                #list_ns_model_prim.append([list_temp_prim,list_temp_sec])
+                    list_temp_sec.append(snm.id_model.dependenciessecondary)
+                list_ns_model.append(zip(list_temp_prim, list_temp_sec))
 
-                list_temp2 = []
+                list_temp_prim = []
+                list_temp_sec  = []
                 for sass in select_ns_ass:
-                    list_temp2.append(sass.id_assumptions.assumptionsprimary)
-                list_ns_assumptions_prim.append(list_temp2)
+                    list_temp_prim.append(sass.id_assumptions.assumptionsprimary)
+                    list_temp_sec.append(sass.id_assumptions.assumptionssecondary)
+                list_ns_assumptions.append(zip(list_temp_prim, list_temp_sec))
 
             #we select the data who will be in the select box
             selectMethod = MethodNs.objects.values('method').distinct()
@@ -262,10 +272,18 @@ def visu_data(request):
             selectAssumptions2 = AssumptionsNs.objects.values('assumptionssecondary').distinct()
 
             #compact in one object all the data
-            select_ns_all_zip = zip(select_ns_all,list_ns_model_prim,list_ns_assumptions_prim)
+            select_ns_all_zip = zip(select_ns_all,
+                                    list_ns_model,
+                                    list_ns_assumptions)
 
-            selectAll = {"queryall":select_ns_all_zip,"queryMeth":selectMethod,"queryAss":selectAssumptions,"queryDep":selectModel ,
-                         "queryConV":selectConstrainV , "queryConT":selectConstrainT ,"queryDepS":selectModelSec,"queryAssS":selectAssumptions2}
+            selectAll = {"queryall":select_ns_all_zip,
+                         "queryMeth":selectMethod,
+                         "queryAss":selectAssumptions,
+                         "queryDep":selectModel,
+                         "queryConV":selectConstrainV,
+                         "queryConT":selectConstrainT,
+                         "queryDepS":selectModelSec,
+                         "queryAssS":selectAssumptions2}
 
             #send to the template
             return render(request, "compare/visu_data.html",selectAll)
@@ -293,12 +311,29 @@ def detail(request, id):
 
     #We recup all the Assumptions linked to the id(filename) of the NS
     ns_As = NsToAssumptions.objects.select_related('id_assumptions').filter(filename = id)
-   
+
+    # Trick to link to ADS page (need to replace the &, for ex in A&A)
+    ns_list.id_ref.shortlink = ns_list.id_ref.short.replace("&","%26")
+
+    for mo in ns_Mo:
+        if mo.id_model.dependenciesreferences is not None:
+            mo.id_model.reflist = zip(mo.id_model.dependenciesreferences.split(", "),
+                                      mo.id_model.dependenciesreferences.replace("&","%26").split(", "))
+        else:
+            mo.id_model.reflist = None
+
+    for ass in ns_As:
+        if ass.id_assumptions.assumptionsreferences is not None:
+            ass.id_assumptions.reflist = zip(ass.id_assumptions.assumptionsreferences.split(", "),
+                                             ass.id_assumptions.assumptionsreferences.replace("&","%26").split(", "))
+        else:
+            ass.id_assumptions.reflist = None
+
     #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template 
-    select = {"queryall":ns_list,
-                 "queryMo":ns_Mo,
-                 "queryAs":ns_As}
-    return render(request,'compare/detail.html',select)
+    select = {"queryall": ns_list,
+              "queryMo": ns_Mo,
+              "queryAs": ns_As}
+    return render(request, 'compare/detail.html', select)
 
 @login_required 
 def modify(request,id):  
@@ -1036,6 +1071,8 @@ def insert_data(request):
 
                     consV=d['ConstrainVariable'][i]
                     consT=d['ConstrainType'][i]
+
+                    # TODO: Add check that constrain version is an integer
                     consVe =d['ConstrainVersion'][i]
                                 
                 
@@ -1257,7 +1294,7 @@ def insert_data(request):
         #we verify all the values
         insert = json.loads(request.POST.get('insert'))
 
-        # TO DO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
+        # TODO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
         if((len(insert['filename'])<= 0) or (len(insert['filepath'])<=0 )):
             mess = "/!\ ERROR /!\ : Please enter a Filename or/and a Filepath"
             return HttpResponse(json.dumps(mess), content_type='application/json',)

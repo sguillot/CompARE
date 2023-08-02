@@ -267,10 +267,11 @@ input.check{
 
 
 .divmodel li ,.divassumptions  li{
-    padding: 2%;
+    /*padding: 2%;*/
     list-style-type:none;
-    font-size: 1.3em;
-    
+    font-size: 1.0em;
+    /*list-style-position: inside;*/
+    /*padding-left: 0;*/
 }
 
 .divmodel span , .divassumptions span{

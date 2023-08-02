@@ -5,7 +5,7 @@
   We get all filter 
   We call the AjaxRequest function 
   */
-   $(document).ready(function(){
+$(document).ready(function(){
     var checkList = []
     $(document).on("click", 'input.check[type="checkbox"]', function(){
       var value = $(this).val();
@@ -157,8 +157,8 @@ function ajaxRequest(checkList , select , search){
           dataSearch:stringSearch,
           dataSelect:jsonSelect},
     success: function(data) {
-      $("#firstTable tr").remove() 
-      $("#secondTable tr").remove() 
+      $("#firstTable tr").remove()
+      $("#secondTable tr").remove()
 
       let table = document.getElementById("secondTable")
       data.forEach(d => {
@@ -204,7 +204,7 @@ function ajaxRequest(checkList , select , search){
         }
 
         let ref = row.insertCell(10)
-        ref.innerHTML = "<a href="+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
+        ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
 
         let download = row.insertCell(11)
         download.innerHTML = "<a href="+ d.filpath+" download> <img src='../static/compare/download.svg' alt='icon download' width='30em' /></a>"
