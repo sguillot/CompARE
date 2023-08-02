@@ -152,90 +152,64 @@ def visu_data(request):
                 assSFilter = Ns.objects.select_related().filter(filename__in = assListS)
                 select_ns_all = assSFilter
 
-
-            #we are out the if statements 
-            #we put in a list all the NS with the model and assumptions
-            listFilt = []
+            # Once the filtering is done, we put the necessary info of selected NS (select_ns_all) in a filtered_list
+            filtered_list = []
 
             for all in select_ns_all:
-                #we put in the list only the elements that we show in the table in a dictionnary
-                loop = {}    
+                # We put in the list only the elements that we show in the table in a dictionnary
+                ns_info = {}
                 
-                #we get the name and put it in the dictionaray of the NS
-                namedb = all.id_name.namedb 
-                loop['namedb']=namedb
-
-                #we get the filename and put it in the dictionaray of the NS
+                # We get all these attributes needed
+                namedb = all.id_name.namedb
                 filens = all.filename
-                loop['filename']=filens
-
-                #we get the filepath and put it in the dictionaray of the NS
                 filpath = all.filepath
-                loop['filpath']=filpath
-
-                #we get the class and put it in the dictionaray of the NS
                 namecla = all.id_name.classdb
-                loop['classdb']=namecla
-
-                #we get the method and put it in the dictionaray of the NS
                 method = all.id_method.method
-                loop['method']=method
-
-                #we get the method specific and put it in the dictionaray of the NS
                 methodspe = all.id_method.method_specific
-                loop['method_specific']=methodspe
-
-                #we get the constrain type and put it in the dictionaray of the NS
                 constrainty = all.id_constrain.constraintype
-                loop['constraintype']=constrainty
-
-                #we get the constrain version  and put it in the dictionaray of the NS
                 constrainver = all.id_constrain.constrainversion
-                loop['constrainversion']=constrainver
-                
-                #we get the constrain variable and put it in the dictionaray of the NS
                 constrainvar = all.id_constrain.constrainvariable
-                loop['constrainvariable']= str(constrainvar)
-
-                #we get the DOI and put it in the dictionaray of the NS
                 refdoi = all.id_ref.doi
-                loop['doi']= refdoi
-
-                #we get the author and put it in the dictionaray of the NS
                 refauthor = all.id_ref.author
-                loop['author']= refauthor
-
-                #we get the year and put it in the dictionaray of the NS
                 refyear = all.id_ref.refyear
-                loop['year']= refyear
 
-                #We select the filenames linked to models 
-                select_ns_model =  NsToModel.objects.select_related().filter(filename = all.filename)
+                # We add them to the dictionary of the NS
+                ns_info['namedb'] = namedb
+                ns_info['filename'] = filens
+                ns_info['filpath'] = filpath
+                ns_info['classdb'] = namecla
+                ns_info['method'] = method
+                ns_info['method_specific'] = methodspe
+                ns_info['constraintype'] = constrainty
+                ns_info['constrainversion'] = constrainver
+                ns_info['constrainvariable'] = str(constrainvar)
+                ns_info['doi'] = refdoi
+                ns_info['author'] = refauthor
+                ns_info['year'] = refyear
 
-                # We put in a list all the models linked to a filename
-                list_temp = []
+                # We select the filenames linked to model dependencies and add all the models to a list
+                select_ns_model = NsToModel.objects.select_related().filter(filename=all.filename)
+                list_model_dependencies = []
                 for snm in select_ns_model:
-                    #we get the model and put it in a list and after the dictionaray of the NS
-                    # TODO - see if this can be returned as a tuple to be used by AJAX (script.js:line193)
-                    list_temp.append("{}: {}".format(snm.id_model.dependenciesprimary, snm.id_model.dependenciessecondary))
-                    loop['model'] = list_temp
+                    # We pre-format the string of model dependencies (prim. and sec.)
+                    list_model_dependencies.append("<li><u>{}</u>: {}</li>".format(snm.id_model.dependenciesprimary,
+                                                                                   snm.id_model.dependenciessecondary))
+                    ns_info['model'] = list_model_dependencies
 
-                #We select the filenames linked to assumptions 
-                select_ns_ass = NsToAssumptions.objects.select_related().filter(filename = all.filename)
-
-                #we put in a list all the assumptions linked to a filename 
-                list_temp2 = []
+                # We select the filenames linked to assumptions and add all the models to a list
+                select_ns_ass = NsToAssumptions.objects.select_related().filter(filename=all.filename)
+                list_assumptions = []
                 for snm in select_ns_ass:
-                    # we get the assumption (prim. and sec.) and put it in a list and after the dictionaray of the NS
-                    # TODO - see if this can be returned as a tuple to be used by AJAX (script.js:line193)
-                    list_temp2.append("{}: {}".format(snm.id_assumptions.assumptionsprimary, snm.id_assumptions.assumptionssecondary))
-                    loop['assumptions'] = list_temp2
+                    # we get the assumption (prim. and sec.) and put it in a string and after the dictionary of the NS
+                    list_assumptions.append("<li><u>{}</u>: {}</li>".format(snm.id_assumptions.assumptionsprimary,
+                                                                            snm.id_assumptions.assumptionssecondary))
+                    ns_info['assumptions'] = list_assumptions
 
-                # We add the dictionary to the list
-                listFilt.append(loop)
+                # We add the dictionary of the neutron star to the list
+                filtered_list.append(ns_info)
 
             # We return the list with the ns
-            return HttpResponse(json.dumps(listFilt), content_type='application/json',)
+            return HttpResponse(json.dumps(filtered_list), content_type='application/json',)
         
         else:
             # We add the models to each NS

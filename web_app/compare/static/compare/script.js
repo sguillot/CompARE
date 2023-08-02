@@ -132,7 +132,7 @@ function bibtexFile(){
 
 
 /* 
-when user click on the loop
+when user click on the magnifier
 Select all filter
 We call the ajaxRequest function
 */
@@ -190,16 +190,17 @@ function ajaxRequest(checkList , select , search){
 
         let model = row.insertCell(8)
         if (typeof d.model !== 'undefined') {
-          d.model.forEach(mod => {
-          model.insertAdjacentHTML("beforeend","<li>"+ mod +"</li>");
+          d.model.forEach(mod_text => {
+          model.insertAdjacentHTML("beforeend",mod_text);
         });
         }
          
         
         let assump = row.insertCell(9)
         if (typeof d.assumptions !== 'undefined') {
-          d.assumptions.forEach(ass => {
-            assump.insertAdjacentHTML("beforeend", "<li>"+ ass +"</li>");
+          d.assumptions.forEach(ass_text => {
+            // assump.insertAdjacentHTML("beforeend", "<li><u>"+ass1+"</u>: "+ass2+"</li>");
+            assump.insertAdjacentHTML("beforeend", ass_text);
           });
         }
 
