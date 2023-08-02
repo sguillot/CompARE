@@ -1,0 +1,48 @@
+NameDB,PSR J1748-2446ad
+NameSimbad,PSR J1748-2446ad
+ClassDB,NS spin
+ClassSimbad,Psr
+RA,267.020417
+DEC,-24.767778
+LocalisationFile,None
+EventDate,None
+,
+Method,Pulsar timing
+MethodSpecific,Frequency measurement
+DataDate,June 2004 to May 2005
+ProcessingInfo,psrchive and Tempo packages
+ConstrainVariable,F
+ConstrainType,mean +/- 1 sigma
+ConstrainVersion,1
+,
+ModelDependenciesPrimary,None
+ModelDependenciesSecondary,None
+ModelDependencyDescription,None
+ModelDependencyReferences,None
+AssumptionsPrimary,None
+AssumptionsSecondary,None
+AssumptionsDescription,None
+AssumptionsReferences,None
+,
+Ref1stAuthor,Hessels
+RefYear,2006
+RefShort,2006Sci...311.1901H
+RefBibtex,"@ARTICLE{2006Sci...311.1901H,
+       author = {{Hessels}, Jason W.~T. and {Ransom}, Scott M. and {Stairs}, Ingrid H. and {Freire}, Paulo C.~C. and {Kaspi}, Victoria M. and {Camilo}, Fernando},
+        title = ""{A Radio Pulsar Spinning at 716 Hz}"",
+      journal = {Science},
+     keywords = {ASTRONOMY},
+         year = 2006,
+        month = mar,
+       volume = {311},
+       number = {5769},
+        pages = {1901-1904},
+          doi = {10.1126/science.1123430},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2006Sci...311.1901H},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+"
+RefDOI,10.1126/science.1123430
+DataRepositoryDOI,None
+DataLink,None
+FileName,NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt
