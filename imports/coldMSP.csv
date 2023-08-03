@@ -79,7 +79,7 @@ solar abundances,
 distance prior, mass prior"
 AssumptionsDescription,"At the surface of a neutron star, elements stratify on time scales of minutes/hours leaving the lightest on top (Romani 1987). Also, the thickness of the last scattering layer of a NS is on the order of a few cm. Therefore, it is common to assume a single composition, being that of the lightest element. Hydrogen is therefore a reasonable assumption for the composition, especially for a NS that has accreted matter from a companion star. Other effects are in competition and may put some uncertainties on the surface composition, namely, accretion from the interstellar medium, diffuse nuclear burning of light of H into He (Chang & Bildsten 2003, 2004), and spallation of heavier elements into lighter ones (Bildsten et al. 1992).
 
-This analyses also assume emission from a low-magnetic field neutron stars (as typically measured for MSPs, specifically B_dip ~ 2.8e8 G for PSR J0437-4715). The atmosphere model is that of a non-magnetised atmosphere, which is a good approximation as B-field effect (modified opacities) become important above 1e10 G. However, this neglects potential high-magnetic loop near the NS surface.
+This analyses also assume emission from a low-magnetic field neutron stars (as typically measured for MSPs, specifically B_dip ~ 2.8e8 G for PSR J0437-4715). The atmosphere model is that of a non-magnetised atmosphere, which is a good approximation as B-field effect (modified opacities) become important above 1e10 G (Kaminker et al., 1983; Zavlin et al., 1996). However, this neglects potential high-magnetic loop near the NS surface.
 
 The relativistic effects of rotation on the emergent spectrum are neglected in this analysis. However, the effects on the radius are < 1 km at the rotational frequency of PSR J0437-4715 (173.6 Hz), see Baubock et al. 2015). 
 
@@ -94,7 +94,7 @@ The radio timing of the pulsar provided priors on the pulsar distance (156.79 pc
 The reddening was also provided as a prior, using estimation for Galactic dust maps: E(B-V) = 0.002+/-0.014 (Lallement et al. 2018).
 ","At the surface of a neutron star, elements stratify on time scales of minutes/hours leaving the lightest on top (Romani 1987). Also, the thickness of the last scattering layer of a NS is on the order of a few cm. Therefore, it is common to assume a single composition, being that of the lightest element. If no Hydrogen is present in the system, the next expected element is Helium, which is a possibility if the NS has accreted only Helium from a companion star. Other effects are in competition and may put some uncertainties on the surface composition, namely, accretion from the interstellar medium, diffuse nuclear burning of light of H into He (Chang & Bildsten 2003, 2004), and spallation of heavier elements into lighter ones (Bildsten et al. 1992).
 
-This analyses also assume emission from a low-magnetic field neutron stars (as typically measured for MSPs, specifically B_dip ~ 2.8e8 G for PSR J0437-4715). The atmosphere model is that of a non-magnetised atmosphere, which is a good approximation as B-field effect (modified opacities) become important above 1e10 G. However, this neglects potential high-magnetic loop near the NS surface.
+This analyses also assume emission from a low-magnetic field neutron stars (as typically measured for MSPs, specifically B_dip ~ 2.8e8 G for PSR J0437-4715). The atmosphere model is that of a non-magnetised atmosphere, which is a good approximation as B-field effect (modified opacities) become important above 1e10 G (Kaminker et al., 1983; Zavlin et al., 1996). However, this neglects potential high-magnetic loop near the NS surface.
 
 The relativistic effects of rotation on the emergent spectrum are neglected in this analysis. However, the effects on the radius are < 1 % at the rotational frequency of PSR J0437-4715 (173.6 Hz), see Baubock et al. 2015. 
 
@@ -177,4 +177,4 @@ archivePrefix = {arXiv},
 RefDOI,10.1093/mnras/stz2941,10.1093/mnras/stz2941
 DataRepositoryDOI,None,None
 DataLink,None,None
-FileName,Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.txt,Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.txt
+FileName,Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.npy,Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.npy
