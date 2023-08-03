@@ -33,7 +33,7 @@ Detail
                 <span><u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
                 <div class="divmodeldesc">
                     {{mo.id_model.dependenciesdescription}} <br>
-                    {% for ads_short, ads_link in mo.id_model.reflist %}
+                    {% for ads_short, ads_link in mo.id_model.ref_list %}
                         <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
                     {% endfor %}
             {% else %}
@@ -56,7 +56,7 @@ Detail
                 <span><u>{{as.id_assumptions.assumptionsprimary}}</u>: {{as.id_assumptions.assumptionssecondary}} <br></span>
                 <div class="divassumptionsdesc">
                     {{as.id_assumptions.assumptionsdescription}} <br>
-                    {% for ads_short, ads_link in as.id_assumptions.reflist %}
+                    {% for ads_short, ads_link in as.id_assumptions.ref_list %}
                         <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
                     {% endfor %}
 
