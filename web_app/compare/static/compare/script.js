@@ -66,7 +66,9 @@ Return a list of dictionnary
 */
 function getSelect(){
   var selectorValues = {}
-  const ListOptions = ["MethList","ConsVList","ConsTList","DepList","DepSList","AssList","Ass2List"]
+  const ListOptions = ["list_methods","list_variable","list_constrain_type",
+                        "list_dep_primary","list_dep_secondary",
+                        "list_assumptions_primary","list_assumptions_secondary"]
   ListOptions.forEach(lO => {
     var select = []
     var selector = document.getElementById(lO)

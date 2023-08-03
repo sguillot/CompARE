@@ -77,8 +77,8 @@ Visu_data
             <div id="multiple">
                 <div class="multiple-content">
                     <div class="flexSelect">
-                        <label for="MethList">Method</label>
-                        <select name="MethList" id="MethList" multiple>
+                        <label for="list_methods">Method</label>
+                        <select name="list_methods" id="list_methods" multiple>
                             {% for qm in queryMeth %}
                                 <option class="Meth" value="{{qm.method}}">{{qm.method}}</option>
                             {% endfor %}
@@ -86,8 +86,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="ConsVList">Constrain Variable</label>
-                        <select name="ConsVList" id="ConsVList" multiple>
+                        <label for="list_variable">Constrain Variable</label>
+                        <select name="list_variable" id="list_variable" multiple>
                             {% for qv in queryConV %}
                                 <option class="ConsV" value="{{qv.constrainvariable}}">{{qv.constrainvariable}}</option>
                             {% endfor %}
@@ -95,8 +95,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="ConsTList">Constrain Type</label>
-                        <select name="ConsTList" id="ConsTList" multiple>
+                        <label for="list_constrain_type">Constrain Type</label>
+                        <select name="list_constrain_type" id="list_constrain_type" multiple>
                             {% for qt in queryConT %}
                                 <option class="ConsT" value="{{qt.constraintype}}">{{qt.constraintype}}</option>
                             {% endfor %}
@@ -104,8 +104,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="DepList">Model Primary</label>
-                        <select name="DepList" id="DepList" multiple>
+                        <label for="list_dep_primary">Model Primary</label>
+                        <select name="list_dep_primary" id="list_dep_primary" multiple>
                             {% for qd in queryDep %}
                                 <option class="Dep" value="{{qd.dependenciesprimary}}">{{qd.dependenciesprimary}}</option>
                             {% endfor %}
@@ -113,8 +113,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="DepSList">Model Secondary</label>
-                        <select name="DepSList" id="DepSList" multiple>
+                        <label for="list_dep_secondary">Model Secondary</label>
+                        <select name="list_dep_secondary" id="list_dep_secondary" multiple>
                             {% for qds in queryDepS %}
                                 <option class="DepS" value="{{qds.dependenciessecondary}}">{{qds.dependenciessecondary}}</option>
                             {% endfor %}
@@ -122,8 +122,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="AssList">Assumptions Primary</label>
-                        <select name="AssList" id="AssList" multiple>
+                        <label for="list_assumptions_primary">Assumptions Primary</label>
+                        <select name="list_assumptions_primary" id="list_assumptions_primary" multiple>
                             {% for qa in queryAss %}
                                 <option class="Ass" value="{{qa.assumptionsprimary}}">{{qa.assumptionsprimary}}</option>
                             {% endfor %}
@@ -131,8 +131,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="Ass2List">Assumptions Secondary</label>
-                        <select name="Ass2List" id="Ass2List" multiple>
+                        <label for="list_assumptions_secondary">Assumptions Secondary</label>
+                        <select name="list_assumptions_secondary" id="list_assumptions_secondary" multiple>
                             {% for qas in queryAssS %}
                                 <option class="Ass2" value="{{qas.assumptionssecondary}}">{{qas.assumptionssecondary}}</option>
                             {% endfor %}

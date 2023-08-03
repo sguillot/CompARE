@@ -40,7 +40,7 @@ def visu_data(request):
         bibtex_select = request.GET.get('bibtexfile')
         download_select = request.GET.get('filedwnl')
 
-        # For downloads, we retrieve the filenames and return the filepaths to the success part of the Ajax request
+        # For the selection of files to download
         if download_select:
             # List with the "filenames" that the user has selected
             to_download = json.loads(download_select)
@@ -54,10 +54,10 @@ def visu_data(request):
             for f in selected_filepath:
                 list_filepaths.append(f['filepath'])
 
-            # We return the list to the succes part of Ajax request
+            # We return the list of filepaths to the success part of Ajax request
             return HttpResponse(json.dumps(list_filepaths), content_type='application/json')
 
-        # For BibTex info, we retrieve the filenames and write the Bibtex data in a file
+        # For the selection of BibTex info to download
         if bibtex_select:
             # List with the "filenames" that the user has selected
             list_bibtex = json.loads(bibtex_select)
@@ -77,152 +77,172 @@ def visu_data(request):
             # We return the path of the Bibtex file to the success part off the AJAX request
             return HttpResponse(json.dumps("../static/compare/Bibtex.txt"), content_type='application/json')
 
-        ## TODO:  Next one to check and reformat
-        #We filter with the result of the search bar if the user has sent a request
-        #if the variable string_search has a value
+        # For 'string' searches with the search bar
         if string_search:
-            #We filter the select variable that contains all the Ns from the database
-            #we check if the fields contain the sent string (case insensitive)
-            select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains = string_search) |
-                                                 Q(id_name__classdb__icontains = string_search) |
-                                                 Q(id_method__method__icontains = string_search) |
-                                                 Q(id_method__datadate__icontains = string_search) |
-                                                 Q(id_method__processinfinfo__icontains = string_search) |
-                                                 Q(id_constrain__constraintype__icontains = string_search) |
-                                                 Q(id_constrain__constrainversion__icontains = string_search)|
-                                                 Q(id_constrain__constrainvariable__icontains = string_search)
-                                                 )
+            # We run a query to search for the string on all database table (case insensitive)
+            select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains=string_search) |
+                                                 Q(id_name__classdb__icontains=string_search) |
+                                                 Q(id_method__method__icontains=string_search) |
+                                                 Q(id_method__datadate__icontains=string_search) |
+                                                 Q(id_method__processinfinfo__icontains=string_search) |
+                                                 Q(id_constrain__constraintype__icontains=string_search) |
+                                                 Q(id_constrain__constrainversion__icontains=string_search) |
+                                                 Q(id_constrain__constrainvariable__icontains=string_search))
 
-        #We filter with the result of the side checkbox panel if the user has sent a request
-        #if the variable jsonCheckList has a value
+        # For the class selection with the left checkbox panel
         if json_checklist:
-            checkList = json.loads(json_checklist) #python list with the checkboxes that are checked
-            #if checklist is empty we do like all the checkboxes were checked
-            if not checkList:
-                checkList = class_list
+            # We retrieve the checkbox list via a JSON
+            checkbox_list = json.loads(json_checklist)
 
-            #We filter the select variable that contains all the Ns from the database ( it can be already filter from the above condition )
-            #we select the ns who have a values from the list
-            select_ns_all = select_ns_all.filter(id_name__classdb__in=checkList)
+            # For an empty checkbox list, we do as if all the checkboxes were checked
+            if not checkbox_list:
+                checkbox_list = class_list
 
-        #We filter with the select box selected if the user has sent a request
-        #if the variable dict_select has a value
+            # We filter the NS from the database for which the ClassDB corresponds to the values in the checkbox list
+            select_ns_all = select_ns_all.filter(id_name__classdb__in=checkbox_list)
+
+        # For the keyword selection in the filter panel
         if dict_select:
-            sel = json.loads(dict_select) #dictionnary python list  whith the values selected (key = the selecte box , value = the selected item )
+            # We retrieve the keyword list via a JSON as a dictionary (key: selected box, value: selected item )
+            keywords = json.loads(dict_select)
 
-            #We check if the keys have a value if they have we filter the select variable already filtered above with the values
-            if sel['MethList']:
-                select_ns_all = select_ns_all.filter(id_method__method__in=sel['MethList'])
-            if sel['ConsVList']:
-                select_ns_all = select_ns_all.filter(id_constrain__constrainvariable__in=sel['ConsVList'])
-            if sel['ConsTList']:
-                select_ns_all = select_ns_all.filter(id_constrain__constraintype__in=sel['ConsTList'])
+            # If keywords are selected, we filter based on the keyword list, from the pre-filtered NS list select_ns_all
+            if keywords['list_methods']:
+                select_ns_all = select_ns_all.filter(id_method__method__in=keywords['list_methods'])
+            if keywords['list_variable']:
+                select_ns_all = select_ns_all.filter(id_constrain__constrainvariable__in=keywords['list_variable'])
+            if keywords['list_constrain_type']:
+                select_ns_all = select_ns_all.filter(id_constrain__constraintype__in=keywords['list_constrain_type'])
 
-            #For the dependencies and assumptions select box
-            #we check if the keys have a value
-            if sel['DepList']:
-                filListDep = []
-                for fil in select_ns_all:#Loop to get all filename from the filtered select
-                    filListDep.append(fil.filename)#We put in a list the filenames
-                # We select the filenames that have the primary dependencies and the filenames
-                selectDep = NsToModel.objects.select_related().filter(Q(filename__in=filListDep) &
-                                                                      Q(id_model__dependenciesprimary__in=sel['DepList'])).values_list('filename', flat=True).distinct()
-                depList = list(selectDep) # We put in a list the filenames of the select
-                depFilter = Ns.objects.select_related().filter(filename__in=depList)#We select the NS who have the filenames
-                select_ns_all = depFilter # we change our main select variable
+            # TODO: See if the four "if" below can be factorized into a single one
+            # For the model dependencies (primary)
+            if keywords['list_dep_primary']:
+                # Get all the NS filenames from the pre-filtered NS list select_ns_all
+                prefiltered_ns = []
+                for ns in select_ns_all:
+                    prefiltered_ns.append(ns.filename)
 
-            # We do the same for these 3 select box
-            if sel['DepSList']:
-                fil2ListDep = []
-                for fil2 in select_ns_all:
-                    fil2ListDep.append(fil2.filename)
-                selectDepS = NsToModel.objects.select_related().filter(Q(filename__in=fil2ListDep)
-                                                                & Q(id_model__dependenciessecondary__in=sel['DepSList'])).values_list('filename', flat=True).distinct()
-                depListS = list(selectDepS)
-                depSFilter = Ns.objects.select_related().filter(filename__in=depListS)
-                select_ns_all = depSFilter
+                # We select the filenames that have the primary dependencies and the filenames of the prefiltered list
+                prim = keywords['list_dep_primary']
+                temp_select_prim = NsToModel.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                                             Q(id_model__dependenciesprimary__in=prim))
+                temp_select_values = temp_select_prim.values_list('filename', flat=True).distinct()
+                dep_primary_selection = list(temp_select_values)
 
-            if sel['AssList']:
-                filListAss = []
-                for fil in select_ns_all:
-                    filListAss.append(fil.filename)
-                selectMod = NsToAssumptions.objects.select_related().filter(Q(filename__in=filListAss)
-                                                                & Q(id_assumptions__assumptionsprimary__in=sel['AssList'])).values_list('filename', flat=True).distinct()
-                assList = list(selectMod)
-                assFilter = Ns.objects.select_related().filter(filename__in=assList)
-                select_ns_all = assFilter
+                # We select the NS who have the filenames based on the selection above
+                dep_primary_ns_select = Ns.objects.select_related().filter(filename__in=dep_primary_selection)
 
-            if sel['Ass2List']:
-                fil2ListAss = []
-                for fil2 in select_ns_all:
-                    fil2ListAss.append(fil2.filename)
+                # We change our main select_ns_all variable
+                select_ns_all = dep_primary_ns_select
 
-                selectModS = NsToAssumptions.objects.select_related().filter(Q(filename__in=fil2ListAss)
-                                                                & Q(id_assumptions__assumptionssecondary__in=sel['Ass2List'])).values_list('filename', flat=True).distinct()
-                assListS = list(selectModS)
-                assSFilter = Ns.objects.select_related().filter(filename__in=assListS)
-                select_ns_all = assSFilter
+            # For the model dependencies (secondary)
+            if keywords['list_dep_secondary']:
+                # Get all the NS filenames from the pre-filtered NS list select_ns_all
+                prefiltered_ns = []
+                for ns in select_ns_all:
+                    prefiltered_ns.append(ns.filename)
+
+                # We select the filenames that have the secondary dependencies and the filenames of the prefiltered list
+                sec = keywords['list_dep_secondary']
+                temp_select_sec = NsToModel.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                                            Q(id_model__dependenciessecondary__in=sec))
+                temp_select_values = temp_select_sec.values_list('filename', flat=True).distinct()
+                dep_secondary_selection = list(temp_select_values)
+
+                # We select the NS that have the filenames based on the selection above
+                dep_secondary_ns_select = Ns.objects.select_related().filter(filename__in=dep_secondary_selection)
+
+                # We change our main select_ns_all variable
+                select_ns_all = dep_secondary_ns_select
+
+            # For the assumptions (primary)
+            if keywords['list_assumptions_primary']:
+                # Get all the NS filenames from the pre-filtered NS list select_ns_all
+                prefiltered_ns = []
+                for ns in select_ns_all:
+                    prefiltered_ns.append(ns.filename)
+
+                # We select the filenames that have the primary assumptions and the filenames of the prefiltered list
+                prim = keywords['list_assumptions_primary']
+                temp_select_prim = NsToAssumptions.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                                                   Q(id_assumptions__assumptionsprimary__in=prim))
+                temp_select_values = temp_select_prim.values_list('filename', flat=True).distinct()
+                assumption_primary_selection = list(temp_select_values)
+
+                # We select the NS that have the filenames based on the selection above
+                assumption_primary_ns_select = Ns.objects.select_related().filter(filename__in=assumption_primary_selection)
+
+                # We change our main select_ns_all variable
+                select_ns_all = assumption_primary_ns_select
+
+            # For the model dependencies (secondary)
+            if keywords['list_assumptions_secondary']:
+                # Get all the NS filenames from the pre-filtered NS list select_ns_all
+                prefiltered_ns = []
+                for ns in select_ns_all:
+                    prefiltered_ns.append(ns.filename)
+
+                # We select the filenames that have the primary assumptions and the filenames of the prefiltered list
+                sec = keywords['list_assumptions_secondary']
+                temp_select_sec = NsToAssumptions.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                                                  Q(id_assumptions__assumptionssecondary__in=sec))
+                temp_select_values = temp_select_sec.values_list('filename', flat=True).distinct()
+                assumption_secondary_selection = list(temp_select_values)
+
+                # We select the NS that have the filenames based on the selection above
+                assumption_secondary_ns_select = Ns.objects.select_related().filter(filename__in=assumption_secondary_selection)
+
+                # We change our main select_ns_all variable
+                select_ns_all = assumption_secondary_ns_select
 
             # Once the filtering is done, we put the necessary info of selected NS (select_ns_all) in a filtered_list
             filtered_list = []
+            for ns in select_ns_all:
+                # We put in the list only the attributes shown in the table into a dictionary
+                ns_info = {'namedb': ns.id_name.namedb,
+                           'filename': ns.filename,
+                           'filpath': ns.filepath,
+                           'classdb': ns.id_name.classdb,
+                           'method': ns.id_method.method,
+                           'method_specific': ns.id_method.method_specific,
+                           'constraintype': ns.id_constrain.constraintype,
+                           'constrainversion': ns.id_constrain.constrainversion,
+                           # TODO: Why is this converted to a string ?
+                           'constrainvariable': str(ns.id_constrain.constrainvariable),
+                           'doi': ns.id_ref.doi,
+                           'author': ns.id_ref.author,
+                           'year': ns.id_ref.refyear
+                           }
 
-            for all in select_ns_all:
-                # We put in the list only the elements that we show in the table in a dictionnary
-                ns_info = {}
-
-                # We get all these attributes needed
-                namedb = all.id_name.namedb
-                filens = all.filename
-                filpath = all.filepath
-                namecla = all.id_name.classdb
-                method = all.id_method.method
-                methodspe = all.id_method.method_specific
-                constrainty = all.id_constrain.constraintype
-                constrainver = all.id_constrain.constrainversion
-                constrainvar = all.id_constrain.constrainvariable
-                refdoi = all.id_ref.doi
-                refauthor = all.id_ref.author
-                refyear = all.id_ref.refyear
-
-                # We add them to the dictionary of the NS
-                ns_info['namedb'] = namedb
-                ns_info['filename'] = filens
-                ns_info['filpath'] = filpath
-                ns_info['classdb'] = namecla
-                ns_info['method'] = method
-                ns_info['method_specific'] = methodspe
-                ns_info['constraintype'] = constrainty
-                ns_info['constrainversion'] = constrainver
-                ns_info['constrainvariable'] = str(constrainvar)
-                ns_info['doi'] = refdoi
-                ns_info['author'] = refauthor
-                ns_info['year'] = refyear
-
-                # We select the filenames linked to model dependencies and add all the models to a list
-                select_ns_model = NsToModel.objects.select_related().filter(filename=all.filename)
+                # We select the filenames linked to model dependencies and add all the model dependencies to a list
+                select_ns_model = NsToModel.objects.select_related().filter(filename=ns.filename)
                 list_model_dependencies = []
                 for snm in select_ns_model:
                     # We pre-format the string of model dependencies (prim. and sec.)
                     list_model_dependencies.append("<li><u>{}</u>: {}</li>".format(snm.id_model.dependenciesprimary,
                                                                                    snm.id_model.dependenciessecondary))
+                    # The pre-formatted list is added to the dictionary
                     ns_info['model'] = list_model_dependencies
 
                 # We select the filenames linked to assumptions and add all the models to a list
-                select_ns_ass = NsToAssumptions.objects.select_related().filter(filename=all.filename)
+                select_ns_ass = NsToAssumptions.objects.select_related().filter(filename=ns.filename)
                 list_assumptions = []
                 for snm in select_ns_ass:
                     # we get the assumption (prim. and sec.) and put it in a string and after the dictionary of the NS
                     list_assumptions.append("<li><u>{}</u>: {}</li>".format(snm.id_assumptions.assumptionsprimary,
                                                                             snm.id_assumptions.assumptionssecondary))
+                    # The pre-formatted list is added to the dictionary
                     ns_info['assumptions'] = list_assumptions
 
-                # We add the dictionary of the neutron star to the list
+                # We add the dictionary of the ns to the filtered_list of all ns
                 filtered_list.append(ns_info)
 
-            # We return the list with the ns
+            # We return the filtered_list of all ns back to the HTML
             return HttpResponse(json.dumps(filtered_list), content_type='application/json',)
 
         else:
+
+            # TODO:  Next one to check and reformat
             # We add the models to each NS
             list_ns_model = []
             list_ns_assumptions = []
