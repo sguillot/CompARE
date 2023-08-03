@@ -264,7 +264,7 @@ def visu_data(request):
             select_ns_all_zip = zip(select_ns_all,
                                     list_ns_model,
                                     list_ns_assumptions,
-                                    list_ns_filelinks)
+                                    list_ns_filepaths)
 
             selectAll = {"queryall": select_ns_all_zip,
                          "queryMeth": selectMethod,
