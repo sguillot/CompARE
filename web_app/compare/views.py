@@ -838,8 +838,8 @@ def insert_data(request):
                 d = formatting_csv(d)
 
                 #list with type of sources
-                NsClass = ["NS spin","Transiently_Accreting_NS","NS mass","NS-NS mergers",
-                           "PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"]
+                NsClass = ["NS spin", "Transiently_Accreting_NS", "NS mass", "NS-NS mergers",
+                           "PPM", "qLMXB", "Cold MSP", "Thermal INSs", "Type-I X-ray bursts"]
 
                 #we get the enum types in lists
                 me = []

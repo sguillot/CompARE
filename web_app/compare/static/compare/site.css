@@ -372,11 +372,26 @@ input.check{
   /*page Insertion*/
 
 
+.allcontent {
+    padding: 1%;
+    font-size: 1.3em;
+}
+
+.allcontent p {
+    margin-top: 1px;
+    margin-bottom: 0px;
+}
+
 #addN,#addR {
     display: none;
 }
 
- 
+.inputadd{
+  display: flex;
+  flex-direction: column;
+    padding: 10px;
+}
+
 #errorInsert , .err{display: none;}
 
 .error , #errorInsert p , .err{
@@ -387,7 +402,41 @@ input.check{
   margin-bottom: 1rem;
   border: 1px solid transparent;
   border-radius: 0.25rem;
-} 
+}
+
+
+/*.table-source table{*/
+/*  width: 100%;*/
+/*  background-color: #ffffff;*/
+/*  border: #062B5A 2px solid;*/
+/*  border-collapse: collapse;*/
+/*  text-align: center;*/
+/*}*/
+
+/*.table-source th{*/
+/*  background-color: #baccdb;*/
+/*  color: #062b5a;*/
+/*}*/
+
+.table-source th, .table-source td, .table-reference th, .table-reference td{
+  /*border-width: 2px solid;*/
+  /*border: #baccdb 1px solid;*/
+  /*border-bottom: #062B5A 1px solid;*/
+  border-right: #baccdb 1px solid;
+  /*border-left: #baccdb 1px solid;*/
+  padding: 10px;
+  text-align: center;
+}
+
+.table-modeldep th, .table-modeldep td, .table-assumption th, .table-assumption td{
+  /*border-width: 1px;*/
+  /*border-bottom: #062B5A 1px solid;*/
+  border-right: #baccdb 1px solid;
+  /*border-left: #baccdb 1px solid;*/
+  padding: 10px;
+  text-align: center;
+}
+
 /*
 .allcontent{
   display: flex;
@@ -434,7 +483,7 @@ height: 100px;
 }
 
 
-.table-select table{
+.table-source table{
   width: 100%;
   background-color: #ffffff;
   border: #062B5A 2px solid;
@@ -442,19 +491,19 @@ height: 100px;
   text-align: center;
 }
 
-.table-select th{
+.table-source th{
   background-color: #baccdb;
   color: #062b5a;
 }
 
-.table-select th, .table-select td{
+.table-source th, .table-source td{
   border-width: 1px; 
   border-bottom: #062B5A 1px solid;
   border-right: #baccdb 1px solid;
   padding: 9px;
 }
 
-.table-select th{
+.table-source th{
   border-right: #062B5A 1px solid;
 }
 
@@ -474,11 +523,7 @@ height: 100px;
   font-size: 1.1em;
 }
 
-.inputadd{
-  background-color: #2b322d;
-  display: flex;
-  flex-direction: column;
-}
+
 */
 
 
