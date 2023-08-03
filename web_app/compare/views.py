@@ -1,6 +1,7 @@
 import datetime
 import json
 import pandas as pd
+import decimal
 from decimal import Decimal
 
 from compare.models import Ns, NsToModel, NsToAssumptions, MethodNs, AssumptionsNs, ModelNs, ConstrainNs, NameNs, RefNs
@@ -853,9 +854,9 @@ def insert_data(request):
                 for v in ConstrainNs.constrainvariable.field.choices:
                     cv.append(v[0])
 
-                nbinsert = 0
+                to_insert = 0
                 inserted = []
-                notinserted = {}
+                not_inserted = {}
 
                 #for each row of the dataframe
                 for i in range(1,len(d)+1):
@@ -891,25 +892,26 @@ def insert_data(request):
                     if (len(listassref)==0):
                         listassref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
-                    #we verify if the filename do not alreday exist
-                    if Ns.objects.filter(filename = d['FileName'][i]):
-                        notinserted[filename] = " already in"
+                    # Check if the filename exists
+                    if Ns.objects.filter(filename=d['FileName'][i]):
+                        not_inserted[filename] = "already in"
                         continue
-                    #we verify the non null field
-                    elif ((len(d['NameDB'][i]) <= 0  or
+
+                    # Check the non null field
+                    elif ((len(d['NameDB'][i]) <= 0 or
                            len(d['ClassDB'][i]) <= 0 or
                            len(d['Method'][i]) <= 0) or
-                          (len(d['MethodSpecific'][i])<=0) or
-                          (len(d['DataDate'][i])<=0) or
-                          (len(d['ProcessingInfo'][i])<=0) or
-                          (len(d['ConstrainVariable'][i])<= 0) or
-                          (len(d['ConstrainType'][i])<=0) or
-                          (len(d['Ref1stAuthor'][i])<= 0) or
-                          (len(d['RefYear'][i])<=0) or
-                          (len(d['RefShort'][i])<=0) or
+                          (len(d['MethodSpecific'][i]) <= 0) or
+                          (len(d['DataDate'][i]) <=0 ) or
+                          (len(d['ProcessingInfo'][i]) <= 0) or
+                          (len(d['ConstrainVariable'][i]) <= 0) or
+                          (len(d['ConstrainType'][i]) <= 0) or
+                          (len(d['Ref1stAuthor'][i]) <= 0) or
+                          (len(d['RefYear'][i]) <=0 ) or
+                          (len(d['RefShort'][i]) <=0 ) or
                           #(len(d['RefBibtex'][i])<=0) or
-                          (len(d['RefDOI'][i])<=0)):
-                        notinserted[filename] = " missing mandatory elements"
+                          (len(d['RefDOI'][i]) <=0 )):
+                        not_inserted[filename] = "missing mandatory elements"
                         continue
 
                     #more verifications
@@ -922,66 +924,66 @@ def insert_data(request):
                     #     notinserted[filename] = " model have to have minimum one field"
                     #     continue
 
-                    elif( (len(listmo)!= len(listmosec)) or
-                          (len(listmo)!= len(listmodesc)) or
-                          (len(listmo) != len(listmodepref))
-                        ):
-                        notinserted[filename] = " has a mismatch in input model dependencies " \
-                                                "( {} primary, {} secondary, {} descriptions, and {} references)".format(len(listmo),
-                                                                                                                         len(listmosec),
-                                                                                                                         len(listmodesc),
-                                                                                                                         len(listassref))
+                    elif((len(listmo) != len(listmosec)) or
+                         (len(listmo) != len(listmodesc)) or
+                         (len(listmo) != len(listmodepref))):
+                        not_inserted[filename] = "mismatch in input model dependencies: " \
+                                                 "{} primary, {} secondary, {} descriptions, " \
+                                                 "and {} references".format(len(listmo),
+                                                                            len(listmosec),
+                                                                            len(listmodesc),
+                                                                            len(listassref))
                         continue
 
-                    elif( (len(listass)!= len(listasssec)) or
-                          (len(listass)!= len(listassdesc))or
-                          (len(listass) != len(listassdesc))
-                        ):
-                        notinserted[filename] = " has a mismatch in input assumptions " \
-                                                "( {} primary, {} secondary, {} descriptions, and {} references)".format(len(listass),
-                                                                                                                         len(listasssec),
-                                                                                                                         len(listassdesc),
-                                                                                                                         len(listassdesc))
+                    elif((len(listass) != len(listasssec)) or
+                         (len(listass) != len(listassdesc)) or
+                         (len(listass) != len(listassdesc))):
+                        not_inserted[filename] = "has a mismatch in input assumptions " \
+                                                 "{} primary, {} secondary, {} descriptions, " \
+                                                 "and {} references".format(len(listass),
+                                                                            len(listasssec),
+                                                                            len(listassdesc),
+                                                                            len(listassdesc))
                         continue
 
                     elif str(d['Method'][i]) not in me:
-                        notinserted[filename] = d['Method'][i] + " can not be a method (choose among {})".format(me)
+                        not_inserted[filename] = "{} is not a valid method - choices: {}".format(d['Method'][i], me)
                         continue
 
                     elif d['ConstrainType'][i] not in ct:
-                        notinserted[filename] = d['ConstrainType'][i] + " can not be a constrain type (choose among {})".format(ct)
+                        not_inserted[filename] = "{} is not a valid constrain type - choices: {}".format(d['ConstrainType'][i], ct)
                         continue
 
                     elif d['ConstrainVariable'][i] not in cv:
-                        notinserted[filename] = d['ConstrainVariable'][i] + " can not be a constrain variable (choose among {})".format(cv)
+                        not_inserted[filename] = "{} is not a valid constrain variable - choices: {}".format(d['ConstrainVariable'][i], cv)
                         continue
 
                     elif d['ClassDB'][i] not in NsClass:
-                        notinserted[filename] = d['ClassDB'][i] + " can not be a name class (choose among {})".format(NsClass)
+                        not_inserted[filename] = "{} is not a valid name class - choices: {}".format(d['ClassDB'][i], NsClass)
                         continue
 
-                    elif(len(d['RA'][i])>1):
+                    elif len(d['RA'][i]) > 1:
                         try:
                             Decimal(d['RA'][i])
                         except decimal.InvalidOperation:
-                            notinserted[filename] = d['RA'][i] + " can not be a converted in decimal"
+                            not_inserted[filename] = "{} can not be a converted to decimal".format(d['RA'][i])
                             continue
 
                     elif(len(d['DEC'][i])>1):
                         try:
                             Decimal(d['DEC'][i])
                         except decimal.InvalidOperation:
-                            notinserted[filename] = d['DEC'][i] + " can not be a converted in decimal"
+                            not_inserted[filename] = "{} can not be a converted to decimal".format(d['DEC'][i])
                             continue
 
                     elif(len(d['RefYear'][i])>1):
                         try:
                             int(d['RefYear'][i])
                         except ValueError:
-                            notinserted[filename] = d['RefYear'][i] + " can not be a converted in integer"
+                            not_inserted[filename] = "{} can not be a converted to integer".format(d['RefYear'][i])
                             continue
 
-                    #we get the value of the name
+                    # We retrieve get the value of the name
                     namen = d['NameDB'][i]
                     classn = d['ClassDB'][i]
                     nameS = d['NameSimbad'][i]
@@ -991,8 +993,7 @@ def insert_data(request):
                     dat = d['EventDate'][i]
                     loc = d['LocalisationFile'][i]
 
-                    #verifications in case
-
+                    # Verifications in case
                     if len(nameS) < 1:
                         nameS = None
 
@@ -1063,10 +1064,10 @@ def insert_data(request):
 
                     auth = d['Ref1stAuthor'][i]
                     year = d['RefYear'][i]
-                    short =d['RefShort'][i]
+                    short = d['RefShort'][i]
                     bibtex = d['RefBibtex'][i]
                     doi = d['RefDOI'][i]
-                    repdoi =d['DataRepositoryDOI'][i]
+                    repdoi = d['DataRepositoryDOI'][i]
                     datal = d['DataLink'][i]
 
                     if len(repdoi)<1:
@@ -1162,18 +1163,27 @@ def insert_data(request):
                                                         assumptionsreferences=assref)
                             assumptions.save()
                             idAs = AssumptionsNs.objects.latest('id_assumptions')
-                        #we create the link between ns and assumptions
-                        nsass = NsToAssumptions(filename=nsInstance,id_assumptions=idAs)
+
+                        # We create the link between ns and assumptions
+                        nsass = NsToAssumptions(filename=nsInstance, id_assumptions=idAs)
                         nsass.save()
-                    nbinsert +=  1
+                    to_insert += 1
                     inserted.append(filename)
-                #message for the user
-                mes = "You inserted "+str(nbinsert)+"/"+str(len(d)-1)+" elements"
-                mes2 = "Element inserted:"+str(inserted)
-                mes3 = "Element not inserted: "+str(notinserted)
+
+                # Message for the user
+                mes = "You inserted {} out of {} elements".format(to_insert, len(d))
                 messages.success(request, mes)
-                messages.success(request, mes2)
-                messages.success(request, mes3)
+
+                if len(inserted) != 0:
+                    mes2 = "Element(s) inserted:  {}".format(", ".join(["{}".format(i) for i in inserted]))
+                    messages.success(request, mes2)
+
+                if len(not_inserted) != 0:
+                    mes3 = "Some element were not inserted:  "
+                    for not_in in not_inserted:
+                        mes3 += "{} ({})  -  ".format(not_in, not_inserted[not_in])
+                    messages.success(request, mes3)
+
         #for insertion manual we check the what the user wants to insert
         elif (request.POST.get('hid') == 'formAddName' ):
 
