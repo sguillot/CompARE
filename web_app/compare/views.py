@@ -20,6 +20,38 @@ def home(request):
     return render(request, "compare/home.html")
 
 
+def keyword_filter(select_ns_prefiltered, all_keywords, keyword):
+    # Get all the NS filenames from the pre-filtered NS list select_ns_all
+    prefiltered_ns = []
+    for ns in select_ns_prefiltered:
+        prefiltered_ns.append(ns.filename)
+
+    # We select the filenames that have the primary dependencies and the filenames of the prefiltered list
+    kwd = all_keywords[keyword]
+    if keyword == "list_dep_primary":
+        tmp_select = NsToModel.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                               Q(id_model__dependenciesprimary__in=kwd))
+    elif keyword == "list_dep_secondary":
+        tmp_select = NsToModel.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                               Q(id_model__dependenciessecondary__in=kwd))
+    elif keyword == "list_assumptions_primary":
+        tmp_select = NsToAssumptions.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                                     Q(id_assumptions__assumptionsprimary__in=kwd))
+    elif keyword == "list_assumptions_secondary":
+        tmp_select = NsToAssumptions.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
+                                                                     Q(id_assumptions__assumptionssecondary__in=kwd))
+    else:
+        return select_ns_prefiltered
+
+    # Get unique filenames from this selection
+    temp_select_values = tmp_select.values_list('filename', flat=True).distinct()
+
+    # We select the NS who have the filenames based on the selection above
+    select_ns_filtered = Ns.objects.select_related().filter(filename__in=list(temp_select_values))
+
+    return select_ns_filtered
+
+
 def visu_data(request):
 
     # We select all the Ns from the database without models and assumptions but
@@ -79,7 +111,7 @@ def visu_data(request):
 
         # For 'string' searches with the search bar
         if string_search:
-            # We run a query to search for the string on all database table (case insensitive)
+            # We run a query to search for the string on all database table (case-insensitive)
             select_ns_all = select_ns_all.filter(Q(id_name__namedb__icontains=string_search) |
                                                  Q(id_name__classdb__icontains=string_search) |
                                                  Q(id_method__method__icontains=string_search) |
@@ -114,86 +146,21 @@ def visu_data(request):
             if keywords['list_constrain_type']:
                 select_ns_all = select_ns_all.filter(id_constrain__constraintype__in=keywords['list_constrain_type'])
 
-            # TODO: See if the four "if" below can be factorized into a single one
             # For the model dependencies (primary)
             if keywords['list_dep_primary']:
-                # Get all the NS filenames from the pre-filtered NS list select_ns_all
-                prefiltered_ns = []
-                for ns in select_ns_all:
-                    prefiltered_ns.append(ns.filename)
-
-                # We select the filenames that have the primary dependencies and the filenames of the prefiltered list
-                prim = keywords['list_dep_primary']
-                temp_select_prim = NsToModel.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
-                                                                             Q(id_model__dependenciesprimary__in=prim))
-                temp_select_values = temp_select_prim.values_list('filename', flat=True).distinct()
-                dep_primary_selection = list(temp_select_values)
-
-                # We select the NS who have the filenames based on the selection above
-                dep_primary_ns_select = Ns.objects.select_related().filter(filename__in=dep_primary_selection)
-
-                # We change our main select_ns_all variable
-                select_ns_all = dep_primary_ns_select
+                select_ns_all = keyword_filter(select_ns_all, keywords, 'list_dep_primary')
 
             # For the model dependencies (secondary)
             if keywords['list_dep_secondary']:
-                # Get all the NS filenames from the pre-filtered NS list select_ns_all
-                prefiltered_ns = []
-                for ns in select_ns_all:
-                    prefiltered_ns.append(ns.filename)
-
-                # We select the filenames that have the secondary dependencies and the filenames of the prefiltered list
-                sec = keywords['list_dep_secondary']
-                temp_select_sec = NsToModel.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
-                                                                            Q(id_model__dependenciessecondary__in=sec))
-                temp_select_values = temp_select_sec.values_list('filename', flat=True).distinct()
-                dep_secondary_selection = list(temp_select_values)
-
-                # We select the NS that have the filenames based on the selection above
-                dep_secondary_ns_select = Ns.objects.select_related().filter(filename__in=dep_secondary_selection)
-
-                # We change our main select_ns_all variable
-                select_ns_all = dep_secondary_ns_select
+                select_ns_all = keyword_filter(select_ns_all, keywords, 'list_dep_secondary')
 
             # For the assumptions (primary)
             if keywords['list_assumptions_primary']:
-                # Get all the NS filenames from the pre-filtered NS list select_ns_all
-                prefiltered_ns = []
-                for ns in select_ns_all:
-                    prefiltered_ns.append(ns.filename)
-
-                # We select the filenames that have the primary assumptions and the filenames of the prefiltered list
-                prim = keywords['list_assumptions_primary']
-                temp_select_prim = NsToAssumptions.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
-                                                                                   Q(id_assumptions__assumptionsprimary__in=prim))
-                temp_select_values = temp_select_prim.values_list('filename', flat=True).distinct()
-                assumption_primary_selection = list(temp_select_values)
-
-                # We select the NS that have the filenames based on the selection above
-                assumption_primary_ns_select = Ns.objects.select_related().filter(filename__in=assumption_primary_selection)
-
-                # We change our main select_ns_all variable
-                select_ns_all = assumption_primary_ns_select
+                select_ns_all = keyword_filter(select_ns_all, keywords, 'list_assumptions_primary')
 
             # For the model dependencies (secondary)
             if keywords['list_assumptions_secondary']:
-                # Get all the NS filenames from the pre-filtered NS list select_ns_all
-                prefiltered_ns = []
-                for ns in select_ns_all:
-                    prefiltered_ns.append(ns.filename)
-
-                # We select the filenames that have the primary assumptions and the filenames of the prefiltered list
-                sec = keywords['list_assumptions_secondary']
-                temp_select_sec = NsToAssumptions.objects.select_related().filter(Q(filename__in=prefiltered_ns) &
-                                                                                  Q(id_assumptions__assumptionssecondary__in=sec))
-                temp_select_values = temp_select_sec.values_list('filename', flat=True).distinct()
-                assumption_secondary_selection = list(temp_select_values)
-
-                # We select the NS that have the filenames based on the selection above
-                assumption_secondary_ns_select = Ns.objects.select_related().filter(filename__in=assumption_secondary_selection)
-
-                # We change our main select_ns_all variable
-                select_ns_all = assumption_secondary_ns_select
+                select_ns_all = keyword_filter(select_ns_all, keywords, 'list_assumptions_secondary')
 
             # Once the filtering is done, we put the necessary info of selected NS (select_ns_all) in a filtered_list
             filtered_list = []
