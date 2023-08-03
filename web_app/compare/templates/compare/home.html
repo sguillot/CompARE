@@ -4,8 +4,44 @@ Home
 {% endblock %}
 {% block content %}
 
+<div class="homepage">
+    <h1>Welcome to CompARE</h1>
+    <p>
+        CompARE is a repository containing published data sets of astrophysical measurements of neutron star properties
+        made easily accessible and exploitable to equation of state practitioners. Electromagnetic observations of these
+        compact objects yield measurements of their masses and radii thanks to various spectral or temporal analyses
+        methods. The gravitational signal from neutron star merger events result in measurements on the masses and tidal
+        deformabilities of these objects. Together they provide constraints on the yet-unknown dense matter equation of
+        state.
+    </p>
 
-<h1> Page d'accueil</h1>
-<h2> avec des explications ?</h2>
+    <p>
+        CompARE aims at proposing a curated, organized and exhaustive repository of these constraints for equation of
+        state modellers. Under the form of a database, users are able to browse all existing constraints by type of
+        sources or events, explore the relevant caveats or analysis assumptions, and select the ones they want to
+        download to compare or adjust their equation of state models.
+    </p>
+
+    <h2>How does it work?</h2>
+    <p>
+        All entries in the CompARE database have been sorted with various criteria, such as a source class (e.g., qLMXB,
+        GW event, ...), measurement methods (e.g., thermal emission, ...), and with an as-exhaustive-as-possible list of
+        model dependencies (e.g., atmosphere models) and assumptions (e.g., atmospheric composition). All references for
+        all these model dependencies and assumptions are provided, such that the user can decide whether the choices
+        made in the analyses are acceptable, and the results can be considered reliable.
+    </p>
+    <p>
+        The user can filter according to all those criteria and choose to download the datasets (all at once, or
+        individually). The original work of the authors of each data set is provided (ADS link, DOI, etc...).
+    </p>
+
+    <h2>How to add my datasets to CompARE</h2>
+        <p>
+            At the moment, only admins can add entries to CompARE. Please <a href="{% url 'info' %}">contact us</a>.
+            Ideally, your data sets are publicly available such that we can also reference the DOI of the data sets
+            (e.g., via Zenodo).
+        </p>
+</div>
+
 
 {% endblock %}
