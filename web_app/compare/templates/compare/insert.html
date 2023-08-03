@@ -18,32 +18,31 @@ Add
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="file" name="myfile">
+        <input type="file" name="myfile" style="TEST">
         <button type="submit">Send</button>
     </form>
     <div class="nscontent">
         <hr>
         <div class="formfilename">
-            <label>File Name</label>
+            <label><u>File name</u></label><br>
             <input type="text" name="filename" placeholder="File Name" id="filename" maxlength="100" minlength="5">
         </div>
         <div class="formfilepath">
-            <label>FilePath</label>
-            <textarea name="filepath" placeholder="File Path"id="filepath"></textarea>
+            <label>File path</label><br>
+            <input type="text" name="filepath" placeholder="File Path" id="filepath" maxlength="512" minlength="5">
         </div>
     </div>
-
     <div class="namecontent">
         <div class="nameselect">
             <div class="divslct">
                 <select name="name" id="nList"  onchange="changeFuncName(value)">
-                    <option value="opt">select a Name</option>
+                    <option value="opt">Select an existing source</option>
                     {% for n in queryname %}
                         <option value="{{n.id_name}}">{{n.namedb }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="table-select">
+            <div class="table-source">
                 <table>
                     <thead>
                         <tr>
@@ -54,7 +53,7 @@ Add
                             <th>RA</th>
                             <th>DEC</th>
                             <th>Localisation File</th>
-                            <th>Eventdate</th>
+                            <th>Event date</th>
                         </tr>
                     </thead>
                     <tbody id="nameTable"> </tbody>
@@ -63,7 +62,8 @@ Add
         </div>
         
         <div class="btnadd">
-            <button onclick="showHide(this)" class="addN" >ADD Name</button>
+            <label><u>Create a new source</u></label><br>
+            <button onclick="showHide(this)" class="addN" >New source</button>
             <div id="addN">
                 <div class="nameadd">
                     <form action='' id="test" method="POST">
@@ -99,7 +99,7 @@ Add
                             </div>
                             <div class="divsepar">
                                 <label>Localisation File</label>
-                                <textarea name="localisationfile" placeholder="Localisation File"></textarea>
+                                <input type="text" name="localisationfile" placeholder="Localisation File" id="localisationfile" maxlength="512" minlength="5">
                             </div>
                             <div class="divsepar">
                                 <label>Event Date</label>
@@ -108,7 +108,7 @@ Add
                             <input type="hidden" name="hid" value="formAddName">
                         </div>
 
-                        <button type="submit">Send</button>
+                        <button type="submit">Create</button>
 
                     </form>
                 </div>
@@ -119,7 +119,7 @@ Add
     <hr>
 
     <div class="methodcontent">
-        <p>Method</p>
+        <label><u>Measurement method</u></label><br>
 
         <div id="addM">
             <form action='' id="test" method="POST">
@@ -144,8 +144,7 @@ Add
     <hr>
    
     <div class="constraincontent">
-        <p>Constrain</p>
-       
+        <label><u>Constrain</u></label><br>
         <div id="addC">
             <form action='' id="test" method="POST">
                 {% csrf_token %}
@@ -171,27 +170,31 @@ Add
     <hr>
 
     <div class="refcontent">
-        <p>Ref</p>
+        <label><u>Reference</u></label><br>
         <select name="ref" id="rList" onchange="changeFuncRef(value)">
-            <option value="opt">select a Ref</option>
+            <option value="opt">Selected an existing reference</option>
             {% for qr in queryref %}
                 <option value="{{qr.id_ref}}">{{qr.author}} | {{qr.refyear}}</option>
             {% endfor %}
         </select>
-        <table>
-            <thead>
-                <tr>
-                    <th>Author</th>
-                    <th>Ref Year</th>
-                    <th>Short</th>
-                    <th>Repository DOI</th>
-                    <th>Data Link</th>
-                </tr>
-            </thead>
-            <tbody id="refTable"> </tbody>
-        </table>
-        <button onclick="showHide(this)" class="addR">ADD Ref</button>
-        <div id="addR">
+        <div class="table-reference">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Ref Year</th>
+                        <th>Short</th>
+                        <th>Repository DOI</th>
+                        <th>Data Link</th>
+                    </tr>
+                </thead>
+                <tbody id="refTable"> </tbody>
+            </table>
+        </div>
+
+        <label><u>Create a new reference</u></label><br>
+        <button onclick="showHide(this)" class="addR">New reference</button>
+        <div class='inputadd' id="addR">
             <form action='' id="test" method="POST">
                 {% csrf_token %}
                 <label>Author</label>
@@ -199,11 +202,12 @@ Add
                 <label>Ref Year</label>
                 <input type="number" name="refyear" placeholder="Ref Year">
                 <label>Short</label>
-                <input type="text" name="short" placeholder="Short">
+                <input type="text" name="short" placeholder="Short ADS">
                 <label>Bibtex</label>
                 <textarea name="bibtex" placeholder="bibtex"></textarea>
                 <label>Doi</label>
-                <textarea name="doi" placeholder="Doi"></textarea>
+<!--                <textarea name="doi" placeholder="doi"></textarea>-->
+                <input type="text" name="doi" placeholder="DOI">
                 <label>Repository Doi</label>
                 <input type="text" name="repositorydoi" placeholder="Repository Doi">
                 <label>Data Link</label>
@@ -217,60 +221,73 @@ Add
     <hr>
     
     <div class="modelcontent">
-        <p>Dependencies</p>
-       
+        <label><u>Model dependencies</u></label><br>
         <div id="addMo">
-                <label>Dependencies Primary</label>
-                <input type="text" name="dependenciesprimary" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5">
-                <label>Dependencies Secondary</label>
-                <input type="text" name="dependenciessecondary" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5">
-                <label>Dependecies Description</label>
-                <textarea name="dependeciesdescription" id="dependeciesdescription" placeholder="Dependecies Description"></textarea>
-                <label>Caveats References</label>
-                <textarea name="MocaveatsReferences" id="MocaveatsReferences" placeholder="Caveats References"></textarea>
-                <input type="hidden" name="hid" value="formAddModel">
-                <button onclick="inTableMod()">Send</button>
-                <button onclick="returndep()" class="addC" >Return</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Dependencies Primary</th>
-                        <th>Dependencies Secondary</th>
-                        <th>Dependecies Descriptionn</th>
-                        <th>Caveats References</th>
-                    </tr>
-                </thead>
-                <tbody id="modelTable"> </tbody>
-            </table>
+            <label>Dependencies Primary</label>
+            <input type="text" name="dependenciesprimary" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5">
+            <label>Dependencies Secondary</label>
+            <input type="text" name="dependenciessecondary" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5">
+            <label>Dependecies Description</label>
+            <textarea name="dependenciesdescription" id="dependenciesdescription" placeholder="Dependencies Description"></textarea>
+            <label>Dependencies References</label>
+            <textarea name="dependenciesreferences" id="dependenciesreferences" placeholder="Dependencies References"></textarea>
+            <input type="hidden" name="hiddep" value="formAddModel">
+            <button onclick="inTableMod()">Add</button>
+            <button onclick="returndep()" class="addMo">Remove</button>
+            <div class="table-modeldep">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dependencies Primary</th>
+                            <th>Dependencies Secondary</th>
+                            <th>Dependencies Description</th>
+                            <th>Dependencies References</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modelTable"> </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <hr>
 
     <div class="asscontent">
-        <p>Assumptions</p>
+        <label><u>Assumptions</u></label><br>
         <div id="addA">
-                <label>Assumptions Primary</label>
-                <input type="text" name="assumptionsprimary" id="assumptionsprimary" placeholder="Assumptions Primary" maxlength="60" minlength="5">
-                <label>Assumptions Secondary</label>
-                <input type="text" name="assumptionssecondary" id="assumptionssecondary" placeholder="Assumptions Secondary" maxlength="60" minlength="5">
-                <label>Assumptions Description</label>
-                <textarea name="assumptionsdescription"  id="assumptionsdescription" placeholder="Assumptions Description"></textarea>
-                <input type="hidden" name="hid" value="formAddAssumptions">
-                <button onclick="inTableAss()">Send</button>
-                <button onclick="returnass()" class="addA" >Return</button>
+            <label>Assumptions Primary</label>
+            <input type="text" name="assumptionsprimary" id="assumptionsprimary" placeholder="Assumptions Primary" maxlength="60" minlength="5">
+            <label>Assumptions Secondary</label>
+            <input type="text" name="assumptionssecondary" id="assumptionssecondary" placeholder="Assumptions Secondary" maxlength="60" minlength="5">
+            <label>Assumptions Description</label>
+            <textarea name="assumptionsdescription"  id="assumptionsdescription" placeholder="Assumptions Description"></textarea>
+            <label>Assumptions References</label>
+            <textarea name="assumptionsreferences" id="assumptionsreferences" placeholder="Assumptions References"></textarea>
+            <input type="hidden" name="hidass" value="formAddAssumptions">
+            <button onclick="inTableAss()">Add</button>
+            <button onclick="returnass()" class="addA" >Remove</button>
+            <div class="table-modeldep">
                 <table>
                     <thead>
                         <tr>
                             <th>Assumptions Primary</th>
                             <th>Assumptions Secondary</th>
                             <th>Assumptions Description</th>
+                            <th>Assumptions References</th>
                         </tr>
                     </thead>
                     <tbody id="assumptionTable"> </tbody>
                 </table>
+            </div>
         </div>
-        <button type="submit" onclick="createNs()">Validate</button>
+
+    </div>
+
+    <hr>
+
+    <div>
+    When done, click here:
+    <button type="submit" onclick="createNs()">Validate</button>
     </div>
 </div>
 {% endblock %}

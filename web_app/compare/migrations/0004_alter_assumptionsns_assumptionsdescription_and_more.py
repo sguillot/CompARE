@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='modelns',
-            name='dependeciesdescription',
-            field=models.TextField(blank=True, db_column='DependeciesDescription', null=True),
+            name='dependenciesdescription',
+            field=models.TextField(blank=True, db_column='DependenciesDescription', null=True),
         ),
     ]

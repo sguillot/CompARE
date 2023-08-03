@@ -4,6 +4,8 @@ Visu_data
 {% endblock %}
 {% block content %}
 
+{% load static %}
+
 <div class="visu">
 
 <div class="side_menu">
@@ -64,7 +66,7 @@ Visu_data
 
             <div class="search">
                 <input type="text" id="Search" name="Search" placeholder="Search">
-                <input type="image" id="btn" src="..\static\compare\search.svg" onclick="searchFilter()">
+                <input type="image" id="btn" src="{% static 'compare/search.svg' %}" onclick="searchFilter()">
             </div>
 
             <div class="button">
@@ -149,28 +151,28 @@ Visu_data
         <table>
             <thead>
                 <tr>
-                    <th>More</th>
-                    <th>Namedb</th>
-                    <th>Classdb</th>
+                    <th>More info</th>
+                    <th>Source name</th>
+                    <th>Database Class</th>
                     <th>Method</th>
-                    <th>Method Specific</th>
-                    <th>Constrain Type</th>
-                    <th>Constrain Version</th>
-                    <th>Constrain Variable</th>
-                    <th>Dependencies</th>
-                    <th>Assumptions</th>
+                    <th>Method details</th>
+                    <th>Constraint Type</th>
+                    <th>Constraint Version</th>
+                    <th>Constraint Variable</th>
+                    <th>Model dependencies</th>
+                    <th>Analysis assumptions</th>
                     <th>Reference</th>
                     <th>Download</th>
-                    <th><img src="../static/compare/check.svg" onclick="selectall()"><img src="../static/compare/square.svg" onclick="unselectall()"></th>
+                    <th><img src="{% static 'compare/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/square.svg' %}" onclick="unselectall()"></th>
                 </tr>
             </thead>
 
-            <tbody id="secondTable"> </tbody>
+            <tbody id="secondTable"></tbody>
 
             <tbody id="firstTable">
                 {% for q , m , a in queryall %}
                 <tr>
-                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="../static/compare/plus.svg" alt="icon more" width=30em /></a></td>
+                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/plus.svg' %}" alt="icon more" width=30em /></a></td>
                     <td>{{ q.id_name.namedb }}</td>
                     <td>{{ q.id_name.classdb }}</td>
                     <td>{{ q.id_method.method }}</td>
@@ -179,18 +181,17 @@ Visu_data
                     <td>{{ q.id_constrain.constrainversion }}</td>
                     <td>{{ q.id_constrain.constrainvariable }}</td>
                     <td>
-                        {% for mm in m %}
-                            <li>{{mm}}</li>
+                        {% for mprim, msec in m %}
+                            <li><u>{{mprim}}</u>: {{msec}}</li>
                         {% endfor %}
                     </td>
-
                     <td>
-                        {% for aa in a %}
-                            <li>{{aa}}</li>
+                        {% for aprim, asec in a %}
+                            <li><u>{{aprim}}</u>: {{asec}}</li>
                         {% endfor %} 
                     </td>
                     <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
-                    <td> <a href='{{q.filepath}}' download="{{q.filepath}}"><img src="../static/compare/download.svg" alt="icon download" width=30em /></a></td>
+                    <td> <a href='{{q.filepath}}' download="{{q.filepath}}"><img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em /></a></td>
 
                     <td><input type="checkbox" value='{{q.filename}}' class="dwnl" name="che"></td> 
                 </tr>

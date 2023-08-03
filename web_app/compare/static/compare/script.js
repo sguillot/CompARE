@@ -5,7 +5,7 @@
   We get all filter 
   We call the AjaxRequest function 
   */
-   $(document).ready(function(){
+$(document).ready(function(){
     var checkList = []
     $(document).on("click", 'input.check[type="checkbox"]', function(){
       var value = $(this).val();
@@ -132,7 +132,7 @@ function bibtexFile(){
 
 
 /* 
-when user click on the loop
+when user click on the magnifier
 Select all filter
 We call the ajaxRequest function
 */
@@ -157,15 +157,15 @@ function ajaxRequest(checkList , select , search){
           dataSearch:stringSearch,
           dataSelect:jsonSelect},
     success: function(data) {
-      $("#firstTable tr").remove() 
-      $("#secondTable tr").remove() 
+      $("#firstTable tr").remove()
+      $("#secondTable tr").remove()
 
       let table = document.getElementById("secondTable")
       data.forEach(d => {
         let row  = table.insertRow()
 
         let more = row.insertCell(0)
-        more.innerHTML = "<a href=detail/"+d.filename+" target='_blank'><img src='../static/compare/plus.svg' alt='icon more' width='30em' /></a>"
+        more.innerHTML = "<a href=detail/"+d.filename+" target='_blank'><img src='{% static \"compare/plus.svg\" %}' alt='icon more' width='30em' /></a>"
 
         let name = row.insertCell(1)
         name.innerHTML = d.namedb
@@ -190,24 +190,25 @@ function ajaxRequest(checkList , select , search){
 
         let model = row.insertCell(8)
         if (typeof d.model !== 'undefined') {
-          d.model.forEach(mod => {
-          model.insertAdjacentHTML("beforeend","<li>"+ mod +"</li>");
+          d.model.forEach(mod_text => {
+          model.insertAdjacentHTML("beforeend",mod_text);
         });
         }
          
         
         let assump = row.insertCell(9)
         if (typeof d.assumptions !== 'undefined') {
-          d.assumptions.forEach(ass => {
-            assump.insertAdjacentHTML("beforeend", "<li>"+ ass +"</li>");
+          d.assumptions.forEach(ass_text => {
+            // assump.insertAdjacentHTML("beforeend", "<li><u>"+ass1+"</u>: "+ass2+"</li>");
+            assump.insertAdjacentHTML("beforeend", ass_text);
           });
         }
 
         let ref = row.insertCell(10)
-        ref.innerHTML = "<a href="+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
+        ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
 
         let download = row.insertCell(11)
-        download.innerHTML = "<a href="+ d.filpath+" download> <img src='../static/compare/download.svg' alt='icon download' width='30em' /></a>"
+        download.innerHTML = "<a href="+ d.filpath+" download> <img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
         
         let checkdo = row.insertCell(12)
         checkdo.innerHTML = "<td><input type='checkbox' value="+ d.filename+" class='dwnl' name='che'> </td>"
@@ -240,11 +241,6 @@ function unselectall(){
     tabcheck[i].checked = false;
   }
 }
-
-
-
-
-
 
 
 //details
@@ -292,4 +288,3 @@ function enable(id) {
     inp[index].disabled = false 
   }
 }
-

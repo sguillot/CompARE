@@ -3,20 +3,23 @@
 Modify
 {% endblock %}
 {% block content %}
-
+{% load static %}
 {% if messages %}
     {% for m in messages %}
         <div class="error">{{m}}</div>
     {%endfor%}
 {% endif %}
+
 <div id="errorInsert">
     <p id='test'></p>
 </div>
-<h1>{{queryall.filename}}</h1>
+
+
 <div class="modify-page">
+    <h1><u>{{queryall.id_name.namedb}}</u>:  {{queryall.filename}}</h1>
     <div class="modify-name">
-        <p>Name:</p>
-        <input type="image" class="enable-name" src="..\..\..\static\compare\pencil.svg" onclick="enable(this)">
+        <h3>Name:</h3>
+        <p>click to edit&nbsp;<input type="image" class="enable-name" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-name">
             <form method="post">
                 {% csrf_token %}
@@ -42,24 +45,27 @@ Modify
             </form>
         </div>
         <div class="info-name">
-            <p>Other File linked to this Name :</p>
+            <p><i>Other file(s) linked to this Name</i>:</p>
+                {% if queryName.count < 2 %}
+                    <p>&emsp;None</p>
+                {% endif %}
             <ul>
                 {%for qn in queryName %}
                     {% if qn.filename != queryall.filename %}
                     <li>
                         <a href="{% url 'detail' qn.filename %}" target="_blank">{{qn.filename}}</a>
                     </li>
+
                     {% endif %}
                 {% endfor %}
             </ul>
 
         </div>
-        
     </div>
     <hr>
     <div class="modify-ref">
-        <p>Ref:</p>
-        <input type="image" class="enable-ref" src="..\..\..\static\compare\pencil.svg" onclick="enable(this)">
+        <h3>Reference:</h3>
+        <p>click to edit&nbsp;<input type="image" class="enable-ref" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-ref">
             <form method="post">
                 {% csrf_token %}
@@ -83,7 +89,10 @@ Modify
             </form>
         </div>
         <div class="info-ref">
-            <p>Other File linked to this Ref :</p>
+            <p><i>Other file(s) linked to this Reference</i>:</p>
+                {% if queryRef.count < 2 %}
+                    <p>&emsp;None</p>
+                {% endif %}
             <ul>
                 {%for qr in queryRef %}
                     {% if qr.filename != queryall.filename %}
@@ -99,8 +108,8 @@ Modify
     </div>
     <hr>
     <div class="modify-method">
-        <p>Method:</p>
-        <input type="image" class="enable-method" src="..\..\..\static\compare\pencil.svg" onclick="enable(this)">
+        <h3>Method:</h3>
+        <p>click to edit&nbsp;<input type="image" class="enable-method" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-method">
             <form method="post">
                 {% csrf_token %}
@@ -127,7 +136,10 @@ Modify
             
         </div>
         <div class="info-method">
-            <p> Other File linked to this Method :</p>
+            <p><i>Other file(s) linked to this Method</i>:</p>
+                {% if queryMethod.count < 2 %}
+                    <p>&emsp;None</p>
+                {% endif %}
             <ul>
                 {%for qm in queryMethod %}
                     {% if qm.filename != queryall.filename %}
@@ -142,8 +154,8 @@ Modify
     </div>
     <hr>
     <div class="modify-constrain">
-        <p>Constrain:</p>
-        <input type="image" class="enable-constrain" src="..\..\..\static\compare\pencil.svg" onclick="enable(this)">
+        <h3>Constrain:</h3>
+        <p>click to edit&nbsp;<input type="image" class="enable-constrain" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-constrain">
             <form method="post">
                 {% csrf_token %}
@@ -173,13 +185,15 @@ Modify
                 <!--<input type="text" name="constrainT" class="enable-constrain" value="{{queryall.id_constrain.constraintype}}" placeholder="{{queryall.id_constrain.constraintype}}" disabled>-->
                 <!--<input type="text" name="constrainVar" class="enable-constrain" value="{{queryall.id_constrain.constrainvariable}}" placeholder="{{queryall.id_constrain.constrainvariable}}" disabled>-->
                 <input type="hidden" name="constrain">
-                <input type="submit" class="enable-constrain" name="update" class="enable-method" value="Update" disabled>
-                <input type="submit" class="enable-constrain" name="add" class="enable-method" value="Add a new Ref" disabled>
-
+                <input type="submit" name="update" class="enable-constrain" value="Update" disabled>
+                <input type="submit" name="add" class="enable-constrain" value="Add a new Ref" disabled>
             </form>
         </div>
         <div class="info-constrain">
-            <p>Other File linked to this Constrain :</p>
+            <p><i>Other file(s) linked to this Constrain</i>:</p>
+                {% if queryConstrain.count < 2 %}
+                    <p>&emsp;None</p>
+                {% endif %}
             <ul>
                 {%for qc in queryConstrain %}
                     {% if qc.filename != queryall.filename %}
@@ -189,48 +203,45 @@ Modify
                     {% endif %}
                 {% endfor %}
             </ul>
-            
         </div>
 
     </div>
     <hr>
     <div class="modify-model">
-        <p>Model:</p>
+        <h3>Model dependencies:</h3>
         <div class="form-model"> 
             {%for qmo in queryModel %}
                 {%for i in qmo %}
-                    <input type="image" class="method{{i.id_model}}" src="..\..\..\static\compare\pencil.svg" onclick="enable(this)">
+                    <p>Click to edit&nbsp;<input type="image" class="method{{i.id_model}}" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
                     <div class="form-constrain">
                         <form method="post">
-                    
                             {% csrf_token %}
-                            <label>Dependencies Primary</label>
+                            <label>Dependency Primary</label>
                             <input type="text" name="dependenciesprimary" class="method{{i.id_model}}" value="{{i.dependenciesprimary}}" placeholder="{{i.dependenciesprimary}}" disabled>
-                            <label>Dependencies Secondary</label>
+                            <label>Dependency Secondary</label>
                             <input type="text" name="dependenciessecondary" class="method{{i.id_model}}" value="{{i.dependenciessecondary}}" placeholder="{{i.dependenciessecondary}}" disabled>
-                            <label>Dependecies Description</label>
-                            <textarea name="dependeciesdescription" class="method{{i.id_model}}" placeholder="{{i.dependeciesdescription}}" disabled>{{i.dependeciesdescription}}</textarea>
-                            <label>Caveats References</label>
-                            <textarea name="MocaveatsReferences" class="method{{i.id_model}}" placeholder="{{i.caveatsReferences}}" disabled>{{i.caveatsReferences}}</textarea>
+                            <label>Dependency Description</label>
+                            <textarea name="dependenciesdescription" class="method{{i.id_model}}" placeholder="{{i.dependenciesdescription}}" disabled>{{i.dependenciesdescription}}</textarea>
+                            <label>Dependency References</label>
+                            <textarea name="dependenciesreferences" class="method{{i.id_model}}" placeholder="{{i.dependenciesreferences}}" disabled>{{i.dependenciesreferences}}</textarea>
                             <input type="hidden" name="model" value="{{i.id_model}}">
                             <input type="submit" class="method{{i.id_model}}" name="update" value="Update" disabled>
                             <input type="submit" class="method{{i.id_model}}" name="add"  value="Add a new Model" disabled>
                         </form>
                         <div class="info-model">
-                            <p>Other File linked to this Model :</p>
+                            <p><i>Other file(s) linked to this model dependency</i>:</p>
                             {% for qmolK , qmolV in queryModellinked.items %}
                                 {% if qmolK == i.id_model %}
                                     <ul>
                                         {% for cle in qmolV %}
                                             <li> 
-                                                <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}} / </a>
+                                                <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}}</a><br>
                                             </li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        
                     </div>
                 {% endfor %}
             {% endfor %}  
@@ -240,33 +251,34 @@ Modify
     </div>
     <hr>
     <div class="modify-assumptions">
-        <p>Assumptions:</p>
+        <h3>Assumptions:</h3>
         <div class="form-assumptions">
             {%for qass in queryAssumption %}
                 {%for j in qass %}
-                    <input type="image" class="assumption{{j.id_assumptions}}" src="..\..\..\static\compare\pencil.svg" onclick="enable(this)">
+                    <p>Click to edit&nbsp;<input type="image" class="assumption{{j.id_assumptions}}" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
                     <div class="form-constrain">
                         <form method="post">
-                    
                             {% csrf_token %}
-                            <label>Assumptions Primary</label>
+                            <label>Assumption Primary</label>
                             <input type="text" name="assumptionsprimary" class="assumption{{j.id_assumptions}}" value="{{j.assumptionsprimary}}" placeholder="{{j.assumptionsprimary}}" disabled>
-                            <label>Assumptions Secondary</label>
+                            <label>Assumption Secondary</label>
                             <input type="text" name="assumptionssecondary" class="assumption{{j.id_assumptions}}" value="{{j.assumptionssecondary}}" placeholder="{{j.assumptionssecondary}}" disabled>
-                            <label>Assumptions Description</label>
+                            <label>Assumption Description</label>
                             <textarea name="assumptionsdescription" class="assumption{{j.id_assumptions}}" placeholder="{{j.assumptionsdescription}}" disabled>{{j.assumptionsdescription}}</textarea>
+                            <label>Assumption References</label>
+                            <textarea name="assumptionsreferences" class="assumption{{j.id_assumptions}}" placeholder="{{j.assumptionsreferences}}" disabled>{{j.assumptionsreferences}}</textarea>
                             <input type="hidden" name="assumption" value="{{j.id_assumptions}}">
                             <input type="submit" class="assumption{{j.id_assumptions}}" name="update" value="Update" disabled>
                             <input type="submit" class="assumption{{j.id_assumptions}}" name="add"  value="Add a new Model" disabled>
                         </form>
                         <div class="info-assumptions">
-                            <p>Other File linked to this Assumption :</p>
+                            <p><i>Other file(s) linked to this assumption</i>:</p>
                             {% for qassK , qassV in queryAssumptionlinked.items %}
                                 {% if qassK == j.id_assumptions %}
                                     <ul>
                                         {% for cle in qassV %}
                                             <li>
-                                                <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}} / </a>
+                                                <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}}</a><br>
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -275,13 +287,10 @@ Modify
                         </div>
                     </div>
                 {% endfor %}
-            {% endfor %}  
-            
+            {% endfor %}
         </div>
-       
-            
-        </div>
-
     </div>
 </div>
+
+
 {% endblock %}

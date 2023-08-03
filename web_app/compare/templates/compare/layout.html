@@ -12,17 +12,19 @@
 </head>
 
 <body>
+
 <div class="navbar">
-    <a href="{% url 'visu' %}" class="navbar-Compare">CompARE</a>
-    <a href="{% url 'visu' %}" class="navbar-brand">Visu</a>
-    <a href="{% url 'insert' %}" class="navbar-brand">Add </a>
-    <a href="{% url 'info' %}" class="navbar-brand">Info</a>
+    <a href="{% url 'home' %}" class="navbar-Compare"><img src="{% static 'compare/logo.png' %}" width=300em ></a>
+    <a href="{% url 'home' %}" class="navbar-brand">Home page</a>
+    <a href="{% url 'visu' %}" class="navbar-brand">Data table</a>
+    <a href="{% url 'insert' %}" class="navbar-brand">Add entry</a>
+    <a href="{% url 'info' %}" class="navbar-brand">More info</a>
     {% if user.is_authenticated %}
-        <a href= "{% url 'logout' %}" class="navbar-brand">{{ user.get_username }} Logout </a>
+        <span>Welcome {{ user.get_username }} &emsp;
+            <a href= "{% url 'logout' %}" class="navbar-brand">Logout</a></span>
     {% else %}
-        <a href="{% url 'login' %}" class="navbar-brand">Login </a>
+        <a href="{% url 'login' %}" class="navbar-brand">Login</a>
     {% endif %}
-    
 </div>
 
 <div class="body-content">
