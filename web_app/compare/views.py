@@ -842,15 +842,15 @@ def insert_data(request):
                            "PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"]
 
                 #we get the enum types in lists
-                me =[]
+                me = []
                 for m in MethodNs.method.field.choices:
                     me.append(m[0])
 
-                ct =[]
+                ct = []
                 for c in ConstrainNs.constraintype.field.choices:
                     ct.append(c[0])
 
-                cv =[]
+                cv = []
                 for v in ConstrainNs.constrainvariable.field.choices:
                     cv.append(v[0])
 
@@ -858,10 +858,10 @@ def insert_data(request):
                 inserted = []
                 not_inserted = {}
 
-                #for each row of the dataframe
-                for i in range(1,len(d)+1):
+                # Loop on all rows of the Panda DataFrame
+                for i in range(1, len(d)+1):
 
-                    #we put in list the models and assumptions
+                    # Model dependencies and assumptions are places in lists
                     filename = d['FileName'][i]
 
                     listmo = d['ModelDependenciesPrimary'][i].split(",")
@@ -870,12 +870,12 @@ def insert_data(request):
 
                     listmodesc = d['ModelDependencyDescription'][i].split("\n")
                     listmodesc = [i for i in listmodesc if i]
-                    if (len(listmodesc)==0):
+                    if len(listmodesc) == 0:
                         listmodesc = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     listmodepref = d['ModelDependencyReferences'][i].split("\n")
                     listmodepref = [i for i in listmodepref if i]
-                    if (len(listmodepref)==0):
+                    if len(listmodepref) == 0:
                         listmodepref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     listass = d['AssumptionsPrimary'][i].split(",")
@@ -884,12 +884,12 @@ def insert_data(request):
 
                     listassdesc = d['AssumptionsDescription'][i].split("\n")
                     listassdesc = [i for i in listassdesc if i]
-                    if (len(listassdesc)==0):
+                    if len(listassdesc) == 0:
                         listassdesc = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     listassref = d['AssumptionsReferences'][i].split("\n")
                     listassref = [i for i in listassref if i]
-                    if (len(listassref)==0):
+                    if len(listassref) == 0:
                         listassref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
                     # Check if the filename exists
@@ -897,33 +897,24 @@ def insert_data(request):
                         not_inserted[filename] = "already in"
                         continue
 
-                    # Check the non null field
+                    # Check the non-null field
                     elif ((len(d['NameDB'][i]) <= 0 or
                            len(d['ClassDB'][i]) <= 0 or
                            len(d['Method'][i]) <= 0) or
                           (len(d['MethodSpecific'][i]) <= 0) or
-                          (len(d['DataDate'][i]) <=0 ) or
+                          (len(d['DataDate'][i]) <= 0) or
                           (len(d['ProcessingInfo'][i]) <= 0) or
                           (len(d['ConstrainVariable'][i]) <= 0) or
                           (len(d['ConstrainType'][i]) <= 0) or
                           (len(d['Ref1stAuthor'][i]) <= 0) or
-                          (len(d['RefYear'][i]) <=0 ) or
-                          (len(d['RefShort'][i]) <=0 ) or
-                          #(len(d['RefBibtex'][i])<=0) or
-                          (len(d['RefDOI'][i]) <=0 )):
+                          (len(d['RefYear'][i]) <= 0) or
+                          (len(d['RefShort'][i]) <= 0) or
+                          # (len(d['RefBibtex'][i])<=0) or
+                          (len(d['RefDOI'][i]) <=0)):
                         not_inserted[filename] = "missing mandatory elements"
                         continue
 
-                    #more verifications
-
-                    #elif( (len(d['AssumptionsPrimary'][i])<=0) and (len(d['AssumptionsSecondary'][i])<=0) and (len(d['AssumptionsDescription'][i])<=0)):
-                    #     notinserted[filename] = " assumptions have to have minimum one field "
-                    #     continue
-                    #
-                    # elif((len(d['ModelDependenciesPrimary'][i])<=0) and (len(d['ModelDependenciesSecondary'][i])<=0) and (len(d['ModelDependencyDescription'][i])<=0)):
-                    #     notinserted[filename] = " model have to have minimum one field"
-                    #     continue
-
+                    # Various verifications...
                     elif((len(listmo) != len(listmosec)) or
                          (len(listmo) != len(listmodesc)) or
                          (len(listmo) != len(listmodepref))):
