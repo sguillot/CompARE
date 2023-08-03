@@ -272,16 +272,18 @@ def visu_data(request):
 def detail(request, id):
     if request.method == 'POST':
         filename = json.loads(request.POST.get('filename'))
-        file = Ns.objects.get(filename = filename)
+        file = Ns.objects.get(filename=filename)
 
         fichierlog = open('web_app\compare\static\compare\log.txt', "a")
-        wri = ['Delete:\n','User:',str(request.user.get_username())+'\n','Date:',str(datetime.datetime.now())+'\n','Content:',str(file)+'\n\n']
+        wri = ['Delete:\n', 'User:', str(request.user.get_username())+'\n',
+               'Date:', str(datetime.datetime.now())+'\n', 'Content:', str(file)+'\n\n']
         fichierlog.writelines(wri)
         fichierlog.close()
 
         file.delete()
 
-        truc='yes'
+        # TODO: rename "truc"
+        truc = 'yes'
         return HttpResponse(json.dumps(truc), content_type='application/json',)
 
     #We recup all the data(ref ,constrain ,name ,method ) linked to the id(filename) of the NS in a query set
@@ -310,59 +312,45 @@ def detail(request, id):
         else:
             ass.id_assumptions.reflist = None
 
-    #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template
+    # We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template
     select = {"queryall": ns_list,
               "queryMo": ns_Mo,
               "queryAs": ns_As}
     return render(request, 'compare/detail.html', select)
 
 @login_required
-def modify(request,id):
+def modify(request, id):
 
-    ns_list = Ns.objects.select_related().get(filename = id)
+    ns_list = Ns.objects.select_related().get(filename=id)
 
-    #We recup all the Models linked to the id(filename) of the NS
-    ns_Mo = NsToModel.objects.select_related('id_model').filter(filename = id)
+    # We retrieve all the info related to the id(filename) of the NS
+    ns_Mo = NsToModel.objects.select_related('id_model').filter(filename=id)
+    ns_As = NsToAssumptions.objects.select_related('id_assumptions').filter(filename=id)
+    name_file = Ns.objects.filter(id_name=ns_list.id_name)
+    ref_file = Ns.objects.filter(id_ref=ns_list.id_ref)
+    method_file = Ns.objects.filter(id_method=ns_list.id_method)
+    constrain_file = Ns.objects.filter(id_constrain=ns_list.id_constrain)
 
-    #We recup all the Assumptions linked to the id(filename) of the NS
-    ns_As = NsToAssumptions.objects.select_related('id_assumptions').filter(filename = id)
-
-    #We recup the Name linked to the id(filename) of the NS
-    name_file = Ns.objects.filter(id_name = ns_list.id_name)
-
-    #We recup the Ref linked to the id(filename) of the NS
-    ref_file = Ns.objects.filter(id_ref = ns_list.id_ref)
-
-    #We recup the method linked to the id(filename) of the NS
-    method_file = Ns.objects.filter(id_method = ns_list.id_method)
-
-    #We recup the constrain linked to the id(filename) of the NS
-    constrain_file = Ns.objects.filter(id_constrain = ns_list.id_constrain)
-
-    #We put in a list the filenames linked to this Model
+    # We put in lists the filenames linked to this Model dependency and ti this assumption
     molist = []
-    for mo in ns_Mo:
-        molist.append(ModelNs.objects.filter(id_model = mo.id_model.id_model))
-
-    filemo = {}
-    for m in molist:
-        for i in m:
-            filemo[i.id_model]=NsToModel.objects.filter(id_model = i.id_model)
-
-    #We put in a list the filenames linked to this assumptions
     asslist = []
+    for mo in ns_Mo:
+        molist.append(ModelNs.objects.filter(id_model=mo.id_model.id_model))
     for ass in ns_As:
         asslist.append(AssumptionsNs.objects.filter(id_assumptions = ass.id_assumptions.id_assumptions))
 
+    filemo = {}
     fileass = {}
+    for m in molist:
+        for i in m:
+            filemo[i.id_model]=NsToModel.objects.filter(id_model=i.id_model)
     for a in asslist:
         for j in a:
             fileass[j.id_assumptions]=NsToAssumptions.objects.filter(id_assumptions = j.id_assumptions)
 
-
-    #We get the value off the method enum in a list
+    # We get the value off the method enum in a list
     methodoptions = MethodNs.method.field.choices
-    listmethod =[]
+    listmethod = []
     for mo in methodoptions:
         listmethod.append(mo[0])
 
@@ -374,9 +362,10 @@ def modify(request,id):
 
     #We get the value off the constrain variable enum in a list
     constrainvar = ConstrainNs.constrainvariable.field.choices
-    listconstrainvar =[]
+    listconstrainvar = []
     for cov in constrainvar:
         listconstrainvar.append(cov[0])
+
 
     #We check for Post request
     if request.method == 'POST':
@@ -444,12 +433,16 @@ def modify(request,id):
                 #if the user clic on the add button
                 elif 'add' in request.POST:
                     #We check if the name alreday exist  and linked it if its the case
-                    if (NameNs.objects.filter(namedb=name,classdb=classNs,namesimbad=nameSin,classsimbad=classSin,ra=ra,declination=dec,localisationfile=loc)):
-                        nameExist =NameNs.objects.filter(namedb=name,classdb=classNs,namesimbad=nameSin,classsimbad=classSin,ra=ra,declination=dec,localisationfile=loc)
-                        nameExist= nameExist[0]
+                    if (NameNs.objects.filter(namedb=name, classdb=classNs,
+                                              namesimbad=nameSin, classsimbad=classSin,
+                                              ra=ra,declination=dec,localisationfile=loc)):
+                        nameExist =NameNs.objects.filter(namedb=name, classdb=classNs,
+                                                         namesimbad=nameSin, classsimbad=classSin,
+                                                         ra=ra, declination=dec, localisationfile=loc)
+                        nameExist = nameExist[0]
                         ns_list.id_name = nameExist
                         ns_list.save()
-                        messages.success(request,"jajajaja")
+                        messages.success(request, "jajajaja")
                     #we add the name
                     else:
                         nameAdd = NameNs(namedb=name, classdb=classNs, namesimbad=nameSin, classsimbad=classSin, ra=ra, declination=dec, localisationfile=loc, eventdate=event)
@@ -590,7 +583,7 @@ def modify(request,id):
 
             constrainVar = request.POST.get('constrainVar')
 
-            if len(constrainT)<= 0 or len(constrainV)<=0 or len(constrainVar)<=0:
+            if len(constrainT) <= 0 or len(constrainV) <=0 or len(constrainVar) <=0:
                 messages.error(request,"L'insertion de Cons n'est pas correct")
             else:
                 if 'update' in request.POST:
@@ -752,25 +745,25 @@ def modify(request,id):
                     fichierlog.writelines(wri)
                     fichierlog.close()
 
-            return redirect('modify',id)
+            return redirect('modify', id)
 
     #We put in a dictionary the querysets with a key . The keys will allow us to display the data of the queryset in the template modify.html
-    select = {"queryall":ns_list,
-                 "queryMo":ns_Mo,
-                 "queryAs":ns_As,
-                 "queryName":name_file,
-                 "queryRef":ref_file,
-                 "queryMethod":method_file,
-                 "queryConstrain":constrain_file,
-                 "queryModel":molist,
-                 "queryAssumption":asslist,
-                 "queryModellinked":filemo,
-                 "queryAssumptionlinked":fileass,
-                 'listmethod':listmethod,
-                 'listconstrain':listconstrain,
-                 'listconstrainvar':listconstrainvar}
+    select = {"queryall": ns_list,
+              "queryMo": ns_Mo,
+              "queryAs": ns_As,
+              "queryName": name_file,
+              "queryRef": ref_file,
+              "queryMethod": method_file,
+              "queryConstrain": constrain_file,
+              "queryModel": molist,
+              "queryAssumption": asslist,
+              "queryModellinked": filemo,
+              "queryAssumptionlinked": fileass,
+              "listmethod": listmethod,
+              "listconstrain": listconstrain,
+              "listconstrainvar": listconstrainvar}
 
-    return render(request, "compare/modify.html",select)
+    return render(request, "compare/modify.html", select)
 
 def login(request):
     #We check if a POST request is send
