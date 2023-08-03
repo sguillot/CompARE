@@ -4,6 +4,8 @@ Visu_data
 {% endblock %}
 {% block content %}
 
+{% load static %}
+
 <div class="visu">
 
 <div class="side_menu">
@@ -64,7 +66,7 @@ Visu_data
 
             <div class="search">
                 <input type="text" id="Search" name="Search" placeholder="Search">
-                <input type="image" id="btn" src="..\static\compare\search.svg" onclick="searchFilter()">
+                <input type="image" id="btn" src="{% static 'compare/search.svg' %}" onclick="searchFilter()">
             </div>
 
             <div class="button">
@@ -161,7 +163,7 @@ Visu_data
                     <th>Analysis assumptions</th>
                     <th>Reference</th>
                     <th>Download</th>
-                    <th><img src="../static/compare/check.svg" onclick="selectall()"><img src="../static/compare/square.svg" onclick="unselectall()"></th>
+                    <th><img src="{% static 'compare/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/square.svg' %}" onclick="unselectall()"></th>
                 </tr>
             </thead>
 
@@ -170,7 +172,7 @@ Visu_data
             <tbody id="firstTable">
                 {% for q , m , a in queryall %}
                 <tr>
-                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="../static/compare/plus.svg" alt="icon more" width=30em /></a></td>
+                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/plus.svg' %}" alt="icon more" width=30em /></a></td>
                     <td>{{ q.id_name.namedb }}</td>
                     <td>{{ q.id_name.classdb }}</td>
                     <td>{{ q.id_method.method }}</td>
@@ -189,7 +191,7 @@ Visu_data
                         {% endfor %} 
                     </td>
                     <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
-                    <td> <a href='{{q.filepath}}' download="{{q.filepath}}"><img src="../static/compare/download.svg" alt="icon download" width=30em /></a></td>
+                    <td> <a href='{{q.filepath}}' download="{{q.filepath}}"><img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em /></a></td>
 
                     <td><input type="checkbox" value='{{q.filename}}' class="dwnl" name="che"></td> 
                 </tr>

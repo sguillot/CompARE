@@ -14,7 +14,7 @@
 <body>
 
 <div class="navbar">
-    <a href="{% url 'home' %}" class="navbar-Compare"><img src="../static/compare/logo.png" width=300em ></a>
+    <a href="{% url 'home' %}" class="navbar-Compare"><img src="{% static 'compare/logo.png' %}" width=300em ></a>
     <a href="{% url 'home' %}" class="navbar-brand">Home page</a>
     <a href="{% url 'visu' %}" class="navbar-brand">Data table</a>
     <a href="{% url 'insert' %}" class="navbar-brand">Add entry</a>
