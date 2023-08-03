@@ -26,6 +26,9 @@ def visu_data(request):
     # with "ref" ,"name" ,"constrain" and "method" with method select_related
     select_ns_all = Ns.objects.select_related().all().order_by('filename')
 
+    class_list = ["NS Spin", "Transiently_Accreting_NS", "NS Mass", "NS-NS mergers",
+                  "PPM", "qLMXB", "Cold MSP", "Thermal INSs", "Type-I X-ray bursts"]
+
     # We check for GET request
     if request.method == 'GET':
 
@@ -96,7 +99,7 @@ def visu_data(request):
             checkList = json.loads(json_checklist) #python list with the checkboxes that are checked
             #if checklist is empty we do like all the checkboxes were checked
             if not checkList:
-                checkList = ["NS Spin","Transiently_Accreting_NS","NS Mass","NS-NS mergers","PPM","qLMXB","Cold MSP","Thermal INSs","Type-I X-ray bursts"] #list with all types of sources
+                checkList = class_list
 
             #We filter the select variable that contains all the Ns from the database ( it can be already filter from the above condition )
             #we select the ns who have a values from the list
@@ -223,12 +226,16 @@ def visu_data(request):
             # We add the models to each NS
             list_ns_model = []
             list_ns_assumptions = []
+            list_ns_filepaths = []
 
             for n in select_ns_all:
+                # We make the file paths from the filenames (to be used by the django template)
+                list_ns_filepaths.append("data/"+n.filename)
+
                 # We select the filenames linked to models
-                select_ns_model = NsToModel.objects.select_related().filter(filename = n.filename)
+                select_ns_model = NsToModel.objects.select_related().filter(filename=n.filename)
                 # We select the filenames linked to assumptions
-                select_ns_ass = NsToAssumptions.objects.select_related().filter(filename = n.filename)
+                select_ns_ass = NsToAssumptions.objects.select_related().filter(filename=n.filename)
 
                 list_temp_prim = []
                 list_temp_sec = []
@@ -256,7 +263,8 @@ def visu_data(request):
             # Zip all the data into a tuple
             select_ns_all_zip = zip(select_ns_all,
                                     list_ns_model,
-                                    list_ns_assumptions)
+                                    list_ns_assumptions,
+                                    list_ns_filepaths)
 
             selectAll = {"queryall": select_ns_all_zip,
                          "queryMeth": selectMethod,
@@ -1077,7 +1085,12 @@ def insert_data(request):
 
 
                     # we create the new NS (filepath have to change)
-                    file = Ns(filename=filename,filepath="qdsdsqdsqdsq.txt",id_ref=idR,id_name=idN,id_method=idM,id_constrain=idC)
+                    file = Ns(filename=filename,
+                              ## filepath could be removed from MySQL database
+                              filepath="qdsdsqdsqdsq.txt",
+                              id_ref=idR, id_name=idN,
+                              id_method=idM, id_constrain=idC
+                              )
                     file.save()
                     nsInstance = Ns.objects.get(filename=filename) # we store the ns for the assumptions and models
 
@@ -1087,16 +1100,16 @@ def insert_data(request):
                         modeldesc = listmodesc[j]
                         modelref = listmodepref[j]
 
-                        if len(modelpri)<1:
+                        if len(modelpri) < 1:
                             modelpri = None
 
-                        if len(modelsec)<1:
+                        if len(modelsec) < 1:
                             modelsec = None
 
-                        if len(modeldesc)<1:
+                        if len(modeldesc) < 1:
                             modeldesc = None
 
-                        if len(modelref)<1:
+                        if len(modelref) < 1:
                             modelref = None
 
                         if(ModelNs.objects.filter(dependenciesprimary=modelpri,

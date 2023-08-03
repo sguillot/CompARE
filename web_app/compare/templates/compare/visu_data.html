@@ -170,7 +170,7 @@ Visu_data
             <tbody id="secondTable"></tbody>
 
             <tbody id="firstTable">
-                {% for q , m , a in queryall %}
+                {% for q , m , a, datalink in queryall %}
                 <tr>
                     <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/plus.svg' %}" alt="icon more" width=30em /></a></td>
                     <td>{{ q.id_name.namedb }}</td>
@@ -190,9 +190,13 @@ Visu_data
                             <li><u>{{aprim}}</u>: {{asec}}</li>
                         {% endfor %} 
                     </td>
-                    <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
-                    <td> <a href='{{q.filepath}}' download="{{q.filepath}}"><img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em /></a></td>
 
+                    <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
+                    <td>
+                        <a href="{% static datalink %}" download="{% static datalink %}">
+                            <img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em />
+                        </a>
+                    </td>
                     <td><input type="checkbox" value='{{q.filename}}' class="dwnl" name="che"></td> 
                 </tr>
                 {% endfor %}
