@@ -73,11 +73,12 @@ class MethodNs(models.Model):
 
     METHOD_CHOICES = [("Pulsar timing", "Pulsar timing"),
                       ("Thermal emission", "Thermal emission"),
+                      ("Phase-resolved thermal emission", "Phase-resolved thermal emission"),
                       ]
 
     # Field names are made lowercase
     id_method = models.AutoField(db_column='id_Method', primary_key=True)
-    method = models.CharField(db_column='Method', max_length=25, choices=METHOD_CHOICES)
+    method = models.CharField(db_column='Method', max_length=40, choices=METHOD_CHOICES)
     method_specific = models.TextField(db_column='Method_Specific')
     datadate = models.TextField(db_column='DataDate')
     processinfinfo = models.TextField(db_column='ProcessinfInfo')
