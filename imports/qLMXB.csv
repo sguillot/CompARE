@@ -73,60 +73,60 @@ tbabs,
 pileup","nsx,
 tbabs,
 pileup"
-ModelDependencyDescription,"The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+ModelDependencyDescription,"The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
-The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
-The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
-
-The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.
-
-Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.
 
-Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
+
+The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.
+
+Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.
 
 To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).
 
-Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.
 
 To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).
 
 Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).
-","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
-The absorption of X-rays was calculated using phabs absorption model available in Xspec (Arnaud et al. 1996).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+The absorption of X-rays was calculated using phabs absorption model available in Xspec (Arnaud et al. 1996).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 available in Xspec.
 
-To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 (updated in 2016) available in Xspec.
 
 To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).
 
-Depending on the brightness of an X-ray source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001). However, it was found to be negligible for this particular source.","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+Depending on the brightness of an X-ray source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001). However, it was found to be negligible for this particular source.","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 available in Xspec.
 
-To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 available in Xspec.
 
-To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+To account for a possible excess of photons at high-energy (> 2 keV), an addition power-law component was added (with fixed index of 1.5) and free normalisation (see Guillot et al. 2013).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000  available in Xspec.
 
-Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsatmos model (Heinke et al. 2006) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000  available in Xspec.
 
-Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of recalculated tables in Xspec, directly usable for spectral analyses.
+Because of the brightness of the source, photons may pile-up on the detectors -- more than 1 photons incident on the same pixel without the readout time frame, and detected as a single photon with the sum of the energies.  This effect, which may distort the spectrum (toward higher energies) may be accounted for with an instrument-specific pile-up model ('pileup' in Xspec, Davis 2001).","The atmosphere model used in this analysis is the nsx model (Ho and Heinke 2009) available under the form of precalculated tables in Xspec, directly usable for spectral analyses.
 
 The absorption of X-rays was calculated using tbabs absorption model of Wilms et al. 2000 available in Xspec.
 
