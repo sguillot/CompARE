@@ -24,7 +24,6 @@ Detail
 <div class="contentfile">
 
 <div class="divmodel">
-
     <p class="titlecat">Model dependencies</p>
     <ul>
     {% for mo in queryMo %}
@@ -36,10 +35,10 @@ Detail
                     {% for ads_short, ads_link in mo.id_model.ref_list %}
                         <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
                     {% endfor %}
-            {% else %}
-                    <span>No model dependencies...</span>
-            {% endif %}
                 </div>
+            {% else %}
+                <span>No model dependencies...</span>
+            {% endif %}
         </li>
         <br>
     {% endfor %}
@@ -59,14 +58,14 @@ Detail
                     {% for ads_short, ads_link in as.id_assumptions.ref_list %}
                         <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
                     {% endfor %}
-
+                </div>
             {% else %}
-                    <span>No assumptions...</span>
+                <span>No assumptions...</span>
             {% endif %}
         </li>
         <br>
     {% endfor %}
-</ul>
+    </ul>
 </div>
 
 <div class="divcompact">
