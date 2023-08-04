@@ -79,7 +79,7 @@ Visu_data
                     <div class="flexSelect">
                         <label for="list_methods">Method</label>
                         <select name="list_methods" id="list_methods" multiple>
-                            {% for qm in queryMeth %}
+                            {% for qm in queryMeth|dictsort:"method" %}
                                 <option class="Meth" value="{{qm.method}}">{{qm.method}}</option>
                             {% endfor %}
                         </select>
@@ -88,7 +88,7 @@ Visu_data
                     <div class="flexSelect">
                         <label for="list_variable">Constrain Variable</label>
                         <select name="list_variable" id="list_variable" multiple>
-                            {% for qv in queryConV %}
+                            {% for qv in queryConV|dictsort:"constrainvariable" %}
                                 <option class="ConsV" value="{{qv.constrainvariable}}">{{qv.constrainvariable}}</option>
                             {% endfor %}
                         </select>
@@ -97,7 +97,7 @@ Visu_data
                     <div class="flexSelect">
                         <label for="list_constrain_type">Constrain Type</label>
                         <select name="list_constrain_type" id="list_constrain_type" multiple>
-                            {% for qt in queryConT %}
+                            {% for qt in queryConT|dictsort:"constraintype" %}
                                 <option class="ConsT" value="{{qt.constraintype}}">{{qt.constraintype}}</option>
                             {% endfor %}
                         </select>
