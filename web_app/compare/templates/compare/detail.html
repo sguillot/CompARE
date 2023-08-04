@@ -14,12 +14,9 @@ Detail
         <button type="button" id="btndwnl" value="Download">Download</button>
 
         {% if user.is_authenticated %}
-            <button type="button" id="btnremove" value="{{queryall.filename}}" onclick="confirmDelete()" >Remove</button>
-            <form action="{% url 'modify' queryall.filename %}">
-                <input type="submit" value="Modify"id="btnmodify"></button>
-            </form>
+            <button type="button" id="btnremove" value="{{queryall.filename}}" onclick="confirmDelete()">Remove</button>
+            <form action="{% url 'modify' queryall.filename %}"><button type="submit" id="btnmodify">Modify</button></form>
         {% endif %}
-        
     </div>
 </div>
 
@@ -27,17 +24,18 @@ Detail
 <div class="contentfile">
 
 <div class="divmodel">
-
-    <p class="titlecat">Models</p>
+    <p class="titlecat">Model dependencies</p>
     <ul>
     {% for mo in queryMo %}
         <li>
             {% if mo.id_model.dependenciesprimary != None %}
                 <span><u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
-                {{mo.id_model.dependenciesdescription}} <br>
-                {% for ads_short, ads_link in mo.id_model.reflist %}
-                    <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
-                {% endfor %}
+                <div class="divmodeldesc">
+                    {{mo.id_model.dependenciesdescription}} <br>
+                    {% for ads_short, ads_link in mo.id_model.ref_list %}
+                        <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+                    {% endfor %}
+                </div>
             {% else %}
                 <span>No model dependencies...</span>
             {% endif %}
@@ -55,17 +53,19 @@ Detail
         <li>
             {% if as.id_assumptions.assumptionsprimary != None %}
                 <span><u>{{as.id_assumptions.assumptionsprimary}}</u>: {{as.id_assumptions.assumptionssecondary}} <br></span>
-                {{as.id_assumptions.assumptionsdescription}} <br>
-                {% for ads_short, ads_link in as.id_assumptions.reflist %}
-                    <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
-                {% endfor %}
+                <div class="divassumptionsdesc">
+                    {{as.id_assumptions.assumptionsdescription}} <br>
+                    {% for ads_short, ads_link in as.id_assumptions.ref_list %}
+                        <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+                    {% endfor %}
+                </div>
             {% else %}
                 <span>No assumptions...</span>
             {% endif %}
         </li>
         <br>
     {% endfor %}
-</ul>
+    </ul>
 </div>
 
 <div class="divcompact">

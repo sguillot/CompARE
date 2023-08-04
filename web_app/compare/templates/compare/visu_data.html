@@ -4,6 +4,8 @@ Visu_data
 {% endblock %}
 {% block content %}
 
+{% load static %}
+
 <div class="visu">
 
 <div class="side_menu">
@@ -64,7 +66,7 @@ Visu_data
 
             <div class="search">
                 <input type="text" id="Search" name="Search" placeholder="Search">
-                <input type="image" id="btn" src="..\static\compare\search.svg" onclick="searchFilter()">
+                <input type="image" id="btn" src="{% static 'compare/search.svg' %}" onclick="searchFilter()">
             </div>
 
             <div class="button">
@@ -75,35 +77,35 @@ Visu_data
             <div id="multiple">
                 <div class="multiple-content">
                     <div class="flexSelect">
-                        <label for="MethList">Method</label>
-                        <select name="MethList" id="MethList" multiple>
-                            {% for qm in queryMeth %}
+                        <label for="list_methods">Method</label>
+                        <select name="list_methods" id="list_methods" multiple>
+                            {% for qm in queryMeth|dictsort:"method" %}
                                 <option class="Meth" value="{{qm.method}}">{{qm.method}}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="flexSelect">
-                        <label for="ConsVList">Constrain Variable</label>
-                        <select name="ConsVList" id="ConsVList" multiple>
-                            {% for qv in queryConV %}
+                        <label for="list_variable">Constrain Variable</label>
+                        <select name="list_variable" id="list_variable" multiple>
+                            {% for qv in queryConV|dictsort:"constrainvariable" %}
                                 <option class="ConsV" value="{{qv.constrainvariable}}">{{qv.constrainvariable}}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="flexSelect">
-                        <label for="ConsTList">Constrain Type</label>
-                        <select name="ConsTList" id="ConsTList" multiple>
-                            {% for qt in queryConT %}
+                        <label for="list_constrain_type">Constrain Type</label>
+                        <select name="list_constrain_type" id="list_constrain_type" multiple>
+                            {% for qt in queryConT|dictsort:"constraintype" %}
                                 <option class="ConsT" value="{{qt.constraintype}}">{{qt.constraintype}}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="flexSelect">
-                        <label for="DepList">Model Primary</label>
-                        <select name="DepList" id="DepList" multiple>
+                        <label for="list_dep_primary">Model Primary</label>
+                        <select name="list_dep_primary" id="list_dep_primary" multiple>
                             {% for qd in queryDep %}
                                 <option class="Dep" value="{{qd.dependenciesprimary}}">{{qd.dependenciesprimary}}</option>
                             {% endfor %}
@@ -111,8 +113,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="DepSList">Model Secondary</label>
-                        <select name="DepSList" id="DepSList" multiple>
+                        <label for="list_dep_secondary">Model Secondary</label>
+                        <select name="list_dep_secondary" id="list_dep_secondary" multiple>
                             {% for qds in queryDepS %}
                                 <option class="DepS" value="{{qds.dependenciessecondary}}">{{qds.dependenciessecondary}}</option>
                             {% endfor %}
@@ -120,8 +122,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="AssList">Assumptions Primary</label>
-                        <select name="AssList" id="AssList" multiple>
+                        <label for="list_assumptions_primary">Assumptions Primary</label>
+                        <select name="list_assumptions_primary" id="list_assumptions_primary" multiple>
                             {% for qa in queryAss %}
                                 <option class="Ass" value="{{qa.assumptionsprimary}}">{{qa.assumptionsprimary}}</option>
                             {% endfor %}
@@ -129,8 +131,8 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="Ass2List">Assumptions Secondary</label>
-                        <select name="Ass2List" id="Ass2List" multiple>
+                        <label for="list_assumptions_secondary">Assumptions Secondary</label>
+                        <select name="list_assumptions_secondary" id="list_assumptions_secondary" multiple>
                             {% for qas in queryAssS %}
                                 <option class="Ass2" value="{{qas.assumptionssecondary}}">{{qas.assumptionssecondary}}</option>
                             {% endfor %}
@@ -149,28 +151,28 @@ Visu_data
         <table>
             <thead>
                 <tr>
-                    <th>More</th>
-                    <th>Namedb</th>
-                    <th>Classdb</th>
+                    <th>More info</th>
+                    <th>Source name</th>
+                    <th>Database Class</th>
                     <th>Method</th>
-                    <th>Method Specific</th>
-                    <th>Constrain Type</th>
-                    <th>Constrain Version</th>
-                    <th>Constrain Variable</th>
-                    <th>Dependencies</th>
-                    <th>Assumptions</th>
+                    <th>Method details</th>
+                    <th>Constraint Type</th>
+                    <th>Constraint Version</th>
+                    <th>Constraint Variable</th>
+                    <th>Model dependencies</th>
+                    <th>Analysis assumptions</th>
                     <th>Reference</th>
                     <th>Download</th>
-                    <th><img src="../static/compare/check.svg" onclick="selectall()"><img src="../static/compare/square.svg" onclick="unselectall()"></th>
+                    <th><img src="{% static 'compare/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/square.svg' %}" onclick="unselectall()"></th>
                 </tr>
             </thead>
 
             <tbody id="secondTable"></tbody>
 
             <tbody id="firstTable">
-                {% for q , m , a in queryall %}
+                {% for q , m , a, datalink in queryall %}
                 <tr>
-                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="../static/compare/plus.svg" alt="icon more" width=30em /></a></td>
+                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/plus.svg' %}" alt="icon more" width=30em /></a></td>
                     <td>{{ q.id_name.namedb }}</td>
                     <td>{{ q.id_name.classdb }}</td>
                     <td>{{ q.id_method.method }}</td>
@@ -188,9 +190,13 @@ Visu_data
                             <li><u>{{aprim}}</u>: {{asec}}</li>
                         {% endfor %} 
                     </td>
-                    <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
-                    <td> <a href='{{q.filepath}}' download="{{q.filepath}}"><img src="../static/compare/download.svg" alt="icon download" width=30em /></a></td>
 
+                    <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
+                    <td>
+                        <a href="{% static datalink %}" download="{% static datalink %}">
+                            <img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em />
+                        </a>
+                    </td>
                     <td><input type="checkbox" value='{{q.filename}}' class="dwnl" name="che"></td> 
                 </tr>
                 {% endfor %}

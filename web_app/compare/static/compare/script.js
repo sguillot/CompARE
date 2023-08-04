@@ -66,7 +66,9 @@ Return a list of dictionnary
 */
 function getSelect(){
   var selectorValues = {}
-  const ListOptions = ["MethList","ConsVList","ConsTList","DepList","DepSList","AssList","Ass2List"]
+  const ListOptions = ["list_methods","list_variable","list_constrain_type",
+                        "list_dep_primary","list_dep_secondary",
+                        "list_assumptions_primary","list_assumptions_secondary"]
   ListOptions.forEach(lO => {
     var select = []
     var selector = document.getElementById(lO)
@@ -132,7 +134,7 @@ function bibtexFile(){
 
 
 /* 
-when user click on the loop
+when user click on the magnifier
 Select all filter
 We call the ajaxRequest function
 */
@@ -165,7 +167,7 @@ function ajaxRequest(checkList , select , search){
         let row  = table.insertRow()
 
         let more = row.insertCell(0)
-        more.innerHTML = "<a href=detail/"+d.filename+" target='_blank'><img src='../static/compare/plus.svg' alt='icon more' width='30em' /></a>"
+        more.innerHTML = "<a href=detail/"+d.filename+" target='_blank'><img src='{% static \"compare/plus.svg\" %}' alt='icon more' width='30em' /></a>"
 
         let name = row.insertCell(1)
         name.innerHTML = d.namedb
@@ -190,16 +192,17 @@ function ajaxRequest(checkList , select , search){
 
         let model = row.insertCell(8)
         if (typeof d.model !== 'undefined') {
-          d.model.forEach(mod => {
-          model.insertAdjacentHTML("beforeend","<li>"+ mod +"</li>");
+          d.model.forEach(mod_text => {
+          model.insertAdjacentHTML("beforeend",mod_text);
         });
         }
          
         
         let assump = row.insertCell(9)
         if (typeof d.assumptions !== 'undefined') {
-          d.assumptions.forEach(ass => {
-            assump.insertAdjacentHTML("beforeend", "<li>"+ ass +"</li>");
+          d.assumptions.forEach(ass_text => {
+            // assump.insertAdjacentHTML("beforeend", "<li><u>"+ass1+"</u>: "+ass2+"</li>");
+            assump.insertAdjacentHTML("beforeend", ass_text);
           });
         }
 
@@ -207,8 +210,14 @@ function ajaxRequest(checkList , select , search){
         ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
 
         let download = row.insertCell(11)
-        download.innerHTML = "<a href="+ d.filpath+" download> <img src='../static/compare/download.svg' alt='icon download' width='30em' /></a>"
-        
+        // None of the two option seem to work...
+        download.innerHTML = "<img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' />"
+        download.innerHTML = '<img src="{% static \'compare/download.svg\' %}" alt="icon download" width="30em" />'
+
+        // Commenting the download for now since even the image doesn't work!
+        // download.innerHTML = "<a href="+ d.filpath + " download> <img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
+        // download.innerHTML = "<a href='{% static \"data/"+ d.filename + "\" %}' download='{% static \"data/"+ d.filename + "\" %}'><img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
+
         let checkdo = row.insertCell(12)
         checkdo.innerHTML = "<td><input type='checkbox' value="+ d.filename+" class='dwnl' name='che'> </td>"
 
@@ -240,11 +249,6 @@ function unselectall(){
     tabcheck[i].checked = false;
   }
 }
-
-
-
-
-
 
 
 //details
@@ -292,4 +296,3 @@ function enable(id) {
     inp[index].disabled = false 
   }
 }
-

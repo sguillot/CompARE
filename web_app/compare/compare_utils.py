@@ -11,7 +11,6 @@ def formatting_csv(df):
         pandas DataFrame: The formatted DataFrame after applying data cleaning operations.
     """
 
-    print("TESTSTSTSTSDSD")
     # Remove leading and trailing spaces in all fields
     for k in df.keys():
         df[k] = df[k].str.strip()
