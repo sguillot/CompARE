@@ -45,7 +45,7 @@ class RefNs(models.Model):
     bibtex = models.TextField(db_column='Bibtex')
     doi = models.TextField(db_column='DOI')
     repositorydoi = models.CharField(db_column='RepositoryDOI', max_length=50, blank=True, null=True)
-    datalink = models.CharField(db_column='DataLink', max_length=70, blank=True, null=True)
+    datalink = models.CharField(db_column='DataLink', max_length=256, blank=True, null=True)
 
     class Meta:
         managed = True
