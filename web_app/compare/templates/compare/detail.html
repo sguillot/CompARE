@@ -3,7 +3,7 @@
 Detail 
 {% endblock %}
 {% block content %}
-
+{% load static %}
 
 <div class="bodydetail">
 
@@ -11,8 +11,9 @@ Detail
         <h1>{{queryall.id_name.namedb}}</h1>
         <h2>{{queryall.filename}}</h2>
     <div class="btn">
-        <button type="button" id="btndwnl" value="Download">Download</button>
-
+        <a href="{% static queryData %}" download="{% static queryData %}">
+            <button type="button" id="btndwnl" value="Download">Download</button>
+        </a>
         {% if user.is_authenticated %}
             <button type="button" id="btnremove" value="{{queryall.filename}}" onclick="confirmDelete()">Remove</button>
             <form action="{% url 'modify' queryall.filename %}"><button type="submit" id="btnmodify">Modify</button></form>

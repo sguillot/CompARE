@@ -121,6 +121,7 @@ input.check{
   width: 60%;
   justify-content: space-around
 }
+
 #dwnlF , #dwnlB ,#show , #vld , #log{
   background-color: #fff;
   height: 40px;

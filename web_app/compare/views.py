@@ -286,6 +286,8 @@ def detail(request, id):
     # Trick to link to ADS page (need to replace the &, for ex in A&A)
     ns_list.id_ref.shortlink = ns_list.id_ref.short.replace("&", "%26")
 
+    ns_datalink = "data/{}".format(id)
+
     for mod in ns_model_dependencies:
         if mod.id_model.dependenciesreferences is not None:
             # Put the references in a list (and replace & by url code for links)
@@ -305,7 +307,8 @@ def detail(request, id):
     # We put the query sets in a dictionary with the keys to display the data of the queryset in the template
     select = {"queryall": ns_list,
               "queryMo": ns_model_dependencies,
-              "queryAs": ns_assumptions}
+              "queryAs": ns_assumptions,
+              "queryData": ns_datalink}
 
     return render(request, 'compare/detail.html', select)
 
@@ -496,7 +499,7 @@ def modify(request, id):
 
                 elif 'add' in request.POST:
                     if RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                            doi=doi,repositorydoi=repdoi ,datalink=datal):
+                                            doi=doi,repositorydoi=repdoi, datalink=datal):
                         refExist = RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
                                                         doi=doi, repositorydoi=repdoi, datalink=datal)
                         refExist = refExist[0]
