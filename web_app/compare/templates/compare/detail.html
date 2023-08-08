@@ -5,6 +5,15 @@ Detail
 {% block content %}
 {% load static %}
 
+<!--<head>-->
+<!--    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />-->
+<!--    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>-->
+<!--    <py-env>-->
+<!--        - matplotlib-->
+<!--    </py-env>-->
+<!--</head>-->
+
+
 <div class="bodydetail">
 
 <div class="titlefile">
@@ -71,35 +80,49 @@ Detail
 
 <div class="divcompact">
 
-<div class="divname">
+<!--    <div class="divplot" id="matplotlib-fig">-->
+<!--        <p>plot here</p>-->
+<!--        <py-script output="matplotlib-fig">-->
+<!--            import matplotlib.pyplot as plt-->
+<!--            import numpy as np-->
+<!--            fig, ax = plt.subplots()-->
+<!--            # x axis-->
+<!--            x = ["Python", "C++", "JavaScript", "Golang"]-->
+<!--            # y axis-->
+<!--            y = [10, 5, 9, 7]-->
+<!--            plt.plot(x, y, marker='o', linestyle='-', color='b')-->
+<!--            # Naming the x-label-->
+<!--            plt.xlabel('Language')-->
+<!--            # Naming the y-label-->
+<!--            plt.ylabel('Score')-->
+<!--            # Naming the title of the plot-->
+<!--            plt.title('Language vs Score')-->
+<!--            fig-->
+<!--        </py-script>-->
+<!--    </div>-->
 
-<p class="titlecat">Source info</p>
+    <div class="divname">
+        <p class="titlecat">Source info</p>
+        <p>{{queryall.id_name.namedb}}</p>
+        <p>{{queryall.id_name.classdb}}</p>
+        <p>{{queryall.id_name.namesimbad}}</p>
+        <p>{{queryall.id_name.classsimbad}}</p>
+        <p>{{queryall.id_name.ra}}</p>
+        <p>{{queryall.id_name.declination}}</p>
+        <p>{{queryall.id_name.localisationfile}}</p>
+        <p>{{queryall.id_name.eventdate}}</p>
+    </div>
 
-    <p>{{queryall.id_name.namedb}}</p>
-    <p>{{queryall.id_name.classdb}}</p>
-    <p>{{queryall.id_name.namesimbad}}</p>
-    <p>{{queryall.id_name.classsimbad}}</p>
-    <p>{{queryall.id_name.ra}}</p>
-    <p>{{queryall.id_name.declination}}</p>
-    <p>{{queryall.id_name.localisationfile}}</p>
-    <p>{{queryall.id_name.eventdate}}</p>
-
-</div>
-
-<div class="divmethod">
-
-    <p class="titlecat">Method</p>
-    
+    <div class="divmethod">
+        <p class="titlecat">Method</p>
         <p>{{queryall.id_method.method}}</p>
         <p>{{queryall.id_method.method_specific}}</p>
         <p>{{queryall.id_method.datadate}}</p>
         <p>{{queryall.id_method.processinfinfo}}</p>
-    
-</div>
+    </div>
 
-<div class="divref">
-
-    <p class="titlecat">References</p>
+    <div class="divref">
+        <p class="titlecat">References</p>
         <p>DOI: <a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">{{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
         <p>ADS: <a href="https://ui.adsabs.harvard.edu/abs/{{queryall.id_ref.shortlink}}/abstract" target="_blank"> {{queryall.id_ref.short}}</a></p>
         <details>
@@ -108,20 +131,14 @@ Detail
         </details>
         <p>Data Repository DOI: {{queryall.id_ref.repositorydoi}}</p>
         <p>Data link: {{queryall.id_ref.datalink}}</p>
-    
-</div>
+    </div>
 
-<div class="divconstrain">
-    
-    <p class="titlecat">Constraints</p>
-    
+    <div class="divconstrain">
+        <p class="titlecat">Constraints</p>
         <p>Type: {{queryall.id_constrain.constraintype}}</p>
         <p>Variable: {{queryall.id_constrain.constrainvariable}}</p>
         <p>Version: {{queryall.id_constrain.constrainversion}}</p>
-    
-    
-</div>
-
+    </div>
 
 </div>
 

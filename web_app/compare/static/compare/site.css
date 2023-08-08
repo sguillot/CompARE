@@ -301,7 +301,7 @@ input.check{
 }
   
 
-.divname, .divmethod , .divref , .divconstrain{
+.divname, .divmethod , .divref , .divconstrain, .divplot{
     width: 45%;
     padding: 2%;
     font-size: 1.3em;
