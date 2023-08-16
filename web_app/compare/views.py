@@ -1182,14 +1182,14 @@ def insert_data(request):
                         mes3 += "{} ({})  -  ".format(not_in, not_inserted[not_in])
                     messages.success(request, mes3)
 
-        # for insertion manual we check the what the user wants to insert
+        # for insertion manual we check what the user wants to insert
         elif (request.POST.get('hid') == 'formAddName' ):
 
             # verifications of the value
-            na =  request.POST.get('name')
+            na = request.POST.get('name')
             classdb = request.POST.get('class')
 
-            if len(na) <= 0  or len(classdb) <= 0:
+            if len(na) <= 0 or len(classdb) <= 0:
                 messages.error(request, "L'insertion de Name n'est pas correcte")
             else:
                 nameS = request.POST.get('nameS')
@@ -1271,7 +1271,7 @@ def insert_data(request):
                 fichierlog.writelines(wri)
                 fichierlog.close()
 
-    # When the user validete the insertion
+    # When the user validates the insertion
     if (request.POST.get('insert')):
 
         # We verify all the values
