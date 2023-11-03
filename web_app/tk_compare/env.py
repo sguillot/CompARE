@@ -15,8 +15,8 @@ print('   web_app:',web_app)
 #
 # Define name of dict_key file
 #
-dict_key = os.path.abspath(os.path.join( web_app, 'tk_compare', 'keys.dict'))
-if verb: print('   dict_key:',dict_key)
+dict_data = os.path.abspath(os.path.join( web_app, 'tk_compare', 'dict_data.dict'))
+if verb: print('   dict_data:',dict_data)
 #
 # Define path to the folders
 #
@@ -28,7 +28,7 @@ if verb: print('   path_data_out_file:',path_data_out_file)
 #
 # Define name of hd5 file
 #
-h5file = os.path.abspath(os.path.join( web_app, 'tk_compare', 'data.h5'))
+h5file = os.path.abspath(os.path.join( web_app, 'tk_compare', 'h5_file.h5'))
 if verb: print('   h5file:',h5file)
 #
 print('Exit env.py:')

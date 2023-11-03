@@ -8,9 +8,9 @@ To run the script, go to `../tk_sample` and launch:
 
 with the following `script_names`:
 
-## 1- `dict_key.py`:
+## 1- `dict_data.py`:
 
-This script produces the dictionary file keys.dict associating a given key to a file name and type (='contour' or 'pdf').
+This script produces the dictionary file data.dict associating a given key to a file name and type (='contour' or 'pdf').
 
 ## 2- `contours.py`:
 
@@ -29,3 +29,6 @@ This script also reads the h5 file and provide results visible by users.
 
 This script plots the output files.
 
+## `env.py`:
+
+This file contains all the names and path to the data necessary for the toolkit.

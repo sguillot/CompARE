@@ -15,28 +15,28 @@ def create_h5_file( ):
     f.create_dataset('timestamp', data=timestamp)
     f.close()
     #
-    # read the key dictionary
+    # read the data dictionary
     #
     #print('-'*10)
     #print('READ DICT FROM FILE:')
-    with open(env.dict_key, 'r') as f:
-        key = eval(f.read())
+    with open(env.dict_data, 'r') as f:
+        data = eval(f.read())
     #
     # dictionary keys:
-    skeys = key.keys()
-    if env.verb: print('   show dictionary keys:')
+    skeys = data.keys()
+    if env.verb: print('   show data dictionary keys:')
     if env.verb: print('   ',skeys)
     #
     # loop over the keys
     #
     for skey in skeys:
         print('   skey:',skey)
-        print('   name:',key[skey]['name'])
+        print('   name:',data[skey]['name'])
         #f = h5py.File("data.hdf5", "a")
         #grp = f.create_group('group')
         #grp = f.create_group(skey)
         # store contours:
-        fname = env.path_data_out_file+'/'+key[skey]['name']+'.cont'
+        fname = env.path_data_out_file+'/'+data[skey]['name']+'.cont'
         if not os.path.isfile( fname ):
             print('The file does not exist ',fname)
             continue
@@ -73,9 +73,11 @@ def read_h5_file( ):
     #print(ds)
     #
     with h5py.File( env.h5file, 'r') as f1:
-        print( 'name',f1.name)
-        print( 'keys:', list(f1.keys()) )
-        ds = f1['timestamp']
-        print( 'ds:', ds )
+        print("   Keys: %s" % f1.keys())
+        print( '   name',f1.name)
+        print( '   keys:', f1.keys() )
+        print( '   keys:', list(f1.keys()) )
+        ts = f1['timestamp']
+        print( '   ts:', ts )
     #
     if env.verb: print('Exit read_hd5_file( )')

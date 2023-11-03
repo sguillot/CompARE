@@ -14,6 +14,8 @@ def main():
     #
     create_h5_file( )
     #
+    print(50*'-')
+    #
     # read hd5 file
     #
     read_h5_file( )
