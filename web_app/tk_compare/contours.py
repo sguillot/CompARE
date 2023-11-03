@@ -14,6 +14,8 @@ def create_contours( skeys ):
     #
     #if env.verb: print('   show dictionary data:')
     #if env.verb: print('   ',data)
+    if not os.path.isdir(env.path_data_out_file):
+        os.system('mkdir '+env.path_data_out_file)
     #
     # loop over skeys
     #
