@@ -32,22 +32,41 @@ def create_h5_file( ):
     for skey in skeys:
         print('   skey:',skey)
         print('   name:',data[skey]['name'])
-        #f = h5py.File("data.hdf5", "a")
-        #grp = f.create_group('group')
-        #grp = f.create_group(skey)
-        # store contours:
-        fname = env.path_data_out_file+'/'+data[skey]['name']+'.cont'
-        if not os.path.isfile( fname ):
-            print('The file does not exist ',fname)
-            continue
-        print('The file does exists ',fname)
-        cont_R, cont_M = np.loadtxt( fname, usecols=(0, 1), unpack = True )
-        if cont_R[0] != cont_R[-1]:
-            cont_R = np.append(cont_R, cont_R[0])
-            cont_M = np.append(cont_M, cont_M[0])
-        print('Radius:',cont_R[0:-1:10])
-        print('Mass:',cont_M[0:-1:10])
-        #f.close()
+        if data[skey]['type'] == 'contour':
+            ncl = len( data[skey]['CL'] )
+            f = h5py.File( env.h5file, "a")
+            #grp = f.create_group('group')
+            grp_skeys = f.create_group(skey)
+            #
+            for i in np.arange(ncl):
+                #f = h5py.File( env.h5file, "a")
+                scl = data[skey]['CL'][i]
+                #grp_skeys_scl = grp_skeys.create_group(scl)
+                fname = env.path_data_out_file+'/'+data[skey]['name']+'CL'+scl+'.txt'
+                if not os.path.isfile( fname ):
+                    print('The file does not exist ',fname)
+                    continue
+                print('The file does exists ',fname)
+                cont_R, cont_M = np.loadtxt( fname )
+                grp_skeys.create_dataset('rad'+scl,data=cont_R)
+                grp_skeys.create_dataset('mas'+scl,data=cont_M)
+                #f.create_dataset(skey+'rad'+scl,data=cont_R)
+                #f.create_dataset(skey+'mas'+scl,data=cont_M)
+                #f.close()
+            f.close()
+
+            # store contours:
+            #fname = env.path_data_out_file+'/'+data[skey]['name']+'.cont'
+            #if not os.path.isfile( fname ):
+            #    print('The file does not exist ',fname)
+            #    continue
+            #print('The file does exists ',fname)
+            #cont_R, cont_M = np.loadtxt( fname, usecols=(0, 1), unpack = True )
+            #if cont_R[0] != cont_R[-1]:
+            #    cont_R = np.append(cont_R, cont_R[0])
+            #    cont_M = np.append(cont_M, cont_M[0])
+            #print('Radius:',cont_R[0:-1:10])
+            #print('Mass:',cont_M[0:-1:10])
 
     #if key[skey]['type'] == 'contour':
     #    #print('copy ',env.path_data_file,key[skey],'.txt')
@@ -73,11 +92,24 @@ def read_h5_file( ):
     #print(ds)
     #
     with h5py.File( env.h5file, 'r') as f1:
-        print("   Keys: %s" % f1.keys())
+        #print("   Keys: %s" % f1.keys())
         print( '   name',f1.name)
         print( '   keys:', f1.keys() )
-        print( '   keys:', list(f1.keys()) )
-        ts = f1['timestamp']
+        skeys = list( f1.keys() )
+        skeys.remove('timestamp')
+        print( '   skeys:', skeys )
+        #a_group_key = list(f1.keys())[0]
+        #print( '   keys[0]:', a_group_key )
+        #rint( '   type(keys[0]):', type(f1[a_group_key]) )
+        ts = f1['timestamp'][()]
         print( '   ts:', ts )
+        for skey in skeys:
+            print('skey:',skey)
+            grp_skey = f1[skey]
+            print('group keys',grp_skey.keys())
+            for key in grp_skey.keys():
+                print('grp_skey.keys():',key)
+                data = grp_skey[key][()]
+                print('data:',data)
     #
     if env.verb: print('Exit read_hd5_file( )')

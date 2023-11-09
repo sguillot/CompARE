@@ -34,6 +34,14 @@ def create_contours( skeys ):
                 m1 = m1[~np.isnan(m1)]
                 r2 = r2[~np.isnan(r2)]
                 m2 = m2[~np.isnan(m2)]
+                #
+                if r1[0] != r1[-1] and m1[0] != m1[-1]:
+                    r1 = np.append(r1, r1[0])
+                    m1 = np.append(m1, m1[0])
+                if r2[0] != r2[-1] and m2[0] != m2[-1]:
+                    r2 = np.append(r2, r2[0])
+                    m2 = np.append(m2, m2[0])
+                #
                 ndata1 = len(r1); ndata2 = len(r2)
                 data1 = np.empty(shape=(2,ndata1))
                 data2 = np.empty(shape=(2,ndata2))
@@ -51,6 +59,17 @@ def create_contours( skeys ):
                 m2 = m2[~np.isnan(m2)]
                 r3 = r3[~np.isnan(r3)]
                 m3 = m3[~np.isnan(m3)]
+                #
+                if r1[0] != r1[-1] and m1[0] != m1[-1]:
+                    r1 = np.append(r1, r1[0])
+                    m1 = np.append(m1, m1[0])
+                if r2[0] != r2[-1] and m2[0] != m2[-1]:
+                    r2 = np.append(r2, r2[0])
+                    m2 = np.append(m2, m2[0])
+                if r3[0] != r3[-1] and m3[0] != m3[-1]:
+                    r3 = np.append(r3, r3[0])
+                    m3 = np.append(m3, m3[0])
+                #
                 ndata1 = len(r1); ndata2 = len(r2); ndata3 = len(r3)
                 data1 = np.empty(shape=(2,ndata1))
                 data2 = np.empty(shape=(2,ndata2))

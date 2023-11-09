@@ -53,11 +53,11 @@ def create_plot_contour( skeys, from_data, from_h5, pname ):
                 print('The file does exists ',fname)
                 cont_R, cont_M = np.loadtxt( fname )
                 #cont_R, cont_M = np.loadtxt( fname, usecols=(0, 1), unpack = True )
-                print('cont_R',cont_R)
-                print('cont_M',cont_M)
-                if cont_R[0] != cont_R[-1]:
-                    cont_R = np.append(cont_R, cont_R[0])
-                    cont_M = np.append(cont_M, cont_M[0])
+                #print('cont_R',cont_R)
+                #print('cont_M',cont_M)
+                #if cont_R[0] != cont_R[-1]:
+                #    cont_R = np.append(cont_R, cont_R[0])
+                #    cont_M = np.append(cont_M, cont_M[0])
                 res_data[sind][scl]['rad'] = cont_R
                 res_data[sind][scl]['mas'] = cont_M
                 if 'hydrogen' in data[skey]['name']:
