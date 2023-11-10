@@ -1,6 +1,8 @@
 import os
 from tk_compare import env
 
+col = [ 'k', 'b', 'g', 'r', 'c', 'm', 'y', 'orange', 'purple', 'brown', 'pink', 'olive' ]
+
 def create_dict_data( ):
     #
     if env.verb: print('Enter create_dict_data( )')
@@ -64,6 +66,25 @@ def create_dict_data( ):
     data['qLMXB-14']['name'] = 'qLMXB_M28-qLMXB_2022-massradius-hydrogen-1'
     data['qLMXB-14']['type'] = 'contour'
     data['qLMXB-14']['CL'] = ['68', '90', '95']
+    #
+    # default options: 'color', 'line'
+    #
+    skeys = data.keys()
+    lnames = []
+    i=0
+    for ind,skey in enumerate(skeys):
+        name = data[skey]['name'].split('-')
+        name_new = name[0]+'-'+name[1]
+        if name_new not in lnames:
+            lnames.append(name_new)
+            color = col[i]
+            i = i + 1
+        print('name_new:',name_new,', color:',color)
+        data[skey]['color'] = color
+        if 'hydrogen' in data[skey]['name']:
+            data[skey]['line'] = 'dashed'
+        elif 'helium' in data[skey]['name']:
+            data[skey]['line'] = 'dotted'
     #
     if env.verb: print('   show dictionary data:')
     if env.verb: print('   ',data)
