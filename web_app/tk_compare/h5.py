@@ -43,34 +43,26 @@ def create_h5( ):
         grp_skey.create_dataset('color',data=data[skey]['color'])
         grp_skey.create_dataset('line',data=data[skey]['line'])
         #
-        if data[skey]['type'] == 'contour':
-            #
-            #ncl = len( data[skey]['CL'] )
-            #f = h5py.File( env.h5file, "a")
-            #
-            for scl in data[skey]['CL']:
-                #scl = data[skey]['CL'][i]
-                grp_skey_scl = grp_skey.create_group(scl)
-                fname = env.path_data_out_file+'/'+data[skey]['name']+'CL'+scl+'.txt'
-                if not os.path.isfile( fname ):
-                    print('The file does not exist ',fname)
-                    continue
-                print('The file does exists ',fname)
-                cont_R, cont_M = np.loadtxt( fname )
-                grp_skey_scl.create_dataset('rad',data=cont_R)
-                grp_skey_scl.create_dataset('mas',data=cont_M)
-                #grp_skeys.create_dataset('rad'+scl,data=cont_R)
-                #grp_skeys.create_dataset('mas'+scl,data=cont_M)
-            #f.close()
-            #
-        elif data[skey]['type'] == 'pdf':
-            #
-            print(f'   convert pdf into contour (to be done)')
-            #
-        elif data[skey]['type'] == 'mcmc':
-            #
-            print(f'   convert mcmc into contour (to be done)')
-            #
+        #if data[skey]['type'] == 'contour':
+        #
+        #ncl = len( data[skey]['CL'] )
+        #f = h5py.File( env.h5file, "a")
+        #
+        for scl in data[skey]['CL']:
+            #scl = data[skey]['CL'][i]
+            grp_skey_scl = grp_skey.create_group(scl)
+            fname = env.path_data_out_file+'/'+data[skey]['name']+'CL'+scl+'.txt'
+            if not os.path.isfile( fname ):
+                print('The file does not exist ',fname)
+                continue
+            print('The file does exists ',fname)
+            cont_R, cont_M = np.loadtxt( fname )
+            grp_skey_scl.create_dataset('rad',data=cont_R)
+            grp_skey_scl.create_dataset('mas',data=cont_M)
+            #grp_skeys.create_dataset('rad'+scl,data=cont_R)
+            #grp_skeys.create_dataset('mas'+scl,data=cont_M)
+        #f.close()
+        #
     f.close()
     #
     if env.verb: print('Exit create_hd5_file( )')

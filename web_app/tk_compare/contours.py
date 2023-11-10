@@ -71,10 +71,10 @@ def create_contours( ):
         #
         elif data[skey]['type'] == 'pdf':
         #
-            print('   convert pdf into contour (to be done)')
             print('   name:',data[skey]['name'])
             rad, mass, pdf = np.loadtxt(env.path_data_file+'/'+data[skey]['name']+'.txt', unpack=True, comments='#')
             max_pdf = max( pdf )
+            print('  max_pdf:',max_pdf)
             rad = np.array( list( set( rad ) ) )
             mass = np.array( list( set( mass ) ) )
             apdf = np.array(pdf).reshape( rad.size, mass.size )
@@ -96,6 +96,31 @@ def create_contours( ):
         elif data[skey]['type'] == 'mcmc':
         #
             print('   convert mcmc into contour (to be done)')
+            print('   name:',data[skey]['name'])
+            rad, mass = np.loadtxt(env.path_data_file+'/'+data[skey]['name']+'.txt', unpack=True, comments='#')
+            pdf, rad, mass = np.histogram2d( rad, mass, bins=30, density = True )
+            rad = rad[1:]
+            mass = mass[1:]
+            pdf = pdf.T
+            max_pdf = np.max( pdf )
+            print('  max_pdf:',max_pdf)
+            #print('  rad:',rad,rad.size)
+            #print('  mass:',mass,mass.size)
+            #print('  pdf.size:',pdf.size,30*30)
+            for scl in data[skey]['CL']:
+                print('   cl:',scl)
+                icl = int( scl )
+                xcl = float( icl/100.0 )
+                sol = optimize.root_scalar(fcl, args=(pdf,max_pdf,xcl), x0=1.0-xcl, x1=min(1.0,1.3-xcl), rtol=0.01, maxiter=100)
+                xlev = sol.root
+                print('   xlev:',xlev)
+                cs = plt.contour(rad, mass, pdf, levels=[xlev*max_pdf])
+                p = cs.collections[0].get_paths()[0]
+                v = p.vertices
+                x = v[:,0]
+                y = v[:,1]
+                cont = np.array( [x, y], dtype = np.float)
+                np.savetxt( env.path_data_out_file+'/'+data[skey]['name']+'CL'+scl+'.txt', cont, header='CL '+scl )
         #
         else:
         #
