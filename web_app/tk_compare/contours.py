@@ -1,7 +1,11 @@
 import os
 import numpy as np
 from tk_compare import env
+from scipy import optimize
 import matplotlib.pyplot as plt
+
+def fcl(x, apdf, max_pdf, xcl):
+    return apdf[apdf>x*max_pdf].sum()-xcl*apdf.sum()
 
 def create_contours( ):
     #
@@ -73,28 +77,20 @@ def create_contours( ):
             max_pdf = max( pdf )
             rad = np.array( list( set( rad ) ) )
             mass = np.array( list( set( mass ) ) )
-            #print( 'len(rad):',rad.size )
-            #print( 'rad:',rad)
-            #print( 'len(mass):',str(mass.size) )
-            #print( 'mass:',mass)
-            #print( 'len(pdf):',str(pdf.size),str(rad.size*mass.size) )
-            #print( 'max_pdf',max_pdf )
             apdf = np.array(pdf).reshape( rad.size, mass.size )
             for scl in data[skey]['CL']:
+                print('   cl:',scl)
                 icl = int( scl )
-                print('   cl:',scl,str(icl),icl*max_pdf/100)
-                cs = plt.contour(rad, mass, apdf, levels=[icl*max_pdf/100])
-                #print('cs:',cs.collections[0].get_paths())
+                xcl = float( icl/100.0 )
+                sol = optimize.root_scalar(fcl, args=(apdf,max_pdf,xcl), x0=1.0-xcl, x1=min(1.0,1.3-xcl), rtol=0.01, maxiter=100)
+                xlev = sol.root
+                print('   xlev:',xlev)
+                cs = plt.contour(rad, mass, apdf, levels=[xlev*max_pdf])
                 p = cs.collections[0].get_paths()[0]
                 v = p.vertices
                 x = v[:,0]
                 y = v[:,1]
-                #print('x:',x)
-                #print('y:',y)
                 cont = np.array( [x, y], dtype = np.float)
-                #print('  data_out:',env.path_data_out_file)
-                #print('  data:',data[skey]['name'])
-                #print('  CL:',scl)
                 np.savetxt( env.path_data_out_file+'/'+data[skey]['name']+'CL'+scl+'.txt', cont, header='CL '+scl )
         #
         elif data[skey]['type'] == 'mcmc':
