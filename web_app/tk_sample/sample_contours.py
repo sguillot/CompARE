@@ -11,9 +11,7 @@ def main():
     #
     # define the keys
     #
-    skeys = [ 'qLMXB-1', 'qLMXB-2', 'qLMXB-3', 'qLMXB-4', 'qLMXB-5', 'qLMXB-6', 'qLMXB-7', 'qLMXB-8', 'qLMXB-9', 'qLMXB-10', 'qLMXB-11', 'qLMXB-12', 'qLMXB-13', 'qLMXB-14' ]
-    #
-    create_contours( skeys )
+    create_contours( )
     
     
 if __name__ == "__main__":

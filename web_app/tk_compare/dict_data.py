@@ -45,11 +45,11 @@ def create_dict_data( ):
     data['qLMXB-9'] = {}
     data['qLMXB-9']['name'] = 'qLMXB_M13-qLMXB_2018-massradius-helium-1'
     data['qLMXB-9']['type'] = 'pdf'
-    data['qLMXB-9']['CL'] = ['tbf']
+    data['qLMXB-9']['CL'] = ['68', '90', '95', '99']
     data['qLMXB-10'] = {}
     data['qLMXB-10']['name'] = 'qLMXB_M13-qLMXB_2018-massradius-hydrogen-1'
     data['qLMXB-10']['type'] = 'pdf'
-    data['qLMXB-10']['CL'] = ['tbf']
+    data['qLMXB-10']['CL'] = ['68', '90', '95', '99']
     data['qLMXB-11'] = {}
     data['qLMXB-11']['name'] = 'qLMXB_M30-qLMXB_2020-massradius-helium-1'
     data['qLMXB-11']['type'] = 'mcmc'
