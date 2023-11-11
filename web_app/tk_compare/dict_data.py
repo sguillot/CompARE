@@ -10,6 +10,8 @@ def create_dict_data( ):
     # define the data
     #
     data = {}
+    data['sources'] = {}
+    data['skeys'] = {}
     data['qLMXB-1'] = {}
     data['qLMXB-1']['name'] = 'qLMXB_NGC2808-qLMXB_2007-massradius-hydrogen-1'
     data['qLMXB-1']['type'] = 'contour'
@@ -69,22 +71,34 @@ def create_dict_data( ):
     #
     # default options: 'color', 'line'
     #
-    skeys = data.keys()
+    skeys = list( data.keys() )
+    print('skeys full:',skeys)
+    skeys.remove('sources')
+    skeys.remove('skeys')
+    data['skeys']['qLMXB'] = skeys
+    print('skeys short:',skeys)
+    source_qLMXB = set()
     lnames = []
     i=0
-    for ind,skey in enumerate(skeys):
-        name = data[skey]['name'].split('-')
-        name_new = name[0]+'-'+name[1]
+    for ind,skey in enumerate( data['skeys']['qLMXB'] ):
+        name_long  = data[skey]['name'].split('-')
+        name_short = name_long[0].split('_')
+        name_new = name_long[0]+'-'+name_long[1]
+        if name_short[0] == 'qLMXB':
+            source_qLMXB.add(name_short[1])
         if name_new not in lnames:
             lnames.append(name_new)
             color = col[i]
             i = i + 1
-        print('name_new:',name_new,', color:',color)
         data[skey]['color'] = color
         if 'hydrogen' in data[skey]['name']:
             data[skey]['line'] = 'dashed'
         elif 'helium' in data[skey]['name']:
             data[skey]['line'] = 'dotted'
+        print('ind:',ind,' i:',i-1,' name_new:',name_new,' source:',name_short[1],' color:',color,' line:',data[skey]['line'])
+    print('number of sources:',len(source_qLMXB))
+    print('source names:',source_qLMXB)
+    data['sources']['qLMXB'] = source_qLMXB
     #
     if env.verb: print('   show dictionary data:')
     if env.verb: print('   ',data)
