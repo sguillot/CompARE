@@ -4,8 +4,8 @@ from tk_compare import env
 from scipy import optimize
 import matplotlib.pyplot as plt
 
-def fcl(x, apdf, max_pdf, xcl):
-    return apdf[apdf>x*max_pdf].sum()-xcl*apdf.sum()
+def fcl(x, pdf, max_pdf, xcl):
+    return pdf[pdf>x*max_pdf].sum()-xcl*pdf.sum()
 
 def create_files_qLMXB_contours_A( ):
     #
@@ -23,11 +23,11 @@ def create_files_qLMXB_contours_A( ):
         print('For key = ',skey,' type = ',data[skey]['type'])
         fname = env.path_data_file+'/'+data[skey]['name']+'.txt'
         foname = env.path_data_out_file+'/'+data[skey]['name']
-        print('fname:',fname)
+        print('   fname:',fname)
         #
         if data[skey]['type'] == 'contour':
         #
-            print('   copy contours CL_A into files')
+            print('   copy contours CL_A into files',list(data[skey]['CL_A']))
             ncl = len( data[skey]['CL_A'] )
             if ncl == 1:
                 #
@@ -76,13 +76,13 @@ def create_files_qLMXB_contours_A( ):
                 #
             #
             for ind,scl in enumerate(data[skey]['CL_A']):
-                print('   save data in ',data[skey]['name']+'-CL_A'+scl+'.txt')
+                print('      save data in ',data[skey]['name']+'-CL_A'+scl+'.txt')
                 if ind == 0:
-                    np.savetxt( foname+'-CLA'+scl+'.txt', data1, header='CL_A '+scl )
+                    np.savetxt( foname+'-CL'+scl+'.txt', data1, header='CL_A '+scl )
                 elif ind == 1:
-                    np.savetxt( foname+'-CLA'+scl+'.txt', data2, header='CL_A '+scl )
+                    np.savetxt( foname+'-CL'+scl+'.txt', data2, header='CL_A '+scl )
                 elif ind == 2:
-                    np.savetxt( foname+'-CLA'+scl+'.txt', data3, header='CL_A '+scl )
+                    np.savetxt( foname+'-CL'+scl+'.txt', data3, header='CL_A '+scl )
         #
         elif data[skey]['type'] == 'pdf':
         #
@@ -113,7 +113,7 @@ def create_files_qLMXB_pdf( ):
     #
     for skey in data['skeys']['qLMXB']:
         #
-        print('   For key = ',skey,' type = ',data[skey]['type'])
+        print('For key = ',skey,' type = ',data[skey]['type'])
         fname = env.path_data_file+'/'+data[skey]['name']+'.txt'
         foname = env.path_data_out_file+'/'+data[skey]['name']
         print('   fname:',fname)
@@ -124,15 +124,19 @@ def create_files_qLMXB_pdf( ):
         #
         elif data[skey]['type'] == 'pdf':
         #
-            print('      convert pdf into pdf')
+            print('      copy pdf from authors --> pdf for the code')
             rad, mass, pdf = np.loadtxt( fname, unpack=True, comments='#')
             rad2=list(set(rad)); mass2=list(set(mass))
             rad2.sort(); mass2.sort();
-            print('      rad2:',rad2 )
+            #print('         rad2:',rad2 )
             rad = np.array( rad2 )
             mass = np.array( mass2 )
-            print('      rad:',rad)
-            print('      mass:',mass)
+            print('         rad:',rad.size,rad)
+            print('         mass:',mass.size,mass)
+            print('         pdf:',pdf.size,rad.size*mass.size)
+            if pdf.size != rad.size*mass.size:
+                print('*** issue with dimensions of pdf files')
+                exit()
             apdf = np.array(pdf).reshape( rad.size, mass.size )
             #data[skey]['pdf'] = {}
             #data[skey]['pdf']['rad'] = rad
@@ -144,15 +148,19 @@ def create_files_qLMXB_pdf( ):
         #
         elif data[skey]['type'] == 'mcmc':
         #
-            print('      convert mcmc into pdf')
+            print('      convert mcmc from authors --> pdf for the code')
             rad, mass = np.loadtxt( fname, unpack=True, comments='#')
             pdf, rad, mass = np.histogram2d( rad, mass, bins=100, density = False )
             #pdf, rad, mass = np.histogram2d( rad, mass, bins=100, density = True )
             rad = rad[0:-1]
             mass = mass[0:-1]
             pdf = pdf.T
-            #print('  rad:',rad,rad.size)
-            #print('  mass:',mass,mass.size)
+            print('         rad:',rad.size,rad)
+            print('         mass:',mass.size,mass)
+            print('         pdf:',pdf.size,rad.size*mass.size)
+            if pdf.size != rad.size*mass.size:
+                print('*** issue with dimensions of pdf files')
+                exit()
             #print('  pdf.size:',pdf.size,30*30)
             #data[skey]['pdf'] = {}
             #data[skey]['pdf']['rad'] = rad
@@ -171,7 +179,6 @@ def create_files_qLMXB_pdf( ):
     if env.verb: print('Exit create_files_qLMXB_pdf( )')
     #
 
-
 def create_files_qLMXB_contours_C( ):
     #
     if env.verb: print('Enter create_files_qLMXB_contours_C( )')
@@ -188,50 +195,50 @@ def create_files_qLMXB_contours_C( ):
         print('For key = ',skey,' type = ',data[skey]['type'])
         fname = env.path_data_file+'/'+data[skey]['name']+'.txt'
         foname = env.path_data_out_file+'/'+data[skey]['name']
-        print('fname:',fname)
+        print('   fname:',fname)
         #
         if data[skey]['type'] == 'contour':
         #
-            print('      create contours from pdf (to be done)')
+            print('   convert pdf --> contours for type=contour(to be done)')
         #
         elif data[skey]['type'] == 'pdf' or data[skey]['type'] == 'mcmc':
         #
-            print('      convert pdf into contours')
+            print('   convert pdf --> contours for type=pdf or mcmc')
             #
-            foname = env.path_data_out_file+'/'+data[skey]['name']+'-pdf_rad.txt'
-            if not os.path.isfile( foname ):
-                print('The file pdf_rad does not exist ',foname)
+            fo2name = env.path_data_out_file+'/'+data[skey]['name']+'-pdf_rad.txt'
+            if not os.path.isfile( fo2name ):
+                print('*** The file pdf_rad does not exist ***',fo2name)
                 continue
-            rad = np.loadtxt( foname )
+            rad = np.loadtxt( fo2name )
             #
-            foname = env.path_data_out_file+'/'+data[skey]['name']+'-pdf_mass.txt'
-            if not os.path.isfile( foname ):
-                print('The file pdf_mass does not exist ',foname)
+            fo2name = env.path_data_out_file+'/'+data[skey]['name']+'-pdf_mass.txt'
+            if not os.path.isfile( fo2name ):
+                print('*** The file pdf_mass does not exist ***',fo2name)
                 continue
-            mass = np.loadtxt( foname )
+            mass = np.loadtxt( fo2name )
             #
-            foname = env.path_data_out_file+'/'+data[skey]['name']+'-pdf_pdf.txt'
-            if not os.path.isfile( foname ):
-                print('The file pdf_pdf does not exist ',foname)
+            fo2name = env.path_data_out_file+'/'+data[skey]['name']+'-pdf_pdf.txt'
+            if not os.path.isfile( fo2name ):
+                print('*** The file pdf_pdf does not exist ***',fo2name)
                 continue
-            pdf = np.loadtxt( foname )
+            pdf = np.loadtxt( fo2name )
             max_pdf = np.max( pdf )
             print('   max_pdf:',max_pdf)
             #
             for scl in data[skey]['CL_C']:
                 print('      CL_C:',scl)
-                icl = int( scl )
+                icl = int( scl[1:3] )
                 xcl = float( icl/100.0 )
                 sol = optimize.root_scalar(fcl, args=(pdf,max_pdf,xcl), x0=1.0-xcl, x1=min(1.0,1.3-xcl), rtol=0.01, maxiter=100)
                 xlev = sol.root
-                print('      xlev:',xlev)
+                print('         xlev:',xlev)
                 cs = plt.contour(rad, mass, pdf, levels=[xlev*max_pdf])
                 p = cs.collections[0].get_paths()[0]
                 v = p.vertices
                 x = v[:,0]
                 y = v[:,1]
                 contour = np.array( [x, y], dtype = np.float)
-                np.savetxt( foname+'-CLC'+scl+'.txt', contour, header='CL_C '+scl )
+                np.savetxt( foname+'-CL'+scl+'.txt', contour, header='CL_C '+scl )
         #
         else:
         #

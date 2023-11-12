@@ -13,34 +13,33 @@ with the following `script_name`:
 This script produces the dictionary file data.dict associating a given key to a file name and type (='contour' or 'pdf').
 It also associates a color and a line type to a kind of data (for the plot).
 
-## 2- `contours`:
+## 2- `create_files`:
 
 This script read the input files stored in compare/static/data/ and convert it to various output data such as:
   - contour files
   - pdf
 For the moment, the output files are stored into compare/static/data_out/ folder and are associated to a given confidence level (CL).
 
-## 3- `read_file`:
-  
-This script reads ASCII files and store them all in `res` dictionary.  
-  
-## 4- `create_h5`:
+## 3- `create_h5`:
 
-This script puts all the result files into a h5 single file.
+This script puts all the result files (created by create_files) into a h5 single file.
 
-## 5- `read_h5_user`:
+## 4- `res_files`:
+  
+This script reads ASCII files and store them all in `res` dictionary.
+
+## 5- `res_h5_user`:
 
 This script reads the h5 file and store all the data in `res` dictionary.  
 
-## 4- `plot_file`:
+## 6- `plot_files`:
 
 This script reads ASCII files and store them all in `res` dictionary (like `read_file`).
 and then plots the output files.
 
 For the plot, the user shall provide the list of keys associated to the contours to be plotted (in `skeys`), as well as the confidence levels (in `scls`) and the name pf the plot (in `pname`).
 
-
-## 4- `plot_h5_user`:
+## 7- `plot_h5_user`:
 
 This script reads the h5 file and store them all in `res` dictionary (like `read_h5`).
 and then plots the output files.

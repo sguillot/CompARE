@@ -18,36 +18,36 @@ def create_dict_data( ):
     # provide the type of data
     data['qLMXB-1']['type'] = 'contour'
     # if contour, provide the contour as given by the authors (A)
-    data['qLMXB-1']['CL_A'] = ['90', '99']
+    data['qLMXB-1']['CL_A'] = ['A90', 'A99']
     # repeat:
     data['qLMXB-2'] = {}
     data['qLMXB-2']['name'] = 'qLMXB_NGC5139-qLMXB_2014-massradius-hydrogen-1'
     data['qLMXB-2']['type'] = 'contour'
-    data['qLMXB-2']['CL_A'] = ['68', '90', '99']
+    data['qLMXB-2']['CL_A'] = ['A68', 'A90', 'A99']
     data['qLMXB-3'] = {}
     data['qLMXB-3']['name'] = 'qLMXB_NGC6397-qLMXB_2014-massradius-helium-1'
     data['qLMXB-3']['type'] = 'contour'
-    data['qLMXB-3']['CL_A'] = ['68', '90', '99']
+    data['qLMXB-3']['CL_A'] = ['A68', 'A90', 'A99']
     data['qLMXB-4'] = {}
     data['qLMXB-4']['name'] = 'qLMXB_NGC6397-qLMXB_2014-massradius-hydrogen-1'
     data['qLMXB-4']['type'] = 'contour'
-    data['qLMXB-4']['CL_A'] = ['68', '90', '99']
+    data['qLMXB-4']['CL_A'] = ['A68', 'A90', 'A99']
     data['qLMXB-5'] = {}
     data['qLMXB-5']['name'] = 'qLMXB_47TucX5-qLMXB_2016-massradius-hydrogen-1'
     data['qLMXB-5']['type'] = 'contour'
-    data['qLMXB-5']['CL_A'] = ['68', '95']
+    data['qLMXB-5']['CL_A'] = ['A68', 'A95']
     data['qLMXB-6'] = {}
     data['qLMXB-6']['name'] = 'qLMXB_47TucX7-qLMXB_2016-massradius-helium-1'
     data['qLMXB-6']['type'] = 'contour'
-    data['qLMXB-6']['CL_A'] = ['68', '95']
+    data['qLMXB-6']['CL_A'] = ['A68', 'A95']
     data['qLMXB-7'] = {}
     data['qLMXB-7']['name'] = 'qLMXB_47TucX7-qLMXB_2016-massradius-hydrogen-1'
     data['qLMXB-7']['type'] = 'contour'
-    data['qLMXB-7']['CL_A'] = ['68', '95']
+    data['qLMXB-7']['CL_A'] = ['A68', 'A95']
     data['qLMXB-8'] = {}
     data['qLMXB-8']['name'] = 'qLMXB_NGC6304-qLMXB_2017-massradius-hydrogen-1'
     data['qLMXB-8']['type'] = 'contour'
-    data['qLMXB-8']['CL_A'] = ['68', '95', '99']
+    data['qLMXB-8']['CL_A'] = ['A68', 'A95', 'A99']
     data['qLMXB-9'] = {}
     data['qLMXB-9']['name'] = 'qLMXB_M13-qLMXB_2018-massradius-helium-1'
     data['qLMXB-9']['type'] = 'pdf'
@@ -63,11 +63,11 @@ def create_dict_data( ):
     data['qLMXB-13'] = {}
     data['qLMXB-13']['name'] = 'qLMXB_M28-qLMXB_2022-massradius-helium-1'
     data['qLMXB-13']['type'] = 'contour'
-    data['qLMXB-13']['CL_A'] = ['68', '90', '95']
+    data['qLMXB-13']['CL_A'] = ['A68', 'A90', 'A95']
     data['qLMXB-14'] = {}
     data['qLMXB-14']['name'] = 'qLMXB_M28-qLMXB_2022-massradius-hydrogen-1'
     data['qLMXB-14']['type'] = 'contour'
-    data['qLMXB-14']['CL_A'] = ['68', '90', '95']
+    data['qLMXB-14']['CL_A'] = ['A68', 'A90', 'A95']
     #
     # setup default options: 'color', 'line', 'CL_C'
     # also count the number of sources and give their list
@@ -83,7 +83,7 @@ def create_dict_data( ):
     i=0
     for ind,skey in enumerate( data['skeys']['qLMXB'] ):
         # give here the CL which will be constructed (C) by the code
-        data[skey]['CL_C'] = ['68', '90', '95', '99']
+        data[skey]['CL_C'] = ['C68', 'C90', 'C95', 'C99']
         name_long  = data[skey]['name'].split('-')
         name_short = name_long[0].split('_')
         name_new = name_long[0]+'-'+name_long[1]

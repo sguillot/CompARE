@@ -9,15 +9,19 @@ from tk_compare import show_res_qLMXB
 
 def main():
     #
+    print(50*'-')
+    #
     # read file and store data in res
     #
     res_qLMXB = create_res_qLMXB( )
     #
-    # describe dictionary stored in res
+    print(50*'-')
+    #
+    # show dictionary stored in res
     #
     show_res_qLMXB( res_qLMXB )
     #
-    #
+    print(50*'-')
     #
     
 if __name__ == "__main__":

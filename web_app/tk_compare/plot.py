@@ -16,10 +16,11 @@ def create_plot_qLMXB_contour_A( res, skeys, scls, pname ):
     #
     for scl in scls:
         if len(skeys) == 1:
-            plotname = pname+'-'+res[skey]['name']+'-CLA'+scl+'.pdf'
+            plotname = pname+'-'+res[skeys]['name']+'-CLA'+scl+'.pdf'
         else:
             plotname = pname+'-several'+'-CLA'+scl+'.pdf'
         #
+        print('   plotname',plotname)
         fig, axs = plt.subplots(1,1)
         fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
         fig.subplots_adjust(left=0.12, bottom=0.1, right=None, top=None, wspace=0.6, hspace=0.3)
@@ -29,8 +30,13 @@ def create_plot_qLMXB_contour_A( res, skeys, scls, pname ):
         axs.set_xlim(5,18)
         axs.set_ylim(0.4,2.7)
         for skey in skeys:
-            if scl in res[skey]['CL_A']:
-                axs.plot( res[skey][scl]['rad'], res[skey][scl]['mas'], linestyle=res[skey]['line'], color=res[skey]['color'], label=res[skey]['name'] )
+            print('   For key',skey)
+            print('      keys',list(res[skey].keys()))
+            if 'CL_A' in list(res[skey].keys()):
+                print('      skey:',skey,res[skey]['CL_A'])
+                scla = 'A'+scl
+                if scla in res[skey]['CL_A']:
+                    axs.plot( res[skey][scla]['rad'], res[skey][scla]['mass'], linestyle=res[skey]['line'], color=res[skey]['color'], label=res[skey]['name'] )
         axs.text(6,2.5,scl+'% CL(authors)')
         axs.legend(loc='upper right',fontsize='xx-small')
         plt.savefig(plotname)
@@ -44,11 +50,13 @@ def create_plot_qLMXB_contour_C( res, skeys, scls, pname ):
     # plot the figure with contours
     #
     for scl in scls:
+        sclc='C'+scl
         if len(skeys) == 1:
-            plotname = pname+'-'+res[skey]['name']+'-CLC'+scl+'.pdf'
+            plotname = pname+'-'+res[skeys]['name']+'-CLC'+scl+'.pdf'
         else:
             plotname = pname+'-several'+'-CLC'+scl+'.pdf'
         #
+        print('   plotname',plotname)
         fig, axs = plt.subplots(1,1)
         fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
         fig.subplots_adjust(left=0.12, bottom=0.1, right=None, top=None, wspace=0.6, hspace=0.3)
@@ -58,16 +66,20 @@ def create_plot_qLMXB_contour_C( res, skeys, scls, pname ):
         axs.set_xlim(5,18)
         axs.set_ylim(0.4,2.7)
         for skey in skeys:
-            if scl in res[skey]['CL_C']:
-                axs.plot( res[skey][scl]['rad'], res[skey][scl]['mas'], linestyle=res[skey]['line'], color=res[skey]['color'], label=res[skey]['name'] )
+            print('   For key:',skey)
+            print('      keys',list(res[skey].keys()))
+            print('      CL_C:',list(res[skey][sclc].keys()))
+            if 'rad' in list(res[skey][sclc].keys()):
+                print('      skey:',skey,res[skey]['CL_C'])
+                axs.plot( res[skey][sclc]['rad'], res[skey][sclc]['mass'], linestyle=res[skey]['line'], color=res[skey]['color'], label=res[skey]['name'] )
         axs.text(6,2.5,scl+'% CL(created)')
         axs.legend(loc='upper right',fontsize='xx-small')
         plt.savefig(plotname)
     #
     if env.verb: print('Exit create_plot_contour_C( res, skeys, scls, pname )')
 
-def fcl(x, apdf, max_pdf, xcl):
-    return apdf[apdf>x*max_pdf].sum()-xcl*apdf.sum()
+def fcl(x, pdf, max_pdf, xcl):
+    return pdf[pdf>x*max_pdf].sum()-xcl*pdf.sum()
 
 def create_plot_qLMXB_pdf( res, skeys, scls, pname ):
     #
@@ -76,8 +88,9 @@ def create_plot_qLMXB_pdf( res, skeys, scls, pname ):
     # plot the figure with pdf
     #
     for skey in skeys:
+        print('For key = ',skey,' type = ',res[skey]['type'])
         if res[skey]['type'] == 'pdf' or res[skey]['type'] == 'mcmc':
-            print('name:',res[skey]['name'])
+            print('   name:',res[skey]['name'])
             plotname = pname+'-'+res[skey]['name']+'-pdf.pdf'
             fig, axs = plt.subplots(1,1)
             fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
@@ -91,17 +104,19 @@ def create_plot_qLMXB_pdf( res, skeys, scls, pname ):
             axs.pcolor( res[skey]['pdf']['rad'], res[skey]['pdf']['mass'], res[skey]['pdf']['pdf'] )
             # plot contours
             max_pdf = np.amax( res[skey]['pdf']['pdf'] )
+            print('   max_pdf:',max_pdf)
             scls = ['68', '90', '95', '99']
             for ind,scl in enumerate( scls ):
-                print('   scl:',scl)
+                print('      scl:',scl)
+                sclc = 'C'+scl
                 icl = int( scl )
                 xcl = float( icl/100.0 )
                 sol = optimize.root_scalar(fcl, args=( res[skey]['pdf']['pdf'], max_pdf, xcl ), x0=1.0-xcl, x1=min(1.0,1.3-xcl), rtol=0.01, maxiter=100)
                 xlev = sol.root
-                print('   xlev:',xlev)
+                print('         xlev:',xlev)
                 cs = axs.contour(res[skey]['pdf']['rad'], res[skey]['pdf']['mass'], res[skey]['pdf']['pdf'], levels=[xlev*max_pdf] )
-                if scl in res[skey]['CL_C']:
-                    axs.plot( res[skey][scl]['rad'], res[skey][scl]['mas'], linestyle='dashed', color=col[ind+1], label=scl )
+                if sclc in res[skey]['CL_C']:
+                    axs.plot( res[skey][sclc]['rad'], res[skey][sclc]['mass'], linestyle='dashed', color=col[ind+1], label=scl )
             #axs.text(6,2.5,scl+'% CL')
             axs.legend(loc='upper right',fontsize='xx-small')
             plt.savefig(plotname)
