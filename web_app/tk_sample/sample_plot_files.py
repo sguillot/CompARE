@@ -6,7 +6,8 @@ sys.path.insert(0, tk_compare)
 from tk_compare import env
 from tk_compare import create_res_qLMXB
 from tk_compare import show_res_qLMXB
-from tk_compare import create_plot_qLMXB_contour
+from tk_compare import create_plot_qLMXB_contour_A
+from tk_compare import create_plot_qLMXB_contour_C
 from tk_compare import create_plot_qLMXB_pdf
 
 def main():
@@ -28,7 +29,7 @@ def main():
     #
     pname = 'plot_contour'
     #
-    create_plot_qLMXB_contour( res_qLMXB, skeys_qLMXB, scls, pname )
+    create_plot_qLMXB_contour_A( res_qLMXB, skeys_qLMXB, scls, pname )
     #
     skeys_qLMXB = [ 'qLMXB-9', 'qLMXB-10',  'qLMXB-11', 'qLMXB-12' ]
     #
@@ -37,6 +38,12 @@ def main():
     pname = 'plot_pdf'
     #
     create_plot_qLMXB_pdf( res_qLMXB, skeys_qLMXB, scls, pname )
+    #
+    scls = [ '68', '90', '95', '99']
+    #
+    pname = 'plot_contour'
+    #
+    create_plot_qLMXB_contour_C( res_qLMXB, skeys_qLMXB, scls, pname )
     #
     
     

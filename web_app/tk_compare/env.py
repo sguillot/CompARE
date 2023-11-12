@@ -23,6 +23,9 @@ if verb: print('   dict_data:',dict_data)
 path_data_file = os.path.abspath(os.path.join( web_app, 'compare', 'static', 'data'))
 path_data_out_file = os.path.abspath(os.path.join( web_app, 'compare', 'static', 'data_out'))
 #
+if not os.path.isdir(path_data_out_file):
+    os.system('mkdir '+path_data_out_file)
+#
 if verb: print('   path_data_file:',path_data_file)
 if verb: print('   path_data_out_file:',path_data_out_file)
 #

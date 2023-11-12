@@ -13,63 +13,64 @@ def create_dict_data( ):
     data['sources'] = {}
     data['skeys'] = {}
     data['qLMXB-1'] = {}
+    # provide the name of the file
     data['qLMXB-1']['name'] = 'qLMXB_NGC2808-qLMXB_2007-massradius-hydrogen-1'
+    # provide the type of data
     data['qLMXB-1']['type'] = 'contour'
-    data['qLMXB-1']['CL'] = ['90', '99']
+    # if contour, provide the contour as given by the authors (A)
+    data['qLMXB-1']['CL_A'] = ['90', '99']
+    # repeat:
     data['qLMXB-2'] = {}
     data['qLMXB-2']['name'] = 'qLMXB_NGC5139-qLMXB_2014-massradius-hydrogen-1'
     data['qLMXB-2']['type'] = 'contour'
-    data['qLMXB-2']['CL'] = ['68', '90', '99']
+    data['qLMXB-2']['CL_A'] = ['68', '90', '99']
     data['qLMXB-3'] = {}
     data['qLMXB-3']['name'] = 'qLMXB_NGC6397-qLMXB_2014-massradius-helium-1'
     data['qLMXB-3']['type'] = 'contour'
-    data['qLMXB-3']['CL'] = ['68', '90', '99']
+    data['qLMXB-3']['CL_A'] = ['68', '90', '99']
     data['qLMXB-4'] = {}
     data['qLMXB-4']['name'] = 'qLMXB_NGC6397-qLMXB_2014-massradius-hydrogen-1'
     data['qLMXB-4']['type'] = 'contour'
-    data['qLMXB-4']['CL'] = ['68', '90', '99']
+    data['qLMXB-4']['CL_A'] = ['68', '90', '99']
     data['qLMXB-5'] = {}
     data['qLMXB-5']['name'] = 'qLMXB_47TucX5-qLMXB_2016-massradius-hydrogen-1'
     data['qLMXB-5']['type'] = 'contour'
-    data['qLMXB-5']['CL'] = ['68', '95']
+    data['qLMXB-5']['CL_A'] = ['68', '95']
     data['qLMXB-6'] = {}
     data['qLMXB-6']['name'] = 'qLMXB_47TucX7-qLMXB_2016-massradius-helium-1'
     data['qLMXB-6']['type'] = 'contour'
-    data['qLMXB-6']['CL'] = ['68', '95']
+    data['qLMXB-6']['CL_A'] = ['68', '95']
     data['qLMXB-7'] = {}
     data['qLMXB-7']['name'] = 'qLMXB_47TucX7-qLMXB_2016-massradius-hydrogen-1'
     data['qLMXB-7']['type'] = 'contour'
-    data['qLMXB-7']['CL'] = ['68', '95']
+    data['qLMXB-7']['CL_A'] = ['68', '95']
     data['qLMXB-8'] = {}
     data['qLMXB-8']['name'] = 'qLMXB_NGC6304-qLMXB_2017-massradius-hydrogen-1'
     data['qLMXB-8']['type'] = 'contour'
-    data['qLMXB-8']['CL'] = ['68', '95', '99']
+    data['qLMXB-8']['CL_A'] = ['68', '95', '99']
     data['qLMXB-9'] = {}
     data['qLMXB-9']['name'] = 'qLMXB_M13-qLMXB_2018-massradius-helium-1'
     data['qLMXB-9']['type'] = 'pdf'
-    data['qLMXB-9']['CL'] = ['68', '90', '95', '99']
     data['qLMXB-10'] = {}
     data['qLMXB-10']['name'] = 'qLMXB_M13-qLMXB_2018-massradius-hydrogen-1'
     data['qLMXB-10']['type'] = 'pdf'
-    data['qLMXB-10']['CL'] = ['68', '90', '95', '99']
     data['qLMXB-11'] = {}
     data['qLMXB-11']['name'] = 'qLMXB_M30-qLMXB_2020-massradius-helium-1'
     data['qLMXB-11']['type'] = 'mcmc'
-    data['qLMXB-11']['CL'] = ['68', '90', '95', '99']
     data['qLMXB-12'] = {}
     data['qLMXB-12']['name'] = 'qLMXB_M30-qLMXB_2020-massradius-hydrogen-1'
     data['qLMXB-12']['type'] = 'mcmc'
-    data['qLMXB-12']['CL'] = ['68', '90', '95', '99']
     data['qLMXB-13'] = {}
     data['qLMXB-13']['name'] = 'qLMXB_M28-qLMXB_2022-massradius-helium-1'
     data['qLMXB-13']['type'] = 'contour'
-    data['qLMXB-13']['CL'] = ['68', '90', '95']
+    data['qLMXB-13']['CL_A'] = ['68', '90', '95']
     data['qLMXB-14'] = {}
     data['qLMXB-14']['name'] = 'qLMXB_M28-qLMXB_2022-massradius-hydrogen-1'
     data['qLMXB-14']['type'] = 'contour'
-    data['qLMXB-14']['CL'] = ['68', '90', '95']
+    data['qLMXB-14']['CL_A'] = ['68', '90', '95']
     #
-    # default options: 'color', 'line'
+    # setup default options: 'color', 'line', 'CL_C'
+    # also count the number of sources and give their list
     #
     skeys = list( data.keys() )
     print('skeys full:',skeys)
@@ -81,6 +82,8 @@ def create_dict_data( ):
     lnames = []
     i=0
     for ind,skey in enumerate( data['skeys']['qLMXB'] ):
+        # give here the CL which will be constructed (C) by the code
+        data[skey]['CL_C'] = ['68', '90', '95', '99']
         name_long  = data[skey]['name'].split('-')
         name_short = name_long[0].split('_')
         name_new = name_long[0]+'-'+name_long[1]

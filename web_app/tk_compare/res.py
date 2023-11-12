@@ -23,21 +23,24 @@ def create_res_qLMXB( ):
         res[skey]['type']  = data[skey]['type']
         res[skey]['line']  = data[skey]['line']
         res[skey]['color'] = data[skey]['color']
-        res[skey]['CL']    = data[skey]['CL']
         #
-        for ind,scl in enumerate( data[skey]['CL'] ):
+        if res[skey]['type'] == 'contour':
             #
-            res[skey][scl] = {}
-            foname = env.path_data_out_file+'/'+data[skey]['name']+'-CL'+scl+'.txt'
-            if not os.path.isfile( foname ):
-                print('The file CL does not exist ',foname)
-                continue
-            print('The file does exists ',foname)
-            cont_R, cont_M = np.loadtxt( foname )
-            res[skey][scl]['rad'] = cont_R
-            res[skey][scl]['mas'] = cont_M
+            res[skey]['CL_A']    = data[skey]['CL_A']
+            #
+            for ind,scl in enumerate( data[skey]['CL_A'] ):
+                #
+                res[skey][scl] = {}
+                foname = env.path_data_out_file+'/'+data[skey]['name']+'-CLA'+scl+'.txt'
+                if not os.path.isfile( foname ):
+                    print('The file CL_A does not exist ',foname)
+                    continue
+                print('The file does exists ',foname)
+                cont_R, cont_M = np.loadtxt( foname )
+                res[skey][scl]['rad'] = cont_R
+                res[skey][scl]['mas'] = cont_M
         #
-        if res[skey]['type'] == 'pdf' or res[skey]['type'] == 'mcmc':
+        elif res[skey]['type'] == 'pdf' or res[skey]['type'] == 'mcmc':
             #
             res[skey]['pdf'] = {}
             foname = env.path_data_out_file+'/'+data[skey]['name']+'-pdf_rad.txt'
@@ -58,6 +61,18 @@ def create_res_qLMXB( ):
                 continue
             pdf = np.loadtxt( foname )
             res[skey]['pdf']['pdf'] = pdf
+            #
+            for ind,scl in enumerate( data[skey]['CL_C'] ):
+                #
+                res[skey][scl] = {}
+                foname = env.path_data_out_file+'/'+data[skey]['name']+'-CLC'+scl+'.txt'
+                if not os.path.isfile( foname ):
+                    print('The file CL_C does not exist ',foname)
+                    continue
+                print('The file does exists ',foname)
+                cont_R, cont_M = np.loadtxt( foname )
+                res[skey][scl]['rad'] = cont_R
+                res[skey][scl]['mas'] = cont_M
     #
     return res
     #
@@ -78,13 +93,18 @@ def show_res_qLMXB( res ):
         print('   type:',res[skey]['type'])
         print('   color:',res[skey]['color'])
         print('   line:',res[skey]['line'])
-        scls = res[skey]['CL']
-        print('   CL:',scls)
+        scls = list( res[skey]['CL_A'] )
+        print('   CL_A:',scls)
         for scl in scls:
-            print('      CL:',scl)
+            print('      CL_A:',scl)
             # give mas and rad
-        if 'pdf' in res[skey].keys():
+        if 'pdf' in list( res[skey].keys() ):
             print('   Found pdf plot in res dictionary')
+        scls = list( res[skey]['CL_C'] )
+        print('   CL_C:',scls)
+        for scl in scls:
+            print('      CL_C:',scl)
+            # give mas and rad
     #
     if env.verb: print('Exit show_res_qLMXB( res )')
     #
