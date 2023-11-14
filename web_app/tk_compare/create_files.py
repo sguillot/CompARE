@@ -76,13 +76,13 @@ def create_files_qLMXB_contours_A( ):
                 #
             #
             for ind,scl in enumerate(data[skey]['CL_A']):
-                print('      save data in ',data[skey]['name']+'-CL_A'+scl+'.txt')
+                print('      save data in ',foname+'-CL_A'+scl+'.txt')
                 if ind == 0:
-                    np.savetxt( foname+'-CL'+scl+'.txt', data1, header='CL_A '+scl )
+                    np.savetxt( foname+'-CL_A'+scl+'.txt', data1, header='CL_A '+scl )
                 elif ind == 1:
-                    np.savetxt( foname+'-CL'+scl+'.txt', data2, header='CL_A '+scl )
+                    np.savetxt( foname+'-CL_A'+scl+'.txt', data2, header='CL_A '+scl )
                 elif ind == 2:
-                    np.savetxt( foname+'-CL'+scl+'.txt', data3, header='CL_A '+scl )
+                    np.savetxt( foname+'-CL_A'+scl+'.txt', data3, header='CL_A '+scl )
         #
         elif data[skey]['type'] == 'pdf':
         #
@@ -227,7 +227,8 @@ def create_files_qLMXB_contours_C( ):
             #
             for scl in data[skey]['CL_C']:
                 print('      CL_C:',scl)
-                icl = int( scl[1:3] )
+                #icl = int( scl[1:3] )
+                icl = int( scl )
                 xcl = float( icl/100.0 )
                 sol = optimize.root_scalar(fcl, args=(pdf,max_pdf,xcl), x0=1.0-xcl, x1=min(1.0,1.3-xcl), rtol=0.01, maxiter=100)
                 xlev = sol.root
@@ -238,7 +239,7 @@ def create_files_qLMXB_contours_C( ):
                 x = v[:,0]
                 y = v[:,1]
                 contour = np.array( [x, y], dtype = np.float)
-                np.savetxt( foname+'-CL'+scl+'.txt', contour, header='CL_C '+scl )
+                np.savetxt( foname+'-CL_C'+scl+'.txt', contour, header='CL_C '+scl )
         #
         else:
         #
