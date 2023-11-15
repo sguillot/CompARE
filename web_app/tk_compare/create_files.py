@@ -250,3 +250,47 @@ def create_files_qLMXB_contours_C( ):
     if env.verb: print('Exit create_files_qLMXB_contours_C( )')
     #
 
+def create_files_Mass( ):
+    #
+    if env.verb: print('Enter create_files_Mass( )')
+    #
+    # read the dictionary
+    #
+    with open(env.dict_data, 'r') as f:
+        data = eval(f.read())
+    #
+    # loop over skeys
+    #
+    for skey in data['skeys']['Mass']:
+        #
+        print('For key = ',skey)
+        fname = env.path_data_file+'/'+data[skey]['name']+'.txt'
+        foname = env.path_data_out_file+'/'+data[skey]['name']+'.txt'
+        print('   copy ',fname,' -> ',foname)
+        os.system('cp '+fname+' '+foname)
+    #
+    if env.verb: print('Exit create_files_Mass( )')
+    #
+
+def create_files_Spin( ):
+    #
+    if env.verb: print('Enter create_files_Spin( )')
+    #
+    # read the dictionary
+    #
+    with open(env.dict_data, 'r') as f:
+        data = eval(f.read())
+    #
+    # loop over skeys
+    #
+    for skey in data['skeys']['Spin']:
+        #
+        print('For key = ',skey)
+        fname = env.path_data_file+'/'+data[skey]['name']+'.txt'
+        foname = env.path_data_out_file+'/'+data[skey]['name']+'.txt'
+        print('   copy ',fname,' -> ',foname)
+        os.system('cp '+fname+' '+foname)
+    #
+    if env.verb: print('Exit create_files_Spin( )')
+    #
+

@@ -68,20 +68,45 @@ def create_dict_data( ):
     data['qLMXB-14']['name'] = 'qLMXB_M28-qLMXB_2022-massradius-hydrogen-1'
     data['qLMXB-14']['type'] = 'contour'
     data['qLMXB-14']['CL_A'] = ['68', '90', '95']
+    data['Mass-1'] = {}
+    data['Mass-1']['name'] = 'NS-Mass_PSRJ0740+6620_2020-mass-shapiro-1'
+    data['Mass-2'] = {}
+    data['Mass-2']['name'] = 'NS-Mass_PSRJ1614-2230_NANOgrav11yr-mass-shapiro-1'
+    data['Mass-3'] = {}
+    data['Mass-3']['name'] = 'NS-Mass_PSRJ1614-2230_NANOgrav15yr-mass-shapiro-2'
+    data['Spin-1'] = {}
+    data['Spin-1']['name'] = 'NS-Spin_PSRJ1748-2446ad_2005-spin-1'
     #
     # setup default options: 'color', 'line', 'CL_C'
     # also count the number of sources and give their list
     #
     skeys = list( data.keys() )
     print('skeys full:',skeys)
-    skeys.remove('sources')
-    skeys.remove('skeys')
-    data['skeys']['qLMXB'] = skeys
-    print('skeys short:',skeys)
+    skeys_qLMXB = []
+    skeys_Mass = []
+    skeys_Spin = []
+    for skey in skeys:
+        if 'qLMXB' in skey:
+            skeys_qLMXB.append(skey)
+        elif 'Mass' in skey:
+            skeys_Mass.append(skey)
+        elif 'Spin' in skey:
+            skeys_Spin.append(skey)
+    #skeys.remove('sources')
+    #skeys.remove('skeys')
+    data['skeys']['qLMXB'] = skeys_qLMXB
+    data['skeys']['Mass'] = skeys_Mass
+    data['skeys']['Spin'] = skeys_Spin
+    print('skeys qLMXB:',data['skeys']['qLMXB'])
+    print('skeys Mass:',data['skeys']['Mass'])
+    print('skeys Spin:',data['skeys']['Spin'])
+    # Treat qLMXB
+    print('qLMXB:')
     source_qLMXB = set()
     lnames = []
     i=0
     for ind,skey in enumerate( data['skeys']['qLMXB'] ):
+        print('   skey: ',skey)
         # give here the CL which will be constructed (C) by the code
         data[skey]['CL_C'] = ['68', '90', '95', '99']
         name_long  = data[skey]['name'].split('-')
@@ -98,10 +123,40 @@ def create_dict_data( ):
             data[skey]['line'] = 'dashed'
         elif 'helium' in data[skey]['name']:
             data[skey]['line'] = 'dotted'
-        print('ind:',ind,' i:',i-1,' name_new:',name_new,' source:',name_short[1],' color:',color,' line:',data[skey]['line'])
-    print('number of sources:',len(source_qLMXB))
-    print('source names:',source_qLMXB)
+        print('   ind:',ind,' i:',i-1,' name_new:',name_new,' source:',name_short[1],' color:',color,' line:',data[skey]['line'])
+    print('   number of sources:',len(source_qLMXB))
+    print('   source names:',source_qLMXB)
     data['sources']['qLMXB'] = source_qLMXB
+    # Treat Mass
+    print('Mass:')
+    source_Mass = set()
+    for ind,skey in enumerate( data['skeys']['Mass'] ):
+        print('   skey: ',skey,' name:',data[skey]['name'])
+        name  = data[skey]['name'].split('_')
+        if name[0] == 'NS-Mass':
+            source_Mass.add(name[1])
+            color = col[ind]
+        data[skey]['color'] = color
+        data[skey]['line'] = 'solid'
+        print('   ind:',ind,' name[0]:',name[0],' source:',name[1],' color:',color,' line:',data[skey]['line'])
+    print('   number of sources:',len(source_Mass))
+    print('   source names:',source_Mass)
+    data['sources']['Mass'] = source_Mass
+    # Treat Spin
+    print('Spin:')
+    source_Spin = set()
+    for ind,skey in enumerate( data['skeys']['Spin'] ):
+        print('   skey: ',skey)
+        name  = data[skey]['name'].split('_')
+        if name[0] == 'NS-Spin':
+            source_Spin.add(name[1])
+            color = col[ind]
+        data[skey]['color'] = color
+        data[skey]['line'] = 'solid'
+        print('   ind:',ind,' name[0]:',name[0],' source:',name[1],' color:',color,' line:',data[skey]['line'])
+    print('   number of sources:',len(source_Spin))
+    print('   source names:',source_Spin)
+    data['sources']['Spin'] = source_Spin
     #
     if env.verb: print('   show dictionary data:')
     if env.verb: print('   ',data)

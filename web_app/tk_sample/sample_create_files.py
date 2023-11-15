@@ -7,6 +7,8 @@ from tk_compare import env
 from tk_compare import create_files_qLMXB_contours_A
 from tk_compare import create_files_qLMXB_pdf
 from tk_compare import create_files_qLMXB_contours_C
+from tk_compare import create_files_Mass
+from tk_compare import create_files_Spin
 
 def main():
     #
@@ -27,6 +29,18 @@ def main():
     # create contour from pdf
     #
     create_files_qLMXB_contours_C( )
+    #
+    print(50*'-')
+    #
+    # create Mass
+    #
+    create_files_Mass( )
+    #
+    print(50*'-')
+    #
+    # create Spin
+    #
+    create_files_Spin( )
     #
     print(50*'-')
 

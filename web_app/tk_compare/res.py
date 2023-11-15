@@ -98,6 +98,65 @@ def create_res_qLMXB( ):
     #
     if env.verb: print('Exit create_res_qLMXB( )')
 
+def create_res_Mass( ):
+    #
+    if env.verb: print('Enter create_res_Mass( )')
+    #
+    # define the key
+    #
+    #print('-'*10)
+    #print('READ DICT FROM FILE:')
+    with open(env.dict_data, 'r') as f:
+        data = eval(f.read())
+    #
+    res = {}
+    #
+    # loop over skeys
+    #
+    for skey in data['skeys']['Mass']:
+        print('For key = ',skey)
+        res[skey] = {}
+        res[skey]['name']  = data[skey]['name']
+        res[skey]['line']  = data[skey]['line']
+        res[skey]['color'] = data[skey]['color']
+        foname = env.path_data_out_file+'/'+data[skey]['name']+'.txt'
+        Mass, Mass_err = np.loadtxt( foname )
+        res[skey]['Mass']  = Mass
+        res[skey]['Mass_err']  = Mass_err
+    #
+    return res
+    #
+    if env.verb: print('Exit create_res_Mass( )')
+
+def create_res_Spin( ):
+    #
+    if env.verb: print('Enter create_res_Spin( )')
+    #
+    # define the key
+    #
+    #print('-'*10)
+    #print('READ DICT FROM FILE:')
+    with open(env.dict_data, 'r') as f:
+        data = eval(f.read())
+    #
+    res = {}
+    #
+    # loop over skeys
+    #
+    for skey in data['skeys']['Spin']:
+        print('For key = ',skey)
+        res[skey] = {}
+        res[skey]['name']  = data[skey]['name']
+        res[skey]['line']  = data[skey]['line']
+        res[skey]['color'] = data[skey]['color']
+        foname = env.path_data_out_file+'/'+data[skey]['name']+'.txt'
+        Freq, Freq_err = np.loadtxt( foname )
+        res[skey]['Freq']  = Freq
+        res[skey]['Freq_err']  = Freq_err
+    #
+    return res
+    #
+    if env.verb: print('Exit create_res_Spin( )')
 
 def show_res_qLMXB( res ):
     #
@@ -138,4 +197,40 @@ def show_res_qLMXB( res ):
     if env.verb: print('Exit show_res_qLMXB( res )')
     #
 
+def show_res_Mass( res ):
+    #
+    if env.verb: print('Enter show_res_Mass( res )')
+    #
+    skeys = list( res.keys() )
+    print('skeys:',skeys)
+    #
+    for skey in skeys:
+        print('for key:',skey)
+        skey_keys = list(res[skey].keys())
+        print('   res[skey].keys()',skey_keys)
+        print('   name:',res[skey]['name'])
+        print('   color:',res[skey]['color'])
+        print('   line:',res[skey]['line'])
+        print('   Mass:',res[skey]['Mass'],'+-',res[skey]['Mass_err'])
+    #
+    if env.verb: print('Exit show_res_Mass( res )')
+    #
 
+def show_res_Spin( res ):
+    #
+    if env.verb: print('Enter show_res_Spin( res )')
+    #
+    skeys = list( res.keys() )
+    print('skeys:',skeys)
+    #
+    for skey in skeys:
+        print('for key:',skey)
+        skey_keys = list(res[skey].keys())
+        print('   res[skey].keys()',skey_keys)
+        print('   name:',res[skey]['name'])
+        print('   color:',res[skey]['color'])
+        print('   line:',res[skey]['line'])
+        print('   Freq:',res[skey]['Freq'],'+-',res[skey]['Freq_err'])
+    #
+    if env.verb: print('Exit show_res_Spin( res )')
+    #

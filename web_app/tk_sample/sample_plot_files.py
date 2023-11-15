@@ -5,12 +5,20 @@ sys.path.insert(0, tk_compare)
 
 from tk_compare import env
 from tk_compare import create_res_qLMXB
+from tk_compare import create_res_Mass
+from tk_compare import create_res_Spin
 from tk_compare import show_res_qLMXB
 from tk_compare import create_plot_qLMXB_contour_A
 from tk_compare import create_plot_qLMXB_contour_C
 from tk_compare import create_plot_qLMXB_pdf
+from tk_compare import create_plot_Mass
+from tk_compare import create_plot_Spin
 
 def main():
+    #
+    # --------------------------------------------------
+    # qLMXB
+    # --------------------------------------------------
     #
     print(50*'-')
     #
@@ -49,9 +57,47 @@ def main():
     #
     create_plot_qLMXB_contour_C( res_qLMXB, skeys_qLMXB, scls, pname )
     #
+    # --------------------------------------------------
+    # Mass
+    # --------------------------------------------------
+    #
     print(50*'-')
     #
-    
+    # read file and store data in res_Mass
+    #
+    res_Mass = create_res_Mass( )
+    #
+    print(50*'-')
+    #
+    # define the keys
+    #
+    skeys_Mass = [ 'Mass-1', 'Mass-2', 'Mass-3']
+    pname = 'plot_mass'
+    #
+    create_plot_Mass( res_Mass, skeys_Mass, pname )
+    #
+    print(50*'-')
+    #
+    # --------------------------------------------------
+    # Spin
+    # --------------------------------------------------
+    #
+    print(50*'-')
+    #
+    # read file and store data in res_Mass
+    #
+    res_Spin = create_res_Spin( )
+    #
+    print(50*'-')
+    #
+    # define the keys
+    #
+    skeys_Spin = [ 'Spin-1']
+    pname = 'plot_spin'
+    #
+    #create_plot_Spin( res_Spin, skeys_Spin, pname )
+    #
+    print(50*'-')
     
 if __name__ == "__main__":
     main()

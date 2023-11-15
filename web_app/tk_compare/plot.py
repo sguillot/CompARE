@@ -122,3 +122,61 @@ def create_plot_qLMXB_pdf( res, skeys, scls, pname ):
     #
     if env.verb: print('Exit create_plot_pdf( res, skeys, scls, pname )')
     
+def func_sig ( x, m, m_err):
+    return 1.0 - 1.0 / ( 1.0+np.exp( (x-m)/m_err ) )
+
+def create_plot_Mass( res, skeys, pname ):
+    #
+    if env.verb: print('Enter create_plot_Mass( res, skeys, pname )')
+    #
+    # plot the figure with masses
+    #
+    if len(skeys) == 1:
+        plotname = pname+'-'+res[skeys]['name']+'.pdf'
+    else:
+        plotname = pname+'-several'+'.pdf'
+    #
+    print('   plotname',plotname)
+    radius = np.linspace(0, 20)
+    mass = 0.4+np.linspace(0, 100)/40.0
+    fig, axs = plt.subplots(1,2)
+    fig.tight_layout() # Or equivalently,  "plt.tight_layout()"
+    fig.subplots_adjust(left=0.12, bottom=0.1, right=None, top=None, wspace=0.6, hspace=0.3)
+    #plt.title('MR Contours')
+    axs[0].set_xlabel(r'Radius (km)')
+    axs[0].set_ylabel(r'Mass (M$_\odot$)')
+    axs[0].set_xlim(5,18)
+    axs[0].set_ylim(0.4,2.7)
+    for skey in skeys:
+        print('   For key',skey)
+        print('      keys',list(res[skey].keys()))
+        print('      Mass:',res[skey]['Mass'],'+-',res[skey]['Mass_err'])
+        axs[0].fill_between( radius, res[skey]['Mass']-res[skey]['Mass_err'], res[skey]['Mass']+res[skey]['Mass_err'], color=res[skey]['color'], label=res[skey]['name'] )
+    axs[0].legend(loc='upper right',fontsize='xx-small')
+    #
+    axs[1].set_xlabel(r'Mass (M$_\odot$)')
+    axs[1].set_ylabel(r'Probability')
+    for skey in skeys:
+        axs[1].plot( mass, func_sig(mass, res[skey]['Mass'], res[skey]['Mass_err']), color=res[skey]['color'], label=res[skey]['name'])
+    plt.savefig(plotname)
+    #
+    if env.verb: print('Exit create_plot_Mass( res, skeys, pname )')
+
+def create_plot_Spin( res, skeys, pname ):
+    #
+    if env.verb: print('Enter create_plot_Spin( res, skeys, pname )')
+    #
+    # plot the figure with masses
+    #
+    if len(skeys) == 1:
+        plotname = pname+'-'+res[skeys]['name']+'.pdf'
+    else:
+        plotname = pname+'-several'+'.pdf'
+    #
+    print('   plotname',plotname)
+    #
+    # complete here with the plot to draw
+    #
+    plt.savefig(plotname)
+    #
+    if env.verb: print('Exit create_plot_Spin( res, skeys, pname )')
