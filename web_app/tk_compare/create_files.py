@@ -126,6 +126,7 @@ def create_files_qLMXB_pdf( ):
         #
             print('      copy pdf from authors --> pdf for the code')
             rad, mass, pdf = np.loadtxt( fname, unpack=True, comments='#')
+            # utiliser np.unique et np.sort au lieu de passer par des listes.
             rad2=list(set(rad)); mass2=list(set(mass))
             rad2.sort(); mass2.sort();
             #print('         rad2:',rad2 )
@@ -225,14 +226,18 @@ def create_files_qLMXB_contours_C( ):
             max_pdf = np.max( pdf )
             print('   max_pdf:',max_pdf)
             #
+            # Search for the contours associated to the CL_C defined in the dictionary data
+            #
             for scl in data[skey]['CL_C']:
                 print('      CL_C:',scl)
                 #icl = int( scl[1:3] )
                 icl = int( scl )
                 xcl = float( icl/100.0 )
+                # The formula to transform xcl into probability is given in the function fcl:
                 sol = optimize.root_scalar(fcl, args=(pdf,max_pdf,xcl), x0=1.0-xcl, x1=min(1.0,1.3-xcl), rtol=0.01, maxiter=100)
                 xlev = sol.root
                 print('         xlev:',xlev)
+                # extract the contour from the pdf 
                 cs = plt.contour(rad, mass, pdf, levels=[xlev*max_pdf])
                 p = cs.collections[0].get_paths()[0]
                 v = p.vertices
