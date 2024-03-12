@@ -8,7 +8,7 @@ Installation from Conda might be possible, but I couldn't get it to work.
 
 Define your SQL localhost root password:
 
-    ALTER USER ‘root’@‘localhost' IDENTIFIED WITH mysql_native_password BY ‘pass1234’;
+    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass1234';
 
 Create the database from the existing `database_compare3.sql` file. Note that `database_draft.sql` is outdated and will not work with the current version of the code (python and html). It will prompt your password: 'pass1234' in the example above)
 
