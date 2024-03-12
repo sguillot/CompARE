@@ -217,7 +217,7 @@ function ajaxRequest(checkList , select , search){
         // download.innerHTML = "<a href='{% static \"data/"+ d.filename + "\" %}' download='{% static \"data/"+ d.filename + "\" %}'><img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
 
         // We also generate the part of the static URL before the specified path
-        download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + baseStaticURL + "data/" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/download.svg' alt='icon download' width='30em' />" + "</a>";
+        download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/download.svg' alt='icon download' width='30em' />" + "</a>";
 
         let checkdo = row.insertCell(12)
         checkdo.innerHTML = "<td><input type='checkbox' value="+ d.filename+" class='dwnl' name='che'> </td>"
