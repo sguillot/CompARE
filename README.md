@@ -74,11 +74,11 @@ From the MySQL workbench or its command prompt (depending on your operating syst
 
 Create the `compare3` database as follows:
 
-`CREATE DATABASE compare3;`
+    CREATE DATABASE compare3;
 
 And check its existence if necessary:
 
-`SHOW DATABASES;`
+    SHOW DATABASES;
 
 Import the `database_compare3.sql` file into the previously created database. Note that `database_draft.sql` is outdated and will not work with the current version of the code (python and html). It will prompt your password: _'pass1234'_ in the example above.
 
