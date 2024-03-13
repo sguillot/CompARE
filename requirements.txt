@@ -1,6 +1,7 @@
 from OS:
 python3
 wget
+gzip
 
 from pip3:
 os

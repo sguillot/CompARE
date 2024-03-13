@@ -4,7 +4,7 @@ Repository of observational constraints on the dense matter equation of state fr
 
 To contribute, please use the `develop` branch of the GitHub repository.
 
-Local installation instructions of the database and web app are in the tutorial `/docs/tuto local.md`
+Local installation instructions of the database and web app are in the tutorial `/docs/tuto local.md`.
 
 [//]: # (We recommend the developer to work on a local version of CompARE.)
 
@@ -18,15 +18,15 @@ Here are some details of the existing folders:
 
 ### /data/
 
-Containts the data files (organized by type of source)
+Containts the data files (organized by type of source).
 
 ### /docs/
 
-Contains tutorials. Also contains files for 'Looping' (database development software)
+Contains tutorials. Also contains files for 'Looping' (database development software).
 
 ## /scripts/
 
-Contains the scripts (plotting, fetching data, managing database)
+Contains the scripts (plotting, fetching data, managing database).
 
 ## requirements.txt
 
@@ -52,17 +52,43 @@ Contains the web app and the database interface files.
 Installation can be done from the MySQL page, or from `brew` (for Mac users, see https://flaviocopes.com/mysql-how-to-install/). 
 Installation from Conda might be possible, but I couldn't get it to work.
 
-Define your SQL localhost root password:
+### For Windows users:
 
-    ALTER USER ‘root’@‘localhost' IDENTIFIED WITH mysql_native_password BY ‘pass1234’;
+If you wish to run mySQL commands from a **command prompt** like CMD or Powershell (to facilitate importing data from an `.sql` file into the database):
 
-Create the database from the existing `database_compare3.sql` file. Note that `database_draft.sql` is outdated and will not work with the current version of the code (python and html). It will prompt your password: 'pass1234' in the example above)
+- Go to the `"Modify system environment variables"` tab and click on `"Environment variables"`;
 
-    mysql -u root -p < scripts/database/database_compare3.sql
+- In the `"System variables"` section, find the `"PATH"` variable and modify it.
 
-Add the environment variable `PWD_MYSQL` with your password (e.g. `pass1234` in the example above) with the following line in your `.bashrc` or `.bash_profile`.
+- Click on `"New"` and add the full path to the MySQL bin directory (something like `C:\Program Files\MySQL Server\bin`).
+
+Save everything and check from a command prompt that you have MySQL by typing the command: 
+
+    mysql --version
+
+### For everyone:
+
+From the MySQL workbench or its command prompt (depending on your operating system), connect to your instance and change (if necessary) your SQL root password localhost:
+
+    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass1234';
+
+Create the `compare3` database as follows:
+
+    CREATE DATABASE compare3;
+
+And check its existence if necessary:
+
+    SHOW DATABASES;
+
+Import the `database_compare3.sql` file into the previously created database. Note that `database_draft.sql` is outdated and will not work with the current version of the code (python and html). It will prompt your password: _'pass1234'_ in the example above.
+
+    mysql -u root -p --database=compare3 < scripts/database/database_compare3.sql
+
+Add the environment variable `PWD_MYSQL` with your password (e.g. `pass1234` in the example above) with the following line in your `.bashrc` or `.bash_profile` (on Windows, you can use **Git Bash** for example).
 
     export PWD_MYSQL="pass1234"
+
+Reload your shell configuration file to apply the changes with ``source ~/.bashrc`` or ``source ~/.bash_profile``.
 
 
 ## Clone the CompARE project from GitHub.
@@ -83,7 +109,8 @@ or
 
     pip install -r .\requirementsDjango.txt   
 
-If this does not work, try installing individually the packages listed in `requirementsDjango.txt`
+If this does not work, try installing individually the packages listed in `requirementsDjango.txt`.
+
 
 [//]: # (### Change the settings)
 
@@ -111,16 +138,15 @@ If this does not work, try installing individually the packages listed in `requi
 [//]: # (PORT = Mysql Port &#40;default used by mysql is 3306&#41;)
 
 
-
 ### Run the web app server and open the web app interface
 
-In a terminal :
+In a terminal:
 
     cd web_app/
 
     python manage.py runserver
 
-Open the following address in a web browser
+Open the following address in a web browser:
 
     http://127.0.0.1:8000/
 
