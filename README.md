@@ -4,7 +4,7 @@ Repository of observational constraints on the dense matter equation of state fr
 
 To contribute, please use the `develop` branch of the GitHub repository.
 
-Local installation instructions of the database and web app are in the tutorial `/docs/tuto local.md`
+Local installation instructions of the database and web app are in the tutorial `/docs/tuto local.md`.
 
 [//]: # (We recommend the developer to work on a local version of CompARE.)
 
@@ -18,15 +18,15 @@ Here are some details of the existing folders:
 
 ### /data/
 
-Containts the data files (organized by type of source)
+Containts the data files (organized by type of source).
 
 ### /docs/
 
-Contains tutorials. Also contains files for 'Looping' (database development software)
+Contains tutorials. Also contains files for 'Looping' (database development software).
 
 ## /scripts/
 
-Contains the scripts (plotting, fetching data, managing database)
+Contains the scripts (plotting, fetching data, managing database).
 
 ## requirements.txt
 
@@ -52,9 +52,9 @@ Contains the web app and the database interface files.
 Installation can be done from the MySQL page, or from `brew` (for Mac users, see https://flaviocopes.com/mysql-how-to-install/). 
 Installation from Conda might be possible, but I couldn't get it to work.
 
-### For Windows users :
+### For Windows users:
 
-If you wish to run mySQL commands from a **command prompt** like CMD or Powershell (to facilitate importing data from an `.sql` file into the database) :
+If you wish to run mySQL commands from a **command prompt** like CMD or Powershell (to facilitate importing data from an `.sql` file into the database):
 
 - Go to the `"Modify system environment variables"` tab and click on `"Environment variables"`;
 
@@ -62,11 +62,13 @@ If you wish to run mySQL commands from a **command prompt** like CMD or Powershe
 
 - Click on `"New"` and add the full path to the MySQL bin directory (something like `C:\Program Files\MySQL Server\bin`).
 
-Save everything and check from a command prompt that you have MySQL by typing the command ``mysql --version``.
+Save everything and check from a command prompt that you have MySQL by typing the command: 
 
-### For everyone :
+    mysql --version
 
-From the MySQL workbench or its command prompt (depending on your operating system), connect to your instance and change (if necessary) your SQL root password localhost :
+### For everyone:
+
+From the MySQL workbench or its command prompt (depending on your operating system), connect to your instance and change (if necessary) your SQL root password localhost:
 
     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass1234';
 
@@ -82,10 +84,11 @@ Import the `database_compare3.sql` file into the previously created database. No
 
     mysql -u root -p --database=compare3 < scripts/database/database_compare3.sql
 
-Add the environment variable `PWD_MYSQL` with your password (e.g. `pass1234` in the example above) with the following line in your `.bashrc` or `.bash_profile`.
+Add the environment variable `PWD_MYSQL` with your password (e.g. `pass1234` in the example above) with the following line in your `.bashrc` or `.bash_profile` (on Windows, you can use **Git Bash** for example).
 
     export PWD_MYSQL="pass1234"
 
+Reload your shell configuration file to apply the changes with ``source ~/.bashrc`` or ``source ~/.bash_profile``.
 
 ## Clone the CompARE project from GitHub.
  
@@ -105,7 +108,7 @@ or
 
     pip install -r .\requirementsDjango.txt   
 
-If this does not work, try installing individually the packages listed in `requirementsDjango.txt`
+If this does not work, try installing individually the packages listed in `requirementsDjango.txt`.
 
 [//]: # (### Change the settings)
 
@@ -133,18 +136,16 @@ If this does not work, try installing individually the packages listed in `requi
 [//]: # (PORT = Mysql Port &#40;default used by mysql is 3306&#41;)
 
 
-
 ### Run the web app server and open the web app interface
 
-In a terminal :
+In a terminal:
 
     cd web_app/
 
     python manage.py runserver
 
-Open the following address in a web browser
+Open the following address in a web browser:
 
     http://127.0.0.1:8000/
-
 
 We thank ECT*, EMMI, Strong2020, INFN, INSU-PNHE and CNES for their support in the early stage of development of this work.
