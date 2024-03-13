@@ -167,7 +167,8 @@ function ajaxRequest(checkList , select , search){
         let row  = table.insertRow()
 
         let more = row.insertCell(0)
-        more.innerHTML = "<a href=detail/"+d.filename+" target='_blank'><img src='{% static \"compare/plus.svg\" %}' alt='icon more' width='30em' /></a>"
+        // We generate the part of the static URL before the specified path
+        more.innerHTML = "<a href=detail/" + d.filename + " target='_blank'><img src='" + baseStaticURL + "compare/plus.svg' alt='icon more' width='30em' /></a>"
 
         let name = row.insertCell(1)
         name.innerHTML = d.namedb
@@ -210,13 +211,13 @@ function ajaxRequest(checkList , select , search){
         ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
 
         let download = row.insertCell(11)
-        // None of the two option seem to work...
-        download.innerHTML = "<img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' />"
-        download.innerHTML = '<img src="{% static \'compare/download.svg\' %}" alt="icon download" width="30em" />'
 
         // Commenting the download for now since even the image doesn't work!
         // download.innerHTML = "<a href="+ d.filpath + " download> <img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
         // download.innerHTML = "<a href='{% static \"data/"+ d.filename + "\" %}' download='{% static \"data/"+ d.filename + "\" %}'><img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
+
+        // We also generate the part of the static URL before the specified path
+        download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/download.svg' alt='icon download' width='30em' />" + "</a>";
 
         let checkdo = row.insertCell(12)
         checkdo.innerHTML = "<td><input type='checkbox' value="+ d.filename+" class='dwnl' name='che'> </td>"

@@ -90,6 +90,7 @@ Add the environment variable `PWD_MYSQL` with your password (e.g. `pass1234` in 
 
 Reload your shell configuration file to apply the changes with ``source ~/.bashrc`` or ``source ~/.bash_profile``.
 
+
 ## Clone the CompARE project from GitHub.
  
     git clone https://github.com/sguillot/CompARE
@@ -109,6 +110,7 @@ or
     pip install -r .\requirementsDjango.txt   
 
 If this does not work, try installing individually the packages listed in `requirementsDjango.txt`.
+
 
 [//]: # (### Change the settings)
 
@@ -147,5 +149,6 @@ In a terminal:
 Open the following address in a web browser:
 
     http://127.0.0.1:8000/
+
 
 We thank ECT*, EMMI, Strong2020, INFN, INSU-PNHE and CNES for their support in the early stage of development of this work.

@@ -5,6 +5,9 @@
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'compare/site.css' %}"/>
+    <script>
+        var baseStaticURL = "{% static '' %}";
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="{% static 'compare/script.js' %}"></script>
     <script src="{% static 'compare/scriptAdd.js' %}"></script>

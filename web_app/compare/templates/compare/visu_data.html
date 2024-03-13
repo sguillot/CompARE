@@ -193,7 +193,7 @@ Visu_data
 
                     <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
                     <td>
-                        <a href="{% static datalink %}" download="{% static datalink %}">
+                        <a href="{% static datalink %}" download="{{q.filename}}">
                             <img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em />
                         </a>
                     </td>
