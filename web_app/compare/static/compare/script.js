@@ -211,11 +211,7 @@ function ajaxRequest(checkList , select , search){
         ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
 
         let download = row.insertCell(11)
-
-        // Commenting the download for now since even the image doesn't work!
-        // download.innerHTML = "<a href="+ d.filpath + " download> <img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
-        // download.innerHTML = "<a href='{% static \"data/"+ d.filename + "\" %}' download='{% static \"data/"+ d.filename + "\" %}'><img src='{% static \"compare/download.svg\" %}' alt='icon download' width='30em' /></a>"
-
+      
         // We also generate the part of the static URL before the specified path
         download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/download.svg' alt='icon download' width='30em' />" + "</a>";
 

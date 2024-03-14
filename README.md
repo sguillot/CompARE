@@ -56,7 +56,7 @@ Installation from Conda might be possible, but I couldn't get it to work.
 
 If you wish to run mySQL commands from a **command prompt** like CMD or Powershell (to facilitate importing data from an `.sql` file into the database):
 
-- Go to the `"Modify system environment variables"` tab and click on `"Environment variables"`;
+- Go to the `"Modify system environment variables"` tab and click on `"Environment variables"`.
 
 - In the `"System variables"` section, find the `"PATH"` variable and modify it.
 
