@@ -323,7 +323,7 @@ input.check{
   border-radius: 2em;
 }
 
-/* page Login */
+/* page login */
 
 .box-login{
   background-color: #ffffff;
@@ -371,9 +371,9 @@ input.check{
   font-size: 1.6em;
 }
 
-/* add form */
+/* add & modify form */
 
-.allcontent {
+.allcontent, .modify-page {
   max-width: 60%;
   margin: 0 auto;
   padding: 20px;
@@ -384,11 +384,13 @@ input.check{
   font-size: 1.3em;
 }
 
-.allcontent p {
+.allcontent p, .modify-page p {
   margin-top: 1px;
 }
 
-.upload-form, .nscontent, .namecontent, .inputadd, .inputRef, .constraincontent, .refcontent, .modelcontent, .asscontent {
+.upload-form, .nscontent, .namecontent, .inputadd, .inputRef, 
+.constraincontent, .refcontent, .modelcontent, .asscontent, .form-name,
+.form-ref, .form-method, .form-constrain {
   margin-bottom: 20px;
 }
 
@@ -442,7 +444,7 @@ input.check{
   margin-left:10px;
 }
 
-.submit-button, .addN, .addR, .addMA, .removeMA, .createSRV {
+.submit-button, .addN, .addR, .addMA, .removeMA, .createSRV, .updateBtn, .addNew {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -450,11 +452,11 @@ input.check{
   transition: background-color 0.3s ease;
 }
 
-.addMA, .removeMA, .createSRV {
+.addMA, .removeMA, .createSRV, .updateBtn, .addNew {
   margin: 0px 10px 20px 0px;
 }
 
-.submit-button, .addN, .addR {
+.submit-button, .addN, .addR, .addNew {
   background-color: #007bff;
   color: #fff;
 }
@@ -464,17 +466,31 @@ input.check{
   color: #fff;
 }
 
+.updateBtn {
+  background-color: #ffc107;
+  color: #fff;
+}
+
 .removeMA {
   background-color: #dc3545;
   color: #fff;
 }
 
-.submit-button:hover, .addN:hover, .addR:hover {
+.updateBtn:disabled, .addNew:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submit-button:hover, .addN:hover, .addR:hover, .addNew:hover {
   background-color: #0056b3;
 }
 
 .addMA:hover, .createSRV:hover {
   background-color: #218838;
+}
+
+.updateBtn:hover {
+  background-color: #e0a800;
 }
 
 .removeMA:hover {
@@ -487,13 +503,14 @@ input.check{
 
 .nscontent label, .divsepar label, .methodcontent label, .constraincontent label, 
 .refcontent label, .modelcontent label, .asscontent label,
-.formfilename label, .formfilepath label, .btnadd label {
+.formfilename label, .formfilepath label, .btnadd label, .modify-name label,
+.form-ref label, .form-method label, .form-constrain label {
   font-weight: bold;
   display: block;
   margin-bottom: 5px;
 }
 
-.insertinput {
+.insertinput, .modifyinput {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -502,7 +519,7 @@ input.check{
   box-sizing: border-box;
 }
 
-.insertinput:focus {
+.insertinput:focus, .modifyinput:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -518,32 +535,6 @@ input.check{
   margin-bottom: 1rem;
   border: 1px solid transparent;
   border-radius: 0.25rem;
-}
-
-/* page modify */
-
-.info-assumptions li, .info-model li{
-  display: inline ;
-}
-
-.info-assumptions a, .info-model a{
-  text-decoration: none;
-}
-
-.modify-page {
-  padding: 1%;
-}
-
-.form-method {
-  padding-left: 0.5%;
-  display: flex;
-  align-items: start;
-}
-
-.form-constrain {
-  padding: 0.5%;
-  display: flex;
-  align-items: center;
 }
 
 /* page info & home page */
