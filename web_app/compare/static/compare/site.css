@@ -431,8 +431,6 @@ input.check{
   padding: 10px;
 }
 
-/* buttons & inputs */
-
 .file-input {
   padding: 10px;
   border: 1px solid #ccc;
@@ -444,10 +442,7 @@ input.check{
   margin-left:10px;
 }
 
-.submit-button, .addN, .addR, .addMA, .removeMA, 
-.nameadd button[type="submit"], 
-.inputadd button[type="submit"], 
-.validation-button button {
+.submit-button, .addN, .addR, .addMA, .removeMA, .createSRV {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -455,7 +450,7 @@ input.check{
   transition: background-color 0.3s ease;
 }
 
-.addMA, .removeMA, .nameadd button[type="submit"], .inputadd button[type="submit"], .validation-button button {
+.addMA, .removeMA, .createSRV {
   margin: 0px 10px 20px 0px;
 }
 
@@ -464,7 +459,7 @@ input.check{
   color: #fff;
 }
 
-.addMA, .nameadd button[type="submit"], .inputadd button[type="submit"], .validation-button button {
+.addMA, .createSRV {
   background-color: #28a745;
   color: #fff;
 }
@@ -478,7 +473,7 @@ input.check{
   background-color: #0056b3;
 }
 
-.addMA:hover, .nameadd button[type="submit"]:hover, .inputadd button[type="submit"]:hover, .validation-button button:hover {
+.addMA:hover, .createSRV:hover {
   background-color: #218838;
 }
 
@@ -486,7 +481,6 @@ input.check{
   background-color: #c82333;
 }
 
-/* labels */
 .btnadd, .addRef {
   margin-top: 20px;
 }
@@ -499,33 +493,7 @@ input.check{
   margin-bottom: 5px;
 }
 
-.formfilename input[type="text"]:focus,
-.formfilepath input[type="text"]:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.formfilename input[type="text"]::placeholder,
-.formfilepath input[type="text"]::placeholder {
-    color: #999;
-}
-
-#selMethN, #methSpe, #methodD, #methodP, #selConsT, #selConsV, #consVers, #nList, #rList,
-.formfilename input[type="text"],
-.formfilepath input[type="text"],
-.divsepar input[type="text"],
-.divsepar input[type="number"],
-.divsepar input[type="date"],
-.divsepar select,
-.inputadd input[type="text"],
-.inputadd input[type="number"],
-.inputadd textarea,
-.modelcontent input[type="text"],
-.modelcontent input[type="number"],
-.modelcontent textarea,
-.asscontent input[type="text"],
-.asscontent textarea {
+.insertinput {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -534,7 +502,11 @@ input.check{
   box-sizing: border-box;
 }
 
-/* errors */
+.insertinput:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 
 #errorInsert, .err{display: none;}
 
