@@ -298,6 +298,7 @@ input.check{
 .divmodeldesc, .divassumptionsdesc {
   padding-top: 5px;
   text-justify: distribute;
+  margin-left:10px;
 }
 
 .divcompact{
