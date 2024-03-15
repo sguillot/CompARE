@@ -7,8 +7,10 @@ Add
 {% if messages %}
     {% for m in messages %}
         <div class="error" id={{m}}>{{m}}</div>
-    {%endfor%}
+    {% endfor %}
 {% endif %}
+
+<br><br>
 
 <div id="errorInsert">
     <p id='test'></p>
@@ -16,54 +18,55 @@ Add
 
 <div class="allcontent">
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="upload-form">
         {% csrf_token %}
-        <input type="file" name="myfile" style="TEST">
-        <button type="submit">Send</button>
+        <input type="file" name="myfile" class="file-input">
+        <button type="submit" class="submit-button">Send</button>
     </form>
+
     <div class="nscontent">
-        <hr>
+        <label><u>Manual file addition</u></label><br>
+
         <div class="formfilename">
-            <label><u>File name</u></label><br>
+            <label>File name</label>
             <input type="text" name="filename" placeholder="File Name" id="filename" maxlength="100" minlength="5">
         </div>
         <div class="formfilepath">
-            <label>File path</label><br>
+            <label>File path</label>
             <input type="text" name="filepath" placeholder="File Path" id="filepath" maxlength="512" minlength="5">
         </div>
     </div>
+
     <div class="namecontent">
-        <div class="nameselect">
-            <div class="divslct">
-                <select name="name" id="nList"  onchange="changeFuncName(value)">
-                    <option value="opt">Select an existing source</option>
-                    {% for n in queryname %}
-                        <option value="{{n.id_name}}">{{n.namedb }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="table-source">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Class</th>
-                            <th>Name Simbad</th>
-                            <th>Class Simbad</th>
-                            <th>RA</th>
-                            <th>DEC</th>
-                            <th>Localisation File</th>
-                            <th>Event date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="nameTable"> </tbody>
-                </table>
-            </div>
+        <div class="divslct">
+            <select name="name" id="nList"  onchange="changeFuncName(value)">
+                <option value="opt">Select an existing source</option>
+                {% for n in queryname %}
+                    <option value="{{n.id_name}}">{{n.namedb}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="table-source">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Name Simbad</th>
+                        <th>Class Simbad</th>
+                        <th>RA</th>
+                        <th>DEC</th>
+                        <th>Localisation File</th>
+                        <th>Event date</th>
+                    </tr>
+                </thead>
+                <tbody id="nameTable"> </tbody>
+            </table>
         </div>
         
         <div class="btnadd">
             <label><u>Create a new source</u></label><br>
-            <button onclick="showHide(this)" class="addN" >New source</button>
+            <button onclick="showHide(this)" class="addN">New source</button>
             <div id="addN">
                 <div class="nameadd">
                     <form action='' id="test" method="POST">
@@ -144,24 +147,24 @@ Add
     <hr>
    
     <div class="constraincontent">
-        <label><u>Constrain</u></label><br>
+        <label><u>Constraint</u></label><br>
         <div id="addC">
             <form action='' id="test" method="POST">
                 {% csrf_token %}
-                <label>Constrain Type</label>
+                <label>Constraint Type</label>
                 <select name="constraint" id="selConsT">
                     {% for lc in listconstrain %}
                         <option value="{{lc}}">{{lc}}</option>
                     {%endfor%}
                 </select>
-                <label>Constrain Variable</label>
+                <label>Constraint Variable</label>
                 <select name="constrainvar" id="selConsV">
                     {% for lcv in listconstrainvar %}
                         <option value="{{lcv}}">{{lcv}}</option>
                     {%endfor%}
                 </select>
-                <label>Constrain Version</label>
-                <input type="number" name="constrainv" id="consVers" placeholder="Constrain Version">
+                <label>Constraint Version</label>
+                <input type="number" name="constrainv" id="consVers" placeholder="Constraint Version">
                 <input type="hidden" name="hid" value="formAddConstrain">
             </form>
         </div>
@@ -192,29 +195,32 @@ Add
             </table>
         </div>
 
-        <label><u>Create a new reference</u></label><br>
-        <button onclick="showHide(this)" class="addR">New reference</button>
-        <div class='inputadd' id="addR">
-            <form action='' id="test" method="POST">
-                {% csrf_token %}
-                <label>Author</label>
-                <input type="text" name="author" placeholder="Author">
-                <label>Ref Year</label>
-                <input type="number" name="refyear" placeholder="Ref Year">
-                <label>Short</label>
-                <input type="text" name="short" placeholder="Short ADS">
-                <label>Bibtex</label>
-                <textarea name="bibtex" placeholder="bibtex"></textarea>
-                <label>Doi</label>
-<!--                <textarea name="doi" placeholder="doi"></textarea>-->
-                <input type="text" name="doi" placeholder="DOI">
-                <label>Repository Doi</label>
-                <input type="text" name="repositorydoi" placeholder="Repository Doi">
-                <label>Data Link</label>
-                <input type="text" name="datalink" placeholder="Data Link">
-                <input type="hidden" name="hid" value="formAddRef">
-                <button type="submit">Send</button>
-            </form>
+        <div class="addRef">
+            <label><u>Create a new reference</u></label><br>
+            <button onclick="showHide(this)" class="addR">New reference</button>
+            <div class='inputadd' id="addR">
+                <form action='' id="test" method="POST">
+                    {% csrf_token %}
+                    <div class="inputRef">
+                        <label>Author</label>
+                        <input type="text" name="author" placeholder="Author">
+                        <label>Ref Year</label>
+                        <input type="number" name="refyear" placeholder="Ref Year">
+                        <label>Short</label>
+                        <input type="text" name="short" placeholder="Short ADS">
+                        <label>Bibtex</label>
+                        <textarea name="bibtex" placeholder="bibtex"></textarea>
+                        <label>Doi</label>
+                        <input type="text" name="doi" placeholder="DOI">
+                        <label>Repository Doi</label>
+                        <input type="text" name="repositorydoi" placeholder="Repository Doi">
+                        <label>Data Link</label>
+                        <input type="text" name="datalink" placeholder="Data Link">
+                        <input type="hidden" name="hid" value="formAddRef">
+                    </div>
+                    <button type="submit">Create</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -227,13 +233,13 @@ Add
             <input type="text" name="dependenciesprimary" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5">
             <label>Dependencies Secondary</label>
             <input type="text" name="dependenciessecondary" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5">
-            <label>Dependecies Description</label>
+            <label>Dependencies Description</label>
             <textarea name="dependenciesdescription" id="dependenciesdescription" placeholder="Dependencies Description"></textarea>
             <label>Dependencies References</label>
             <textarea name="dependenciesreferences" id="dependenciesreferences" placeholder="Dependencies References"></textarea>
             <input type="hidden" name="hiddep" value="formAddModel">
-            <button onclick="inTableMod()">Add</button>
-            <button onclick="returndep()" class="addMo">Remove</button>
+            <button class="addMA" onclick="inTableMod()">Add</button>
+            <button class="removeMA" onclick="returndep()" class="addMo">Remove</button>
             <div class="table-modeldep">
                 <table>
                     <thead>
@@ -264,8 +270,8 @@ Add
             <label>Assumptions References</label>
             <textarea name="assumptionsreferences" id="assumptionsreferences" placeholder="Assumptions References"></textarea>
             <input type="hidden" name="hidass" value="formAddAssumptions">
-            <button onclick="inTableAss()">Add</button>
-            <button onclick="returnass()" class="addA" >Remove</button>
+            <button class="addMA" onclick="inTableAss()">Add</button>
+            <button class="removeMA" onclick="returnass()" class="addA" >Remove</button>
             <div class="table-modeldep">
                 <table>
                     <thead>
@@ -285,9 +291,11 @@ Add
 
     <hr>
 
-    <div>
-    When done, click here:
-    <button type="submit" onclick="createNs()">Validate</button>
+    <div class="validation-button">
+        When done, click here:
+        <button type="submit" onclick="createNs()">Validate</button>
     </div>
 </div>
 {% endblock %}
+
+<br><br>

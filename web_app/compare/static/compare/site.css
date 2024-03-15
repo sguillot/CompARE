@@ -211,8 +211,6 @@ input.check{
 
 .bodydetail{
   background-color: #ffffff;
-  /*background-image: linear-gradient(0deg, #ffffff 0%, #dedede 100%);*/
-  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -280,7 +278,6 @@ input.check{
   padding-left: 0.2%;
   padding-right: 0.2%;
   background-color: #ffffff;
-  /*background-image: linear-gradient(0deg, #ffffff 0%, #b0b0b0 100%);*/
   border-style: solid;
   text-align: justify;
 }
@@ -292,8 +289,6 @@ input.check{
 .divmodel li, .divassumptions  li{
   list-style-type:none;
   font-size: 1.3em;
-  /*list-style-position: inside;*/
-  /*padding-left: 0;*/
 }
 
 .divmodel span, .divassumptions span{
@@ -310,7 +305,6 @@ input.check{
   flex-wrap: wrap;
   width: 45%;
   background-color: #ffffff;
-  /*background-image: linear-gradient(0deg, #ffffff 0%, #b0b0b0 100%);*/
   justify-content: space-between; 
   border-style: solid;
 }
@@ -377,27 +371,170 @@ input.check{
   font-size: 1.6em;
 }
 
-/*page Insertion*/
+/* add form */
 
 .allcontent {
+  max-width: 60%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 1%;
   font-size: 1.3em;
 }
 
 .allcontent p {
   margin-top: 1px;
-  margin-bottom: 0px;
+}
+
+.upload-form, .nscontent, .namecontent, .inputadd, .inputRef, .constraincontent, .refcontent, .modelcontent, .asscontent {
+  margin-bottom: 20px;
+}
+
+.upload-form {
+  display:flex;
+  justify-content: center;
+}
+
+.validation-button {
+  margin-top: 20px;
+  text-align: center; 
+}
+
+.table-source, .table-reference, .table-modeldep {
+  overflow-x: auto;
+}
+
+.table-source table, .table-reference table, .table-modeldep table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-source th, .table-source td, .table-reference th, .table-reference td, .table-modeldep th, .table-modeldep td, .table-assumption th, .table-assumption td{
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
 }
 
 #addN, #addR {
   display: none;
 }
 
-.inputadd{
+.divsepar {
+  margin-bottom: 10px;
+}
+
+.inputadd, .inputRef{
   display: flex;
   flex-direction: column;
   padding: 10px;
 }
+
+/* buttons & inputs */
+
+.file-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 70%;
+}
+
+.submit-button {
+  margin-left:10px;
+}
+
+.submit-button, .addN, .addR, .addMA, .removeMA, 
+.nameadd button[type="submit"], 
+.inputadd button[type="submit"], 
+.validation-button button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addMA, .removeMA, .nameadd button[type="submit"], .inputadd button[type="submit"], .validation-button button {
+  margin: 0px 10px 20px 0px;
+}
+
+.submit-button, .addN, .addR {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.addMA, .nameadd button[type="submit"], .inputadd button[type="submit"], .validation-button button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.removeMA {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.submit-button:hover, .addN:hover, .addR:hover {
+  background-color: #0056b3;
+}
+
+.addMA:hover, .nameadd button[type="submit"]:hover, .inputadd button[type="submit"]:hover, .validation-button button:hover {
+  background-color: #218838;
+}
+
+.removeMA:hover {
+  background-color: #c82333;
+}
+
+/* labels */
+.btnadd, .addRef {
+  margin-top: 20px;
+}
+
+.nscontent label, .divsepar label, .methodcontent label, .constraincontent label, 
+.refcontent label, .modelcontent label, .asscontent label,
+.formfilename label, .formfilepath label, .btnadd label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.formfilename input[type="text"]:focus,
+.formfilepath input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.formfilename input[type="text"]::placeholder,
+.formfilepath input[type="text"]::placeholder {
+    color: #999;
+}
+
+#selMethN, #methSpe, #methodD, #methodP, #selConsT, #selConsV, #consVers, #nList, #rList,
+.formfilename input[type="text"],
+.formfilepath input[type="text"],
+.divsepar input[type="text"],
+.divsepar input[type="number"],
+.divsepar input[type="date"],
+.divsepar select,
+.inputadd input[type="text"],
+.inputadd input[type="number"],
+.inputadd textarea,
+.modelcontent input[type="text"],
+.modelcontent input[type="number"],
+.modelcontent textarea,
+.asscontent input[type="text"],
+.asscontent textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+/* errors */
 
 #errorInsert, .err{display: none;}
 
@@ -410,123 +547,6 @@ input.check{
   border: 1px solid transparent;
   border-radius: 0.25rem;
 }
-
-/*.table-source table{*/
-/*  width: 100%;*/
-/*  background-color: #ffffff;*/
-/*  border: #062B5A 2px solid;*/
-/*  border-collapse: collapse;*/
-/*  text-align: center;*/
-/*}*/
-
-/*.table-source th{*/
-/*  background-color: #baccdb;*/
-/*  color: #062b5a;*/
-/*}*/
-
-.table-source th, .table-source td, .table-reference th, .table-reference td{
-  /*border-width: 2px solid;*/
-  /*border: #baccdb 1px solid;*/
-  /*border-bottom: #062B5A 1px solid;*/
-  border-right: #baccdb 1px solid;
-  /*border-left: #baccdb 1px solid;*/
-  padding: 10px;
-  text-align: center;
-}
-
-.table-modeldep th, .table-modeldep td, .table-assumption th, .table-assumption td{
-  /*border-width: 1px;*/
-  /*border-bottom: #062B5A 1px solid;*/
-  border-right: #baccdb 1px solid;
-  /*border-left: #baccdb 1px solid;*/
-  padding: 10px;
-  text-align: center;
-}
-
-/*
-.allcontent{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #44c767;
-}
-
-.nscontent{
-  display:flex;
-  color: #ffffff;
-  background-color: #062b5a;
-  font-size: 1.3em;
-}
-
-.formfilename , .formfilepath{
-  display: flex;
-  flex-direction: column;
-  padding: 50px;
-}
-
-.formfilename input, .formfilepath textarea{
-  font-size: 1em;
-}
-
-.formfilepath textarea{
-  width: 300px;
-  height: 100px;
-}
-
-.namecontent{
-  background-color: #eb24e1;
-  display: flex;
-  flex-direction: column;
-  width: 70%;
-}
-
-.divslct{
-  background-color: #c892c6;
-  display: flex;
-  flex-direction: column;
-  align-items :center;
-}
-
-
-.table-source table{
-  width: 100%;
-  background-color: #ffffff;
-  border: #062B5A 2px solid;
-  border-collapse: collapse;
-  text-align: center;
-}
-
-.table-source th{
-  background-color: #baccdb;
-  color: #062b5a;
-}
-
-.table-source th, .table-source td{
-  border-width: 1px; 
-  border-bottom: #062B5A 1px solid;
-  border-right: #baccdb 1px solid;
-  padding: 9px;
-}
-
-.table-source th{
-  border-right: #062B5A 1px solid;
-}
-
-
-.nameadd{
-  background-color: #721c24;
-}
-
-.btnadd{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.namecontent input , .namecontent select , .namecontent textarea{
-  font-size: 1.1em;
-}
-*/
 
 /* page modify */
 
