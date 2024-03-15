@@ -7,41 +7,42 @@ Modify
 {% if messages %}
     {% for m in messages %}
         <div class="error">{{m}}</div>
-    {%endfor%}
+    {% endfor %}
 {% endif %}
+
+<br><br>
 
 <div id="errorInsert">
     <p id='test'></p>
 </div>
 
-
 <div class="modify-page">
     <h1><u>{{queryall.id_name.namedb}}</u>:  {{queryall.filename}}</h1>
     <div class="modify-name">
         <h3>Name:</h3>
-        <p>click to edit&nbsp;<input type="image" class="enable-name" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <p>Click to edit&nbsp;<input type="image" class="enable-name" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-name">
             <form method="post">
                 {% csrf_token %}
                 <label>Namedb</label>
-                <input type="text" name='namens' class="enable-name" value="{{queryall.id_name.namedb}}" placeholder="{{queryall.id_name.namedb}}" disabled>
+                <input type="text" name='namens' class="enable-name modifyinput" value="{{queryall.id_name.namedb}}" placeholder="{{queryall.id_name.namedb}}" disabled>
                 <label>Class</label>
-                <input type="text" name='classns'  value="{{queryall.id_name.classdb}}" placeholder="{{queryall.id_name.classdb}}" disabled>
+                <input type="text" name='classns' class="modifyinput" value="{{queryall.id_name.classdb}}" placeholder="{{queryall.id_name.classdb}}" disabled>
                 <label>NameSimbad</label>
-                <input type="text" name='namesim' class="enable-name" value="{{queryall.id_name.namesimbad}}" placeholder="{{queryall.id_name.namesimbad}}" disabled>
+                <input type="text" name='namesim' class="enable-name modifyinput" value="{{queryall.id_name.namesimbad}}" placeholder="{{queryall.id_name.namesimbad}}" disabled>
                 <label>ClassSimbad</label>
-                <input type="text" name='classsim' class="enable-name" value="{{queryall.id_name.classsimbad}}" placeholder="{{queryall.id_name.classsimbad}}" disabled>
+                <input type="text" name='classsim' class="enable-name modifyinput" value="{{queryall.id_name.classsimbad}}" placeholder="{{queryall.id_name.classsimbad}}" disabled>
                 <label>RA</label>
-                <input type="number" name='ra' class="enable-name" value="{{queryall.id_name.ra}}" placeholder="{{queryall.id_name.ra}}" disabled>
+                <input type="number" name='ra' class="enable-name modifyinput" value="{{queryall.id_name.ra}}" placeholder="{{queryall.id_name.ra}}" disabled>
                 <label>DEC</label>
-                <input type="number" name='dec' class="enable-name" value="{{queryall.id_name.declination}}" placeholder="{{queryall.id_name.declination}}" disabled>
+                <input type="number" name='dec' class="enable-name modifyinput" value="{{queryall.id_name.declination}}" placeholder="{{queryall.id_name.declination}}" disabled>
                 <label>Localisation File</label>
-                <textarea name='localisation' class="enable-name" placeholder="{{queryall.id_name.localisationfile}}" disabled>{{queryall.id_name.localisationfile}}</textarea>
+                <textarea name='localisation' class="enable-name modifyinput" placeholder="{{queryall.id_name.localisationfile}}" disabled>{{queryall.id_name.localisationfile}}</textarea>
                 <label>Event Date</label>
-                <input type="date" name='event' class="enable-name" value="{{queryall.id_name.eventdate}}" placeholder="{{queryall.id_name.eventdate}}" disabled>
+                <input type="date" name='event' class="enable-name modifyinput" value="{{queryall.id_name.eventdate}}" placeholder="{{queryall.id_name.eventdate}}" disabled>
                 <input type="hidden" name="name">
-                <input type="submit" name="update" class="enable-name" value="Update" disabled>
-                <input type="submit" name="add" class="enable-name" value="Add a new Name" disabled>
+                <input type="submit" name="update" class="enable-name updateBtn" value="Update" disabled>
+                <input type="submit" name="add" class="enable-name addNew" value="Add a new Name" disabled>
             </form>
         </div>
         <div class="info-name">
@@ -65,27 +66,27 @@ Modify
     <hr>
     <div class="modify-ref">
         <h3>Reference:</h3>
-        <p>click to edit&nbsp;<input type="image" class="enable-ref" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <p>Click to edit&nbsp;<input type="image" class="enable-ref" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-ref">
             <form method="post">
                 {% csrf_token %}
                 <label>Author</label>
-                <input type="text" name="author" class="enable-ref" value="{{queryall.id_ref.author}}" placeholder="{{queryall.id_ref.author}}" disabled>
+                <input type="text" name="author" class="enable-ref modifyinput" value="{{queryall.id_ref.author}}" placeholder="{{queryall.id_ref.author}}" disabled>
                 <label>Ref Year</label>
-                <input type="number" name="refyear" class="enable-ref" value="{{queryall.id_ref.refyear}}" placeholder="{{queryall.id_ref.refyear}}" disabled>
+                <input type="number" name="refyear" class="enable-ref modifyinput" value="{{queryall.id_ref.refyear}}" placeholder="{{queryall.id_ref.refyear}}" disabled>
                 <label>Doi</label>
-                <textarea name="doi" class="enable-ref" placeholder="{{queryall.id_ref.doi}}" disabled>{{queryall.id_ref.doi}}</textarea>
+                <textarea name="doi" class="enable-ref modifyinput" placeholder="{{queryall.id_ref.doi}}" disabled>{{queryall.id_ref.doi}}</textarea>
                 <label>Short</label>
-                <input type="text" name="short" class="enable-ref" value="{{queryall.id_ref.short}}" placeholder="{{queryall.id_ref.short}}" disabled>
+                <input type="text" name="short" class="enable-ref modifyinput" value="{{queryall.id_ref.short}}" placeholder="{{queryall.id_ref.short}}" disabled>
                 <label>Bibtex</label>
-                <textarea name="bibtex" class="enable-ref" placeholder="{{queryall.id_ref.bibtex}}" disabled>{{queryall.id_ref.bibtex}}</textarea>
+                <textarea name="bibtex" class="enable-ref modifyinput" placeholder="{{queryall.id_ref.bibtex}}" disabled>{{queryall.id_ref.bibtex}}</textarea>
                 <label>Repository Doi</label>
-                <input type="text" name="repdoi" class="enable-ref" value="{{queryall.id_ref.repositorydoi}}" placeholder="{{queryall.id_ref.repositorydoi}}" disabled>
+                <input type="text" name="repdoi" class="enable-ref modifyinput" value="{{queryall.id_ref.repositorydoi}}" placeholder="{{queryall.id_ref.repositorydoi}}" disabled>
                 <label>Data Link</label>
-                <input type="text" name="datalink" class="enable-ref" value="{{queryall.id_ref.datalink}}" placeholder="{{queryall.id_ref.datalink}}" disabled>
+                <input type="text" name="datalink" class="enable-ref modifyinput" value="{{queryall.id_ref.datalink}}" placeholder="{{queryall.id_ref.datalink}}" disabled>
                 <input type="hidden" name="ref">
-                <input type="submit" name="update" class="enable-ref" value="Update" disabled>
-                <input type="submit" name="add" class="enable-ref" value="Add a new Ref" disabled>
+                <input type="submit" name="update" class="enable-ref updateBtn" value="Update" disabled>
+                <input type="submit" name="add" class="enable-ref addNew" value="Add a new Ref" disabled>
             </form>
         </div>
         <div class="info-ref">
@@ -109,12 +110,12 @@ Modify
     <hr>
     <div class="modify-method">
         <h3>Method:</h3>
-        <p>click to edit&nbsp;<input type="image" class="enable-method" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <p>Click to edit&nbsp;<input type="image" class="enable-method" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-method">
             <form method="post">
                 {% csrf_token %}
                 <label>Method</label>
-                <select name="methodns" class="enable-method" disabled>  
+                <select name="methodns" class="enable-method modifyinput" disabled>  
                     <option value="{{queryall.id_method.method}}">{{queryall.id_method.method}}</option>
                     {% for lm in listmethod %}
                         {% if lm != queryall.id_method.method %}
@@ -122,16 +123,15 @@ Modify
                         {% endif %}
                     {%endfor%}
                 </select>
-                <!--<input type="text" name="methodns" class="enable-method" value="{{queryall.id_method.method}}" placeholder="{{queryall.id_method.method}}" disabled>-->
                 <label>Method Specific</label>
-                <textarea name="methodspe" class="enable-method" value="{{queryall.id_method.method_specific}}" placeholder="{{queryall.id_method.method_specific}}" disabled>{{queryall.id_method.method_specific}}</textarea>
+                <textarea name="methodspe" class="enable-method modifyinput" value="{{queryall.id_method.method_specific}}" placeholder="{{queryall.id_method.method_specific}}" disabled>{{queryall.id_method.method_specific}}</textarea>
                 <label>Data Date</label>
-                <input type="text" name="datadate" class="enable-method" value="{{queryall.id_method.datadate}}" placeholder="{{queryall.id_method.datadate}}" disabled>
+                <input type="text" name="datadate" class="enable-method modifyinput" value="{{queryall.id_method.datadate}}" placeholder="{{queryall.id_method.datadate}}" disabled>
                 <label>Processing Info</label>
-                <textarea name="processinfinfo" class="enable-method" placeholder="{{queryall.id_method.processinfinfo}}" disabled>{{queryall.id_method.processinfinfo}}</textarea>
+                <textarea name="processinfinfo" class="enable-method modifyinput" placeholder="{{queryall.id_method.processinfinfo}}" disabled>{{queryall.id_method.processinfinfo}}</textarea>
                 <input type="hidden" name="method">
-                <input type="submit" name="update" class="enable-method" value="Update" disabled>
-                <input type="submit" name="add" class="enable-method" value="Add a new Ref" disabled>
+                <input type="submit" name="update" class="enable-method updateBtn" value="Update" disabled>
+                <input type="submit" name="add" class="enable-method addNew" value="Add a new Ref" disabled>
             </form>
             
         </div>
@@ -154,13 +154,13 @@ Modify
     </div>
     <hr>
     <div class="modify-constrain">
-        <h3>Constrain:</h3>
-        <p>click to edit&nbsp;<input type="image" class="enable-constrain" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <h3>Constraint:</h3>
+        <p>Click to edit&nbsp;<input type="image" class="enable-constrain" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-constrain">
             <form method="post">
                 {% csrf_token %}
-                <label>Constrain Type</label>
-                <select name="constrainT" class="enable-constrain" disabled>
+                <label>Constraint Type</label>
+                <select name="constrainT" class="enable-constrain modifyinput" disabled>
                     <option value="{{queryall.id_constrain.constraintype}}">{{queryall.id_constrain.constraintype}}</option>
                     {% for lc in listconstrain %}
                         {% if lc != queryall.id_constrain.constraintype %}
@@ -169,11 +169,11 @@ Modify
                     {%endfor%}
                 </select>
 
-                <label>Constrain Version</label>
-                <input type="number" name="constrainV"class="enable-constrain" value="{{queryall.id_constrain.constrainversion}}" placeholder="{{queryall.id_constrain.constrainversion}}" disabled>
+                <label>Constraint Version</label>
+                <input type="number" name="constrainV"class="enable-constrain modifyinput" value="{{queryall.id_constrain.constrainversion}}" placeholder="{{queryall.id_constrain.constrainversion}}" disabled>
                
-                <label>Constrain Variable</label>
-                <select name="constrainVar" class="enable-constrain" disabled>
+                <label>Constraint Variable</label>
+                <select name="constrainVar" class="enable-constrain modifyinput" disabled>
                     <option value="{{queryall.id_constrain.constrainvariable}}">{{queryall.id_constrain.constrainvariable}}</option>
                     {% for lcv in listconstrainvar %}
                         {% if lcv != queryall.id_constrain.constrainvariable %}
@@ -185,8 +185,8 @@ Modify
                 <!--<input type="text" name="constrainT" class="enable-constrain" value="{{queryall.id_constrain.constraintype}}" placeholder="{{queryall.id_constrain.constraintype}}" disabled>-->
                 <!--<input type="text" name="constrainVar" class="enable-constrain" value="{{queryall.id_constrain.constrainvariable}}" placeholder="{{queryall.id_constrain.constrainvariable}}" disabled>-->
                 <input type="hidden" name="constrain">
-                <input type="submit" name="update" class="enable-constrain" value="Update" disabled>
-                <input type="submit" name="add" class="enable-constrain" value="Add a new Ref" disabled>
+                <input type="submit" name="update" class="enable-constrain updateBtn" value="Update" disabled>
+                <input type="submit" name="add" class="enable-constrain addNew" value="Add a new Ref" disabled>
             </form>
         </div>
         <div class="info-constrain">
@@ -217,31 +217,31 @@ Modify
                         <form method="post">
                             {% csrf_token %}
                             <label>Dependency Primary</label>
-                            <input type="text" name="dependenciesprimary" class="method{{i.id_model}}" value="{{i.dependenciesprimary}}" placeholder="{{i.dependenciesprimary}}" disabled>
+                            <input type="text" name="dependenciesprimary" class="method{{i.id_model}} modifyinput" value="{{i.dependenciesprimary}}" placeholder="{{i.dependenciesprimary}}" disabled>
                             <label>Dependency Secondary</label>
-                            <input type="text" name="dependenciessecondary" class="method{{i.id_model}}" value="{{i.dependenciessecondary}}" placeholder="{{i.dependenciessecondary}}" disabled>
+                            <input type="text" name="dependenciessecondary" class="method{{i.id_model}} modifyinput" value="{{i.dependenciessecondary}}" placeholder="{{i.dependenciessecondary}}" disabled>
                             <label>Dependency Description</label>
-                            <textarea name="dependenciesdescription" class="method{{i.id_model}}" placeholder="{{i.dependenciesdescription}}" disabled>{{i.dependenciesdescription}}</textarea>
+                            <textarea name="dependenciesdescription" class="method{{i.id_model}} modifyinput" placeholder="{{i.dependenciesdescription}}" disabled>{{i.dependenciesdescription}}</textarea>
                             <label>Dependency References</label>
-                            <textarea name="dependenciesreferences" class="method{{i.id_model}}" placeholder="{{i.dependenciesreferences}}" disabled>{{i.dependenciesreferences}}</textarea>
+                            <textarea name="dependenciesreferences" class="method{{i.id_model}} modifyinput" placeholder="{{i.dependenciesreferences}}" disabled>{{i.dependenciesreferences}}</textarea>
                             <input type="hidden" name="model" value="{{i.id_model}}">
-                            <input type="submit" class="method{{i.id_model}}" name="update" value="Update" disabled>
-                            <input type="submit" class="method{{i.id_model}}" name="add"  value="Add a new Model" disabled>
+                            <input type="submit" class="method{{i.id_model}} updateBtn" name="update" value="Update" disabled>
+                            <input type="submit" class="method{{i.id_model}} addNew" name="add" value="Add a new Model" disabled>
                         </form>
-                        <div class="info-model">
-                            <p><i>Other file(s) linked to this model dependency</i>:</p>
-                            {% for qmolK , qmolV in queryModellinked.items %}
-                                {% if qmolK == i.id_model %}
-                                    <ul>
-                                        {% for cle in qmolV %}
-                                            <li> 
-                                                <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}}</a><br>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                    </div>
+                    <div class="info-model">
+                        <p><i>Other file(s) linked to this model dependency</i>:</p>
+                        {% for qmolK , qmolV in queryModellinked.items %}
+                            {% if qmolK == i.id_model %}
+                                <ul>
+                                    {% for cle in qmolV %}
+                                        <li> 
+                                            <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}}</a><br>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 {% endfor %}
             {% endfor %}  
@@ -260,31 +260,31 @@ Modify
                         <form method="post">
                             {% csrf_token %}
                             <label>Assumption Primary</label>
-                            <input type="text" name="assumptionsprimary" class="assumption{{j.id_assumptions}}" value="{{j.assumptionsprimary}}" placeholder="{{j.assumptionsprimary}}" disabled>
+                            <input type="text" name="assumptionsprimary" class="assumption{{j.id_assumptions}} modifyinput" value="{{j.assumptionsprimary}}" placeholder="{{j.assumptionsprimary}}" disabled>
                             <label>Assumption Secondary</label>
-                            <input type="text" name="assumptionssecondary" class="assumption{{j.id_assumptions}}" value="{{j.assumptionssecondary}}" placeholder="{{j.assumptionssecondary}}" disabled>
+                            <input type="text" name="assumptionssecondary" class="assumption{{j.id_assumptions}} modifyinput" value="{{j.assumptionssecondary}}" placeholder="{{j.assumptionssecondary}}" disabled>
                             <label>Assumption Description</label>
-                            <textarea name="assumptionsdescription" class="assumption{{j.id_assumptions}}" placeholder="{{j.assumptionsdescription}}" disabled>{{j.assumptionsdescription}}</textarea>
+                            <textarea name="assumptionsdescription" class="assumption{{j.id_assumptions}} modifyinput" placeholder="{{j.assumptionsdescription}}" disabled>{{j.assumptionsdescription}}</textarea>
                             <label>Assumption References</label>
-                            <textarea name="assumptionsreferences" class="assumption{{j.id_assumptions}}" placeholder="{{j.assumptionsreferences}}" disabled>{{j.assumptionsreferences}}</textarea>
+                            <textarea name="assumptionsreferences" class="assumption{{j.id_assumptions}} modifyinput" placeholder="{{j.assumptionsreferences}}" disabled>{{j.assumptionsreferences}}</textarea>
                             <input type="hidden" name="assumption" value="{{j.id_assumptions}}">
-                            <input type="submit" class="assumption{{j.id_assumptions}}" name="update" value="Update" disabled>
-                            <input type="submit" class="assumption{{j.id_assumptions}}" name="add"  value="Add a new Model" disabled>
+                            <input type="submit" class="assumption{{j.id_assumptions}} updateBtn" name="update" value="Update" disabled>
+                            <input type="submit" class="assumption{{j.id_assumptions}} addNew" name="add"  value="Add a new Model" disabled>
                         </form>
-                        <div class="info-assumptions">
-                            <p><i>Other file(s) linked to this assumption</i>:</p>
-                            {% for qassK , qassV in queryAssumptionlinked.items %}
-                                {% if qassK == j.id_assumptions %}
-                                    <ul>
-                                        {% for cle in qassV %}
-                                            <li>
-                                                <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}}</a><br>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                    </div>
+                    <div class="info-assumptions">
+                        <p><i>Other file(s) linked to this assumption</i>:</p>
+                        {% for qassK , qassV in queryAssumptionlinked.items %}
+                            {% if qassK == j.id_assumptions %}
+                                <ul>
+                                    {% for cle in qassV %}
+                                        <li>
+                                            <a href="{% url 'detail' cle.filename.filename %}" target="_blank">{{cle.filename.filename}}</a><br>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 {% endfor %}
             {% endfor %}

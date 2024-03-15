@@ -11,7 +11,7 @@ Detail
         <h1>{{queryall.id_name.namedb}}</h1>
         <h2>{{queryall.filename}}</h2>
     <div class="btn">
-        <button type="button" id="btndwnl" value="Download">Download</button>
+        <button type="button" id="btndwnl" value="Download">Download</button><br>
 
         {% if user.is_authenticated %}
             <button type="button" id="btnremove" value="{{queryall.filename}}" onclick="confirmDelete()">Remove</button>
@@ -74,14 +74,14 @@ Detail
 
 <p class="titlecat">Source info</p>
 
-    <p>{{queryall.id_name.namedb}}</p>
-    <p>{{queryall.id_name.classdb}}</p>
-    <p>{{queryall.id_name.namesimbad}}</p>
-    <p>{{queryall.id_name.classsimbad}}</p>
-    <p>{{queryall.id_name.ra}}</p>
-    <p>{{queryall.id_name.declination}}</p>
-    <p>{{queryall.id_name.localisationfile}}</p>
-    <p>{{queryall.id_name.eventdate}}</p>
+    <p><b>Source name:</b> {{queryall.id_name.namedb}}</p>
+    <p><b>Database class:</b> {{queryall.id_name.classdb}}</p>
+    <p><b>Simbad name:</b> {{queryall.id_name.namesimbad}}</p>
+    <p><b>Simbad class:</b> {{queryall.id_name.classsimbad}}</p>
+    <p><b>RA:</b> {{queryall.id_name.ra}}</p>
+    <p><b>Declination:</b> {{queryall.id_name.declination}}</p>
+    <p><b>Localisation file:</b> {{queryall.id_name.localisationfile}}</p>
+    <p><b>Event date:</b> {{queryall.id_name.eventdate}}</p>
 
 </div>
 
@@ -89,24 +89,24 @@ Detail
 
     <p class="titlecat">Method</p>
     
-        <p>{{queryall.id_method.method}}</p>
-        <p>{{queryall.id_method.method_specific}}</p>
-        <p>{{queryall.id_method.datadate}}</p>
-        <p>{{queryall.id_method.processinfinfo}}</p>
+        <p><b>Method:</b> {{queryall.id_method.method}}</p>
+        <p><b>Specific method:</b> {{queryall.id_method.method_specific}}</p>
+        <p><b>Data date:</b> {{queryall.id_method.datadate}}</p>
+        <p><b>Processing info:</b> {{queryall.id_method.processinfinfo}}</p>
     
 </div>
 
 <div class="divref">
 
     <p class="titlecat">References</p>
-        <p>DOI: <a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">{{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
-        <p>ADS: <a href="https://ui.adsabs.harvard.edu/abs/{{queryall.id_ref.shortlink}}/abstract" target="_blank"> {{queryall.id_ref.short}}</a></p>
+        <p><b>DOI:</b> <a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">{{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
+        <p><b>ADS:</b> <a href="https://ui.adsabs.harvard.edu/abs/{{queryall.id_ref.shortlink}}/abstract" target="_blank"> {{queryall.id_ref.short}}</a></p>
         <details>
             <summary>Bibtex</summary>
             <p>{{queryall.id_ref.bibtex}}</p>
         </details>
-        <p>Data Repository DOI: {{queryall.id_ref.repositorydoi}}</p>
-        <p>Data link: {{queryall.id_ref.datalink}}</p>
+        <p><b>Data Repository DOI:</b> {{queryall.id_ref.repositorydoi}}</p>
+        <p><b>Data link:</b> {{queryall.id_ref.datalink}}</p>
     
 </div>
 
@@ -114,9 +114,9 @@ Detail
     
     <p class="titlecat">Constraints</p>
     
-        <p>Type: {{queryall.id_constrain.constraintype}}</p>
-        <p>Variable: {{queryall.id_constrain.constrainvariable}}</p>
-        <p>Version: {{queryall.id_constrain.constrainversion}}</p>
+        <p><b>Type:</b> {{queryall.id_constrain.constraintype}}</p>
+        <p><b>Variable:</b> {{queryall.id_constrain.constrainvariable}}</p>
+        <p><b>Version:</b> {{queryall.id_constrain.constrainversion}}</p>
     
     
 </div>
