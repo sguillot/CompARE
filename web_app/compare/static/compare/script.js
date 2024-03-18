@@ -107,30 +107,56 @@ function downloadFile(){
   })
 }
 
+/*
+Get the filename which allows to download the file
+*/
+function downloadFilename(filename) {
+  var link = document.createElement('a');
+  link.href = "{% static 'compare/static/compare/' %}" + filename;
+  link.download = filename;
+  link.click();
+}
 
 /*
+
 Get the value of checkboxes checked
 We sent to the views the filename 
 We get bibtex
 Download the file created
 */
-function bibtexFile(){
-  var values = getCheckboxesTab()
-  if(values.length >0){
-    var values2 = JSON.stringify(values);  
+function bibtexFile() {
+  var values = getCheckboxesTab();
+  if (values.length > 0) {
+    var values2 = JSON.stringify(values);
     $.ajax({
-      url: '',
+      url: '/visu/', // URL pour télécharger le fichier Bibtex
       type: 'GET',
-      data:{bibtexfile: values2},
-      success: function(data) {
-        var linkbib = document.createElement("a");
-        linkbib.href = data;
-        linkbib.download = "";
-        linkbib.click();
-        linkbib.remove()
+      data: { bibtexfile: values2 },
+      success: function (data) {
+
+        console.log('Bibtex content:', data);
+        // Créer un objet Blob contenant les données
+        var blob = new Blob([data], { type: 'text/plain' });
+
+        // Créer un objet URL à partir du Blob
+        var url = window.URL.createObjectURL(blob);
+
+        // Créer un élément <a> pour télécharger le fichier
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'Bibtex.txt'; // Nom du fichier à télécharger
+
+        // Ajouter l'élément <a> à la page et cliquer dessus pour démarrer le téléchargement
+        document.body.appendChild(link);
+        link.click();
+
+        // Nettoyer après le téléchargement
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
       }
-    })
-}}
+    });
+  }
+}
 
 
 /* 
