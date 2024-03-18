@@ -63,7 +63,7 @@ CREATE TABLE `auth_group` (
 
 LOCK TABLES `auth_group` WRITE;
 /*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
-INSERT INTO `auth_group` VALUES (8,'coldMSP'),(4,'NS Mass'),(2,'NS Spin'),(5,'NS-NS_mergers'),(6,'PPM'),(7,'qLMXB'),(9,'Thermal INSs'),(3,'Transiently Accreting NS'),(10,'Type-I X-ray bursts');
+INSERT INTO `auth_group` VALUES (8,'Cold MSP'),(4,'NS Mass'),(2,'NS Spin'),(5,'NS-NS_mergers'),(6,'PPM'),(7,'qLMXB'),(9,'Thermal INSs'),(3,'Transiently Accreting NS'),(10,'Type-I X-ray bursts');
 /*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
