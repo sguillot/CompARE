@@ -1,5 +1,9 @@
 import datetime
+import io
 import json
+import os
+import zipfile
+from django.conf import settings
 import pandas as pd
 import decimal
 from decimal import Decimal
@@ -74,20 +78,31 @@ def visu_data(request):
 
         # For the selection of files to download
         if download_select:
-            # List with the "filenames" that the user has selected
             to_download = json.loads(download_select)
+            zip_buffer = io.BytesIO()
 
-            # We only retrieve the filepaths of the filenames
-            # TODO: CRITICAL: May need to change if filepath are removed from DB
-            selected_filepath = select_ns_all.filter(filename__in=to_download).values('filepath')
+            with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
+                # Ajouter chaque fichier téléchargé dans le dossier du fichier ZIP
+                for filename in to_download:
+                    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', filename)
+                    if os.path.exists(filepath):
+                        zip_file.write(filepath, arcname=filename)
+                    else:
+                        print(f"File not found: {filepath}")
 
-            # We put these filepath in a list (instead of DjangoRequest)
-            list_filepaths = []
-            for f in selected_filepath:
-                list_filepaths.append(f['filepath'])
+                zip_file.printdir()
 
-            # We return the list of filepaths to the success part of Ajax request
-            return HttpResponse(json.dumps(list_filepaths), content_type='application/json')
+            # Créer un dossier nommé "zip" s'il n'existe pas déjà
+            zip_folder = os.path.join(settings.BASE_DIR, 'zip')
+            os.makedirs(zip_folder, exist_ok=True)
+
+            # Enregistrer le fichier ZIP dans le dossier "zip"
+            zip_path = os.path.join(zip_folder, 'files.zip')
+            with open(zip_path, 'wb') as f:
+                f.write(zip_buffer.getvalue())
+
+            # Retourner une réponse indiquant que le fichier ZIP a été créé avec succès
+            return HttpResponse("ZIP file created successfully.")
 
         # For the selection of BibTex info to download
         if bibtex_select:
@@ -164,7 +179,6 @@ def visu_data(request):
                 # We put in the list only the attributes shown in the table into a dictionary
                 ns_info = {'namedb': ns.id_name.namedb,
                            'filename': ns.filename,
-                           'filpath': ns.filepath,
                            'classdb': ns.id_name.classdb,
                            'method': ns.id_method.method,
                            'method_specific': ns.id_method.method_specific,
@@ -204,14 +218,14 @@ def visu_data(request):
             return HttpResponse(json.dumps(filtered_list), content_type='application/json',)
 
         else:
-            # We add the model dependencies, assumptions and filepath of all NS
+            # We add the model dependencies, assumptions and files of all NS
             list_ns_model_dependencies = []
             list_ns_assumptions = []
-            list_ns_filepaths = []
+            list_ns_files = []
 
             for ns in select_ns_all:
                 # We make the file paths from the filenames (to be used by the django template)
-                list_ns_filepaths.append("data/"+ns.filename)
+                list_ns_files.append("data/"+ns.filename)
 
                 # We select the filenames linked to models
                 select_ns_model_dependencies = NsToModel.objects.select_related().filter(filename=ns.filename)
@@ -236,7 +250,7 @@ def visu_data(request):
             select_ns_all_zip = zip(select_ns_all,
                                     list_ns_model_dependencies,
                                     list_ns_assumptions,
-                                    list_ns_filepaths)
+                                    list_ns_files)
 
             # We select the data that will appear in the table, and put into a dictionary
             select_all_ns = {"queryall": select_ns_all_zip,
@@ -260,7 +274,7 @@ def detail(request, id):
         filename = json.loads(request.POST.get('filename'))
         file = Ns.objects.get(filename=filename)
 
-        logfile = open('compare\static\compare\log.txt', "a")
+        logfile = open('compare/static/compare/log.txt', "a")
         wri = ['Delete:\n', 'User:', str(request.user.get_username())+'\n',
                'Date:', str(datetime.datetime.now())+'\n', 'Content:', str(file)+'\n\n']
         logfile.writelines(wri)
@@ -413,7 +427,7 @@ def modify(request, id):
                     messages.success(request, "Yes")
 
                     #to write in the log file
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n',
                            'Date:', str(datetime.datetime.now())+'\n', 'Content:', str(nameNS)+'\n\n']
                     logfile.writelines(wri)
@@ -444,7 +458,7 @@ def modify(request, id):
                         messages.success(request, "Yes")
 
                     #to write in the logo file
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content: Name ', str(ns_list.id_name)+'\n\n']
                     logfile.writelines(wri)
@@ -484,7 +498,7 @@ def modify(request, id):
                     RefNS.save()
                     messages.success(request, "Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n',
                            'Date:', str(datetime.datetime.now())+'\n', 'Content:', str(RefNS)+'\n\n']
                     logfile.writelines(wri)
@@ -507,7 +521,7 @@ def modify(request, id):
                         ns_list.save()
                         messages.success(request,"Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content: Ref ', str(ns_list.id_ref)+'\n\n']
                     logfile.writelines(wri)
@@ -533,7 +547,7 @@ def modify(request, id):
                     MethNS.save()
                     messages.success(request, "Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content:', str(MethNS)+'\n\n']
                     logfile.writelines(wri)
@@ -556,7 +570,7 @@ def modify(request, id):
                         ns_list.save()
                         messages.success(request, "Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content:Method ', str(ns_list.id_method)+'\n\n']
                     logfile.writelines(wri)
@@ -580,7 +594,7 @@ def modify(request, id):
                     Constrainns.constrainversion = constrainV
                     Constrainns.save()
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content: ', str(Constrainns)+'\n\n']
                     logfile.writelines(wri)
@@ -609,7 +623,7 @@ def modify(request, id):
                         ns_list.save()
                         messages.success(request, "Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content: ', str(ns_list.id_constrain)+'\n\n']
                     logfile.writelines(wri)
@@ -647,7 +661,7 @@ def modify(request, id):
                     model.save()
                     messages.success(request,"Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content:', str(model)+'\n\n']
                     logfile.writelines(wri)
@@ -674,7 +688,7 @@ def modify(request, id):
                         model.save()
                         messages.success(request,"Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n',
                            'Date:',str(datetime.datetime.now())+'\n', 'Content: ', str(model)+'\n\n']
                     logfile.writelines(wri)
@@ -712,7 +726,7 @@ def modify(request, id):
                     assumption.save()
                     messages.success(request,"Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
                            str(datetime.datetime.now()) + '\n', 'Content:', str(assumption) + '\n\n']
                     logfile.writelines(wri)
@@ -739,7 +753,7 @@ def modify(request, id):
                         assumption.save()
                         messages.success(request,"Yes")
 
-                    logfile = open('compare\static\compare\log.txt', "a")
+                    logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
                            str(datetime.datetime.now()) + '\n', 'Content:Assumptions ', str(assumption) + '\n\n']
                     logfile.writelines(wri)
@@ -1073,10 +1087,8 @@ def insert_data(request):
                         idR = RefNs.objects.latest('id_ref')
 
 
-                    # we create the new NS (filepath have to change)
+                    # we create the new NS
                     file = Ns(filename=filename,
-                              ## TODO: filepath could be removed from MySQL database
-                              filepath="qdsdsqdsqdsq.txt",
                               id_ref=idR, id_name=idN,
                               id_method=idM, id_constrain=idC
                               )
@@ -1227,7 +1239,7 @@ def insert_data(request):
                     name.save()
 
                     #to write in the log file
-                    fichierlog = open('compare\static\compare\log.txt', "a")
+                    fichierlog = open('compare/static/compare/log.txt', "a")
                     wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content:', str(name)+'\n\n']
                     fichierlog.writelines(wri)
@@ -1261,7 +1273,7 @@ def insert_data(request):
                             doi=doi, repositorydoi=repdoi, datalink=datal)
                 ref.save()
 
-                fichierlog = open('compare\static\compare\log.txt', "a")
+                fichierlog = open('compare/static/compare/log.txt', "a")
                 wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
                        str(datetime.datetime.now())+'\n', 'Content:', str(ref)+'\n\n']
                 fichierlog.writelines(wri)
@@ -1273,9 +1285,9 @@ def insert_data(request):
         # We verify all the values
         insert = json.loads(request.POST.get('insert'))
 
-        # TODO:  Fix these conditions:  for ex with:   insert['filepath'] is ''
-        if (len(insert['filename']) <= 0) or (len(insert['filepath']) <= 0):
-            mess = "/!\ ERROR /!\: Please enter a Filename or/and a Filepath"
+        # TODO:  Fix these conditions:  for ex with:   insert['filename'] is ''
+        if (len(insert['filename']) <= 0):
+            mess = "/!\ ERROR /!\: Please enter a Filename"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         elif (insert['name'] == "opt") or (insert['ref']== 'opt'):
@@ -1314,7 +1326,7 @@ def insert_data(request):
                 method.save()
                 methodId = MethodNs.objects.latest('id_method')
 
-                fichierlog = open('compare\static\compare\log.txt', "a")
+                fichierlog = open('compare/static/compare/log.txt', "a")
                 wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
                        str(datetime.datetime.now())+'\n', str(method)+'\n\n']
                 fichierlog.writelines(wri)
@@ -1334,14 +1346,14 @@ def insert_data(request):
                 constrain.save()
                 constrainId = ConstrainNs.objects.latest('id_constrain')
 
-                fichierlog = open('compare\static\compare\log.txt', "a")
+                fichierlog = open('compare/static/compare/log.txt', "a")
                 wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
                        str(datetime.datetime.now())+'\n', str(constrain)+'\n\n']
                 fichierlog.writelines(wri)
                 fichierlog.close()
 
             # We create the new ns with all the field
-            ns = Ns(filename=insert['filename'], filepath=insert['filepath'],
+            ns = Ns(filename=insert['filename'],
                     id_ref=ref, id_name=name,
                     id_method=methodId, id_constrain=constrainId)
             ns.save()
@@ -1383,7 +1395,7 @@ def insert_data(request):
                     model.save()
                     modelId = ModelNs.objects.latest('id_model')
 
-                    fichierlog = open('compare\static\compare\log.txt', "a")
+                    fichierlog = open('compare/static/compare/log.txt', "a")
                     wri = ['User:', str(request.user.get_username())+'\n',
                            'Date:', str(datetime.datetime.now())+'\n', str(model)+'\n\n']
                     fichierlog.writelines(wri)
@@ -1428,7 +1440,7 @@ def insert_data(request):
                     assumptions.save()
                     assumptionsId = AssumptionsNs.objects.latest('id_assumptions')
 
-                    fichierlog = open('compare\static\compare\log.txt', "a")
+                    fichierlog = open('compare/static/compare/log.txt', "a")
                     wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', str(assumptions)+'\n\n']
                     fichierlog.writelines(wri)
@@ -1437,7 +1449,7 @@ def insert_data(request):
                 nsass = NsToAssumptions(filename=ns, id_assumptions=assumptionsId)
                 nsass.save()
 
-        fichierlog = open('compare\static\compare\log.txt', "a")
+        fichierlog = open('compare/static/compare/log.txt', "a")
         wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
                str(datetime.datetime.now())+'\n', 'Content:', str(ns)+'\n\n']
         fichierlog.writelines(wri)

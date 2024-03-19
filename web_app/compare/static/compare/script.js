@@ -84,35 +84,42 @@ function getSelect(){
 
 /*
 Get the value of checkboxes checked
-We sent to the views the filename 
-We get  the filepath
-Download selected files
+We sent to the views the filename and it downloads the selected files
 */
-function downloadFile(){
-  var check = getCheckboxesTab();
-  var checkString = JSON.stringify(check);  
+function downloadFiles() {
+  var checkboxes = document.querySelectorAll('.dwnl:checked');
+  if (checkboxes.length === 0) {
+      alert('Please select at least one file to download.');
+      return;
+  }
+
+  var filenames = [];
+  checkboxes.forEach(function(checkbox) {
+      filenames.push(checkbox.value);
+  });
+
+  var filenamesJSON = JSON.stringify(filenames);
   $.ajax({
-    url: '',
-    type: 'GET',
-    data:{filedwnl: checkString},
-    success: function(data) {
-      data.forEach(path => {
-        let linkpath = document.createElement("a");
-        linkpath.href = path
-        linkpath.download=""
-        linkpath.click()
-        linkpath.remove();
-      });
-    }
-  })
+      url: '/visu/',
+      type: 'GET',
+      data: { filedwnl: filenamesJSON },
+      success: function(response) {
+          // Une fois que le fichier ZIP est généré, le télécharger directement depuis le serveur
+          alert('Verify in your zip folder included in your project.');
+      },
+      error: function(xhr, status, error) {
+          console.error('Error downloading files:', error);
+      }
+  });
 }
+
 
 /*
 Get the filename which allows to download the file
 */
 function downloadFilename(filename) {
   var link = document.createElement('a');
-  link.href = "{% static 'compare/static/compare/' %}" + filename;
+  link.href = '/static/data/' + filename;
   link.download = filename;
   link.click();
 }
@@ -129,7 +136,7 @@ function bibtexFile() {
   if (values.length > 0) {
     var values2 = JSON.stringify(values);
     $.ajax({
-      url: '/visu/', // URL pour télécharger le fichier Bibtex
+      url: '/visu/', 
       type: 'GET',
       data: { bibtexfile: values2 },
       success: function (data) {
@@ -170,8 +177,6 @@ function searchFilter(){
   var search = getSearch()
   ajaxRequest(searchCheck , select , search);
 }
-
-
 
 
 function ajaxRequest(checkList , select , search){

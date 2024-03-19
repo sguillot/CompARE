@@ -504,7 +504,7 @@ input.check{
 
 .nscontent label, .divsepar label, .methodcontent label, .constraincontent label, 
 .refcontent label, .modelcontent label, .asscontent label,
-.formfilename label, .formfilepath label, .btnadd label, .modify-name label,
+.formfilename label, .btnadd label, .modify-name label,
 .form-ref label, .form-method label, .form-constrain label {
   font-weight: bold;
   display: block;
