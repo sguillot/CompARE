@@ -104,7 +104,6 @@ function downloadFiles() {
       type: 'GET',
       data: { filedwnl: filenamesJSON },
       success: function(response) {
-          // Une fois que le fichier ZIP est généré, le télécharger directement depuis le serveur
           alert('Verify in your zip folder included in your project.');
       },
       error: function(xhr, status, error) {
@@ -125,7 +124,6 @@ function downloadFilename(filename) {
 }
 
 /*
-
 Get the value of checkboxes checked
 We sent to the views the filename 
 We get bibtex
@@ -133,36 +131,36 @@ Download the file created
 */
 function bibtexFile() {
   var values = getCheckboxesTab();
-  if (values.length > 0) {
-    var values2 = JSON.stringify(values);
-    $.ajax({
-      url: '/visu/', 
+  if (values.length === 0) {
+      alert('Please select at least one file to download bibtex.');
+      return;
+  }
+
+  var values2 = JSON.stringify(values);
+  $.ajax({
+      url: '/visu/',
       type: 'GET',
       data: { bibtexfile: values2 },
-      success: function (data) {
+      success: function(data) {
+          // Create a Blob object containing the data
+          var blob = new Blob([data], { type: 'text/plain' });
 
-        console.log('Bibtex content:', data);
-        // Créer un objet Blob contenant les données
-        var blob = new Blob([data], { type: 'text/plain' });
+          // Creating a URL object from a Blob
+          var url = window.URL.createObjectURL(blob);
 
-        // Créer un objet URL à partir du Blob
-        var url = window.URL.createObjectURL(blob);
+          // Create a <a> element to download the file
+          var link = document.createElement('a');
+          link.href = url;
+          link.download = 'Bibtex.txt';
+          // Add the <a> element to the page and click on it to start the download
+          document.body.appendChild(link);
+          link.click();
 
-        // Créer un élément <a> pour télécharger le fichier
-        var link = document.createElement('a');
-        link.href = url;
-        link.download = 'Bibtex.txt'; // Nom du fichier à télécharger
-
-        // Ajouter l'élément <a> à la page et cliquer dessus pour démarrer le téléchargement
-        document.body.appendChild(link);
-        link.click();
-
-        // Nettoyer après le téléchargement
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(link);
+          // Clean up after downloading
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(link);
       }
-    });
-  }
+  });
 }
 
 
