@@ -104,7 +104,7 @@ function downloadFiles() {
       type: 'GET',
       data: { filedwnl: filenamesJSON },
       xhrFields: {
-          responseType: 'blob' // Pour gérer les données binaires (le fichier ZIP)
+          responseType: 'blob' // To manage binary data (the ZIP file)
       },
       success: function(response) {
           var blob = new Blob([response], { type: 'application/zip' });
