@@ -17,7 +17,7 @@ Modify
 </div>
 
 <div class="modify-page">
-    <h1><u>{{queryall.id_name.namedb}}</u>:  {{queryall.filename}}</h1>
+    <h1><u>{{queryall.id_name.namedb}}</u>: <br> {{queryall.filename}}</h1>
     <div class="modify-name">
         <h3>Name:</h3>
         <p>Click to edit&nbsp;<input type="image" class="enable-name" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
@@ -86,7 +86,7 @@ Modify
                 <input type="text" name="datalink" class="enable-ref modifyinput" value="{{queryall.id_ref.datalink}}" placeholder="{{queryall.id_ref.datalink}}" disabled>
                 <input type="hidden" name="ref">
                 <input type="submit" name="update" class="enable-ref updateBtn" value="Update" disabled>
-                <input type="submit" name="add" class="enable-ref addNew" value="Add a new Ref" disabled>
+                <input type="submit" name="add" class="enable-ref addNew" value="Add new reference" disabled>
             </form>
         </div>
         <div class="info-ref">
@@ -131,7 +131,7 @@ Modify
                 <textarea name="processinfinfo" class="enable-method modifyinput" placeholder="{{queryall.id_method.processinfinfo}}" disabled>{{queryall.id_method.processinfinfo}}</textarea>
                 <input type="hidden" name="method">
                 <input type="submit" name="update" class="enable-method updateBtn" value="Update" disabled>
-                <input type="submit" name="add" class="enable-method addNew" value="Add a new Ref" disabled>
+                <input type="submit" name="add" class="enable-method addNew" value="Add new method" disabled>
             </form>
             
         </div>
@@ -186,7 +186,7 @@ Modify
                 <!--<input type="text" name="constrainVar" class="enable-constrain" value="{{queryall.id_constrain.constrainvariable}}" placeholder="{{queryall.id_constrain.constrainvariable}}" disabled>-->
                 <input type="hidden" name="constrain">
                 <input type="submit" name="update" class="enable-constrain updateBtn" value="Update" disabled>
-                <input type="submit" name="add" class="enable-constrain addNew" value="Add a new Ref" disabled>
+                <input type="submit" name="add" class="enable-constrain addNew" value="Add new constraint" disabled>
             </form>
         </div>
         <div class="info-constrain">
@@ -226,7 +226,7 @@ Modify
                             <textarea name="dependenciesreferences" class="method{{i.id_model}} modifyinput" placeholder="{{i.dependenciesreferences}}" disabled>{{i.dependenciesreferences}}</textarea>
                             <input type="hidden" name="model" value="{{i.id_model}}">
                             <input type="submit" class="method{{i.id_model}} updateBtn" name="update" value="Update" disabled>
-                            <input type="submit" class="method{{i.id_model}} addNew" name="add" value="Add a new Model" disabled>
+                            <input type="submit" class="method{{i.id_model}} addNew" name="add" value="Add new Model Dependency" disabled>
                         </form>
                     </div>
                     <div class="info-model">
@@ -269,7 +269,7 @@ Modify
                             <textarea name="assumptionsreferences" class="assumption{{j.id_assumptions}} modifyinput" placeholder="{{j.assumptionsreferences}}" disabled>{{j.assumptionsreferences}}</textarea>
                             <input type="hidden" name="assumption" value="{{j.id_assumptions}}">
                             <input type="submit" class="assumption{{j.id_assumptions}} updateBtn" name="update" value="Update" disabled>
-                            <input type="submit" class="assumption{{j.id_assumptions}} addNew" name="add"  value="Add a new Model" disabled>
+                            <input type="submit" class="assumption{{j.id_assumptions}} addNew" name="add"  value="Add new assumption" disabled>
                         </form>
                     </div>
                     <div class="info-assumptions">
