@@ -12,7 +12,7 @@ from compare.models import Ns, NsToModel, NsToAssumptions, MethodNs, Assumptions
 from compare.compare_utils import formatting_csv
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.db.models import Q
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib import messages
@@ -65,6 +65,13 @@ def visu_data(request):
     class_list = ["NS Spin", "Transiently_Accreting_NS", "NS Mass", "NS-NS mergers",
                   "PPM", "qLMXB", "Cold MSP", "Thermal INSs", "Type-I X-ray bursts"]
 
+    for ns in select_ns_all:
+        filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', ns.filename)
+        if not os.path.exists(filepath):
+            ns.file_exists = False
+        else:
+            ns.file_exists = True
+
     # We check for GET request
     if request.method == 'GET':
 
@@ -88,7 +95,7 @@ def visu_data(request):
                     if os.path.exists(filepath):
                         zip_file.write(filepath, arcname=filename)
                     else:
-                        print(f"File not found: {filepath}")
+                        return HttpResponseNotFound(f"File not found: {filename}")
 
                 zip_file.printdir()
 
@@ -244,7 +251,8 @@ def visu_data(request):
             select_ns_all_zip = zip(select_ns_all,
                                     list_ns_model_dependencies,
                                     list_ns_assumptions,
-                                    list_ns_files)
+                                    list_ns_files,
+                                    [ns.file_exists for ns in select_ns_all])
 
             # We select the data that will appear in the table, and put into a dictionary
             select_all_ns = {"queryall": select_ns_all_zip,
@@ -290,6 +298,9 @@ def detail(request, id):
     # Trick to link to ADS page (need to replace the &, for ex in A&A)
     ns_list.id_ref.shortlink = ns_list.id_ref.short.replace("&", "%26")
 
+    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', id)
+    file_exists = os.path.exists(filepath)
+
     for mod in ns_model_dependencies:
         if mod.id_model.dependenciesreferences is not None:
             # Put the references in a list (and replace & by url code for links)
@@ -309,7 +320,8 @@ def detail(request, id):
     # We put the query sets in a dictionary with the keys to display the data of the queryset in the template
     select = {"queryall": ns_list,
               "queryMo": ns_model_dependencies,
-              "queryAs": ns_assumptions}
+              "queryAs": ns_assumptions,
+              "file_exists": file_exists}
 
     return render(request, 'compare/detail.html', select)
 

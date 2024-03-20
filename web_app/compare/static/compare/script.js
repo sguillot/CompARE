@@ -100,27 +100,24 @@ function downloadFiles() {
 
   var filenamesJSON = JSON.stringify(filenames);
   $.ajax({
-      url: '/visu/',
-      type: 'GET',
-      data: { filedwnl: filenamesJSON },
-      xhrFields: {
-          responseType: 'blob' // To manage binary data (the ZIP file)
-      },
-      success: function(response) {
-          var blob = new Blob([response], { type: 'application/zip' });
-          var link = document.createElement('a');
-          link.href = window.URL.createObjectURL(blob);
-          link.download = 'files.zip';
-          link.click();
-          alert('Download complete.');
-      },
-      error: function(xhr, status, error) {
-          console.error('Error downloading files:', error);
-      }
+    url: '/visu/',
+    type: 'GET',
+    data: { filedwnl: filenamesJSON },
+    xhrFields: {
+      responseType: 'blob' // To manage binary data (the ZIP file)
+    },
+    success: function(response) {
+      var blob = new Blob([response], { type: 'application/zip' });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'files.zip';
+      link.click();
+    },
+    error: function(xhr, status, error) {
+      alert('Error downloading file(s). Please try again.');
+    }
   });
 }
-
-
 
 /*
 Get the filename which allows to download the file
@@ -147,28 +144,28 @@ function bibtexFile() {
 
   var values2 = JSON.stringify(values);
   $.ajax({
-      url: '/visu/',
-      type: 'GET',
-      data: { bibtexfile: values2 },
-      success: function(data) {
-          // Create a Blob object containing the data
-          var blob = new Blob([data], { type: 'text/plain' });
+    url: '/visu/',
+    type: 'GET',
+    data: { bibtexfile: values2 },
+    success: function(data) {
+      // Create a Blob object containing the data
+      var blob = new Blob([data], { type: 'text/plain' });
 
-          // Creating a URL object from a Blob
-          var url = window.URL.createObjectURL(blob);
+      // Creating a URL object from a Blob
+      var url = window.URL.createObjectURL(blob);
 
-          // Create a <a> element to download the file
-          var link = document.createElement('a');
-          link.href = url;
-          link.download = 'Bibtex.txt';
-          // Add the <a> element to the page and click on it to start the download
-          document.body.appendChild(link);
-          link.click();
+      // Create a <a> element to download the file
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = 'Bibtex.txt';
+      // Add the <a> element to the page and click on it to start the download
+      document.body.appendChild(link);
+      link.click();
 
-          // Clean up after downloading
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(link);
-      }
+      // Clean up after downloading
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    }
   });
 }
 

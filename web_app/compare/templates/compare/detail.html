@@ -11,7 +11,9 @@ Detail
     <h1>{{queryall.id_name.namedb}}</h1>
     <h2>{{queryall.filename}}</h2>
     <div class="btn">
-        <button type="button" id="btndwnl" onclick="downloadFilename('{{ queryall.filename }}')">Download</button><br>
+        {% if file_exists %}
+            <button type="button" id="btndwnl" onclick="downloadFilename('{{ queryall.filename }}')">Download</button><br>
+        {% endif %}
 
         {% if user.is_authenticated %}
             {% if user.groups.exists %}
