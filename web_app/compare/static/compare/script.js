@@ -84,41 +84,55 @@ function getSelect(){
 
 /*
 Get the value of checkboxes checked
-We sent to the views the filename 
-We get  the filepath
-Download selected files
+We sent to the views the filename and it downloads the selected files
 */
-function downloadFile(){
-  var check = getCheckboxesTab();
-  var checkString = JSON.stringify(check);  
+function downloadFiles() {
+  var checkboxes = document.querySelectorAll('.dwnl:checked');
+  if (checkboxes.length === 0) {
+      alert('Please select at least one file to download.');
+      return;
+  }
+
+  var filenames = [];
+  checkboxes.forEach(function(checkbox) {
+      filenames.push(checkbox.value);
+  });
+
+  var filenamesJSON = JSON.stringify(filenames);
   $.ajax({
-    url: '',
-    type: 'GET',
-    data:{filedwnl: checkString},
-    success: function(data) {
-      data.forEach(path => {
-        let linkpath = document.createElement("a");
-        linkpath.href = path
-        linkpath.download=""
-        linkpath.click()
-        linkpath.remove();
-      });
-    }
-  })
+      url: '/visu/',
+      type: 'GET',
+      data: { filedwnl: filenamesJSON },
+      xhrFields: {
+          responseType: 'blob' // To manage binary data (the ZIP file)
+      },
+      success: function(response) {
+          var blob = new Blob([response], { type: 'application/zip' });
+          var link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = 'files.zip';
+          link.click();
+          alert('Download complete.');
+      },
+      error: function(xhr, status, error) {
+          console.error('Error downloading files:', error);
+      }
+  });
 }
+
+
 
 /*
 Get the filename which allows to download the file
 */
 function downloadFilename(filename) {
   var link = document.createElement('a');
-  link.href = "{% static 'compare/static/compare/' %}" + filename;
+  link.href = '/static/data/' + filename;
   link.download = filename;
   link.click();
 }
 
 /*
-
 Get the value of checkboxes checked
 We sent to the views the filename 
 We get bibtex
@@ -126,36 +140,36 @@ Download the file created
 */
 function bibtexFile() {
   var values = getCheckboxesTab();
-  if (values.length > 0) {
-    var values2 = JSON.stringify(values);
-    $.ajax({
-      url: '/visu/', // URL pour télécharger le fichier Bibtex
+  if (values.length === 0) {
+      alert('Please select at least one file to download bibtex.');
+      return;
+  }
+
+  var values2 = JSON.stringify(values);
+  $.ajax({
+      url: '/visu/',
       type: 'GET',
       data: { bibtexfile: values2 },
-      success: function (data) {
+      success: function(data) {
+          // Create a Blob object containing the data
+          var blob = new Blob([data], { type: 'text/plain' });
 
-        console.log('Bibtex content:', data);
-        // Créer un objet Blob contenant les données
-        var blob = new Blob([data], { type: 'text/plain' });
+          // Creating a URL object from a Blob
+          var url = window.URL.createObjectURL(blob);
 
-        // Créer un objet URL à partir du Blob
-        var url = window.URL.createObjectURL(blob);
+          // Create a <a> element to download the file
+          var link = document.createElement('a');
+          link.href = url;
+          link.download = 'Bibtex.txt';
+          // Add the <a> element to the page and click on it to start the download
+          document.body.appendChild(link);
+          link.click();
 
-        // Créer un élément <a> pour télécharger le fichier
-        var link = document.createElement('a');
-        link.href = url;
-        link.download = 'Bibtex.txt'; // Nom du fichier à télécharger
-
-        // Ajouter l'élément <a> à la page et cliquer dessus pour démarrer le téléchargement
-        document.body.appendChild(link);
-        link.click();
-
-        // Nettoyer après le téléchargement
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(link);
+          // Clean up after downloading
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(link);
       }
-    });
-  }
+  });
 }
 
 
@@ -170,8 +184,6 @@ function searchFilter(){
   var search = getSearch()
   ajaxRequest(searchCheck , select , search);
 }
-
-
 
 
 function ajaxRequest(checkList , select , search){

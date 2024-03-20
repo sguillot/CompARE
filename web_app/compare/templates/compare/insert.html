@@ -18,22 +18,23 @@ Add
 
 <div class="allcontent">
 
-    <form method="post" enctype="multipart/form-data" class="upload-form">
-        {% csrf_token %}
-        <input type="file" name="myfile" class="file-input">
-        <button type="submit" class="submit-button">Send</button>
-    </form>
 
     <div class="nscontent">
-        <label><u>Manual file addition</u></label><br>
+        <label><u>Multiple simulataneous additions (automatic, via CSV file)</u></label><br>
+        <form method="post" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
+            <input type="file" name="myfile" class="file-input">
+            <button type="submit" class="submit-button">Send</button>
+        </form>
+        <br>
+    </div>
+
+    <div class="nscontent">
+        <label><u>Single addition (manual)</u></label><br>
 
         <div class="formfilename">
             <label>File name</label>
             <input class="insertinput" type="text" name="filename" placeholder="File Name" id="filename" maxlength="100" minlength="5">
-        </div>
-        <div class="formfilepath">
-            <label>File path</label>
-            <input class="insertinput" type="text" name="filepath" placeholder="File Path" id="filepath" maxlength="512" minlength="5">
         </div>
     </div>
 
