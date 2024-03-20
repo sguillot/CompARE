@@ -12,7 +12,7 @@ from compare.models import Ns, NsToModel, NsToAssumptions, MethodNs, Assumptions
 from compare.compare_utils import formatting_csv
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.db.models import Q
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib import messages
@@ -88,7 +88,7 @@ def visu_data(request):
                     if os.path.exists(filepath):
                         zip_file.write(filepath, arcname=filename)
                     else:
-                        print(f"File not found: {filepath}")
+                        return HttpResponseNotFound(f"File not found: {filename}")
 
                 zip_file.printdir()
 
