@@ -115,7 +115,6 @@ function changeFuncRef(value){
 function createNs(){
     insertvalue={}
     insertvalue['filename']=document.getElementById('filename').value
-    insertvalue['filepath']=document.getElementById('filepath').value
     insertvalue['name']=document.getElementById('nList').value
     insertvalue['method']=getMethod()
     insertvalue['constrain']=getConstrain()
