@@ -82,7 +82,7 @@ def visu_data(request):
             zip_buffer = io.BytesIO()
 
             with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
-                # Ajouter chaque fichier téléchargé dans le dossier du fichier ZIP
+                # Add each downloaded file to the ZIP file folder
                 for filename in to_download:
                     filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', filename)
                     if os.path.exists(filepath):
@@ -92,7 +92,7 @@ def visu_data(request):
 
                 zip_file.printdir()
 
-            # Retourner le fichier ZIP en tant que réponse HTTP
+            # Return the ZIP file as an HTTP response
             zip_buffer.seek(0)
             response = HttpResponse(zip_buffer.getvalue(), content_type='application/zip')
             response['Content-Disposition'] = 'attachment; filename="files.zip"'
