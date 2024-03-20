@@ -447,7 +447,6 @@ DROP TABLE IF EXISTS `ns`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ns` (
   `FileName` varchar(100) NOT NULL,
-  `FilePath` text NOT NULL,
   `id_ref` int DEFAULT NULL,
   `id_Name` int DEFAULT NULL,
   `id_Method` int DEFAULT NULL,
@@ -470,29 +469,7 @@ CREATE TABLE `ns` (
 
 LOCK TABLES `ns` WRITE;
 /*!40000 ALTER TABLE `ns` DISABLE KEYS */;
-INSERT INTO `ns` VALUES ('Cold_MSP_PSRJ0437-4715_2019_massradius_helium_1.npy','qdsdsqdsqdsq.txt',434,485,528,300),('Cold_MSP_PSRJ0437-4715_2019_massradius_hydrogen_1.npy','qdsdsqdsqdsq.txt',434,485,527,300),
-('NS_Mass_PSRJ0740+6620_2020_mass_shapiro_1.txt','qdsdsqdsqdsq.txt',437,487,531,301),
-('NS_Mass_PSRJ1614-2230_NANOgrav11yr_mass_shapiro_1.txt','qdsdsqdsqdsq.txt',436,486,530,302),
-('NS_Mass_PSRJ1614-2230_NANOgrav15yr_mass_shapiro_2.txt','qdsdsqdsqdsq.txt',435,486,529,301),
-('NS_Spin_PSRJ1748-2446ad_2005_spin_1.txt','qdsdsqdsqdsq.txt',449,499,542,306),
-('PPM_PSRJ0030+0451_2019_massradius_2spots_Miller_1.txt','qdsdsqdsqdsq.txt',439,488,532,303),
-('PPM_PSRJ0030+0451_2019_massradius_STPDT_Riley_1.txt','qdsdsqdsqdsq.txt',438,488,532,303),
-('PPM_PSRJ0740+6620_2021_massradius_2spots_Miller_1.txt','qdsdsqdsqdsq.txt',441,489,533,303),
-('PPM_PSRJ0740+6620_2021_massradius_STU_Riley_1.txt','qdsdsqdsqdsq.txt',440,489,533,303),
-('qLMXB_47TucX5_qLMXB_2016_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',448,497,541,305),
-('qLMXB_47TucX7_qLMXB_2016_massradius_helium_1.txt','qdsdsqdsqdsq.txt',448,498,541,305),
-('qLMXB_47TucX7_qLMXB_2016_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',448,498,541,305),
-('qLMXB_M13_qLMXB_2018_massradius_helium_1.txt','qdsdsqdsqdsq.txt',442,490,534,304),
-('qLMXB_M13_qLMXB_2018_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',442,490,534,304),
-('qLMXB_M28_qLMXB_2022_massradius_helium_1.txt','qdsdsqdsqdsq.txt',443,491,535,305),
-('qLMXB_M28_qLMXB_2022_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',443,491,535,305),
-('qLMXB_M30_qLMXB_2020_massradius_helium_1.txt','qdsdsqdsqdsq.txt',444,492,536,300),
-('qLMXB_M30_qLMXB_2020_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',444,492,536,300),
-('qLMXB_NGC2808_qLMXB_2007_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',445,493,537,305),
-('qLMXB_NGC5139_qLMXB_2014_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',446,494,538,305),
-('qLMXB_NGC6304_qLMXB_2017_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',447,495,539,305),
-('qLMXB_NGC6397_qLMXB_2014_massradius_helium_1.txt','qdsdsqdsqdsq.txt',446,496,540,305),
-('qLMXB_NGC6397_qLMXB_2014_massradius_hydrogen_1.txt','qdsdsqdsqdsq.txt',446,496,540,305);
+INSERT INTO `ns` VALUES ('Cold_MSP_PSRJ0437-4715_2019_massradius_helium_1.npy',434,485,528,300),('Cold_MSP_PSRJ0437-4715_2019_massradius_hydrogen_1.npy',434,485,527,300),('NS_Mass_PSRJ0740+6620_2020_mass_shapiro_1.txt',437,487,531,301),('NS_Mass_PSRJ1614-2230_NANOgrav11yr_mass_shapiro_1.txt',436,486,530,302),('NS_Mass_PSRJ1614-2230_NANOgrav15yr_mass_shapiro_2.txt',435,486,529,301),('NS_Spin_PSRJ1748-2446ad_2005_spin_1.txt',449,499,542,306),('PPM_PSRJ0030+0451_2019_massradius_2spots_Miller_1.txt',439,488,532,303),('PPM_PSRJ0030+0451_2019_massradius_STPDT_Riley_1.txt',438,488,532,303),('PPM_PSRJ0740+6620_2021_massradius_2spots_Miller_1.txt',441,489,533,303),('PPM_PSRJ0740+6620_2021_massradius_STU_Riley_1.txt',440,489,533,303),('qLMXB_47TucX5_qLMXB_2016_massradius_hydrogen_1.txt',448,497,541,305),('qLMXB_47TucX7_qLMXB_2016_massradius_helium_1.txt',448,498,541,305),('qLMXB_47TucX7_qLMXB_2016_massradius_hydrogen_1.txt',448,498,541,305),('qLMXB_M13_qLMXB_2018_massradius_helium_1.txt',442,490,534,304),('qLMXB_M13_qLMXB_2018_massradius_hydrogen_1.txt',442,490,534,304),('qLMXB_M28_qLMXB_2022_massradius_helium_1.txt',443,491,535,305),('qLMXB_M28_qLMXB_2022_massradius_hydrogen_1.txt',443,491,535,305),('qLMXB_M30_qLMXB_2020_massradius_helium_1.txt',444,492,536,300),('qLMXB_M30_qLMXB_2020_massradius_hydrogen_1.txt',444,492,536,300),('qLMXB_NGC2808_qLMXB_2007_massradius_hydrogen_1.txt',445,493,537,305),('qLMXB_NGC5139_qLMXB_2014_massradius_hydrogen_1.txt',446,494,538,305),('qLMXB_NGC6304_qLMXB_2017_massradius_hydrogen_1.txt',447,495,539,305),('qLMXB_NGC6397_qLMXB_2014_massradius_helium_1.txt',446,496,540,305),('qLMXB_NGC6397_qLMXB_2014_massradius_hydrogen_1.txt',446,496,540,305);
 /*!40000 ALTER TABLE `ns` ENABLE KEYS */;
 UNLOCK TABLES;
 

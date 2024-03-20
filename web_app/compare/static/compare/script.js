@@ -103,14 +103,23 @@ function downloadFiles() {
       url: '/visu/',
       type: 'GET',
       data: { filedwnl: filenamesJSON },
+      xhrFields: {
+          responseType: 'blob' // Pour gérer les données binaires (le fichier ZIP)
+      },
       success: function(response) {
-          alert('Verify in your zip folder included in your project.');
+          var blob = new Blob([response], { type: 'application/zip' });
+          var link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = 'files.zip';
+          link.click();
+          alert('Download complete.');
       },
       error: function(xhr, status, error) {
           console.error('Error downloading files:', error);
       }
   });
 }
+
 
 
 /*

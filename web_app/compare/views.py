@@ -92,17 +92,11 @@ def visu_data(request):
 
                 zip_file.printdir()
 
-            # Créer un dossier nommé "zip" s'il n'existe pas déjà
-            zip_folder = os.path.join(settings.BASE_DIR, 'zip')
-            os.makedirs(zip_folder, exist_ok=True)
-
-            # Enregistrer le fichier ZIP dans le dossier "zip"
-            zip_path = os.path.join(zip_folder, 'files.zip')
-            with open(zip_path, 'wb') as f:
-                f.write(zip_buffer.getvalue())
-
-            # Retourner une réponse indiquant que le fichier ZIP a été créé avec succès
-            return HttpResponse("ZIP file created successfully.")
+            # Retourner le fichier ZIP en tant que réponse HTTP
+            zip_buffer.seek(0)
+            response = HttpResponse(zip_buffer.getvalue(), content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename="files.zip"'
+            return response
 
         # For the selection of BibTex info to download
         if bibtex_select:
