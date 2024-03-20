@@ -86,7 +86,6 @@ def visu_data(request):
         # For the selection of files to download
         if download_select:
             to_download = json.loads(download_select)
-            print(to_download)
             zip_buffer = io.BytesIO()
 
             with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
@@ -263,7 +262,7 @@ def visu_data(request):
                              "queryDep": ModelNs.objects.values('dependenciesprimary').distinct(),
                              "queryDepS": ModelNs.objects.values('dependenciessecondary').distinct(),
                              "queryAss": AssumptionsNs.objects.values('assumptionsprimary').distinct(),
-                             "queryAss  S": AssumptionsNs.objects.values('assumptionssecondary').distinct()
+                             "queryAssS": AssumptionsNs.objects.values('assumptionssecondary').distinct()
                              }
 
             # Send the dictionary to the template
