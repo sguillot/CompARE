@@ -11,9 +11,15 @@ from decimal import Decimal
 from compare.models import Ns, NsToModel, NsToAssumptions, MethodNs, AssumptionsNs, ModelNs, ConstrainNs, NameNs, RefNs
 from compare.compare_utils import formatting_csv
 
+from .graphs.generate_graph import plot_contours_from_h5
+from .graphs.generate_multiple_graphs import plot_contours_from_checkboxes
+from .graphs.extract_paths import extract_contour_number
+from .graphs.data_processing import process_data_to_h5
+
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.db.models import Q
+from django.db.models import Count
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -107,16 +113,16 @@ def visu_data(request):
 
         # For the selection of BibTex info to download
         if bibtex_select:
-            # Convertir la chaîne JSON en liste Python
+            # Convert JSON string to Python list
             list_bibtex = json.loads(bibtex_select)
 
-            # Récupérer les informations Bibtex sélectionnées
+            # Retrieve selected Bibtex information
             selected_bibtex = select_ns_all.filter(filename__in=list_bibtex).values_list('id_ref__bibtex', flat=True)
 
-            # Concaténer les Bibtex sélectionnés
+            # Concatenate selected Bibtex
             bibtex_content = '\n\n'.join(selected_bibtex)
 
-            # Retourner le contenu Bibtex en tant que réponse HTTP avec le type MIME approprié
+            # Return the Bibtex content as an HTTP response
             response = HttpResponse(bibtex_content, content_type='text/plain')
             response['Content-Disposition'] = 'attachment; filename="Bibtex.txt"'
             return response
@@ -267,7 +273,45 @@ def visu_data(request):
 
             # Send the dictionary to the template
             return render(request, "compare/visu_data.html", select_all_ns)
+        
+def generate_plot(request):
+    if request.method == 'GET' and 'files[]' in request.GET:
+        files = request.GET.getlist('files[]')
 
+        html_graphs = []
+        h5_filepath_array = []
+        h5_filename_array = []
+        extracted_contours = []
+        
+        for filename in files:
+            # H5 file recovery based on file name from the database
+            ns_list = Ns.objects.select_related().get(filename=filename)
+            h5_filename = ns_list.h5_filename
+            filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+            
+            # Check if the corresponding H5 file exists
+            if os.path.exists(filepath_h5):
+                h5_filepath_array.append(filepath_h5)
+                h5_filename_array.append(h5_filename)
+            else:
+                alert_message = "The H5 file cannot be found. Impossible to generate graph."
+
+        # If the table contains at least one element, plot the graph and extract the relevant information
+        if len(h5_filepath_array) > 0:
+            contour_plot_html = plot_contours_from_checkboxes(h5_filepath_array)
+            html_graphs.append(contour_plot_html)
+
+            contour_data = extract_contour_number(contour_plot_html)
+            extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
+            extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+        else:
+            return render(request, 'compare/plot.html', {'alert_message': alert_message})
+        
+        context = {'html_graphs': html_graphs[0],
+                   'extracted_contours': extracted_contours,
+                   'filenames': h5_filename_array}
+        
+        return render(request, 'compare/plot.html', context)
 
 def detail(request, id):
 
@@ -284,10 +328,18 @@ def detail(request, id):
 
         # Removing the file from the database
         file.delete()
-        return HttpResponse(json.dumps('yes'), content_type='application/json',)
+        return HttpResponse(json.dumps('yes'), content_type='application/json')
 
     # We retrieve all the data linked to the id(filename) of the NS in a query set
     ns_list = Ns.objects.select_related().get(filename=id)
+
+    h5_filename = ns_list.h5_filename
+    filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+
+    file_exists = os.path.exists(filepath_h5)
+    contour_plot = None
+    if file_exists:
+        contour_plot = plot_contours_from_h5(filepath_h5)
 
     # We retrieve all the models dependencies linked to the id(filename) of the NS
     ns_model_dependencies = NsToModel.objects.select_related('id_model').filter(filename=id)
@@ -321,7 +373,8 @@ def detail(request, id):
     select = {"queryall": ns_list,
               "queryMo": ns_model_dependencies,
               "queryAs": ns_assumptions,
-              "file_exists": file_exists}
+              "file_exists": file_exists,
+              "contour_plot": contour_plot}
 
     return render(request, 'compare/detail.html', select)
 
@@ -386,7 +439,6 @@ def modify(request, id):
 
             name = request.POST.get('namens')
             classNs = nameNS.classdb
-            name = request.POST.get('namens')
 
             if len(name) <= 0 or len(classNs) <= 0:
                 messages.error(request, "No")
@@ -1196,60 +1248,94 @@ def insert_data(request):
                         mes3 += "{} ({})  -  ".format(not_in, not_inserted[not_in])
                     messages.success(request, mes3)
 
-        # for insertion manual we check what the user wants to insert
-        elif (request.POST.get('hid') == 'formAddName' ):
+    if (request.FILES.get('filetoload')):
 
-            # verifications of the value
-            na = request.POST.get('name')
-            classdb = request.POST.get('class')
+        # We get the name of the file
+        datafile = request.FILES['filetoload']
 
-            if len(na) <= 0 or len(classdb) <= 0:
-                messages.error(request, "L'insertion de Name n'est pas correcte")
+        print("Datafile : ", datafile)
+
+        if datafile:
+
+            # Vérifier le format du fichier
+            if not datafile.name.endswith(('.txt', '.npy')):
+                message = "Le format du fichier doit être .txt ou .npy."
+                return HttpResponse(json.dumps(message), content_type='application/json',)
+
+            # Récupérer le nom du fichier sans son extension
+            message = os.path.splitext(datafile.name)[0]
+            print("Filename without extension : ", message)
+
+            # Vérifier le nom du fichier sans extension
+            valid_names = ["MCMCSamples", "ProbaDistrib", "Quantiles", "MeanErrors", "PosteriorSamples", "Contours"]
+            if not any(message.endswith(name) for name in valid_names):
+                message = "Le nom du fichier sans extension n'est pas valide."
+                return HttpResponse(json.dumps(message), content_type='application/json',)
+
+            destination_path = os.path.join(settings.STATIC_ROOT, 'static', 'data', datafile.name)
+            print("Destination path : ", destination_path)
+
+            with open(destination_path, 'wb+') as destination:
+                for chunk in datafile.chunks():
+                    destination.write(chunk)
+
+            # Appeler la fonction process_data_to_h5 avec le chemin complet du fichier
+            process_data_to_h5(destination_path)
+
+    # for insertion manual we check what the user wants to insert
+    if (request.POST.get('hid') == 'formAddName' ):
+
+        # verifications of the value
+        na = request.POST.get('name')
+        classdb = request.POST.get('class')
+
+        if len(na) <= 0 or len(classdb) <= 0:
+            messages.error(request, "L'insertion de Name n'est pas correcte")
+        else:
+            nameS = request.POST.get('nameS')
+            if len(nameS) < 1:
+                nameS = None
+
+            classS = request.POST.get('classS')
+            if len(classS) < 1:
+                classS = None
+
+            r = request.POST.get('ra')
+            if len(r) > 1:
+                r = Decimal(r)
             else:
-                nameS = request.POST.get('nameS')
-                if len(nameS) < 1:
-                    nameS = None
+                r = None
 
-                classS = request.POST.get('classS')
-                if len(classS) < 1:
-                    classS = None
+            dec = request.POST.get('dec')
+            if len(dec)>1:
+                dec = Decimal(dec)
+            else:
+                dec = None
 
-                r = request.POST.get('ra')
-                if len(r) > 1:
-                    r = Decimal(r)
-                else:
-                    r = None
+            loc = request.POST.get('localisationfile')
+            if len(loc) < 1:
+                loc = None
 
-                dec = request.POST.get('dec')
-                if len(dec)>1:
-                    dec = Decimal(dec)
-                else:
-                    dec = None
+            dat = request.POST.get('eventdate')
+            if len(dat) < 1:
+                dat = None
 
-                loc = request.POST.get('localisationfile')
-                if len(loc) < 1:
-                    loc = None
+            if NameNs.objects.filter(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
+                                        ra=r, declination=dec, localisationfile=loc, eventdate=dat):
+                mess = "Name already exists"
+                messages.error(request,"Name already exists")
+            else:
+                # We create the new name
+                name = NameNs(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
+                                ra=r, declination=dec, localisationfile=loc, eventdate=dat)
+                name.save()
 
-                dat = request.POST.get('eventdate')
-                if len(dat) < 1:
-                    dat = None
-
-                if NameNs.objects.filter(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
-                                         ra=r, declination=dec, localisationfile=loc, eventdate=dat):
-                    mess = "Name already exists"
-                    messages.error(request,"Name already exists")
-                else:
-                    # We create the new name
-                    name = NameNs(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
-                                  ra=r, declination=dec, localisationfile=loc, eventdate=dat)
-                    name.save()
-
-                    #to write in the log file
-                    fichierlog = open('compare/static/compare/log.txt', "a")
-                    wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content:', str(name)+'\n\n']
-                    fichierlog.writelines(wri)
-                    fichierlog.close()
+                #to write in the log file
+                fichierlog = open('compare/static/compare/log.txt', "a")
+                wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
+                        str(datetime.datetime.now())+'\n', 'Content:', str(name)+'\n\n']
+                fichierlog.writelines(wri)
+                fichierlog.close()
 
     # same things for ref
     if (request.POST.get('hid') == 'formAddRef' ):
@@ -1291,23 +1377,25 @@ def insert_data(request):
         # We verify all the values
         insert = json.loads(request.POST.get('insert'))
 
+        print(insert)
+
         # TODO:  Fix these conditions:  for ex with:   insert['filename'] is ''
         if (len(insert['filename']) <= 0):
-            mess = "/!\ ERROR /!\: Please enter a Filename"
+            mess = "ERROR : Please enter a Filename"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         elif (insert['name'] == "opt") or (insert['ref']== 'opt'):
-            mess = "/!\ ERROR /!\: Please select a Name or/and a Ref"
+            mess = "ERROR : Please select a Name or/and a Ref"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         elif (len(insert['method']['methodS']) <= 0) or \
              (len(insert['method']['methodD']) <=0 ) or \
              (len(insert['method']['methodP']) <=0 ):
-            mess = "/!\ ERROR /!\: Please enter a valid Method"
+            mess = "ERROR : Please enter a valid Method"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         elif len(insert['constrain']['constrainVer']) <= 0:
-            mess = "/!\ ERROR /!\: Please enter a valid Constrain"
+            mess = "ERROR : Please enter a valid Constrain"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         else:
@@ -1359,7 +1447,7 @@ def insert_data(request):
                 fichierlog.close()
 
             # We create the new ns with all the field
-            ns = Ns(filename=insert['filename'],
+            ns = Ns(filename=insert['filename'], h5_filename=insert['h5filename'],
                     id_ref=ref, id_name=name,
                     id_method=methodId, id_constrain=constrainId)
             ns.save()
@@ -1425,7 +1513,7 @@ def insert_data(request):
                 if len(insert['assumptions'][ass][2]) < 1:
                     insert['assumptions'][ass][2] = None
 
-                if len(insert['massumptionsodel'][ass][3]) < 1:
+                if len(insert['assumptions'][ass][3]) < 1:
                     insert['assumptions'][ass][3] = None
 
                 if (AssumptionsNs.objects.filter(assumptionsprimary=insert['assumptions'][ass][0],
@@ -1465,12 +1553,16 @@ def insert_data(request):
         return HttpResponse(json.dumps(redirect), content_type='application/json',)
 
     # We select the value for the dropdown list
-    group = request.user.groups.values_list('name', flat=True)
-    groupList = list(group)
+    #group = request.user.groups.values_list('name', flat=True)
+    #groupList = list(group)
 
     queryall = Ns.objects.select_related().all()
-    queryname = NameNs.objects.filter(classdb__in=group)
+    #queryname = NameNs.objects.filter(classdb__in=group)
+
     queryref = RefNs.objects.all().distinct()
+
+    queryname = NameNs.objects.all().distinct()
+    count_by_classdb = queryname.values('classdb').annotate(distinct_class_db_count=Count('classdb', distinct=True))
 
     methodoptions = MethodNs.method.field.choices
     listmethod = []
@@ -1489,11 +1581,13 @@ def insert_data(request):
 
     query = {"queryall": queryall,
              "queryname": queryname,
+             "count_by_name_and_classdb": count_by_classdb,
              'queryref': queryref,
-             'groupList': groupList,
              'listmethod': listmethod,
              'listconstrain': listconstrain,
              'listconstrainvar': listconstrainvar}
+            #'groupList': groupList,
+
     return render(request, "compare/insert.html", query)
 
 

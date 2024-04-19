@@ -169,6 +169,57 @@ function bibtexFile() {
   });
 }
 
+/*
+Show one or more plots depending on the selected files (checkboxes)
+*/
+function showPlot() {
+  var selectedFiles = getCheckboxesTab();
+    
+  if (selectedFiles.length === 0) {
+    alert('Please select at least one file.');
+    return;
+  }
+
+  $.ajax({
+      url: '/generate_plot/',
+      type: 'GET',
+      data: { files: selectedFiles },
+      dataType: 'html',
+      success: function(response) {
+          url = '/generate_plot/?files[]=' + selectedFiles.join('&files[]=');
+          window.open(url, '_blank');
+      },
+      error: function(xhr, status, error) {
+          console.error('Error generating plot:', error);
+      }
+  });
+}
+
+/*
+Resets the display of previously selected filters
+Returns the table display to its initial state
+*/
+function resetFilters() {
+  // Reset checkboxes
+  var checkboxes = document.querySelectorAll('input[type="checkbox"].check:checked');
+  checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+  });
+
+  // Reset selectors
+  const ListOptions = ["list_methods", "list_variable", "list_constrain_type", "list_dep_primary", "list_dep_secondary", "list_assumptions_primary", "list_assumptions_secondary"];
+  ListOptions.forEach((lO) => {
+      var selector = document.getElementById(lO);
+      selector.selectedIndex = -1; // Reset to first option
+  });
+
+  // Reset search area
+  document.getElementById('Search').value = '';
+
+  // Click on the validation button to reset the table
+  document.getElementById('vld').click();
+}
+
 
 /* 
 when user click on the magnifier

@@ -15,7 +15,7 @@ function getCookie(name) {
 }
 
 function showHide(div){
-    var iddiv = document.getElementById(div.className)
+    var iddiv = document.getElementById(div.className);
     if (iddiv.style.display !== 'block') {
         iddiv.style.display = 'block';
     }
@@ -25,13 +25,13 @@ function showHide(div){
 
 }
 
-  function returndep(){
+function returndep(){
     document.getElementById('modelTable').deleteRow(-1)
-  }
+}
 
-  function returnass(){
+function returnass(){
     document.getElementById('assumptionTable').deleteRow(-1)
-  }
+}
 
 
 function changeFuncName(value){
@@ -112,9 +112,64 @@ function changeFuncRef(value){
     }
 }
 
+function loadFile(event){
+
+    event.preventDefault();
+
+    var inputFile = document.getElementById('file-load');
+
+    var selectedFile = inputFile.files[0];
+    var selectedFilename = inputFile.files[0].name;
+    var h5Filename = selectedFilename.replace(/\.[^/.]+$/, "") + ".h5";
+
+    console.log("H5 filename: " + h5Filename);
+
+    const csrftoken = getCookie('csrftoken');
+
+    var formData = new FormData();
+    formData.append('filetoload', selectedFile);
+
+    console.log(formData);
+   
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {'X-CSRFToken': csrftoken},
+        success: function(message) {
+            if (message.startsWith("Le")) {
+                // Afficher le message HttpResponse dans l'élément HTML approprié
+                document.documentElement.scrollTop = 0;
+                document.getElementById('test').innerHTML = message;
+                document.getElementById('errorInsert').style.display = 'block';
+            } else {
+                // Mettre à jour la valeur de l'input avec le nom du fichier
+                document.getElementById('filename').value = selectedFilename;
+                document.getElementById('h5filename').value = h5Filename;
+                // Activer tous les éléments avec la classe enabledinput
+                enableInputs();
+                document.getElementById('createDep').disabled = false; 
+                document.getElementById('deleteDep').disabled = false; 
+                document.getElementById('createAss').disabled = false;
+                document.getElementById('deleteAss').disabled = false;
+            }
+        }
+    });
+}
+
+function enableInputs() {
+    var elements = document.querySelectorAll('.enabledinput');
+    elements.forEach(function(element) {
+        element.disabled = false;
+    });
+}
+
 function createNs(){
     insertvalue={}
     insertvalue['filename']=document.getElementById('filename').value
+    insertvalue['h5filename']=document.getElementById('h5filename').value
     insertvalue['name']=document.getElementById('nList').value
     insertvalue['method']=getMethod()
     insertvalue['constrain']=getConstrain()
@@ -162,7 +217,6 @@ function inTableAss(){
     datasecondary =  document.getElementById('assumptionssecondary').value
     datadescription =  document.getElementById('assumptionsdescription').value
     datareference =  document.getElementById('assumptionsreferences').value
-
 
     let row  = table.insertRow()
         

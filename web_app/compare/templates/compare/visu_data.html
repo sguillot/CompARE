@@ -61,7 +61,6 @@ Visu_data
     </form>
 </div>
 
-
 <div class="content">
     
     <div class="filter">
@@ -77,6 +76,7 @@ Visu_data
             <div class="button">
                 <button id="dwnlF" onclick="downloadFiles()">Download Files</button>
                 <button id="dwnlB" onclick="bibtexFile()">Download Bibtex</button>
+                <button id="showP" onclick="showPlot()">Show plot</button>
             </div>
         </div>
             <div id="multiple">
@@ -144,7 +144,8 @@ Visu_data
                         </select>
                     </div>
                     <div class="button-vld">
-                        <button id="vld" onclick="searchFilter()">Valider</button>
+                        <button id="vld" onclick="searchFilter()">Confirm</button>
+                        <button id="reset" onclick="resetFilters()">Reset filters</button>
                     </div>
                 </div>
                 
@@ -212,7 +213,5 @@ Visu_data
     </div>
 </div>
 </div>
-
-
 
 {% endblock %}

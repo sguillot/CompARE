@@ -4,134 +4,128 @@ Detail
 {% endblock %}
 {% block content %}
 
-
 <div class="bodydetail">
 
-<div class="titlefile">
-    <h1>{{queryall.id_name.namedb}}</h1>
-    <h2>{{queryall.filename}}</h2>
-    <div class="btn">
-        {% if file_exists %}
-            <button type="button" id="btndwnl" onclick="downloadFilename('{{ queryall.filename }}')">Download</button><br>
-        {% endif %}
+    <div class="titlefile">
+        <h1>{{queryall.id_name.namedb}}</h1>
+        <h2>{{queryall.filename}}</h2>
 
-        {% if user.is_authenticated %}
-            {% if user.groups.exists %}
-                {% for group in user.groups.all %}
-                    {% if group.name == queryall.id_name.classdb %}
-                        <button type="button" id="btnremove" value="{{queryall.filename}}" onclick="confirmDelete()">Remove</button>
-                        <form action="{% url 'modify' queryall.filename %}"><button type="submit" id="btnmodify">Modify</button></form>
-                    {% endif %}
-                {% endfor %}
+        <div class="btn">
+            {% if file_exists %}
+                <button type="button" id="btndwnl" onclick="downloadFilename('{{ queryall.filename }}')">Download</button><br>
             {% endif %}
-        {% endif %}
+
+            {% if user.is_authenticated %}
+                {% if user.groups.exists %}
+                    {% for group in user.groups.all %}
+                        {% if group.name == queryall.id_name.classdb %}
+                            <button type="button" id="btnremove" value="{{queryall.filename}}" onclick="confirmDelete()">Remove</button>
+                            <form action="{% url 'modify' queryall.filename %}"><button type="submit" id="btnmodify">Modify</button></form>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        </div>
+        
     </div>
-</div>
 
-<div class="contentfile">
+    <div class="contentfile">
 
-<div class="divmodel">
-    <p class="titlecat">Model dependencies</p>
-    <ul>
-    {% for mo in queryMo %}
-        <li>
-            {% if mo.id_model.dependenciesprimary != None %}
-                <span><u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
-                <div class="divmodeldesc">
-                    {{mo.id_model.dependenciesdescription}} <br>
-                    {% for ads_short, ads_link in mo.id_model.ref_list %}
-                        <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
-                    {% endfor %}
+        <div class="divmodel">
+            <p class="titlecat">Model dependencies</p>
+            <ul>
+            {% for mo in queryMo %}
+                <li>
+                    {% if mo.id_model.dependenciesprimary != None %}
+                        <span><u>{{mo.id_model.dependenciesprimary}}</u>: {{mo.id_model.dependenciessecondary}} <br> </span>
+                        <div class="divmodeldesc">
+                            {{mo.id_model.dependenciesdescription}} <br>
+                            {% for ads_short, ads_link in mo.id_model.ref_list %}
+                                <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <span>No model dependencies...</span>
+                    {% endif %}
+                </li>
+                <br>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="divassumptions">
+            <p class="titlecat">Assumptions</p>
+            <ul>
+            {% for as in queryAs %}
+                <li>
+                    {% if as.id_assumptions.assumptionsprimary != None %}
+                        <span><u>{{as.id_assumptions.assumptionsprimary}}</u>: {{as.id_assumptions.assumptionssecondary}} <br></span>
+                        <div class="divassumptionsdesc">
+                            {{as.id_assumptions.assumptionsdescription}} <br>
+                            {% for ads_short, ads_link in as.id_assumptions.ref_list %}
+                                <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <span>No assumptions...</span>
+                    {% endif %}
+                </li>
+                <br>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <div class="divcompact">
+
+            <div class="divname">
+                <p class="titlecat">Source info</p>
+                <p><b>Source name:</b> {{queryall.id_name.namedb}}</p>
+                <p><b>Database class:</b> {{queryall.id_name.classdb}}</p>
+                <p><b>Simbad name:</b> <a href="https://simbad.cds.unistra.fr/simbad/sim-id?Ident={{queryall.id_name.namesimbad}}" target="_blank">{{queryall.id_name.namesimbad}}</a></p>
+                <p><b>Simbad class:</b> {{queryall.id_name.classsimbad}}</p>
+                <p><b>RA:</b> {{queryall.id_name.ra}}</p>
+                <p><b>Declination:</b> {{queryall.id_name.declination}}</p>
+                <p><b>Localisation file:</b> {{queryall.id_name.localisationfile}}</p>
+                <p><b>Event date:</b> {{queryall.id_name.eventdate}}</p>
+            </div>
+
+            <div class="divmethod">
+                <p class="titlecat">Method</p>
+                <p><b>Method:</b> {{queryall.id_method.method}}</p>
+                <p><b>Specific method:</b> {{queryall.id_method.method_specific}}</p>
+                <p><b>Data date:</b> {{queryall.id_method.datadate}}</p>
+                <p><b>Processing info:</b> {{queryall.id_method.processinfinfo}}</p>
+            </div>
+
+            {% if contour_plot %}
+                <div class="contour-plot">
+                    {{ contour_plot|safe }}
                 </div>
-            {% else %}
-                <span>No model dependencies...</span>
             {% endif %}
-        </li>
-        <br>
-    {% endfor %}
-    </ul>
-</div>
 
-<div class="divassumptions">
+            <div class="divref">
+                <p class="titlecat">References</p>
+                <p><b>DOI:</b> <a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">{{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
+                <p><b>ADS:</b> <a href="https://ui.adsabs.harvard.edu/abs/{{queryall.id_ref.shortlink}}/abstract" target="_blank"> {{queryall.id_ref.short}}</a></p>
+                <details>
+                    <summary>Bibtex</summary>
+                    <p>{{queryall.id_ref.bibtex}}</p>
+                </details>
+                <p><b>Data Repository DOI:</b> {{queryall.id_ref.repositorydoi}}</p>
+                <p><b>Data link:</b> {{queryall.id_ref.datalink}}</p>
+            </div>
 
-    <p class="titlecat">Assumptions</p>
-    <ul>
-    {% for as in queryAs %}
-        <li>
-            {% if as.id_assumptions.assumptionsprimary != None %}
-                <span><u>{{as.id_assumptions.assumptionsprimary}}</u>: {{as.id_assumptions.assumptionssecondary}} <br></span>
-                <div class="divassumptionsdesc">
-                    {{as.id_assumptions.assumptionsdescription}} <br>
-                    {% for ads_short, ads_link in as.id_assumptions.ref_list %}
-                        <a href="https://ui.adsabs.harvard.edu/abs/{{ads_link}}/abstract" target="_blank"> {{ads_short}}</a><br>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <span>No assumptions...</span>
-            {% endif %}
-        </li>
-        <br>
-    {% endfor %}
-    </ul>
-</div>
+            <div class="divconstrain">
+                <p class="titlecat">Constraints</p>
+                <p><b>Type:</b> {{queryall.id_constrain.constraintype}}</p>
+                <p><b>Variable:</b> {{queryall.id_constrain.constrainvariable}}</p>
+                <p><b>Version:</b> {{queryall.id_constrain.constrainversion}}</p>
+            </div>
 
-<div class="divcompact">
+        </div>
 
-<div class="divname">
-
-<p class="titlecat">Source info</p>
-
-    <p><b>Source name:</b> {{queryall.id_name.namedb}}</p>
-    <p><b>Database class:</b> {{queryall.id_name.classdb}}</p>
-    <p><b>Simbad name:</b> <a href="https://simbad.cds.unistra.fr/simbad/sim-id?Ident={{queryall.id_name.namesimbad}}" target="_blank">{{queryall.id_name.namesimbad}}</a></p>
-    <p><b>Simbad class:</b> {{queryall.id_name.classsimbad}}</p>
-    <p><b>RA:</b> {{queryall.id_name.ra}}</p>
-    <p><b>Declination:</b> {{queryall.id_name.declination}}</p>
-    <p><b>Localisation file:</b> {{queryall.id_name.localisationfile}}</p>
-    <p><b>Event date:</b> {{queryall.id_name.eventdate}}</p>
+    </div>
 
 </div>
 
-<div class="divmethod">
-
-    <p class="titlecat">Method</p>
-    
-        <p><b>Method:</b> {{queryall.id_method.method}}</p>
-        <p><b>Specific method:</b> {{queryall.id_method.method_specific}}</p>
-        <p><b>Data date:</b> {{queryall.id_method.datadate}}</p>
-        <p><b>Processing info:</b> {{queryall.id_method.processinfinfo}}</p>
-    
-</div>
-
-<div class="divref">
-
-    <p class="titlecat">References</p>
-        <p><b>DOI:</b> <a href="https://doi.org/{{queryall.id_ref.doi}}" target="_blank">{{queryall.id_ref.author}} {{ queryall.id_ref.refyear}}</a></p>
-        <p><b>ADS:</b> <a href="https://ui.adsabs.harvard.edu/abs/{{queryall.id_ref.shortlink}}/abstract" target="_blank"> {{queryall.id_ref.short}}</a></p>
-        <details>
-            <summary>Bibtex</summary>
-            <p>{{queryall.id_ref.bibtex}}</p>
-        </details>
-        <p><b>Data Repository DOI:</b> {{queryall.id_ref.repositorydoi}}</p>
-        <p><b>Data link:</b> {{queryall.id_ref.datalink}}</p>
-    
-</div>
-
-<div class="divconstrain">
-    
-    <p class="titlecat">Constraints</p>
-    
-        <p><b>Type:</b> {{queryall.id_constrain.constraintype}}</p>
-        <p><b>Variable:</b> {{queryall.id_constrain.constrainvariable}}</p>
-        <p><b>Version:</b> {{queryall.id_constrain.constrainversion}}</p>
-    
-    
-</div>
-
-
-</div>
-
-</div>
-</div>
 {% endblock %}
-

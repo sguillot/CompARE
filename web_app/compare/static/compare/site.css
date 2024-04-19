@@ -121,7 +121,7 @@ input.check{
   justify-content: space-around;
 }
 
-#dwnlF, #dwnlB, #show, #vld, #log{
+#dwnlF, #dwnlB, #showP, #show, #vld, #log, #reset{
   cursor:pointer;
   background-color: #fff;
   height: 40px;
@@ -132,16 +132,25 @@ input.check{
   border-radius: 2px;
 }
 
-#vld:hover{
-  background-color: #0a851b;
+#vld {
+  margin-right:35px;
+}
+
+#vld:hover, #dwnlF:hover, #dwnlB:hover, #showP:hover, #show:hover, #log:hover, #reset:hover{
   color: white;
   transition:0.1s ease-in-out;
 }
 
-#dwnlF:hover, #dwnlB:hover, #show:hover, #log:hover{
+#vld:hover {
+  background-color: #0a851b;
+}
+
+#reset:hover {
+  background-color:#721c24;
+}
+
+#dwnlF:hover, #dwnlB:hover, #showP:hover, #show:hover, #log:hover{
   background-color: #062B5A;
-  color: white;
-  transition:0.1s ease-in-out;
 }
 
 #multiple{
@@ -173,7 +182,7 @@ input.check{
   padding-top: 50px;
 }
 
-/* tableau */
+/* table */
 
 .tab{
   width: 95%;
@@ -207,7 +216,7 @@ input.check{
   padding:2px 0px 2px 0px;
 }
 
-/* page detail */
+/* detail page */
 
 .bodydetail{
   background-color: #ffffff;
@@ -324,7 +333,7 @@ input.check{
   border-radius: 2em;
 }
 
-/* page login */
+/* login page */
 
 .box-login{
   background-color: #ffffff;
@@ -389,13 +398,13 @@ input.check{
   margin-top: 1px;
 }
 
-.upload-form, .nscontent, .namecontent, .inputadd, .inputRef, 
+.upload-form, .upload-form-file, .nscontent, .namecontent, .inputadd, .inputRef, 
 .constraincontent, .refcontent, .modelcontent, .asscontent, .form-name,
 .form-ref, .form-method, .form-constrain {
   margin-bottom: 20px;
 }
 
-.upload-form {
+.upload-form, .upload-form-file {
   display:flex;
   justify-content: center;
 }
@@ -441,11 +450,11 @@ input.check{
   width: 70%;
 }
 
-.submit-button {
+.submit-button, .load-button {
   margin-left:10px;
 }
 
-.submit-button, .addN, .addR, .addMA, .removeMA, .createSRV, .updateBtn, .addNew {
+.submit-button, .load-button, .addN, .addR, .addMA, .removeMA, .createSRV, .updateBtn, .addNew {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -457,17 +466,17 @@ input.check{
   margin: 0px 10px 20px 0px;
 }
 
-.submit-button, .addN, .addR, .addNew {
+.addN, .addR, .addNew {
   background-color: #007bff;
   color: #fff;
 }
 
-.addMA, .createSRV {
+.submit-button, .addMA, .createSRV {
   background-color: #28a745;
   color: #fff;
 }
 
-.updateBtn {
+.updateBtn, .load-button {
   background-color: #ffc107;
   color: #fff;
 }
@@ -482,15 +491,15 @@ input.check{
   cursor: not-allowed;
 }
 
-.submit-button:hover, .addN:hover, .addR:hover, .addNew:hover {
+.addN:hover, .addR:hover, .addNew:hover {
   background-color: #0056b3;
 }
 
-.addMA:hover, .createSRV:hover {
+.submit-button:hover, .addMA:hover, .createSRV:hover {
   background-color: #218838;
 }
 
-.updateBtn:hover {
+.updateBtn:hover, .load-button:hover {
   background-color: #e0a800;
 }
 
@@ -500,6 +509,11 @@ input.check{
 
 .btnadd, .addRef {
   margin-top: 20px;
+}
+
+#createDep:disabled, #deleteDep:disabled, #createAss:disabled, #deleteAss:disabled, #validFormButton:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .nscontent label, .divsepar label, .methodcontent label, .constraincontent label, 
@@ -538,7 +552,7 @@ input.check{
   border-radius: 0.25rem;
 }
 
-/* page info & home page */
+/* info, home & plot page */
 
 .email, .team, .citation, .acknowledgments, .homepage {
 	padding: 1%;
@@ -569,4 +583,31 @@ input.check{
 
 .tab-team tbody tr:hover {
   background-color: #ddd;
+}
+
+#plot-container, #go-back-container {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#go-back {
+  text-decoration: none;
+  cursor:pointer;
+  background-color: #062B5A;
+  padding:10px;
+  border:1px solid #062B5A;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+#go-back:hover {
+  background-color:#fff;
+  color:#062B5A;
+  transition: 0.1s ease-in-out;
+}
+
+#sigmaContainer, #filesContainer {
+  border:1px solid black;
 }

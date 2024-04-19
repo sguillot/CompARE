@@ -9,6 +9,6 @@ urlpatterns = [
     path("logout/", views.logout, name="logout"),
     path("add/", views.insert_data, name="insert"),
     path("info/", views.info, name="info"),
-    path("visu/detail/modify/<id>", views.modify, name="modify")
+    path("visu/detail/modify/<id>", views.modify, name="modify"),
+    path("generate_plot/", views.generate_plot, name="plot")
     ]
-
