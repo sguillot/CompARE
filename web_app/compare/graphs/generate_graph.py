@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import mpld3
 from mpld3 import plugins
 
+import matplotlib
+matplotlib.use('agg')
+
 def plot_contours_from_h5(file_path):
 
     if file_path.endswith("ProbaDistrib.h5") or file_path.endswith("MCMCSamples.h5"):
