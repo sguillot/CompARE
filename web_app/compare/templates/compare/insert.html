@@ -10,7 +10,7 @@ Add
     {% endfor %}
 {% endif %}
 
-<br><br>
+<br>
 
 <div id="errorInsert">
     <p id='test'></p>
@@ -32,6 +32,9 @@ Add
         <label><u>Single addition (manual)</u></label><br>
 
         <label>Text or numpy file</label><br>
+
+        <p class="messageForLoad"><i>Upload your file first to add its features later.</i></p>
+
         <form method="post" enctype="multipart/form-data" class="upload-form-file">
             {% csrf_token %}
             <input type="file" name="datafile" class="file-input" id="file-load">

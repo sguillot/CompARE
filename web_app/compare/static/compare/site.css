@@ -511,6 +511,10 @@ input.check{
   margin-top: 20px;
 }
 
+.messageForLoad {
+  font-size: 14px;
+}
+
 #createDep:disabled, #deleteDep:disabled, #createAss:disabled, #deleteAss:disabled, #validFormButton:disabled{
   opacity: 0.5;
   cursor: not-allowed;

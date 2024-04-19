@@ -1257,19 +1257,18 @@ def insert_data(request):
 
         if datafile:
 
-            # Vérifier le format du fichier
+            # Check file format
             if not datafile.name.endswith(('.txt', '.npy')):
-                message = "Le format du fichier doit être .txt ou .npy."
+                message = "The file format must be .txt or .npy."
                 return HttpResponse(json.dumps(message), content_type='application/json',)
 
-            # Récupérer le nom du fichier sans son extension
+            # Recover file name without extension
             message = os.path.splitext(datafile.name)[0]
-            print("Filename without extension : ", message)
 
             # Vérifier le nom du fichier sans extension
             valid_names = ["MCMCSamples", "ProbaDistrib", "Quantiles", "MeanErrors", "PosteriorSamples", "Contours"]
             if not any(message.endswith(name) for name in valid_names):
-                message = "Le nom du fichier sans extension n'est pas valide."
+                message = "The file does not have the correct nomenclature."
                 return HttpResponse(json.dumps(message), content_type='application/json',)
 
             destination_path = os.path.join(settings.STATIC_ROOT, 'static', 'data', datafile.name)
@@ -1279,7 +1278,7 @@ def insert_data(request):
                 for chunk in datafile.chunks():
                     destination.write(chunk)
 
-            # Appeler la fonction process_data_to_h5 avec le chemin complet du fichier
+            # Call the process_data_to_h5 function with the full file path
             process_data_to_h5(destination_path)
 
     # for insertion manual we check what the user wants to insert
@@ -1290,7 +1289,7 @@ def insert_data(request):
         classdb = request.POST.get('class')
 
         if len(na) <= 0 or len(classdb) <= 0:
-            messages.error(request, "L'insertion de Name n'est pas correcte")
+            messages.error(request, "Name insertion not correct")
         else:
             nameS = request.POST.get('nameS')
             if len(nameS) < 1:
@@ -1347,7 +1346,7 @@ def insert_data(request):
         doi = request.POST.get('doi')
 
         if len(auth) <= 0 or len(year) <= 0 or len(short) <= 0 or len(bibtex) <= 0 or len(doi) <= 0:
-            messages.error(request,"L'insertion de Ref n'est pas correct")
+            messages.error(request,"Ref insertion not correct")
         else:
             repdoi = request.POST.get('repositorydoi')
             if len(repdoi) < 1:
@@ -1552,12 +1551,7 @@ def insert_data(request):
         redirect = 'add'
         return HttpResponse(json.dumps(redirect), content_type='application/json',)
 
-    # We select the value for the dropdown list
-    #group = request.user.groups.values_list('name', flat=True)
-    #groupList = list(group)
-
     queryall = Ns.objects.select_related().all()
-    #queryname = NameNs.objects.filter(classdb__in=group)
 
     queryref = RefNs.objects.all().distinct()
 
@@ -1586,7 +1580,6 @@ def insert_data(request):
              'listmethod': listmethod,
              'listconstrain': listconstrain,
              'listconstrainvar': listconstrainvar}
-            #'groupList': groupList,
 
     return render(request, "compare/insert.html", query)
 

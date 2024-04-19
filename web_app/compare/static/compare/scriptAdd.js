@@ -114,22 +114,21 @@ function changeFuncRef(value){
 
 function loadFile(event){
 
-    event.preventDefault();
+    // Prevents page reloading
+    event.preventDefault(); 
 
     var inputFile = document.getElementById('file-load');
 
+    // Retrieves file and file name + processes file extension
     var selectedFile = inputFile.files[0];
     var selectedFilename = inputFile.files[0].name;
     var h5Filename = selectedFilename.replace(/\.[^/.]+$/, "") + ".h5";
 
-    console.log("H5 filename: " + h5Filename);
-
     const csrftoken = getCookie('csrftoken');
 
+    // Stores for a key, the "File" object in a FormData object
     var formData = new FormData();
     formData.append('filetoload', selectedFile);
-
-    console.log(formData);
    
     $.ajax({
         url: '',
@@ -139,27 +138,29 @@ function loadFile(event){
         contentType: false,
         headers: {'X-CSRFToken': csrftoken},
         success: function(message) {
-            if (message.startsWith("Le")) {
-                // Afficher le message HttpResponse dans l'élément HTML approprié
+            if (message.startsWith("The")) {
+                // Display the HttpResponse message in the appropriate HTML element
                 document.documentElement.scrollTop = 0;
                 document.getElementById('test').innerHTML = message;
                 document.getElementById('errorInsert').style.display = 'block';
             } else {
-                // Mettre à jour la valeur de l'input avec le nom du fichier
+                // Update input value with file name
                 document.getElementById('filename').value = selectedFilename;
                 document.getElementById('h5filename').value = h5Filename;
-                // Activer tous les éléments avec la classe enabledinput
+                // Activate all elements with the enabledinput class
                 enableInputs();
-                document.getElementById('createDep').disabled = false; 
-                document.getElementById('deleteDep').disabled = false; 
-                document.getElementById('createAss').disabled = false;
-                document.getElementById('deleteAss').disabled = false;
             }
         }
     });
 }
 
 function enableInputs() {
+
+    document.getElementById('createDep').disabled = false; 
+    document.getElementById('deleteDep').disabled = false; 
+    document.getElementById('createAss').disabled = false;
+    document.getElementById('deleteAss').disabled = false;
+
     var elements = document.querySelectorAll('.enabledinput');
     elements.forEach(function(element) {
         element.disabled = false;
