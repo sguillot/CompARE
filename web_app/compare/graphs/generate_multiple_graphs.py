@@ -24,7 +24,7 @@ def plot_contours_from_checkboxes(selected_filepaths):
     counter = 0
 
     # Lists to store colors
-    unique_colors = set()
+    unique_colors = []
 
     # Browse selected file names
     for i, filepath in enumerate(selected_filepaths):
@@ -65,8 +65,12 @@ def plot_contours_from_checkboxes(selected_filepaths):
                 # Store the color used in the plot
                 contour_color = 'C{}'.format(i + counter)
                 rgba_color = to_rgba(contour_color)
+
                 rgb_color = [int(255 * c) for c in rgba_color[:3]] 
-                unique_colors.add(tuple(rgb_color))  # Store RGB color
+
+                 # Check if the color is already in unique_colors_list
+                if tuple(rgb_color) not in unique_colors:
+                    unique_colors.append(tuple(rgb_color)) # Store RGB color
 
     ax.set_title('Contour Plot')
     ax.set_xlabel('Radius (km)')
@@ -75,8 +79,5 @@ def plot_contours_from_checkboxes(selected_filepaths):
     # Add the plugin to display coordinates when hovering over the graph
     plugins.connect(fig, plugins.MousePosition(fontsize=14, fmt=".3f"))
 
-    # Convert set of unique colors to a list
-    unique_colors_list = list(unique_colors)
-
     # Return graph HTML
-    return mpld3.fig_to_html(fig), unique_colors_list
+    return mpld3.fig_to_html(fig), unique_colors

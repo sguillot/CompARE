@@ -282,7 +282,6 @@ def generate_plot(request):
         h5_filepath_array = []
         h5_filename_array = []
         extracted_contours = []
-        unique_colors_list = []
         
         for filename in files:
             # H5 file recovery based on file name from the database
@@ -310,10 +309,9 @@ def generate_plot(request):
             # Get subfolders in EOS folder & colors used in the plot
             eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
             subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
-            unique_colors_list.extend(unique_colors)
 
             # Combine these two lists
-            subfolders_and_colors = zip(subfolders, unique_colors_list)
+            subfolders_and_colors = zip(subfolders, unique_colors)
         else:
             return render(request, 'compare/plot.html', {'alert_message': alert_message})
         
