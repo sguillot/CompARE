@@ -188,7 +188,7 @@ function createNs(){
             if (mess === 'add'){
                 window.location.replace('')
                 alert('The creation has been completed.');
-            } else if (mess) {
+            } else {
                 document.documentElement.scrollTop = 0;
                 document.getElementById('test').innerHTML = mess
                 document.getElementById('errorInsert').style.display = 'block';
