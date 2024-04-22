@@ -22,6 +22,9 @@ def plot_contours_from_h5(file_path):
         # Find all subfolders in the EOS folder
         subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
 
+        # Lists to store contour data
+        all_contour_data = []
+
         # Open the HDF5 file in read mode
         with h5py.File(file_path, "r") as hf:
             # Extract data from HDF5 file
@@ -30,6 +33,21 @@ def plot_contours_from_h5(file_path):
             density = hf["data"]["Proba density"][:]
             contours = hf["data"]["Contours"][:]
 
+            # Store contour data
+            all_contour_data.append((radius, mass, density, contours))
+
+        # Determine x and y limits based on contour data
+        min_radius = min([min(radius) for radius, _, _, _ in all_contour_data])
+        max_radius = max([max(radius) for radius, _, _, _ in all_contour_data])
+        min_mass = min([min(mass) for _, mass, _, _ in all_contour_data])
+        max_mass = max([max(mass) for _, mass, _, _ in all_contour_data])
+
+        # Set x and y limits
+        ax.set_xlim(min_radius, max_radius)
+        ax.set_ylim(min_mass, max_mass)
+
+        # Plot contours
+        for i, (radius, mass, density, contours) in enumerate(all_contour_data):
             # Create contour plot
             levels = sorted(contours)
             ax.contour(radius, mass, density, levels=levels, colors='#000000')

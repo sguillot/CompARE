@@ -26,6 +26,9 @@ def plot_contours_from_checkboxes(selected_filepaths):
     # Lists to store colors
     unique_colors = []
 
+    # Lists to store contour data
+    all_contour_data = []
+
     # Browse selected file names
     for i, filepath in enumerate(selected_filepaths):
 
@@ -38,9 +41,24 @@ def plot_contours_from_checkboxes(selected_filepaths):
             density = hf["data"]["Proba density"][:]
             contours = hf["data"]["Contours"][:]
 
-            # Create contour plot
-            levels = sorted(contours)
-            ax.contour(radius, mass, density, levels=levels, colors='C{}'.format(i))
+            # Store contour data
+            all_contour_data.append((radius, mass, density, contours))
+
+    # Determine x and y limits based on contour data
+    min_radius = min([min(radius) for radius, _, _, _ in all_contour_data])
+    max_radius = max([max(radius) for radius, _, _, _ in all_contour_data])
+    min_mass = min([min(mass) for _, mass, _, _ in all_contour_data])
+    max_mass = max([max(mass) for _, mass, _, _ in all_contour_data])
+
+    # Set x and y limits
+    ax.set_xlim(min_radius, max_radius)
+    ax.set_ylim(min_mass, max_mass)
+
+    # Plot contours
+    for i, (radius, mass, density, contours) in enumerate(all_contour_data):
+        # Create contour plot
+        levels = sorted(contours)
+        ax.contour(radius, mass, density, levels=levels, colors='C{}'.format(i))
 
     # Browse subfolders
     for i, subfolder in enumerate(subfolders):
