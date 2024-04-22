@@ -612,6 +612,6 @@ input.check{
   transition: 0.1s ease-in-out;
 }
 
-#sigmaContainer, #filesContainer {
+#sigmaContainer, #filesContainer, #subfoldersContainer {
   border:1px solid black;
 }

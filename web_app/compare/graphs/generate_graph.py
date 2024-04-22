@@ -1,17 +1,26 @@
 import h5py
 import matplotlib.pyplot as plt
 import mpld3
+import numpy as np
+import os
 from mpld3 import plugins
+from django.conf import settings
+
+import matplotlib
+matplotlib.use('agg')
 
 def plot_contours_from_h5(file_path):
 
     if file_path.endswith("ProbaDistrib.h5") or file_path.endswith("MCMCSamples.h5"):
 
-        # List of outline colors
-        colors = ['black', 'blue', 'green', 'yellow', 'red']
-
         # Create a new matplotlib figure
         fig, ax = plt.subplots()
+
+        # Define subfolders containing data files
+        eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
+        
+        # Find all subfolders in the EOS folder
+        subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
 
         # Open the HDF5 file in read mode
         with h5py.File(file_path, "r") as hf:
@@ -23,12 +32,31 @@ def plot_contours_from_h5(file_path):
 
             # Create contour plot
             levels = sorted(contours)
-            ax.contour(radius, mass, density, levels=levels, colors=colors)
+            ax.contour(radius, mass, density, levels=levels, colors='#000000')
+
+        # Browse subfolders
+        for i, subfolder in enumerate(subfolders):
+            # Build path to subfolder
+            folder_path = os.path.join(eos_folder, subfolder)
+
+            # Browse .dat files in subfolder
+            for filename in os.listdir(folder_path):
+                if filename.endswith('.dat'):
+                    file_path = os.path.join(folder_path, filename)
+
+                    # Load data from .dat file, ignoring lines beginning with "#".
+                    data = np.loadtxt(file_path, comments='#')
+
+                    # Extract data columns (radius and mass)
+                    radius = data[:, 0]
+                    mass = data[:, 1]
+
+                    # Draw the curve
+                    plt.plot(radius, mass, label=f'{subfolder} - {filename[:-4]}', color='C{}'.format(i))
 
         ax.set_title('Contour Plot')
         ax.set_xlabel('Radius (km)')
         ax.set_ylabel('Mass (M☉)')
-        ax.legend()
 
         # Add the plugin to display coordinates when hovering over the graph
         plugins.connect(fig, plugins.MousePosition(fontsize=14, fmt=".3f"))

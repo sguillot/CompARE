@@ -1,18 +1,35 @@
 import h5py
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
 import mpld3
-from mpld3 import plugins
+import numpy as np
 import os
+from mpld3 import plugins
+from django.conf import settings
+
+import matplotlib
+matplotlib.use('agg')
 
 def plot_contours_from_checkboxes(selected_filepaths):
     # Create a new matplotlib figure
     fig, ax = plt.subplots()
 
-    #l = []
+    # Define subfolders containing data files
+    eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
+    
+    # Find all subfolders in the EOS folder
+    subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
+
+    # Define a counter
+    counter = 0
+
+    # Lists to store colors
+    unique_colors = set()
 
     # Browse selected file names
     for i, filepath in enumerate(selected_filepaths):
 
+        counter += 1
         # Open the HDF5 file in read mode
         with h5py.File(filepath, "r") as hf:
             # Extract data from HDF5 file
@@ -23,19 +40,43 @@ def plot_contours_from_checkboxes(selected_filepaths):
 
             # Create contour plot
             levels = sorted(contours)
-            CS = ax.contour(radius, mass, density, levels=levels, colors='C{}'.format(i))
+            ax.contour(radius, mass, density, levels=levels, colors='C{}'.format(i))
 
-            #h = CS.collections
-            #l.append(filename)
+    # Browse subfolders
+    for i, subfolder in enumerate(subfolders):
+        # Build path to subfolder
+        folder_path = os.path.join(eos_folder, subfolder)
+
+        # Browse .dat files in subfolder
+        for filename in os.listdir(folder_path):
+            if filename.endswith('.dat'):
+                file_path = os.path.join(folder_path, filename)
+
+                # Load data from .dat file, ignoring lines beginning with "#".
+                data = np.loadtxt(file_path, comments='#')
+
+                # Extract data columns (radius and mass)
+                radius = data[:, 0]
+                mass = data[:, 1]
+
+                # Draw the curve
+                plt.plot(radius, mass, label=f'{subfolder} - {filename[:-4]}', color='C{}'.format(i + counter))
+
+                # Store the color used in the plot
+                contour_color = 'C{}'.format(i + counter)
+                rgba_color = to_rgba(contour_color)
+                rgb_color = [int(255 * c) for c in rgba_color[:3]] 
+                unique_colors.add(tuple(rgb_color))  # Store RGB color
 
     ax.set_title('Contour Plot')
     ax.set_xlabel('Radius (km)')
     ax.set_ylabel('Mass (M☉)')
 
-    #ax.legend(h,l)
-
     # Add the plugin to display coordinates when hovering over the graph
     plugins.connect(fig, plugins.MousePosition(fontsize=14, fmt=".3f"))
 
+    # Convert set of unique colors to a list
+    unique_colors_list = list(unique_colors)
+
     # Return graph HTML
-    return mpld3.fig_to_html(fig)
+    return mpld3.fig_to_html(fig), unique_colors_list

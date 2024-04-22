@@ -34,8 +34,19 @@ Plot
         <div id="filesContainer">
             <h3>Files</h3>
             {% for filename in filenames %}
-                <label class="label-checkbox">
+                <label class="label-filename">
                     <input class="file-checkbox" type="checkbox" value="{{ filename }}" checked>{{ filename }}<br>
+                </label>
+            {% endfor %}
+        </div>
+
+        <br><br>
+
+        <div id="subfoldersContainer">
+            <h3>EOS Models</h3>
+            {% for subfolder, unique_color in subfolders_and_colors %}
+                <label class="label-subfolder">
+                    <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
                 </label>
             {% endfor %}
         </div>
@@ -50,6 +61,16 @@ Plot
 
 <script>
     window.onload = function() {
+
+        // Function to apply color to subfolder text
+        function applyColorToSubfolders() {
+            // Apply RGB color to subfolder text
+            $('.label-subfolder').each(function(index) {
+                var rgbValue = $(this).find('input').val();
+                $(this).css('color', 'rgb' + rgbValue);
+            });
+        }
+
         // Function to apply color to file name text
         function applyColorToFileNames() {
             // Retrieve all <g> groups from the graph
@@ -66,7 +87,7 @@ Plot
                     if (match) {
                         var correctMatch = "#" + match[1];
                         var fileNameIndex = gIndex; // Group index corresponds to file
-                        $('.label-checkbox').eq(fileNameIndex).css('color', correctMatch);
+                        $('.label-filename').eq(fileNameIndex).css('color', correctMatch);
                     }
                 });
             });
@@ -74,6 +95,7 @@ Plot
 
         // Call the function to apply colors when the page is fully loaded
         applyColorToFileNames();
+        applyColorToSubfolders();
     };
 
     // Event manager for checkboxes
@@ -90,7 +112,6 @@ Plot
 
         // Check if the checkbox is checked
         var isChecked = $(this).is(':checked');
-        console.log(isChecked);
 
         // Browse all groups
         groups.each(function() {
@@ -172,6 +193,60 @@ Plot
                     }
                 })
             }
+        });
+    });
+
+    // Event manager for checkboxes
+    $('.subfolder-checkbox').change(function() {
+        // Retrieve checkbox index
+        var index = $(this).index();
+
+        // Retrieve RGB color from the checkbox value
+        var rgbValue = 'rgb' + $(this).val();
+
+        // Check if the checkbox is checked
+        var isChecked = $(this).is(':checked');
+
+        // Retrieve all <g> groups from the graph
+        var groups = $('#plot-container').find('g.mpld3-paths');
+
+        // Browse all groups
+        groups.each(function() {
+            // Retrieve paths within this group
+            var paths = $(this).find('path.mpld3-path');
+
+            // List the path indexes in this group
+            paths.each(function() {
+
+                var style = $(this).attr('style');
+                var colorRegex = /stroke:\s*rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
+
+                var match = style.match(colorRegex);
+                if(match) {
+
+                    var red = match[1];
+                    var green = match[2];
+                    var blue = match[3];
+
+                    // Compare RGB values with checkbox RGB value
+                    if (rgbValue === 'rgb(' + red + ', ' + green + ', ' + blue + ')') {
+                        if (!isChecked) {
+
+                            // Comment the corresponding part in the path style
+                            style = style.replace(colorRegex, '/* stroke:rgb(' + red + ', ' + green + ', ' + blue +  ') */');
+                            
+                            // Apply modified style to path
+                            $(this).attr('style', style);
+                        } else {
+                            // Remove the comment from the corresponding part in the path style
+                            style = style.replace('/* stroke:rgb(' + red + ', ' + green + ', ' + blue +  ') */', 'stroke:rgb(' + red + ', ' + green + ', ' + blue + ')');
+                            
+                            // Apply modified style to path
+                            $(this).attr('style', style);
+                        }
+                    }
+                }
+            });
         });
     });
 
