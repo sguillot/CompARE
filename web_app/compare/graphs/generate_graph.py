@@ -9,9 +9,6 @@ from django.conf import settings
 import matplotlib
 matplotlib.use('agg')
 
-import matplotlib
-matplotlib.use('agg')
-
 def plot_contours_from_h5(file_path):
 
     if file_path.endswith("ProbaDistrib.h5") or file_path.endswith("MCMCSamples.h5"):
