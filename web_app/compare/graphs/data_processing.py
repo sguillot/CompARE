@@ -1,10 +1,27 @@
 import os
 import h5py
 import numpy as np
+import shutil
 from scipy import optimize
 from django.conf import settings
 
-# -----| Choice of the file to process and creation of H5 directory |----- #
+# -----| Choice of the file to process and creation/remove of H5 and temp directories |----- #
+
+def create_temp_directory():
+    """
+    Creates the directory 'web_app/compare/static/temp/' if it doesn't exist already.
+    """
+    temp_dir = os.path.join(settings.STATIC_ROOT, 'temp')
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)
+
+def remove_temp_directory():
+    """
+    Removes the 'temp' directory if it exists.
+    """
+    temp_dir = os.path.join(settings.STATIC_ROOT, 'temp')
+    if os.path.exists(temp_dir):
+        shutil.rmtree(temp_dir)
 
 def create_h5_directory():
     """
@@ -44,7 +61,6 @@ def process_data_to_h5(file_path):
         save_mcmcsamples_to_h5(radius, mass, proba_density, contours, h5)
 
         print(f"Saved HDF5 file: {h5}")
-
 
 # -----| Data Processing - ProbaDistrib |----- #
             
@@ -91,14 +107,11 @@ def save_probadistrib_to_h5(mass_grid, radius_grid, density, density_grid_mass_r
         output_h5_file (str): The path of the output HDF5 file.
     """
 
-    # Create H5 directory if necessary
-    create_h5_directory()
-
     # Confidence levels
     confidence_levels = [0.682689492137086, 0.954499736103642, 0.997300203936740, 0.999936657516334, 0.999999426696856]
 
     # Initialize an HDF5 file to store contour coordinates
-    with h5py.File(os.path.join(settings.STATIC_ROOT, 'static', 'h5', output_h5_file), "w") as f:
+    with h5py.File(os.path.join(settings.STATIC_ROOT, 'temp', output_h5_file), "w") as f:
 
         # Create a group for data
         data_group = f.create_group("data")
@@ -226,10 +239,7 @@ def save_mcmcsamples_to_h5(radius, mass, proba_density, contours, file_path):
         output_h5_file (str): The path of the output HDF5 file.
     """
 
-    # Create H5 directory if necessary
-    create_h5_directory()
-
-    with h5py.File(os.path.join(settings.STATIC_ROOT, 'static', 'h5', file_path), "w") as hf:
+    with h5py.File(os.path.join(settings.STATIC_ROOT, 'temp', file_path), "w") as hf:
         # Create a group for data
         data_group = hf.create_group("data")
         

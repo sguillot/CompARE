@@ -2,6 +2,7 @@ import datetime
 import io
 import json
 import os
+import shutil
 import zipfile
 from django.conf import settings
 import pandas as pd
@@ -14,7 +15,7 @@ from compare.compare_utils import formatting_csv
 from .graphs.generate_graph import plot_contours_from_h5
 from .graphs.generate_multiple_graphs import plot_contours_from_checkboxes
 from .graphs.extract_paths import extract_contour_number
-from .graphs.data_processing import process_data_to_h5
+from .graphs.data_processing import process_data_to_h5, create_temp_directory, remove_temp_directory, create_h5_directory
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
@@ -1262,8 +1263,6 @@ def insert_data(request):
         # We get the name of the file
         datafile = request.FILES['filetoload']
 
-        print("Datafile : ", datafile)
-
         if datafile:
 
             # Check file format
@@ -1280,7 +1279,9 @@ def insert_data(request):
                 message = "The file does not have the correct nomenclature."
                 return HttpResponse(json.dumps(message), content_type='application/json',)
 
-            destination_path = os.path.join(settings.STATIC_ROOT, 'static', 'data', datafile.name)
+            create_temp_directory()
+
+            destination_path = os.path.join(settings.STATIC_ROOT, 'temp', datafile.name)
             print("Destination path : ", destination_path)
 
             with open(destination_path, 'wb+') as destination:
@@ -1464,7 +1465,7 @@ def insert_data(request):
 
             ns = Ns.objects.get(filename=insert['filename'])
             # for all the model we verify the value and create the object ,
-            # if alreday exiqt we linked it , same as the others
+            # if already exist we linked it, same as the others
             for mod in insert['model']:
 
                 if len(insert['model'][mod][0]) < 1:
@@ -1550,6 +1551,29 @@ def insert_data(request):
 
                 nsass = NsToAssumptions(filename=ns, id_assumptions=assumptionsId)
                 nsass.save()
+
+        create_h5_directory()
+
+        temp_path = os.path.join(settings.STATIC_ROOT, 'temp')
+
+        for filename in os.listdir(temp_path):
+            if filename.endswith(('.txt', '.npy')):
+                txt_npy_filepath = os.path.join(temp_path, filename)
+                txt_npy_filename = filename
+                data_path = os.path.join(settings.STATIC_ROOT, 'static', 'data', txt_npy_filename)
+
+            if filename.endswith('.h5'):
+                h5_filepath = os.path.join(temp_path, filename)
+                h5_filename = filename
+                h5_path = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+
+        if os.path.isfile(txt_npy_filepath):
+            shutil.move(txt_npy_filepath, data_path)
+
+        if os.path.isfile(h5_filepath):
+            shutil.move(h5_filepath, h5_path)
+
+        remove_temp_directory()
 
         fichierlog = open('compare/static/compare/log.txt', "a")
         wri = ['User:', str(request.user.get_username())+'\n', 'Date:',

@@ -341,3 +341,171 @@ User:micka
 Date:2024-04-19 11:35:38.579654
 Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
 
+User:micka
+Date:2024-04-22 10:30:16.366434
+MethodNs object (544)
+
+User:micka
+Date:2024-04-22 10:30:16.377433
+ConstrainNs object (308)
+
+User:micka
+Date:2024-04-22 10:39:26.343120
+ConstrainNs object (309)
+
+User:micka
+Date:2024-04-22 10:45:44.311092
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 10:45:44.319075
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 10:45:44.328069
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 10:45:44.336070
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 10:45:44.340071
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
+User:micka
+Date:2024-04-22 10:48:46.237649
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 10:48:46.243653
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 10:48:46.252651
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 10:48:46.258650
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 11:04:17.462594
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 11:04:17.469587
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 11:04:17.480587
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 11:04:17.491585
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 11:04:17.521818
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
+User:micka
+Date:2024-04-22 11:13:01.681551
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 11:13:01.690503
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 11:13:01.702427
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 11:13:01.713412
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 11:13:01.735420
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
+User:micka
+Date:2024-04-22 11:29:17.140673
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 11:29:17.149675
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 11:29:17.162767
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 11:29:17.176677
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 11:29:17.197631
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
+User:micka
+Date:2024-04-22 11:32:31.684412
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 11:32:31.693410
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 11:32:31.706410
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 11:32:31.717411
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 11:32:31.735410
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
+User:micka
+Date:2024-04-22 12:04:56.123145
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 12:04:56.129143
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 12:04:56.140143
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 12:04:56.152166
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 12:04:56.187953
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
+User:micka
+Date:2024-04-22 12:08:48.074567
+MethodNs object (543)
+
+User:micka
+Date:2024-04-22 12:08:48.081567
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-22 12:08:48.091568
+ModelNs object (573)
+
+User:micka
+Date:2024-04-22 12:08:48.100569
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-22 12:08:48.118567
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
