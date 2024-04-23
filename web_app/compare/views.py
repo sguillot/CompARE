@@ -1273,7 +1273,7 @@ def insert_data(request):
             # Recover file name without extension
             message = os.path.splitext(datafile.name)[0]
 
-            # Vérifier le nom du fichier sans extension
+            # Check file name without extension
             valid_names = ["MCMCSamples", "ProbaDistrib", "Quantiles", "MeanErrors", "PosteriorSamples", "Contours"]
             if not any(message.endswith(name) for name in valid_names):
                 message = "The file does not have the correct nomenclature."
@@ -1282,7 +1282,15 @@ def insert_data(request):
             create_temp_directory()
 
             destination_path = os.path.join(settings.STATIC_ROOT, 'temp', datafile.name)
-            print("Destination path : ", destination_path)
+            check_path = os.path.join(settings.STATIC_ROOT, 'static', 'data')
+
+            # Get the list of files in the check_path directory
+            files_in_check_path = os.listdir(check_path)
+
+            # Check if datafile.name exists in the files_in_check_path list
+            if datafile.name in files_in_check_path:
+                message = "The file already exists."
+                return HttpResponse(json.dumps(message), content_type='application/json',)
 
             with open(destination_path, 'wb+') as destination:
                 for chunk in datafile.chunks():
@@ -1385,8 +1393,6 @@ def insert_data(request):
 
         # We verify all the values
         insert = json.loads(request.POST.get('insert'))
-
-        print(insert)
 
         # TODO:  Fix these conditions:  for ex with:   insert['filename'] is ''
         if (len(insert['filename']) <= 0):

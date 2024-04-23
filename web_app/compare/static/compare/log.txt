@@ -1,1 +1,21 @@
 
+User:micka
+Date:2024-04-23 08:22:44.405964
+MethodNs object (543)
+
+User:micka
+Date:2024-04-23 08:22:44.411967
+ConstrainNs object (307)
+
+User:micka
+Date:2024-04-23 08:22:44.419983
+ModelNs object (573)
+
+User:micka
+Date:2024-04-23 08:22:44.426968
+AssumptionsNs object (989)
+
+User:micka
+Date:2024-04-23 08:22:44.438964
+Content:Ns object (qLMXB_M30_qLMXB_2020_massradius_helium_2_MCMCSamples.txt)
+
