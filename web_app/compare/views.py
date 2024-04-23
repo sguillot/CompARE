@@ -240,19 +240,17 @@ def visu_data(request):
                 # We select the filenames linked to assumptions
                 select_ns_assumptions = NsToAssumptions.objects.select_related().filter(filename=ns.filename)
 
-                list_temp_prim = []
-                list_temp_sec = []
+                # Store the dependencies as a tuple in a single list
+                dependencies_list = []
                 for s in select_ns_model_dependencies:
-                    list_temp_prim.append(s.id_model.dependenciesprimary)
-                    list_temp_sec.append(s.id_model.dependenciessecondary)
-                list_ns_model_dependencies.append(zip(list_temp_prim, list_temp_sec))
+                    dependencies_list.append((s.id_model.dependenciesprimary, s.id_model.dependenciessecondary, s.id_model.dependenciesdescription, s.id_model.dependenciesreferences))
+                list_ns_model_dependencies.append(dependencies_list)
 
-                list_temp_prim = []
-                list_temp_sec = []
+                # Store the assumptions as a tuple in a single list
+                assumptions_list = []
                 for s in select_ns_assumptions:
-                    list_temp_prim.append(s.id_assumptions.assumptionsprimary)
-                    list_temp_sec.append(s.id_assumptions.assumptionssecondary)
-                list_ns_assumptions.append(zip(list_temp_prim, list_temp_sec))
+                    assumptions_list.append((s.id_assumptions.assumptionsprimary, s.id_assumptions.assumptionssecondary))
+                list_ns_assumptions.append(assumptions_list)
 
             # Zip all the data into a tuple
             select_ns_all_zip = zip(select_ns_all,
@@ -274,54 +272,6 @@ def visu_data(request):
 
             # Send the dictionary to the template
             return render(request, "compare/visu_data.html", select_all_ns)
-        
-def generate_plot(request):
-    if request.method == 'GET' and 'files[]' in request.GET:
-        files = request.GET.getlist('files[]')
-
-        html_graphs = []
-        h5_filepath_array = []
-        h5_filename_array = []
-        extracted_contours = []
-        
-        for filename in files:
-            # H5 file recovery based on file name from the database
-            ns_list = Ns.objects.select_related().get(filename=filename)
-            h5_filename = ns_list.h5_filename
-            filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
-            
-            # Check if the corresponding H5 file exists
-            if os.path.exists(filepath_h5):
-                h5_filepath_array.append(filepath_h5)
-                h5_filename_array.append(h5_filename)
-            else:
-                alert_message = "The H5 file cannot be found. Impossible to generate graph." 
-
-        # If the table contains at least one element, plot the graph and extract the relevant information
-        if len(h5_filepath_array) > 0:
-            contour_plot_html, unique_colors = plot_contours_from_checkboxes(h5_filepath_array)
-            html_graphs.append(contour_plot_html)
-
-            contour_data = extract_contour_number(contour_plot_html)
-            extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
-            extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
-
-
-            # Get subfolders in EOS folder & colors used in the plot
-            eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
-            subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
-
-            # Combine these two lists
-            subfolders_and_colors = zip(subfolders, unique_colors)
-        else:
-            return render(request, 'compare/plot.html', {'alert_message': alert_message})
-        
-        context = {'html_graphs': html_graphs[0],
-                   'extracted_contours': extracted_contours,
-                   'filenames': h5_filename_array,
-                   'subfolders_and_colors': subfolders_and_colors}
-        
-        return render(request, 'compare/plot.html', context)
 
 def detail(request, id):
 
@@ -388,6 +338,53 @@ def detail(request, id):
 
     return render(request, 'compare/detail.html', select)
 
+def generate_plot(request):
+    if request.method == 'GET' and 'files[]' in request.GET:
+        files = request.GET.getlist('files[]')
+
+        html_graphs = []
+        h5_filepath_array = []
+        h5_filename_array = []
+        extracted_contours = []
+        
+        for filename in files:
+            # H5 file recovery based on file name from the database
+            ns_list = Ns.objects.select_related().get(filename=filename)
+            h5_filename = ns_list.h5_filename
+            filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+            
+            # Check if the corresponding H5 file exists
+            if os.path.exists(filepath_h5):
+                h5_filepath_array.append(filepath_h5)
+                h5_filename_array.append(h5_filename)
+            else:
+                alert_message = "The H5 file cannot be found. Impossible to generate graph." 
+
+        # If the table contains at least one element, plot the graph and extract the relevant information
+        if len(h5_filepath_array) > 0:
+            contour_plot_html, unique_colors = plot_contours_from_checkboxes(h5_filepath_array)
+            html_graphs.append(contour_plot_html)
+
+            contour_data = extract_contour_number(contour_plot_html)
+            extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
+            extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+
+
+            # Get subfolders in EOS folder & colors used in the plot
+            eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
+            subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
+
+            # Combine these two lists
+            subfolders_and_colors = zip(subfolders, unique_colors)
+        else:
+            return render(request, 'compare/plot.html', {'alert_message': alert_message})
+        
+        context = {'html_graphs': html_graphs[0],
+                   'extracted_contours': extracted_contours,
+                   'filenames': h5_filename_array,
+                   'subfolders_and_colors': subfolders_and_colors}
+        
+        return render(request, 'compare/plot.html', context)
 
 # TODO:  Next one to check and reformat
 @login_required

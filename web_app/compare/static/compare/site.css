@@ -615,3 +615,27 @@ input.check{
 #sigmaContainer, #filesContainer, #subfoldersContainer {
   border:1px solid black;
 }
+
+/* CSS for the model pop-up */
+.model-popup-container {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  z-index: 1000; /* Ensure pop-up is above other elements */
+}
+
+.model-popup ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.model-popup li {
+  list-style-type: none;
+  margin: 5px 0;
+}
+
+.questionmark {
+  cursor:help;
+}

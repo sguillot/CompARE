@@ -6,6 +6,46 @@ Visu_data
 
 {% load static %}
 
+<script>
+    function showModelPopup(element, mprim, msec, mdesc, mref_list) {
+
+        let references = mref_list.split(',');
+        // Create the HTML content for the pop-up
+        let popupContent = `
+            <div class="model-popup">
+                <p><strong>Primary Dependency:</strong> ${mprim}</p>
+                <p><strong>Secondary Dependency:</strong> ${msec}</p>
+                <p><strong>Description:</strong> ${mdesc}</p>
+                <p><strong>References:</strong></p>
+                <ul>
+                    ${references.map(ref => `<li>${ref}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+
+        // Create the pop-up element
+        let popup = document.createElement('div');
+        popup.className = 'model-popup-container';
+        popup.innerHTML = popupContent;
+
+        // Position the pop-up below the hovered element
+        let rect = element.getBoundingClientRect();
+        popup.style.top = rect.bottom + 'px';
+        popup.style.left = rect.left + 'px';
+
+        // Append pop-up to the body
+        document.body.appendChild(popup);
+    }
+
+    function hideModelPopup() {
+        // Remove the pop-up element
+        let popup = document.querySelector('.model-popup-container');
+        if (popup) {
+            popup.remove();
+        }
+    }
+</script>
+
 <div class="visu">
 
 <div class="side_menu">
@@ -187,8 +227,12 @@ Visu_data
                     <td>{{ q.id_constrain.constrainversion }}</td>
                     <td>{{ q.id_constrain.constrainvariable }}</td>
                     <td>
-                        {% for mprim, msec in m %}
-                            <li><u>{{mprim}}</u>: {{msec}}</li>
+                        {% for mprim, msec, mdesc, mref_list in m %}
+                            <li>
+                                <u class="questionmark" onmouseover="showModelPopup(this, '{{ mprim }}', '{{ msec }}', '{{ mdesc }}', '{{ mref_list }}')" onmouseout="hideModelPopup()">
+                                    {{ mprim }}
+                                </u>: {{ msec }}
+                            </li>
                         {% endfor %}
                     </td>
                     <td>
