@@ -204,12 +204,12 @@ Visu_data
                     <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
                     <td>
                         {% if file_exists %}
-                            <a href="{% static datalink %}" download="{{q.filename}}">
+                            <a href="{% static datalink %}" download="{{q.h5_filename}}">
                                 <img src="{% static 'compare/images/download.svg' %}" alt="icon download" width=30em />
                             </a>
                         {% endif %}
                     </td>
-                    <td><input type="checkbox" value='{{q.filename}}' class="dwnl" name="che"></td>
+                    <td><input type="checkbox" value='{{q.h5_filename}}' class="dwnl" name="che"></td>
                 </tr>
                 {% endfor %}
             </tbody>

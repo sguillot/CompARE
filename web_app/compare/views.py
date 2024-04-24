@@ -73,7 +73,7 @@ def visu_data(request):
                   "PPM", "qLMXB", "Cold MSP", "Thermal INSs", "Type-I X-ray bursts"]
 
     for ns in select_ns_all:
-        filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', ns.filename)
+        filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', ns.h5_filename)
         if not os.path.exists(filepath):
             ns.file_exists = False
         else:
@@ -97,12 +97,12 @@ def visu_data(request):
 
             with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
                 # Add each downloaded file to the ZIP file folder
-                for filename in to_download:
-                    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', filename)
+                for h5_filename in to_download:
+                    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
                     if os.path.exists(filepath):
-                        zip_file.write(filepath, arcname=filename)
+                        zip_file.write(filepath, arcname=h5_filename)
                     else:
-                        return HttpResponseNotFound(f"File not found: {filename}")
+                        return HttpResponseNotFound(f"File not found: {h5_filename}")
 
                 zip_file.printdir()
 
@@ -117,8 +117,14 @@ def visu_data(request):
             # Convert JSON string to Python list
             list_bibtex = json.loads(bibtex_select)
 
+            # Retrieve selected records
+            selected_records = select_ns_all.filter(h5_filename__in=list_bibtex)
+
+            # Retrieve the filenames from selected records
+            file_names = [record.filename for record in selected_records]
+
             # Retrieve selected Bibtex information
-            selected_bibtex = select_ns_all.filter(filename__in=list_bibtex).values_list('id_ref__bibtex', flat=True)
+            selected_bibtex = select_ns_all.filter(filename__in=file_names).values_list('id_ref__bibtex', flat=True)
 
             # Concatenate selected Bibtex
             bibtex_content = '\n\n'.join(selected_bibtex)
@@ -233,7 +239,7 @@ def visu_data(request):
 
             for ns in select_ns_all:
                 # We make the file paths from the filenames (to be used by the django template)
-                list_ns_files.append("data/"+ns.filename)
+                list_ns_files.append("h5/"+ns.h5_filename)
 
                 # We select the filenames linked to models
                 select_ns_model_dependencies = NsToModel.objects.select_related().filter(filename=ns.filename)
@@ -310,7 +316,7 @@ def detail(request, id):
     # Trick to link to ADS page (need to replace the &, for ex in A&A)
     ns_list.id_ref.shortlink = ns_list.id_ref.short.replace("&", "%26")
 
-    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', id)
+    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
     file_exists = os.path.exists(filepath)
 
     for mod in ns_model_dependencies:
@@ -347,9 +353,9 @@ def generate_plot(request):
         h5_filename_array = []
         extracted_contours = []
         
-        for filename in files:
+        for h5_filename in files:
             # H5 file recovery based on file name from the database
-            ns_list = Ns.objects.select_related().get(filename=filename)
+            ns_list = Ns.objects.select_related().get(h5_filename=h5_filename)
             h5_filename = ns_list.h5_filename
             filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
             

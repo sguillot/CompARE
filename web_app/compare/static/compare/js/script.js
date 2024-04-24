@@ -120,12 +120,12 @@ function downloadFiles() {
 }
 
 /*
-Get the filename which allows to download the file
+Get the h5_filename which allows to download the file
 */
-function downloadFilename(filename) {
+function downloadFilename(h5_filename) {
   var link = document.createElement('a');
-  link.href = '/static/data/' + filename;
-  link.download = filename;
+  link.href = '/static/h5/' + h5_filename;
+  link.download = h5_filename;
   link.click();
 }
 
@@ -143,6 +143,7 @@ function bibtexFile() {
   }
 
   var values2 = JSON.stringify(values);
+
   $.ajax({
     url: '/visu/',
     type: 'GET',
