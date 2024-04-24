@@ -6,46 +6,6 @@ Visu_data
 
 {% load static %}
 
-<script>
-    function showModelPopup(element, mprim, msec, mdesc, mref_list) {
-
-        let references = mref_list.split(',');
-        // Create the HTML content for the pop-up
-        let popupContent = `
-            <div class="model-popup">
-                <p><strong>Primary Dependency:</strong> ${mprim}</p>
-                <p><strong>Secondary Dependency:</strong> ${msec}</p>
-                <p><strong>Description:</strong> ${mdesc}</p>
-                <p><strong>References:</strong></p>
-                <ul>
-                    ${references.map(ref => `<li>${ref}</li>`).join('')}
-                </ul>
-            </div>
-        `;
-
-        // Create the pop-up element
-        let popup = document.createElement('div');
-        popup.className = 'model-popup-container';
-        popup.innerHTML = popupContent;
-
-        // Position the pop-up below the hovered element
-        let rect = element.getBoundingClientRect();
-        popup.style.top = rect.bottom + 'px';
-        popup.style.left = rect.left + 'px';
-
-        // Append pop-up to the body
-        document.body.appendChild(popup);
-    }
-
-    function hideModelPopup() {
-        // Remove the pop-up element
-        let popup = document.querySelector('.model-popup-container');
-        if (popup) {
-            popup.remove();
-        }
-    }
-</script>
-
 <div class="visu">
 
 <div class="side_menu">
@@ -110,7 +70,7 @@ Visu_data
 
             <div class="search">
                 <input type="text" id="Search" name="Search" placeholder="Search">
-                <input type="image" id="btn" src="{% static 'compare/search.svg' %}" onclick="searchFilter()">
+                <input type="image" id="btn" src="{% static 'compare/images/search.svg' %}" onclick="searchFilter()">
             </div>
 
             <div class="button">
@@ -209,7 +169,7 @@ Visu_data
                     <th>Analysis assumptions</th>
                     <th>Reference</th>
                     <th>Download</th>
-                    <th><img src="{% static 'compare/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/square.svg' %}" onclick="unselectall()"></th>
+                    <th><img src="{% static 'compare/images/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/images/square.svg' %}" onclick="unselectall()"></th>
                 </tr>
             </thead>
 
@@ -218,7 +178,7 @@ Visu_data
             <tbody id="firstTable">
                 {% for q , m , a, datalink, file_exists in queryall %}
                 <tr>
-                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/plus.svg' %}" alt="icon more" width=30em /></a></td>
+                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/images/plus.svg' %}" alt="icon more" width=30em /></a></td>
                     <td>{{ q.id_name.namedb }}</td>
                     <td>{{ q.id_name.classdb }}</td>
                     <td>{{ q.id_method.method }}</td>
@@ -245,7 +205,7 @@ Visu_data
                     <td>
                         {% if file_exists %}
                             <a href="{% static datalink %}" download="{{q.filename}}">
-                                <img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em />
+                                <img src="{% static 'compare/images/download.svg' %}" alt="icon download" width=30em />
                             </a>
                         {% endif %}
                     </td>

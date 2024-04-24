@@ -254,7 +254,7 @@ function ajaxRequest(checkList , select , search){
 
         let more = row.insertCell(0)
         // We generate the part of the static URL before the specified path
-        more.innerHTML = "<a href=detail/" + d.filename + " target='_blank'><img src='" + baseStaticURL + "compare/plus.svg' alt='icon more' width='30em' /></a>"
+        more.innerHTML = "<a href=detail/" + d.filename + " target='_blank'><img src='" + baseStaticURL + "compare/images/plus.svg' alt='icon more' width='30em' /></a>"
 
         let name = row.insertCell(1)
         name.innerHTML = d.namedb
@@ -299,7 +299,7 @@ function ajaxRequest(checkList , select , search){
         let download = row.insertCell(11)
       
         // We also generate the part of the static URL before the specified path
-        download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/download.svg' alt='icon download' width='30em' />" + "</a>";
+        download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/images/download.svg' alt='icon download' width='30em' />" + "</a>";
 
         let checkdo = row.insertCell(12)
         checkdo.innerHTML = "<td><input type='checkbox' value="+ d.filename+" class='dwnl' name='che'> </td>"

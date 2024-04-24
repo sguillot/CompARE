@@ -4,20 +4,21 @@
     <meta charset="utf-8"/>
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'compare/site.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'compare/css/site.css' %}"/>
     <script>
         var baseStaticURL = "{% static '' %}";
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="{% static 'compare/script.js' %}"></script>
-    <script src="{% static 'compare/scriptAdd.js' %}"></script>
+    <script src="{% static 'compare/js/script.js' %}"></script>
+    <script src="{% static 'compare/js/scriptAdd.js' %}"></script>
+    <script src="{% static 'compare/js/popup.js' %}"></script>
     <link rel="shortcut icon" href="#">
 </head>
 
 <body>
 
 <div class="navbar">
-    <a href="{% url 'home' %}" class="navbar-Compare"><img src="{% static 'compare/logo.png' %}" width=300em ></a>
+    <a href="{% url 'home' %}" class="navbar-Compare"><img src="{% static 'compare/images/logo.png' %}" width=300em ></a>
     <a href="{% url 'home' %}" class="navbar-brand">Home page</a>
     <a href="{% url 'visu' %}" class="navbar-brand">Data table</a>
     <a href="{% url 'insert' %}" class="navbar-brand">Add entry</a>
@@ -38,5 +39,11 @@
         <p>footer (mettre plan du site et autres informations pertinentes)</p>
     </footer>
 </div>
+
+{% block javascript %}
+    <script src="{% static 'compare/js/common.js' %}"></script>
+    <script src="{% static 'compare/js/plot.js' %}"></script>
+{% endblock %}
+
 </body>
 </html>

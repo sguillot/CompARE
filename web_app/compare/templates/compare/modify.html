@@ -20,7 +20,7 @@ Modify
     <h1><u>{{queryall.id_name.namedb}}</u>: <br> {{queryall.filename}}</h1>
     <div class="modify-name">
         <h3>Name:</h3>
-        <p>Click to edit&nbsp;<input type="image" class="enable-name" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <p>Click to edit&nbsp;<input type="image" class="enable-name" src="{% static 'compare/images/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-name">
             <form method="post">
                 {% csrf_token %}
@@ -66,7 +66,7 @@ Modify
     <hr>
     <div class="modify-ref">
         <h3>Reference:</h3>
-        <p>Click to edit&nbsp;<input type="image" class="enable-ref" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <p>Click to edit&nbsp;<input type="image" class="enable-ref" src="{% static 'compare/images/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-ref">
             <form method="post">
                 {% csrf_token %}
@@ -110,7 +110,7 @@ Modify
     <hr>
     <div class="modify-method">
         <h3>Method:</h3>
-        <p>Click to edit&nbsp;<input type="image" class="enable-method" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <p>Click to edit&nbsp;<input type="image" class="enable-method" src="{% static 'compare/images/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-method">
             <form method="post">
                 {% csrf_token %}
@@ -155,7 +155,7 @@ Modify
     <hr>
     <div class="modify-constrain">
         <h3>Constraint:</h3>
-        <p>Click to edit&nbsp;<input type="image" class="enable-constrain" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+        <p>Click to edit&nbsp;<input type="image" class="enable-constrain" src="{% static 'compare/images/pencil.svg' %}" onclick="enable(this)"></p>
         <div class="form-constrain">
             <form method="post">
                 {% csrf_token %}
@@ -212,7 +212,7 @@ Modify
         <div class="form-model"> 
             {%for qmo in queryModel %}
                 {%for i in qmo %}
-                    <p>Click to edit&nbsp;<input type="image" class="method{{i.id_model}}" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+                    <p>Click to edit&nbsp;<input type="image" class="method{{i.id_model}}" src="{% static 'compare/images/pencil.svg' %}" onclick="enable(this)"></p>
                     <div class="form-constrain">
                         <form method="post">
                             {% csrf_token %}
@@ -255,7 +255,7 @@ Modify
         <div class="form-assumptions">
             {%for qass in queryAssumption %}
                 {%for j in qass %}
-                    <p>Click to edit&nbsp;<input type="image" class="assumption{{j.id_assumptions}}" src="{% static 'compare/pencil.svg' %}" onclick="enable(this)"></p>
+                    <p>Click to edit&nbsp;<input type="image" class="assumption{{j.id_assumptions}}" src="{% static 'compare/images/pencil.svg' %}" onclick="enable(this)"></p>
                     <div class="form-constrain">
                         <form method="post">
                             {% csrf_token %}

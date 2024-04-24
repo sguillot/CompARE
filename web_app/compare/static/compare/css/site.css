@@ -616,7 +616,7 @@ input.check{
   border:1px solid black;
 }
 
-/* CSS for the model pop-up */
+/* Model pop-up */
 .model-popup-container {
   position: absolute;
   background-color: white;
