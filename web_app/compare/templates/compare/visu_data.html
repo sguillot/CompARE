@@ -15,13 +15,8 @@ Visu_data
     </div>
 
     <form class="form">
-        <input type="checkbox" name="NS_Spin" value="NS Spin"class="check">
-        <label for="NS_Spin">NS Spin</label>
-       
-        <br>
-
-        <input type="checkbox" name="Transiently_Accreting_NS" value="Transiently_Accreting_NS" class="check" >
-        <label for="Transiently_Accreting_NS">Transiently Accreting NS</label>
+        <input type="checkbox" name="Cold_MSP" value="Cold MSP" class="check" >
+        <label for="Cold_MSPs">Cold MSP</label>
        
         <br>
 
@@ -35,6 +30,11 @@ Visu_data
         
         <br>
 
+        <input type="checkbox" name="NS_Spin" value="NS Spin"class="check">
+        <label for="NS_Spin">NS Spin</label>
+       
+        <br>
+
         <input type="checkbox" name="PPM" value="PPM" class="check">
         <label for="PPM">PPM</label>
         
@@ -45,14 +45,14 @@ Visu_data
         
         <br>
 
-        <input type="checkbox" name="Cold_MSP" value="Cold MSP" class="check" >
-        <label for="Cold_MSPs">Cold MSP</label>
-       
-        <br>
-
         <input type="checkbox" name="Thermal_INSs" value="Thermal INSs" class="check">
         <label for="Thermal_INSs">Thermal INSs</label>  
         
+        <br>
+
+        <input type="checkbox" name="Transiently_Accreting_NS" value="Transiently_Accreting_NS" class="check" >
+        <label for="Transiently_Accreting_NS">Transiently Accreting NS</label>
+       
         <br>
 
         <input type="checkbox" name="Type-I_X-ray_bursts" value="Type-I X-ray bursts" class="check">
@@ -84,8 +84,8 @@ Visu_data
                     <div class="flexSelect">
                         <label for="list_methods">Method</label>
                         <select name="list_methods" id="list_methods" multiple>
-                            {% for qm in queryMeth|dictsort:"method" %}
-                                <option class="Meth" value="{{qm.method}}">{{qm.method}}</option>
+                            {% for qm in queryMeth %}
+                                <option class="Meth" value="{{qm}}">{{qm}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -93,8 +93,8 @@ Visu_data
                     <div class="flexSelect">
                         <label for="list_variable">Constrain Variable</label>
                         <select name="list_variable" id="list_variable" multiple>
-                            {% for qv in queryConV|dictsort:"constrainvariable" %}
-                                <option class="ConsV" value="{{qv.constrainvariable}}">{{qv.constrainvariable}}</option>
+                            {% for qv in queryConV %}
+                                <option class="ConsV" value="{{qv}}">{{qv}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -102,8 +102,8 @@ Visu_data
                     <div class="flexSelect">
                         <label for="list_constrain_type">Constrain Type</label>
                         <select name="list_constrain_type" id="list_constrain_type" multiple>
-                            {% for qt in queryConT|dictsort:"constraintype" %}
-                                <option class="ConsT" value="{{qt.constraintype}}">{{qt.constraintype}}</option>
+                            {% for qt in queryConT %}
+                                <option class="ConsT" value="{{qt}}">{{qt}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -112,7 +112,7 @@ Visu_data
                         <label for="list_dep_primary">Model Primary</label>
                         <select name="list_dep_primary" id="list_dep_primary" multiple>
                             {% for qd in queryDep %}
-                                <option class="Dep" value="{{qd.dependenciesprimary}}">{{qd.dependenciesprimary}}</option>
+                                <option class="Dep" value="{{qd}}">{{qd}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -121,7 +121,7 @@ Visu_data
                         <label for="list_dep_secondary">Model Secondary</label>
                         <select name="list_dep_secondary" id="list_dep_secondary" multiple>
                             {% for qds in queryDepS %}
-                                <option class="DepS" value="{{qds.dependenciessecondary}}">{{qds.dependenciessecondary}}</option>
+                                <option class="DepS" value="{{qds}}">{{qds}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -130,7 +130,7 @@ Visu_data
                         <label for="list_assumptions_primary">Assumptions Primary</label>
                         <select name="list_assumptions_primary" id="list_assumptions_primary" multiple>
                             {% for qa in queryAss %}
-                                <option class="Ass" value="{{qa.assumptionsprimary}}">{{qa.assumptionsprimary}}</option>
+                                <option class="Ass" value="{{qa}}">{{qa}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -139,7 +139,7 @@ Visu_data
                         <label for="list_assumptions_secondary">Assumptions Secondary</label>
                         <select name="list_assumptions_secondary" id="list_assumptions_secondary" multiple>
                             {% for qas in queryAssS %}
-                                <option class="Ass2" value="{{qas.assumptionssecondary}}">{{qas.assumptionssecondary}}</option>
+                                <option class="Ass2" value="{{qas}}">{{qas}}</option>
                             {% endfor %}
                         </select>
                     </div>

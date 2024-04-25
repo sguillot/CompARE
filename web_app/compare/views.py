@@ -62,6 +62,23 @@ def keyword_filter(select_ns_prefiltered, all_keywords, keyword):
 
     return select_ns_filtered
 
+def get_distinct_values(queryset, field_name):
+    values_list = queryset.values_list(field_name, flat=True).order_by(field_name)
+    distinct_values = []
+    for value in values_list:
+        if value not in distinct_values:
+            distinct_values.append(value)
+    return distinct_values
+
+def get_sorted_distinct_values(queryset, field_name):
+    values_list = queryset.values_list(field_name, flat=True)
+    values_list_lower = list(values_list)
+    sorted_values_lower = sorted(values_list_lower, key=lambda x: x.lower())
+    distinct_values = []
+    for value in sorted_values_lower:
+        if value not in distinct_values:
+            distinct_values.append(value)
+    return [value for value in distinct_values]
 
 def visu_data(request):
 
@@ -264,16 +281,26 @@ def visu_data(request):
                                     list_ns_assumptions,
                                     list_ns_files,
                                     [ns.file_exists for ns in select_ns_all])
+            
+            # Sorted alphabetically + avoids redundancy
+            orderMethodDistinct = get_sorted_distinct_values(MethodNs.objects, 'method')
+            orderConstraintVariableDistinct = get_sorted_distinct_values(ConstrainNs.objects, 'constrainvariable')
+            orderConstraintTypeDistinct = get_sorted_distinct_values(ConstrainNs.objects, 'constraintype')
+
+            orderDepPrimaryDistinct = get_distinct_values(ModelNs.objects, 'dependenciesprimary')
+            orderDepSecondaryDistinct = get_distinct_values(ModelNs.objects, 'dependenciessecondary')
+            orderAssPrimaryDistinct = get_distinct_values(AssumptionsNs.objects, 'assumptionsprimary')
+            orderAssSecondaryDistinct = get_distinct_values(AssumptionsNs.objects, 'assumptionssecondary')
 
             # We select the data that will appear in the table, and put into a dictionary
             select_all_ns = {"queryall": select_ns_all_zip,
-                             "queryMeth": MethodNs.objects.values('method').distinct(),
-                             "queryConV": ConstrainNs.objects.values('constrainvariable').distinct(),
-                             "queryConT": ConstrainNs.objects.values('constraintype').distinct(),
-                             "queryDep": ModelNs.objects.values('dependenciesprimary').distinct(),
-                             "queryDepS": ModelNs.objects.values('dependenciessecondary').distinct(),
-                             "queryAss": AssumptionsNs.objects.values('assumptionsprimary').distinct(),
-                             "queryAssS": AssumptionsNs.objects.values('assumptionssecondary').distinct()
+                             "queryMeth": orderMethodDistinct,
+                             "queryConV": orderConstraintVariableDistinct,
+                             "queryConT": orderConstraintTypeDistinct,
+                             "queryDep": orderDepPrimaryDistinct,
+                             "queryDepS": orderDepSecondaryDistinct,
+                             "queryAss": orderAssPrimaryDistinct,
+                             "queryAssS": orderAssSecondaryDistinct,
                              }
 
             # Send the dictionary to the template
