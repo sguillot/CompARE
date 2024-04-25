@@ -191,14 +191,11 @@ input.check{
 .sort-icons {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
   background-color:#cbd4db;
   border-radius:5px;
-  padding:3px;
+  padding:2px;
   margin-left:5px;
-}
-
-.sort-icon {
-  cursor: pointer;
 }
 
 .sort-icons:hover {
