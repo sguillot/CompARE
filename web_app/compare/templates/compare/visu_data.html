@@ -11,7 +11,7 @@ Visu_data
 <div class="side_menu">
 
     <div class="title-dclasses">
-        <h2>Database classes</h2>
+        <h2>Database Classes</h2>
     </div>
 
     <form class="form">
@@ -66,7 +66,7 @@ Visu_data
     <div class="filter">
         <div class="content-filter">
 
-            <button id="show" class="multiple" onclick="hideShow(this)"> More filters</button>
+            <button id="show" class="multiple" onclick="hideShow(this)"> More Filters</button>
 
             <div class="search">
                 <input type="text" id="Search" name="Search" placeholder="Search">
@@ -76,7 +76,7 @@ Visu_data
             <div class="button">
                 <button id="dwnlF" onclick="downloadFiles()">Download Files</button>
                 <button id="dwnlB" onclick="bibtexFile()">Download Bibtex</button>
-                <button id="showP" onclick="showPlot()">Show plot</button>
+                <button id="showP" onclick="showPlot()">Show Plot</button>
             </div>
         </div>
             <div id="multiple">
@@ -91,7 +91,7 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="list_variable">Constrain Variable</label>
+                        <label for="list_variable">Constraint Variable</label>
                         <select name="list_variable" id="list_variable" multiple>
                             {% for qv in queryConV %}
                                 <option class="ConsV" value="{{qv}}">{{qv}}</option>
@@ -100,7 +100,7 @@ Visu_data
                     </div>
 
                     <div class="flexSelect">
-                        <label for="list_constrain_type">Constrain Type</label>
+                        <label for="list_constrain_type">Constraint Type</label>
                         <select name="list_constrain_type" id="list_constrain_type" multiple>
                             {% for qt in queryConT %}
                                 <option class="ConsT" value="{{qt}}">{{qt}}</option>
@@ -145,7 +145,7 @@ Visu_data
                     </div>
                     <div class="button-vld">
                         <button id="vld" onclick="searchFilter()">Confirm</button>
-                        <button id="reset" onclick="resetFilters()">Reset filters</button>
+                        <button id="reset" onclick="resetFilters()">Reset Filters</button>
                     </div>
                 </div>
                 
@@ -153,21 +153,88 @@ Visu_data
         </div>
     </div>
 
+    <br>
+
     <div class="tab">
         <table>
             <thead>
                 <tr>
-                    <th>More info</th>
-                    <th>Source name</th>
-                    <th>Database Class</th>
-                    <th>Method</th>
-                    <th>Method details</th>
-                    <th>Constraint Type</th>
-                    <th>Constraint Version</th>
-                    <th>Constraint Variable</th>
-                    <th>Model dependencies</th>
-                    <th>Analysis assumptions</th>
-                    <th>Reference</th>
+                    <th>More Info</th>
+                    <th>
+                        <div class="column-header">
+                            <span>Source Name</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="1" onclick="sortTable(1, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Database Class</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="2" onclick="sortTable(2, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Method</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="3" onclick="sortTable(3, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Method Details</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="4" onclick="sortTable(4, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Constraint Type</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="5" onclick="sortTable(5, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Constraint Version</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="6" onclick="sortTable(6, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Constraint Variable</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="7" onclick="sortTable(7, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Model Dependencies</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="8" onclick="sortTable(8, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="column-header">
+                            <span>Analysis Assumptions</span>
+                            <div class="sort-icons">
+                                <span class="sort-icon" data-column="9" onclick="sortTable(9, this)">↕</span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        Reference
+                    </th>
                     <th>Download</th>
                     <th><img src="{% static 'compare/images/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/images/square.svg' %}" onclick="unselectall()"></th>
                 </tr>

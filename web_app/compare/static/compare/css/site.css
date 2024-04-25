@@ -182,6 +182,29 @@ input.check{
   padding-top: 50px;
 }
 
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sort-icons {
+  display: flex;
+  flex-direction: column;
+  background-color:#cbd4db;
+  border-radius:5px;
+  padding:3px;
+  margin-left:5px;
+}
+
+.sort-icon {
+  cursor: pointer;
+}
+
+.sort-icons:hover {
+  background-color:white;
+}
+
 /* table */
 
 .tab{
