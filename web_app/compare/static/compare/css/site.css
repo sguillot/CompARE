@@ -344,6 +344,10 @@ input.check{
   padding: 2%;
   font-size: 1.3em;
 }
+
+.divref > details {
+  cursor:pointer;
+}
   
 .titlecat{
   font-size: 2em;
@@ -351,6 +355,17 @@ input.check{
   font-weight: bold;
   background-color: rgb(255, 255, 255);
   border-radius: 2em;
+}
+
+.plot-detail > #plot-container {
+  display:flex;
+  align-items:center;
+  flex-direction:column;
+}
+
+.alert-container {
+  margin-left:20px;
+  color:red;
 }
 
 /* login page */
@@ -609,7 +624,7 @@ input.check{
   background-color: #ddd;
 }
 
-#plot-container, #go-back-container {
+.plot-page > #plot-container, #go-back-container {
   display:flex;
   align-items: center;
   justify-content: center;

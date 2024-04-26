@@ -1,5 +1,6 @@
 import h5py
 import matplotlib.pyplot as plt
+from matplotlib.colors import to_rgba
 import mpld3
 import numpy as np
 import os
@@ -21,6 +22,9 @@ def plot_contours_from_h5(file_path):
         
         # Find all subfolders in the EOS folder
         subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
+
+        # Lists to store colors
+        unique_colors = []
 
         # Lists to store contour data
         all_contour_data = []
@@ -72,6 +76,16 @@ def plot_contours_from_h5(file_path):
                     # Draw the curve
                     plt.plot(radius, mass, label=f'{subfolder} - {filename[:-4]}', color='C{}'.format(i))
 
+                    # Store the color used in the plot
+                    contour_color = 'C{}'.format(i)
+                    rgba_color = to_rgba(contour_color)
+
+                    rgb_color = [int(255 * c) for c in rgba_color[:3]]
+
+                    # Check if the color is already in the list
+                    if tuple(rgb_color) not in unique_colors:
+                        unique_colors.append(tuple(rgb_color))
+
         ax.set_title('Contour Plot')
         ax.set_xlabel('Radius (km)')
         ax.set_ylabel('Mass (M☉)')
@@ -111,4 +125,4 @@ def plot_contours_from_h5(file_path):
     #    # Add the plugin to display coordinates when hovering over the graph
     #    plugins.connect(fig, plugins.MousePosition(fontsize=14, fmt=".3f"))
 
-    return mpld3.fig_to_html(fig)
+    return mpld3.fig_to_html(fig), unique_colors

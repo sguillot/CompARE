@@ -15,43 +15,45 @@ Plot
     </div>
 {% else %}
   
-<div id="plot-container">
+<div class="plot-page">
+    <div id="plot-container">
+        
+        {% if html_graphs %}
+            {{ html_graphs|safe }}
+        {% endif %}
     
-    {% if html_graphs %}
-        {{ html_graphs|safe }}
-    {% endif %}
-
-    <div class="checkboxesContainer">
-        <div id="sigmaContainer">
-            <h3>Sigmas</h3>
-            {% for contour in extracted_contours %}
-                <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
-            {% endfor %}
+        <div class="checkboxesContainer">
+            <div id="sigmaContainer">
+                <h3>Sigmas</h3>
+                {% for contour in extracted_contours %}
+                    <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
+                {% endfor %}
+            </div>
+    
+            <br><br>
+    
+            <div id="filesContainer">
+                <h3>Files</h3>
+                {% for filename in filenames %}
+                    <label class="label-filename">
+                        <input class="file-checkbox" type="checkbox" value="{{ filename }}" checked>{{ filename }}<br>
+                    </label>
+                {% endfor %}
+            </div>
+    
+            <br><br>
+    
+            <div id="subfoldersContainer">
+                <h3>EOS Models</h3>
+                {% for subfolder, unique_color in subfolders_and_colors %}
+                    <label class="label-subfolder">
+                        <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
+                    </label>
+                {% endfor %}
+            </div>
         </div>
-
-        <br><br>
-
-        <div id="filesContainer">
-            <h3>Files</h3>
-            {% for filename in filenames %}
-                <label class="label-filename">
-                    <input class="file-checkbox" type="checkbox" value="{{ filename }}" checked>{{ filename }}<br>
-                </label>
-            {% endfor %}
-        </div>
-
-        <br><br>
-
-        <div id="subfoldersContainer">
-            <h3>EOS Models</h3>
-            {% for subfolder, unique_color in subfolders_and_colors %}
-                <label class="label-subfolder">
-                    <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
-                </label>
-            {% endfor %}
-        </div>
+    
     </div>
-
 </div>
 <br><br>
 

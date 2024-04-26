@@ -86,7 +86,7 @@ def plot_contours_from_checkboxes(selected_filepaths):
 
                 rgb_color = [int(255 * c) for c in rgba_color[:3]] 
 
-                 # Check if the color is already in unique_colors_list
+                # Check if the color is already in unique_colors_list
                 if tuple(rgb_color) not in unique_colors:
                     unique_colors.append(tuple(rgb_color)) # Store RGB color
 

@@ -97,10 +97,50 @@ Detail
                 <p><b>Processing info:</b> {{queryall.id_method.processinfinfo}}</p>
             </div>
 
-            {% if contour_plot %}
-                <div class="contour-plot">
-                    {{ contour_plot|safe }}
+            {% if alert_message %}
+                <div class="alert-container">
+                    <p>{{ alert_message }}</p>
                 </div>
+            {% else %}
+
+            <div class="plot-detail">
+                <div id="plot-container">
+                    {% if contour_plot %}
+                        {{ contour_plot|safe }}
+                    {% endif %}
+        
+                    <div class="checkboxesContainer">
+                        <div id="sigmaContainer">
+                            <h3>Sigmas</h3>
+                            {% for contour in extracted_contours %}
+                                <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
+                            {% endfor %}
+                        </div>
+                        <br><br>
+    
+                        <div id="subfoldersContainer">
+                            <h3>EOS Models</h3>
+                            {% for subfolder, unique_color in subfolders_and_colors %}
+                                <label class="label-subfolder">
+                                    <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
+                                </label>
+                            {% endfor %}
+                        </div>
+    
+                        <br><br>
+            
+                        <div id="filesContainer">
+                            <h3>File</h3>
+                            {% if filename %}
+                                <label class="label-filename">
+                                    <input class="file-checkbox" type="checkbox" value="{{ filename }}" checked>{{ filename }}<br>
+                                </label>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
             {% endif %}
 
             <div class="divref">

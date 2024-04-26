@@ -330,9 +330,27 @@ def detail(request, id):
     filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
 
     file_exists = os.path.exists(filepath_h5)
+
     contour_plot = None
+    subfolders_and_colors = None
+    alert_message = None
+    extracted_contours = []
+
     if file_exists:
-        contour_plot = plot_contours_from_h5(filepath_h5)
+        contour_plot, unique_colors = plot_contours_from_h5(filepath_h5)
+
+        contour_data = extract_contour_number(contour_plot)
+        extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
+        extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+
+        # Get subfolders in EOS folder & colors used in the plot
+        eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
+        subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
+
+        # Combine these two lists
+        subfolders_and_colors = zip(subfolders, unique_colors)
+    else:
+        alert_message = "The H5 file cannot be found. Impossible to generate graph."
 
     # We retrieve all the models dependencies linked to the id(filename) of the NS
     ns_model_dependencies = NsToModel.objects.select_related('id_model').filter(filename=id)
@@ -366,8 +384,12 @@ def detail(request, id):
     select = {"queryall": ns_list,
               "queryMo": ns_model_dependencies,
               "queryAs": ns_assumptions,
+              "alert_message": alert_message,
               "file_exists": file_exists,
-              "contour_plot": contour_plot}
+              "contour_plot": contour_plot,
+              "filename": h5_filename,
+              "extracted_contours": extracted_contours,
+              "subfolders_and_colors": subfolders_and_colors}
 
     return render(request, 'compare/detail.html', select)
 
@@ -401,7 +423,6 @@ def generate_plot(request):
             contour_data = extract_contour_number(contour_plot_html)
             extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
             extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
-
 
             # Get subfolders in EOS folder & colors used in the plot
             eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
