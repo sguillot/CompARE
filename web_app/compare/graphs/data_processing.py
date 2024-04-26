@@ -101,9 +101,11 @@ def save_probadistrib_to_h5(mass_grid, radius_grid, density, density_grid_mass_r
     This function computes probability density contours from radius, mass, and density data, then saves them into an HDF5 file.
 
     Args:
-        R (array_like): Radius values.
-        M (array_like): Mass values.
-        density (array_like): Probability density values.
+        mass_grid (array_like): Mass values.
+        radius_grid (array_like): Radius values.
+        density (array_like): Density values.
+        density_grid_mass_radius (array_like): Density values on a grid.
+        max_pdf (float): Maximum density value.
         output_h5_file (str): The path of the output HDF5 file.
     """
 

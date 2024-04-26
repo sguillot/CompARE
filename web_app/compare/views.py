@@ -331,9 +331,7 @@ def detail(request, id):
 
     file_exists = os.path.exists(filepath_h5)
 
-    contour_plot = None
-    subfolders_and_colors = None
-    alert_message = None
+    contour_plot, subfolders_and_colors, alert_message = None, None, None
     extracted_contours = []
 
     if file_exists:
@@ -397,10 +395,7 @@ def generate_plot(request):
     if request.method == 'GET' and 'files[]' in request.GET:
         files = request.GET.getlist('files[]')
 
-        html_graphs = []
-        h5_filepath_array = []
-        h5_filename_array = []
-        extracted_contours = []
+        html_graphs, h5_filepath_array, h5_filename_array, extracted_contours = [], [], [], []
         
         for h5_filename in files:
             # H5 file recovery based on file name from the database

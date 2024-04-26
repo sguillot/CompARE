@@ -23,11 +23,8 @@ def plot_contours_from_checkboxes(selected_filepaths):
     # Define a counter
     counter = 0
 
-    # Lists to store colors
-    unique_colors = []
-
-    # Lists to store contour data
-    all_contour_data = []
+    # Lists to store colors ans contour data
+    unique_colors, all_contour_data = [], []
 
     # Browse selected file names
     for i, filepath in enumerate(selected_filepaths):

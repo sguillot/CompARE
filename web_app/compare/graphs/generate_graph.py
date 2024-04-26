@@ -23,11 +23,8 @@ def plot_contours_from_h5(file_path):
         # Find all subfolders in the EOS folder
         subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
 
-        # Lists to store colors
-        unique_colors = []
-
-        # Lists to store contour data
-        all_contour_data = []
+        # Lists to store colors and contour data
+        unique_colors, all_contour_data = [], []
 
         # Open the HDF5 file in read mode
         with h5py.File(file_path, "r") as hf:
