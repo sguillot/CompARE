@@ -68,8 +68,8 @@ function sortTable(columnIndex, iconElement) {
     }
 
     // Toggle arrow icons
-    var arrowUp = '⮝';
-    var arrowDown = '⮟';
+    var arrowUp = '↑';
+    var arrowDown = '↓';
     var currentArrow = iconElement.textContent.trim();
     var newArrow = currentArrow === arrowUp ? arrowDown : arrowUp;
     iconElement.textContent = newArrow;
