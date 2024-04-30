@@ -981,6 +981,8 @@ def insert_data(request):
                     # Model dependencies and assumptions are places in lists
                     filename = d['FileName'][i]
 
+                    h5filename = d['H5FileName'][i]
+
                     listmo = d['ModelDependenciesPrimary'][i].split(",")
 
                     listmosec = d['ModelDependenciesSecondary'][i].split(",")
@@ -1203,6 +1205,7 @@ def insert_data(request):
 
                     # we create the new NS
                     file = Ns(filename=filename,
+                              h5_filename=h5filename,
                               id_ref=idR, id_name=idN,
                               id_method=idM, id_constrain=idC
                               )

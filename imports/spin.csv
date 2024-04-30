@@ -45,4 +45,5 @@ RefBibtex,"@ARTICLE{2006Sci...311.1901H,
 RefDOI,10.1126/science.1123430
 DataRepositoryDOI,None
 DataLink,None
-FileName,NS_Spin-PSRJ1748-2446ad-2005-spin-1.txt
+FileName,NS_Spin_PSRJ1748-2446ad_2005_spin_1_MeanErrors.txt
+H5FileName,NS_Spin_PSRJ1748-2446ad_2005_spin_1_MeanErrors.h5

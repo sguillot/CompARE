@@ -145,4 +145,5 @@ archivePrefix = {arXiv},
 RefDOI,10.1093/mnras/stz2941,10.1093/mnras/stz2941
 DataRepositoryDOI,None,None
 DataLink,None,None
-FileName,Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.npy,Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.npy
+FileName,Cold_MSP_PSRJ0437-4715_2019_massradius_hydrogen_1_MCMCSamples.npy,Cold_MSP_PSRJ0437-4715_2019_massradius_helium_1_MCMCSamples.npy
+H5FileName,Cold_MSP_PSRJ0437-4715_2019_massradius_hydrogen_1_MCMCSamples.h5,Cold_MSP_PSRJ0437-4715_2019_massradius_helium_1_MCMCSamples.h5

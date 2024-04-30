@@ -310,4 +310,5 @@ archivePrefix = {arXiv},
 RefDOI,10.3847/2041-8213/ab481c,10.3847/2041-8213/ab50c5,10.3847/2041-8213/ac0a81,    10.3847/2041-8213/ac089b
 DataRepositoryDOI,10.5281/zenodo.3386448,10.5281/zenodo.3473466,10.5281/zenodo.4697625,  10.5281/zenodo.4670689
 DataLink,https://zenodo.org/record/3386448,https://zenodo.org/record/3473466/files/J0030_2spot_RM.txt?download=1,https://zenodo.org/record/4697625,https://zenodo.org/record/4670689/files/NICER%2BXMM-relative_J0740_RM.txt?download=1
-FileName           ,PPM-PSRJ0030+0451-2019-massradius-STPDT-Riley-1.txt,PPM-PSRJ0030+0451-2019-massradius-2spots-Miller-1.txt,PPM-PSRJ0740+6620-2021-massradius-STU-Riley-1.txt,PPM-PSRJ0740+6620-2021-massradius-2spots-Miller-1.txt
+FileName,PPM_PSRJ0030+0451_2019_massradius_STPDT_Riley_1_PosteriorSamples.txt,PPM_PSRJ0030+0451_2019_massradius_2spots_Miller_1_PosteriorSamples.txt,PPM_PSRJ0740+6620_2021_massradius_STU_Riley_1_PosteriorSamples.txt,PPM_PSRJ0740+6620_2021_massradius_2spots_Miller_1_PosteriorSamples.txt
+H5FileName,PPM_PSRJ0030+0451_2019_massradius_STPDT_Riley_1_PosteriorSamples.h5,PPM_PSRJ0030+0451_2019_massradius_2spots_Miller_1_PosteriorSamples.h5,PPM_PSRJ0740+6620_2021_massradius_STU_Riley_1_PosteriorSamples.h5,PPM_PSRJ0740+6620_2021_massradius_2spots_Miller_1_PosteriorSamples.h5
