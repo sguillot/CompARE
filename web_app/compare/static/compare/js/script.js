@@ -236,7 +236,7 @@ function searchFilter(){
 
 
 function ajaxRequest(checkList , select , search){
-  var jsonCheckList = JSON.stringify(checkList);   
+  var jsonCheckList = JSON.stringify(checkList);
   var stringSearch = search
   var jsonSelect = JSON.stringify(select);
   $.ajax({
@@ -246,6 +246,7 @@ function ajaxRequest(checkList , select , search){
           dataSearch:stringSearch,
           dataSelect:jsonSelect},
     success: function(data) {
+
       $("#firstTable tr").remove()
       $("#secondTable tr").remove()
 
@@ -289,7 +290,6 @@ function ajaxRequest(checkList , select , search){
         let assump = row.insertCell(9)
         if (typeof d.assumptions !== 'undefined') {
           d.assumptions.forEach(ass_text => {
-            // assump.insertAdjacentHTML("beforeend", "<li><u>"+ass1+"</u>: "+ass2+"</li>");
             assump.insertAdjacentHTML("beforeend", ass_text);
           });
         }
@@ -299,11 +299,14 @@ function ajaxRequest(checkList , select , search){
 
         let download = row.insertCell(11)
       
-        // We also generate the part of the static URL before the specified path
-        download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/images/download.svg' alt='icon download' width='30em' />" + "</a>";
+        if(d.result_h5 === true) {
+          // We also generate the part of the static URL before the specified path
+          download.innerHTML = "<a href='" + baseStaticURL + "h5/" + d.h5_filename + "' download='" + d.h5_filename + "'>" + "<img src='" + baseStaticURL + "compare/images/download.svg' alt='icon download' width='30em' />" + "</a>";
+        }
+
 
         let checkdo = row.insertCell(12)
-        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.filename+" class='dwnl' name='che'> </td>"
+        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.h5_filename+" class='dwnl' name='che'> </td>"
 
       })
     }

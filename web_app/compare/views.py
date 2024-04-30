@@ -204,12 +204,23 @@ def visu_data(request):
             if keywords['list_assumptions_secondary']:
                 select_ns_all = keyword_filter(select_ns_all, keywords, 'list_assumptions_secondary')
 
+            # For the H5 file
+            h5_filename_list = Ns.objects.filter(filename__in=[ns.filename for ns in select_ns_all]).values_list('h5_filename', flat=True)
+            result_h5 = []
+
+            for h5_filename in h5_filename_list:
+                filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+                file_exists = os.path.exists(filepath_h5)
+                result_h5.append(file_exists)
+
             # Once the filtering is done, we put the necessary info of selected NS (select_ns_all) in a filtered_list
             filtered_list = []
-            for ns in select_ns_all:
+            for i, ns in enumerate(select_ns_all):
                 # We put in the list only the attributes shown in the table into a dictionary
                 ns_info = {'namedb': ns.id_name.namedb,
                            'filename': ns.filename,
+                           'h5_filename': h5_filename_list[i],
+                           'result_h5': result_h5[i],
                            'classdb': ns.id_name.classdb,
                            'method': ns.id_method.method,
                            'method_specific': ns.id_method.method_specific,
