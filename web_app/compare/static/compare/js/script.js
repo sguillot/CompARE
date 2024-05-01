@@ -10,15 +10,15 @@ $(document).ready(function(){
     $(document).on("click", 'input.check[type="checkbox"]', function(){
       var value = $(this).val();
       if($(this).is(":checked")){
-        checkList.push(value)
+        checkList.push(value);
       } else {
         var index = checkList.indexOf(value);
         if (index > -1) {
           checkList.splice(index, 1);
         }
       }  
-      var select = getSelect()
-      var search = getSearch()
+      var select = getSelect();
+      var search = getSearch();
       ajaxRequest(checkList , select , search);
     })
 })
@@ -34,7 +34,7 @@ function getCheckboxesTab(){
   checkboxes.forEach((checkbox) => {
     values.push(checkbox.value);
   });
-  return(values)
+  return(values);
 }
 
 /* 
@@ -47,7 +47,7 @@ function getCheckboxesFilter(){
   checkboxes.forEach((checkbox) => {
     values.push(checkbox.value);
   });
-  return(values)
+  return(values);
 }
 
 /*
@@ -55,8 +55,8 @@ Get the value of the searchBar
 Return a string 
 */
 function getSearch(){
-  var searchString = document.getElementById('Search').value
-  return (searchString)
+  var searchString = document.getElementById('Search').value;
+  return (searchString);
 }
 
 
@@ -68,17 +68,17 @@ function getSelect(){
   var selectorValues = {}
   const ListOptions = ["list_methods","list_variable","list_constrain_type",
                         "list_dep_primary","list_dep_secondary",
-                        "list_assumptions_primary","list_assumptions_secondary"]
+                        "list_assumptions_primary","list_assumptions_secondary"];
   ListOptions.forEach(lO => {
-    var select = []
-    var selector = document.getElementById(lO)
+    var select = [];
+    var selector = document.getElementById(lO);
     var selectorList = selector.selectedOptions;  
     for (let i = 0; i < selectorList.length; i++) {
-      select.push(selectorList[i].value)
+      select.push(selectorList[i].value);
     }
-    selectorValues[lO] = select
+    selectorValues[lO] = select;
   });
-  return(selectorValues)
+  return(selectorValues);
 }
 
 
@@ -228,16 +228,35 @@ Select all filter
 We call the ajaxRequest function
 */
 function searchFilter(){
-  var searchCheck = getCheckboxesFilter()
-  var select = getSelect()
-  var search = getSearch()
+  var searchCheck = getCheckboxesFilter();
+  var select = getSelect();
+  var search = getSearch();
   ajaxRequest(searchCheck , select , search);
 }
 
+function populateSelect(select, options) {
+
+  // Ajoutez ensuite les options triées au sélecteur
+  options.forEach(option => {
+    // Vérifiez si l'option existe déjà dans le sélecteur
+    if (!select.querySelector("option[value='" + option + "']")) {
+      select.innerHTML += "<option value='" + option + "'>" + option + "</option>";
+    }
+  });
+}
+
+function sortSelect(select) {
+  var options = Array.from(select.options).map(option => option.value);
+  options.sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
+  select.innerHTML = '';
+  options.forEach(option => {
+    select.innerHTML += "<option value='" + option + "'>" + option + "</option>";
+  });
+}
 
 function ajaxRequest(checkList , select , search){
   var jsonCheckList = JSON.stringify(checkList);
-  var stringSearch = search
+  var stringSearch = search;
   var jsonSelect = JSON.stringify(select);
   $.ajax({
     url: '',
@@ -247,66 +266,97 @@ function ajaxRequest(checkList , select , search){
           dataSelect:jsonSelect},
     success: function(data) {
 
-      $("#firstTable tr").remove()
-      $("#secondTable tr").remove()
+      console.log(data)
 
-      let table = document.getElementById("secondTable")
+      $("#firstTable tr").remove();
+      $("#secondTable tr").remove();
+
+      // Get all the elements that we need
+      let table = document.getElementById("secondTable");
+      
+      let selectIds = ["list_methods", "list_variable", "list_constrain_type", "list_dep_primary", "list_dep_secondary", "list_assumptions_primary", "list_assumptions_secondary"];
+
+      selectIds.forEach(id => {
+        let select = document.getElementById(id);
+        while (select.firstChild) {
+          select.removeChild(select.firstChild);
+        }
+      });
+
+      // Filter dynamically the values
       data.forEach(d => {
-        let row  = table.insertRow()
+        // For the "more filters" menu
+        populateSelect(list_methods, [d.method]);
+        populateSelect(list_variable, [d.constrainvariable]);
+        populateSelect(list_constrain_type, [d.constraintype]);
+        populateSelect(list_dep_primary, d.modelprimary);
+        populateSelect(list_dep_secondary, d.modelsecondary);
+        populateSelect(list_assumptions_primary, d.assumptionsprimary);
+        populateSelect(list_assumptions_secondary, d.assumptionssecondary);
 
-        let more = row.insertCell(0)
+        // Sort the select options alphabetically
+        sortSelect(list_methods);
+        sortSelect(list_variable);
+        sortSelect(list_constrain_type);
+        sortSelect(list_dep_primary);
+        sortSelect(list_dep_secondary);
+        sortSelect(list_assumptions_primary);
+        sortSelect(list_assumptions_secondary);
+        console.log(sortSelect(list_assumptions_secondary));
+
+        // For the table
+        let row  = table.insertRow();
+        let more = row.insertCell(0);
         // We generate the part of the static URL before the specified path
-        more.innerHTML = "<a href=detail/" + d.filename + " target='_blank'><img src='" + baseStaticURL + "compare/images/plus.svg' alt='icon more' width='30em' /></a>"
+        more.innerHTML = "<a href=detail/" + d.filename + " target='_blank'><img src='" + baseStaticURL + "compare/images/plus.svg' alt='icon more' width='30em' /></a>";
 
-        let name = row.insertCell(1)
-        name.innerHTML = d.namedb
+        let name = row.insertCell(1);
+        name.innerHTML = d.namedb;
               
-        let classdb = row.insertCell(2)
-        classdb.innerHTML = d.classdb
+        let classdb = row.insertCell(2);
+        classdb.innerHTML = d.classdb;
 
-        let method = row.insertCell(3)
-        method.innerHTML = d.method
+        let method = row.insertCell(3);
+        method.innerHTML = d.method;
 
-        let methodspe = row.insertCell(4)
-        methodspe.innerHTML = d.method_specific
+        let methodspe = row.insertCell(4);
+        methodspe.innerHTML = d.method_specific;
 
-        let constrainty = row.insertCell(5)
-        constrainty.innerHTML = d.constraintype
+        let constrainty = row.insertCell(5);
+        constrainty.innerHTML = d.constraintype;
 
-        let constrainver = row.insertCell(6)
-        constrainver.innerHTML = d.constrainversion
+        let constrainver = row.insertCell(6);
+        constrainver.innerHTML = d.constrainversion;
 
-        let constrainvar = row.insertCell(7)
-        constrainvar.innerHTML = d.constrainvariable
+        let constrainvar = row.insertCell(7);
+        constrainvar.innerHTML = d.constrainvariable;
 
-        let model = row.insertCell(8)
+        let model = row.insertCell(8);
         if (typeof d.model !== 'undefined') {
           d.model.forEach(mod_text => {
           model.insertAdjacentHTML("beforeend",mod_text);
         });
         }
-         
         
-        let assump = row.insertCell(9)
+        let assump = row.insertCell(9);
         if (typeof d.assumptions !== 'undefined') {
           d.assumptions.forEach(ass_text => {
             assump.insertAdjacentHTML("beforeend", ass_text);
           });
         }
 
-        let ref = row.insertCell(10)
-        ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
+        let ref = row.insertCell(10);
+        ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>";
 
-        let download = row.insertCell(11)
+        let download = row.insertCell(11);
       
         if(d.result_h5 === true) {
           // We also generate the part of the static URL before the specified path
           download.innerHTML = "<a href='" + baseStaticURL + "h5/" + d.h5_filename + "' download='" + d.h5_filename + "'>" + "<img src='" + baseStaticURL + "compare/images/download.svg' alt='icon download' width='30em' />" + "</a>";
         }
 
-
-        let checkdo = row.insertCell(12)
-        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.h5_filename+" class='dwnl' name='che'> </td>"
+        let checkdo = row.insertCell(12);
+        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.h5_filename+" class='dwnl' name='che'> </td>";
 
       })
     }
@@ -378,8 +428,8 @@ function confirmDelete(){
 //modify
 
 function enable(id) {
-  var inp =document.getElementsByClassName(id.className)
+  var inp =document.getElementsByClassName(id.className);
   for (let index = 0; index < inp.length; index++) {
-    inp[index].disabled = false 
+    inp[index].disabled = false;
   }
 }

@@ -235,23 +235,47 @@ def visu_data(request):
 
                 # We select the filenames linked to model dependencies and add all the model dependencies to a list
                 select_ns_model = NsToModel.objects.select_related().filter(filename=ns.filename)
-                list_model_dependencies = []
+                list_model_dependencies, list_model_dependencies_primary, list_model_dependencies_secondary = [], [], []
                 for snm in select_ns_model:
                     # We pre-format the string of model dependencies (prim. and sec.)
                     list_model_dependencies.append("<li><u>{}</u>: {}</li>".format(snm.id_model.dependenciesprimary,
                                                                                    snm.id_model.dependenciessecondary))
-                    # The pre-formatted list is added to the dictionary
-                    ns_info['model'] = list_model_dependencies
+                    list_model_dependencies_primary.append(snm.id_model.dependenciesprimary)
+                    list_model_dependencies_secondary.append(snm.id_model.dependenciessecondary)
+                
+                # Check if all the values in the list are None or "None".
+                if all(val is None or val == "None" for val in list_model_dependencies_primary):
+                    list_model_dependencies_primary = ["None"]
+
+                if all(val is None or val == "None" for val in list_model_dependencies_secondary):
+                    list_model_dependencies_secondary = ["None"]
+
+                # The pre-formatted list is added to the dictionary
+                ns_info['model'] = list_model_dependencies
+                ns_info['modelprimary'] = list_model_dependencies_primary
+                ns_info['modelsecondary'] = list_model_dependencies_secondary
 
                 # We select the filenames linked to assumptions and add all the models to a list
                 select_ns_ass = NsToAssumptions.objects.select_related().filter(filename=ns.filename)
-                list_assumptions = []
+                list_assumptions, list_assumptionsprimary, list_assumptionssecondary = [], [], []
                 for snm in select_ns_ass:
                     # we get the assumption (prim. and sec.) and put it in a string and after the dictionary of the NS
                     list_assumptions.append("<li><u>{}</u>: {}</li>".format(snm.id_assumptions.assumptionsprimary,
                                                                             snm.id_assumptions.assumptionssecondary))
-                    # The pre-formatted list is added to the dictionary
-                    ns_info['assumptions'] = list_assumptions
+                    list_assumptionsprimary.append(snm.id_assumptions.assumptionsprimary)
+                    list_assumptionssecondary.append(snm.id_assumptions.assumptionssecondary)
+
+                # Check if all the values in the list are None or "None".
+                if all(val is None or val == "None" for val in list_assumptionsprimary):
+                    list_assumptionsprimary = ["None"]
+
+                if all(val is None or val == "None" for val in list_assumptionssecondary):
+                    list_assumptionssecondary = ["None"]
+
+                # The pre-formatted list is added to the dictionary
+                ns_info['assumptions'] = list_assumptions
+                ns_info['assumptionsprimary'] = list_assumptionsprimary
+                ns_info['assumptionssecondary'] = list_assumptionssecondary
 
                 # We add the dictionary of the ns to the filtered_list of all ns
                 filtered_list.append(ns_info)
