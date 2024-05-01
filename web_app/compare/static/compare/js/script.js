@@ -236,9 +236,9 @@ function searchFilter(){
 
 function populateSelect(select, options) {
 
-  // Ajoutez ensuite les options triées au sélecteur
+  // Then add the sorted options to the selector
   options.forEach(option => {
-    // Vérifiez si l'option existe déjà dans le sélecteur
+    // Check if the option already exists in the selector
     if (!select.querySelector("option[value='" + option + "']")) {
       select.innerHTML += "<option value='" + option + "'>" + option + "</option>";
     }
