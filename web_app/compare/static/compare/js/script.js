@@ -266,8 +266,6 @@ function ajaxRequest(checkList , select , search){
           dataSelect:jsonSelect},
     success: function(data) {
 
-      console.log(data)
-
       $("#firstTable tr").remove();
       $("#secondTable tr").remove();
 
@@ -302,7 +300,6 @@ function ajaxRequest(checkList , select , search){
         sortSelect(list_dep_secondary);
         sortSelect(list_assumptions_primary);
         sortSelect(list_assumptions_secondary);
-        console.log(sortSelect(list_assumptions_secondary));
 
         // For the table
         let row  = table.insertRow();
