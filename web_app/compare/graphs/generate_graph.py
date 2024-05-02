@@ -92,8 +92,6 @@ def plot_contours_from_h5(file_path):
 
     elif "NS_Mass" in file_path and file_path.endswith("MeanErrors.h5"):
 
-        print("yes")
-
         # Create a new matplotlib figure
         fig, ax = plt.subplots()
 

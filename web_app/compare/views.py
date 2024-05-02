@@ -374,9 +374,9 @@ def detail(request, id):
 
         contour_data = extract_contour_number(contour_plot)
         contour_data_list = contour_data.split(",") 
-        nombre_elements = len(contour_data_list) 
+        number_elements = len(contour_data_list) 
 
-        if nombre_elements > 1:
+        if number_elements > 1:
             extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
             extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
         else:
