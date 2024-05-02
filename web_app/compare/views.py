@@ -373,15 +373,24 @@ def detail(request, id):
         contour_plot, unique_colors = plot_contours_from_h5(filepath_h5)
 
         contour_data = extract_contour_number(contour_plot)
-        extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
-        extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+        contour_data_list = contour_data.split(",") 
+        nombre_elements = len(contour_data_list) 
+
+        if nombre_elements > 1:
+            extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
+            extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+        else:
+            extracted_contours = 1
 
         # Get subfolders in EOS folder & colors used in the plot
         eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
         subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
 
         # Combine these two lists
-        subfolders_and_colors = zip(subfolders, unique_colors)
+        if(len(unique_colors) > 0 and len(subfolders) > 0):
+            subfolders_and_colors = zip(subfolders, unique_colors)
+        else:
+            subfolders_and_colors = 0
     else:
         alert_message = "The H5 file cannot be found. Impossible to generate graph."
 

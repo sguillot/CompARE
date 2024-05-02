@@ -110,22 +110,26 @@ Detail
                     {% endif %}
         
                     <div class="checkboxesContainer">
-                        <div id="sigmaContainer">
-                            <h3>Sigmas</h3>
-                            {% for contour in extracted_contours %}
-                                <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
-                            {% endfor %}
-                        </div>
-                        <br><br>
+                        {% if extracted_contours != 1 %}
+                            <div id="sigmaContainer">
+                                <h3>Sigmas</h3>
+                                {% for contour in extracted_contours %}
+                                    <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
+                                {% endfor %}
+                            </div>
+                            <br><br>
+                        {% endif %}
     
-                        <div id="subfoldersContainer">
-                            <h3>EOS Models</h3>
-                            {% for subfolder, unique_color in subfolders_and_colors %}
-                                <label class="label-subfolder">
-                                    <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
-                                </label>
-                            {% endfor %}
-                        </div>
+                        {% if subfolders_and_colors != 0 %}
+                            <div id="subfoldersContainer">
+                                <h3>EOS Models</h3>
+                                {% for subfolder, unique_color in subfolders_and_colors %}
+                                    <label class="label-subfolder">
+                                        <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

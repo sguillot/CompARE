@@ -89,7 +89,35 @@ def plot_contours_from_h5(file_path):
 
         # Add the plugin to display coordinates when hovering over the graph
         plugins.connect(fig, plugins.MousePosition(fontsize=14, fmt=".3f"))
-        
+
+    elif "NS_Mass" in file_path and file_path.endswith("MeanErrors.h5"):
+
+        print("yes")
+
+        # Create a new matplotlib figure
+        fig, ax = plt.subplots()
+
+        # List to store colors
+        unique_colors = []
+
+        # Open the HDF5 file in read mode
+        with h5py.File(file_path, "r") as hf:
+            # Extract data from HDF5 file
+            mass = hf["data"]["Mass (M☉)"][:]
+            mass_scale = hf["data"]["Mass scale"][:]
+            pdf = hf["data"]["Proba density"][:]
+
+        # Plot the probability density
+        ax.plot(mass_scale, pdf, label=f'Mass: {mass}', color='#000000')
+
+        # Set labels and title
+        ax.set_xlabel('Mass (Msun)')
+        ax.set_ylabel('Probability Density')
+        ax.set_title('Gaussian Probability Density')
+
+        # Add the plugin to display coordinates when hovering over the graph
+        plugins.connect(fig, plugins.MousePosition(fontsize=14, fmt=".3f"))
+
     #elif file_path.endswith("Contours.h5"):
     #
     #    x_values = []

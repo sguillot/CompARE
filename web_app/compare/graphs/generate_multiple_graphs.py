@@ -29,17 +29,20 @@ def plot_contours_from_checkboxes(selected_filepaths):
     # Browse selected file names
     for i, filepath in enumerate(selected_filepaths):
 
-        counter += 1
-        # Open the HDF5 file in read mode
-        with h5py.File(filepath, "r") as hf:
-            # Extract data from HDF5 file
-            mass = hf["data"]["Mass (M☉)"][:]
-            radius = hf["data"]["Radius (km)"][:]
-            density = hf["data"]["Proba density"][:]
-            contours = hf["data"]["Contours"][:]
+        if selected_filepaths[i].endswith("ProbaDistrib.h5") or selected_filepaths[i].endswith("MCMCSamples.h5"):
 
-            # Store contour data
-            all_contour_data.append((radius, mass, density, contours))
+            counter += 1
+            # Open the HDF5 file in read mode
+            with h5py.File(filepath, "r") as hf:
+                # Extract data from HDF5 file
+                mass = hf["data"]["Mass (M☉)"][:]
+                print(mass)
+                radius = hf["data"]["Radius (km)"][:]
+                density = hf["data"]["Proba density"][:]
+                contours = hf["data"]["Contours"][:]
+
+                # Store contour data
+                all_contour_data.append((radius, mass, density, contours))
 
     # Determine x and y limits based on contour data
     min_radius = min([min(radius) for radius, _, _, _ in all_contour_data])

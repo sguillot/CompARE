@@ -2,7 +2,7 @@ import os
 import h5py
 import numpy as np
 from scipy import optimize
-import matplotlib.pyplot as plt
+from scipy.stats import norm
 
 # -----| Choice of the file to process and creation of H5 directory |----- #
 
@@ -39,6 +39,14 @@ def process_data_to_h5(directory):
             radius, mass, proba_density, contours = process_mcmcsamples(file_path)
             h5 = f"{os.path.splitext(filename)[0]}.h5"
             save_mcmcsamples_to_h5(radius, mass, proba_density, contours, h5)
+            print(f"Saved HDF5 file: {h5}")
+
+        elif filename.startswith("NS_Mass") and filename.endswith("MeanErrors.txt"):
+
+            print(f"Processing MeanErrors file: {file_path}")
+            pdf, mass_scale, sigma_values = process_meanerrors(file_path)
+            h5 = f"{os.path.splitext(filename)[0]}.h5"
+            save_meanerrors_to_h5(h5, pdf, sigma_values, mass_scale)
             print(f"Saved HDF5 file: {h5}")
 
         #elif filename.endswith("Contours.txt"):
@@ -247,7 +255,43 @@ def save_mcmcsamples_to_h5(radius, mass, proba_density, contours, file_path):
         # Store contours
         data_group.create_dataset("Contours", data=contours)
 
-        print("oh yeah")
+# -----| Data Processing - MeanErrors |----- #
+
+def process_meanerrors(file_path):
+    """
+    This function processes mass and error data from a text file.
+
+    Args:
+        file_path (str): The path of the text file containing mean errors data.
+
+    Returns:
+        pdf (array_like): Gaussian probability density values.
+        mass_scale (array_like): Mass values for the plot.
+        sigma_values (array_like): Sigma values from 1 to 5.
+    """
+    
+    data = np.loadtxt(file_path, skiprows=1)
+    mass, error = data
+    mass_scale = np.linspace(1.5, 2.5, 1000)
+    pdf = norm.pdf(mass_scale, loc=mass, scale=error)
+    sigma_values = np.array([[mass - error * i, mass + error * i] for i in range(1, 6)])
+    return pdf, mass_scale, sigma_values
+
+def save_meanerrors_to_h5(file_path, pdf, sigma_values, mass_scale):
+    """
+    This function writes Gaussian probability density, sigma, and mass data into an HDF5 file.
+
+    Args:
+        file_path (str): The name of the HDF5 file.
+        pdf (array_like): Gaussian probability density values.
+        sigma_values (array_like): Sigma values from 1 to 5.
+        mass_scale (array_like): Mass values for the plot.
+    """
+    with h5py.File(os.path.join('web_app/compare/static/h5/', file_path), 'w') as hf:
+        data_group = hf.create_group("data")
+        data_group.create_dataset('Proba density', data=pdf)
+        data_group.create_dataset('Mass (M☉)', data=sigma_values)
+        data_group.create_dataset('Mass scale', data=mass_scale)
 
 # -----| Data Processing - Chi2Contours |----- #
             

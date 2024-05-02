@@ -3,6 +3,7 @@ import h5py
 import numpy as np
 import shutil
 from scipy import optimize
+from scipy.stats import norm
 from django.conf import settings
 
 # -----| Choice of the file to process and creation/remove of H5 and temp directories |----- #
@@ -62,6 +63,17 @@ def process_data_to_h5(file_path):
 
         print(f"Saved HDF5 file: {h5}")
 
+    elif file_path.startswith("NS_Mass") and file_path.endswith("MeanErrors.txt"):
+
+        print(f"Processing MeanErrors file: {file_path}")
+
+        pdf, mass_scale, sigma_values = process_meanerrors(file_path)
+        h5 = f"{os.path.splitext(os.path.basename(file_path))[0]}.h5"
+
+        save_meanerrors_to_h5(h5, pdf, sigma_values, mass_scale)
+
+        print(f"Saved HDF5 file: {h5}")
+
 # -----| Data Processing - ProbaDistrib |----- #
             
 def process_probadistrib(file_path):
@@ -70,6 +82,13 @@ def process_probadistrib(file_path):
 
     Args:
         file_path (str): The path of the text file containing probability distribution data.
+
+    Returns:
+        mass_grid (array_like): Mass values.
+        radius_grid (array_like): Radius values.
+        density (array_like): Density values.
+        density_grid_mass_radius (array_like): Density values on a grid.
+        max_pdf (float): Maximum density value.
     """
 
     # Load probability distribution data
@@ -149,6 +168,12 @@ def process_mcmcsamples(file_path):
 
     Args:
         file_path (str): The path of the text file containing MCMCSamples data.
+
+    Returns:
+        radius (array_like): Radius values.
+        mass (array_like): Mass values.
+        proba_density (array_like): Probability density values.
+        contours (array_like): Contour values.
     """
     # Load MCMCSamples data
     data = np.loadtxt(file_path)
@@ -234,11 +259,11 @@ def save_mcmcsamples_to_h5(radius, mass, proba_density, contours, file_path):
     Saves probability density contours into an HDF5 file.
 
     Args:
-        contours: Probability density contours.
-        x_edges (array_like): Bin edges in x.
-        y_edges (array_like): Bin edges in y.
-        probabilities (array_like): Probabilities associated with each bin.
-        output_h5_file (str): The path of the output HDF5 file.
+        radius (array_like): Radius values.
+        mass (array_like): Mass values.
+        proba_density (array_like): Probability density values.
+        contours (array_like): Contour values.
+        file_path (str): The path of the output HDF5 file.
     """
 
     with h5py.File(os.path.join(settings.STATIC_ROOT, 'temp', file_path), "w") as hf:
@@ -254,3 +279,41 @@ def save_mcmcsamples_to_h5(radius, mass, proba_density, contours, file_path):
 
         # Store contours
         data_group.create_dataset("Contours", data=contours)
+
+# -----| Data Processing - MeanErrors (NS Mass) |----- #
+
+def process_meanerrors(file_path):
+    """
+    This function processes mass and error data from a text file.
+
+    Args:
+        file_path (str): The path of the text file containing mean errors data.
+
+    Returns:
+        pdf (array_like): Gaussian probability density values.
+        mass_scale (array_like): Mass values for the plot.
+        sigma_values (array_like): Sigma values from 1 to 5.
+    """
+    
+    data = np.loadtxt(file_path, skiprows=1)
+    mass, error = data
+    mass_scale = np.linspace(1.5, 2.5, 1000)
+    pdf = norm.pdf(mass_scale, loc=mass, scale=error)
+    sigma_values = np.array([[mass - error * i, mass + error * i] for i in range(1, 6)])
+    return pdf, mass_scale, sigma_values
+
+def save_meanerrors_to_h5(file_path, pdf, sigma_values, mass_scale):
+    """
+    This function writes Gaussian probability density, sigma, and mass data into an HDF5 file.
+
+    Args:
+        file_path (str): The name of the HDF5 file.
+        pdf (array_like): Gaussian probability density values.
+        sigma_values (array_like): Sigma values from 1 to 5.
+        mass_scale (array_like): Mass values for the plot.
+    """
+    with h5py.File(os.path.join(settings.STATIC_ROOT, 'temp', file_path), 'w') as hf:
+        data_group = hf.create_group("data")
+        data_group.create_dataset('Proba density', data=pdf)
+        data_group.create_dataset('Mass (M☉)', data=sigma_values)
+        data_group.create_dataset('Mass scale', data=mass_scale)
