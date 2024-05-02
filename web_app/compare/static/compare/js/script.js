@@ -181,13 +181,17 @@ function showPlot() {
     return;
   }
 
+  var encodedFiles = selectedFiles.map(function(fileName) {
+    return encodeURIComponent(fileName);
+  });
+
   $.ajax({
       url: '/generate_plot/',
       type: 'GET',
       data: { files: selectedFiles },
       dataType: 'html',
       success: function(response) {
-          url = '/generate_plot/?files[]=' + selectedFiles.join('&files[]=');
+          url = '/generate_plot/?files[]=' + encodedFiles.join('&files[]=');
           window.open(url, '_blank');
       },
       error: function(xhr, status, error) {

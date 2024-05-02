@@ -44,6 +44,14 @@ def plot_contours_from_checkboxes(selected_filepaths):
                 # Store contour data
                 all_contour_data.append((radius, mass, density, contours))
 
+        if selected_filepaths[i].startswith("NS_Mass") and selected_filepaths[i].endswith("MeanErrors.h5"):
+
+            counter += 1
+            # Open the HDF5 file in read mode
+            with h5py.File(filepath, "r") as hf:
+                # Extract data from HDF5 file
+                mass_meanerrors = hf["data"]["Mass (M☉)"][:]
+
     # Determine x and y limits based on contour data
     min_radius = min([min(radius) for radius, _, _, _ in all_contour_data])
     max_radius = max([max(radius) for radius, _, _, _ in all_contour_data])
