@@ -96,13 +96,10 @@ $('.file-checkbox').each(function(index) {
     });
 });
 
-// Event manager for checkboxes
-$('.subfolder-checkbox').change(function() {
-    // Retrieve checkbox index
-    var index = $(this).index();
-
-    // Retrieve RGB color from the checkbox value
-    var rgbValue = 'rgb' + $(this).val();
+// Function to manage checkbox changes
+$('.sigma-errors-checkbox').change(function() {
+    // Retrieve the selected sigma value
+    var sigma = $(this).val();
 
     // Check if the checkbox is checked
     var isChecked = $(this).is(':checked');
@@ -110,20 +107,82 @@ $('.subfolder-checkbox').change(function() {
     // Retrieve all <g> groups from the graph
     var groups = $('#plot-container').find('g.mpld3-paths');
 
+    // Récupérer tous les chemins
+    var pathsInGroup = $('#plot-container').find('g.mpld3-paths > g path.mpld3-path').length;
+
+    // Initialize total paths count
+    var totalPaths = 0;
+
     // Browse all groups
     groups.each(function() {
         // Retrieve paths within this group
         var paths = $(this).find('path.mpld3-path');
 
         // List the path indexes in this group
-        paths.each(function() {
+        paths.each(function(index) {
+            // Increment total paths count
+            totalPaths++;
 
-            var style = $(this).attr('style');
-            var colorRegex = /stroke:\s*rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
+            if(!isChecked && (totalPaths > paths.length - pathsInGroup - 21)) {
+                return;
+            }
 
-            var match = style.match(colorRegex);
-            if(match) {
+            // Calculate the index of the path relative to the current sigma value
+            var sigmaIndex = Math.floor((index % 10) / 2) + 1;
 
+            if(sigmaIndex == sigma) {
+
+                var style = $(this).attr('style');
+                var colorRegex = /stroke:\s*rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
+
+                var match = style.match(colorRegex);
+                var red = match[1];
+                var green = match[2];
+                var blue = match[3];
+
+                if (!isChecked) {
+                    
+                    // Comment the corresponding part in the path style
+                    style = style.replace(colorRegex, '/* stroke:rgb(' + red + ', ' + green + ', ' + blue +  ') */');
+
+                    // Apply modified style to path
+                    $(this).attr('style', style);
+                } else {
+                    // Remove the comment from the corresponding part in the path style
+                    style = style.replace('/* stroke:rgb(' + red + ', ' + green + ', ' + blue +  ') */', 'stroke:rgb(' + red + ', ' + green + ', ' + blue + ')');
+
+                    // Apply modified style to path
+                    $(this).attr('style', style);
+                }
+            }
+
+        });
+    });
+});
+
+// Function to handle checkbox change event
+function handleCheckboxChange(selector) {
+    return function() {
+        // Retrieve RGB color from the checkbox value
+        var rgbValue = 'rgb' + $(this).val();
+
+        // Check if the checkbox is checked
+        var isChecked = $(this).is(':checked');
+
+        // Retrieve all <g> groups from the graph
+        var groups = $('#plot-container').find('g.mpld3-paths');
+
+        // Browse all groups
+        groups.each(function() {
+            // Retrieve paths within this group
+            var paths = $(this).find('path.mpld3-path');
+
+            // List the path indexes in this group
+            paths.each(function() {
+                var style = $(this).attr('style');
+                var colorRegex = /stroke:\s*rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/;
+
+                var match = style.match(colorRegex);
                 var red = match[1];
                 var green = match[2];
                 var blue = match[3];
@@ -131,21 +190,22 @@ $('.subfolder-checkbox').change(function() {
                 // Compare RGB values with checkbox RGB value
                 if (rgbValue === 'rgb(' + red + ', ' + green + ', ' + blue + ')') {
                     if (!isChecked) {
-
                         // Comment the corresponding part in the path style
                         style = style.replace(colorRegex, '/* stroke:rgb(' + red + ', ' + green + ', ' + blue +  ') */');
-                        
-                        // Apply modified style to path
-                        $(this).attr('style', style);
                     } else {
                         // Remove the comment from the corresponding part in the path style
                         style = style.replace('/* stroke:rgb(' + red + ', ' + green + ', ' + blue +  ') */', 'stroke:rgb(' + red + ', ' + green + ', ' + blue + ')');
-                        
-                        // Apply modified style to path
-                        $(this).attr('style', style);
                     }
+                    // Apply modified style to path
+                    $(this).attr('style', style);
                 }
-            }
+            });
         });
-    });
-});
+    };
+}
+
+// Event manager for file error checkboxes
+$('.file-error-checkbox').change(handleCheckboxChange('.file-error-checkbox'));
+
+// Event manager for subfolder checkboxes
+$('.subfolder-checkbox').change(handleCheckboxChange('.subfolder-checkbox'));

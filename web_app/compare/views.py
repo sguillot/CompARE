@@ -387,7 +387,7 @@ def detail(request, id):
         subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
 
         # Combine these two lists
-        if(len(unique_colors) > 0 and len(subfolders) > 0):
+        if len(unique_colors) > 0 and len(subfolders) > 0:
             subfolders_and_colors = zip(subfolders, unique_colors)
         else:
             subfolders_and_colors = 0
@@ -440,6 +440,7 @@ def generate_plot(request):
         files = request.GET.getlist('files[]')
 
         html_graphs, h5_filepath_array, h5_filename_array, extracted_contours = [], [], [], []
+        h5_filename_array_contours, h5_filename_array_errors = [], []
         
         for h5_filename in files:
             # H5 file recovery based on file name from the database
@@ -454,27 +455,49 @@ def generate_plot(request):
             else:
                 alert_message = "The H5 file cannot be found. Impossible to generate graph." 
 
+        for files in h5_filename_array:
+            if "NS_Mass" in files and files.endswith("MeanErrors.h5"):
+                h5_filename_array_errors.append(files)
+            else:
+                h5_filename_array_contours.append(files)
+
+        if len(h5_filename_array_contours) == 0:
+            h5_filename_array_contours = 0
+
         # If the table contains at least one element, plot the graph and extract the relevant information
         if len(h5_filepath_array) > 0:
-            contour_plot_html, unique_colors = plot_contours_from_checkboxes(h5_filepath_array)
+            contour_plot_html, unique_colors_eos, unique_colors_errors = plot_contours_from_checkboxes(h5_filepath_array)
             html_graphs.append(contour_plot_html)
 
             contour_data = extract_contour_number(contour_plot_html)
-            extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
-            extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+            contour_data_list = contour_data.split(",") 
+            number_elements = len(contour_data_list)
+
+            if number_elements > 1:
+                extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
+                extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+            else:
+                extracted_contours = 1
 
             # Get subfolders in EOS folder & colors used in the plot
             eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
             subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
 
+            # Get H5 error filenames
+            if(len(h5_filename_array_errors) > 0 and len(unique_colors_errors) > 0): 
+                errors_and_files = zip(h5_filename_array_errors, unique_colors_errors)
+            else:
+                errors_and_files = 0
+
             # Combine these two lists
-            subfolders_and_colors = zip(subfolders, unique_colors)
+            subfolders_and_colors = zip(subfolders, unique_colors_eos)
         else:
             return render(request, 'compare/plot.html', {'alert_message': alert_message})
         
         context = {'html_graphs': html_graphs[0],
                    'extracted_contours': extracted_contours,
-                   'filenames': h5_filename_array,
+                   'filenames_contours': h5_filename_array_contours,
+                   'errors_and_files': errors_and_files,
                    'subfolders_and_colors': subfolders_and_colors}
         
         return render(request, 'compare/plot.html', context)

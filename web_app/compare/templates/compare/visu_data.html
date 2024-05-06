@@ -256,7 +256,7 @@ Visu_data
                     <td>
                         {% for mprim, msec, mdesc, mref_list in m %}
                             <li>
-                                <u class="questionmark" onmouseover="showModelPopup(this, '{{ mprim }}', '{{ msec }}', '{{ mdesc }}', '{{ mref_list }}')" onmouseout="hideModelPopup()">
+                                <u class="questionmark" onmouseover='showModelPopup(this, "{{ mprim }}", "{{ msec }}", "{{ mdesc }}", "{{ mref_list }}")' onmouseout="hideModelPopup()">
                                     {{ mprim }}
                                 </u>: {{ msec }}
                             </li>

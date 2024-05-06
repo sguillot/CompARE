@@ -19,13 +19,20 @@ function showModelPopup(element, mprim, msec, mdesc, mref_list) {
     popup.className = 'model-popup-container';
     popup.innerHTML = popupContent;
 
-    // Position the pop-up below the hovered element
-    let rect = element.getBoundingClientRect();
-    popup.style.top = rect.bottom + 'px';
-    popup.style.left = rect.left + 'px';
-
     // Append pop-up to the body
     document.body.appendChild(popup);
+
+    // Position the pop-up below the hovered element
+    positionPopup(element, popup);
+}
+
+function positionPopup(element, popup) {
+    let rect = element.getBoundingClientRect();
+    let scrollTop = window.scrollY || document.documentElement.scrollTop;
+    let scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+
+    popup.style.top = rect.bottom + scrollTop + 'px';
+    popup.style.left = rect.left + scrollLeft + 'px';
 }
 
 function hideModelPopup() {
