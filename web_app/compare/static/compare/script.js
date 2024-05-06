@@ -217,24 +217,17 @@ function ajaxRequest(checkList , select , search){
         let methodspe = row.insertCell(4)
         methodspe.innerHTML = d.method_specific
 
-        let constrainty = row.insertCell(5)
-        constrainty.innerHTML = d.constraintype
+        let constrainvar = row.insertCell(5)
+        constrainvar.innerHTML = d.constrainvariable + "</br>(v. " + d.constrainversion + ")"
 
-        let constrainver = row.insertCell(6)
-        constrainver.innerHTML = d.constrainversion
-
-        let constrainvar = row.insertCell(7)
-        constrainvar.innerHTML = d.constrainvariable
-
-        let model = row.insertCell(8)
+        let model = row.insertCell(6)
         if (typeof d.model !== 'undefined') {
           d.model.forEach(mod_text => {
           model.insertAdjacentHTML("beforeend",mod_text);
         });
         }
-         
-        
-        let assump = row.insertCell(9)
+
+        let assump = row.insertCell(7)
         if (typeof d.assumptions !== 'undefined') {
           d.assumptions.forEach(ass_text => {
             // assump.insertAdjacentHTML("beforeend", "<li><u>"+ass1+"</u>: "+ass2+"</li>");
@@ -242,15 +235,15 @@ function ajaxRequest(checkList , select , search){
           });
         }
 
-        let ref = row.insertCell(10)
+        let ref = row.insertCell(8)
         ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>"
 
-        let download = row.insertCell(11)
+        let download = row.insertCell(9)
       
         // We also generate the part of the static URL before the specified path
         download.innerHTML = "<a href='" + baseStaticURL + "data/" + d.filename + "' download='" + d.filename + "'>" + "<img src='" + baseStaticURL + "compare/download.svg' alt='icon download' width='30em' />" + "</a>";
 
-        let checkdo = row.insertCell(12)
+        let checkdo = row.insertCell(10)
         checkdo.innerHTML = "<td><input type='checkbox' value="+ d.filename+" class='dwnl' name='che'> </td>"
 
       })
