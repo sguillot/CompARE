@@ -123,8 +123,6 @@ $('.sigma-errors-checkbox').change(function() {
             // Increment total paths count
             totalPaths++;
 
-            console.log(totalPaths);
-
             if(totalPaths > paths.length - pathsInGroup - 21) {
                 console.log('return');
                 return;

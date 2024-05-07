@@ -679,15 +679,12 @@ input.check{
 .sub-container {
   padding: 20px;
   border-radius:10px;
+  border:1px solid black;
 }
 
 .checkbox-label {
   display: block;
   margin-bottom: 5px;
-}
-
-.sub-container {
-  border:1px solid black;
 }
 
 /* Model & assumption pop-up */
