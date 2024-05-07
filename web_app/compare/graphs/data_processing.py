@@ -297,9 +297,16 @@ def process_meanerrors(file_path):
     
     data = np.loadtxt(file_path, skiprows=1)
     mass, error = data
-    mass_scale = np.linspace(1.5, 2.5, 1000)
-    pdf = norm.pdf(mass_scale, loc=mass, scale=error)
     sigma_values = np.array([[mass - error * i, mass + error * i] for i in range(1, 6)])
+    
+    # Use the latest sigma_values to define mass_scale
+    last_sigma_values = sigma_values[-1]
+    min_mass = last_sigma_values[0]
+    max_mass = last_sigma_values[1]
+    
+    mass_scale = np.linspace(max(0, min_mass), max_mass, 1000)
+    pdf = norm.pdf(mass_scale, loc=mass, scale=error)
+
     return pdf, mass_scale, sigma_values
 
 def save_meanerrors_to_h5(file_path, pdf, sigma_values, mass_scale):

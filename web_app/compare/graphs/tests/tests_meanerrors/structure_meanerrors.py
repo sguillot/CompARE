@@ -20,13 +20,18 @@ def process_meanerrors(filename):
     
     data = np.loadtxt(filename, skiprows=1)
     mass, error = data
-    mass_scale = np.linspace(1.5, 2.5, 1000)
+    sigma_values = np.array([[mass - error * i, mass + error * i] for i in range(1, 6)])
+
+    last_sigma_values = sigma_values[-1]
+    min_mass = last_sigma_values[0]
+    max_mass = last_sigma_values[1]
+
+    mass_scale = np.linspace(max(0, min_mass), max_mass, 1000)
     pdf = norm.pdf(mass_scale, loc=mass, scale=error)
 
     area = trapezoid(pdf, mass_scale)
     print(area)
 
-    sigma_values = np.array([[mass - error * i, mass + error * i] for i in range(1, 6)])
     return data, pdf, mass_scale, sigma_values
 
 def save_meanerrors_to_h5(filename, pdf, sigma_values, mass_scale):
