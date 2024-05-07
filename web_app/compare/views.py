@@ -238,7 +238,7 @@ def visu_data(request):
                 list_model_dependencies, list_model_dependencies_primary, list_model_dependencies_secondary = [], [], []
                 for snm in select_ns_model:
                     # We pre-format the string of model dependencies (prim. and sec.)
-                    list_model_dependencies.append("<li><u class='questionmark' onmouseover='showPopup(this, \"model-popup\", \"{}\", \"{}\", \"{}\", \"{}\")' onmouseout='hidePopup(\"model-popup-container\")'>{}</u>: {}</li>".format(
+                    list_model_dependencies.append("<li><u class='questionmark' onmouseover='showPopup(this, \"model-popup\", \"{}\", \"{}\", \"{}\", \"{}\", \"mprim\", \"msec\")' onmouseout='hidePopup(\"model-popup-container\")'>{}</u>: {}</li>".format(
                         snm.id_model.dependenciesprimary,
                         snm.id_model.dependenciessecondary,
                         snm.id_model.dependenciesdescription,
@@ -267,7 +267,7 @@ def visu_data(request):
                 list_assumptions, list_assumptionsprimary, list_assumptionssecondary = [], [], []
                 for snm in select_ns_ass:
                     # we get the assumption (prim. and sec.) and put it in a string and after the dictionary of the NS
-                    list_assumptions.append("<li><u class='questionmark' onmouseover='showPopup(this, \"assumption-popup\", \"{}\", \"{}\", \"{}\", \"{}\")' onmouseout='hidePopup(\"assumption-popup-container\")'>{}</u>: {}</li>".format(
+                    list_assumptions.append("<li><u class='questionmark' onmouseover='showPopup(this, \"assumption-popup\", \"{}\", \"{}\", \"{}\", \"{}\", \"aprim\", \"asec\")' onmouseout='hidePopup(\"assumption-popup-container\")'>{}</u>: {}</li>".format(
                         snm.id_assumptions.assumptionsprimary,
                         snm.id_assumptions.assumptionssecondary,
                         snm.id_assumptions.assumptionsdescription,

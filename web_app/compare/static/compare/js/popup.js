@@ -1,10 +1,15 @@
-function showPopup(element, popupClass, prim, sec, desc, ref_list) {
+function showPopup(element, popupClass, prim, sec, desc, ref_list, primLabel, secLabel) {
     let references = ref_list.split(',');
+
+    // Determine which labels to display based on attribute names
+    let primLabelText = primLabel === "mprim" ? "Primary Dependency" : "Primary Assumption";
+    let secLabelText = secLabel === "msec" ? "Secondary Dependency" : "Secondary Assumption";
+
     // Create the HTML content for the pop-up
     let popupContent = `
         <div class="${popupClass}">
-            <p><strong>${prim === "mprim" ? "Primary Dependency" : "Primary Assumption"}:</strong> ${prim}</p>
-            <p><strong>${sec === "msec" ? "Secondary Dependency" : "Secondary Assumption"}:</strong> ${sec}</p>
+            <p><strong>${primLabelText}:</strong> ${prim}</p>
+            <p><strong>${secLabelText}:</strong> ${sec}</p>
             <p><strong>Description:</strong> ${desc}</p>
             <p><strong>References:</strong></p>
             <ul>
