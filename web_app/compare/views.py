@@ -238,8 +238,15 @@ def visu_data(request):
                 list_model_dependencies, list_model_dependencies_primary, list_model_dependencies_secondary = [], [], []
                 for snm in select_ns_model:
                     # We pre-format the string of model dependencies (prim. and sec.)
-                    list_model_dependencies.append("<li><u>{}</u>: {}</li>".format(snm.id_model.dependenciesprimary,
-                                                                                   snm.id_model.dependenciessecondary))
+                    list_model_dependencies.append("<li><u class='questionmark' onmouseover='showPopup(this, \"model-popup\", \"{}\", \"{}\", \"{}\", \"{}\")' onmouseout='hidePopup(\"model-popup-container\")'>{}</u>: {}</li>".format(
+                        snm.id_model.dependenciesprimary,
+                        snm.id_model.dependenciessecondary,
+                        snm.id_model.dependenciesdescription,
+                        snm.id_model.dependenciesreferences,
+                        snm.id_model.dependenciesprimary,
+                        snm.id_model.dependenciessecondary
+                    ))
+
                     list_model_dependencies_primary.append(snm.id_model.dependenciesprimary)
                     list_model_dependencies_secondary.append(snm.id_model.dependenciessecondary)
                 
@@ -260,8 +267,15 @@ def visu_data(request):
                 list_assumptions, list_assumptionsprimary, list_assumptionssecondary = [], [], []
                 for snm in select_ns_ass:
                     # we get the assumption (prim. and sec.) and put it in a string and after the dictionary of the NS
-                    list_assumptions.append("<li><u>{}</u>: {}</li>".format(snm.id_assumptions.assumptionsprimary,
-                                                                            snm.id_assumptions.assumptionssecondary))
+                    list_assumptions.append("<li><u class='questionmark' onmouseover='showPopup(this, \"assumption-popup\", \"{}\", \"{}\", \"{}\", \"{}\")' onmouseout='hidePopup(\"assumption-popup-container\")'>{}</u>: {}</li>".format(
+                        snm.id_assumptions.assumptionsprimary,
+                        snm.id_assumptions.assumptionssecondary,
+                        snm.id_assumptions.assumptionsdescription,
+                        snm.id_assumptions.assumptionsreferences,
+                        snm.id_assumptions.assumptionsprimary,
+                        snm.id_assumptions.assumptionssecondary
+                    ))
+
                     list_assumptionsprimary.append(snm.id_assumptions.assumptionsprimary)
                     list_assumptionssecondary.append(snm.id_assumptions.assumptionssecondary)
 
@@ -307,7 +321,7 @@ def visu_data(request):
                 # Store the assumptions as a tuple in a single list
                 assumptions_list = []
                 for s in select_ns_assumptions:
-                    assumptions_list.append((s.id_assumptions.assumptionsprimary, s.id_assumptions.assumptionssecondary))
+                    assumptions_list.append((s.id_assumptions.assumptionsprimary, s.id_assumptions.assumptionssecondary, s.id_assumptions.assumptionsdescription, s.id_assumptions.assumptionsreferences))
                 list_ns_assumptions.append(assumptions_list)
 
             # Zip all the data into a tuple

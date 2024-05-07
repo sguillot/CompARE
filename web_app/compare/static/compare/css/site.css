@@ -651,8 +651,8 @@ input.check{
   border:1px solid black;
 }
 
-/* Model pop-up */
-.model-popup-container {
+/* Model & assumption pop-up */
+.model-popup-container, .assumption-popup-container {
   position: absolute;
   background-color: white;
   border: 1px solid #ccc;
@@ -661,12 +661,12 @@ input.check{
   z-index: 1000; /* Ensure pop-up is above other elements */
 }
 
-.model-popup ul {
+.model-popup ul, .assumption-popup ul {
   padding-left: 20px;
   margin: 0;
 }
 
-.model-popup li {
+.model-popup li, .assumption-popup li {
   list-style-type: none;
   margin: 5px 0;
 }

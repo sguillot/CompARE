@@ -256,15 +256,19 @@ Visu_data
                     <td>
                         {% for mprim, msec, mdesc, mref_list in m %}
                             <li>
-                                <u class="questionmark" onmouseover='showModelPopup(this, "{{ mprim }}", "{{ msec }}", "{{ mdesc }}", "{{ mref_list }}")' onmouseout="hideModelPopup()">
+                                <u class="questionmark" onmouseover='showPopup(this, "model-popup", "{{ mprim }}", "{{ msec }}", "{{ mdesc }}", "{{ mref_list }}")' onmouseout='hidePopup("model-popup-container")'>
                                     {{ mprim }}
                                 </u>: {{ msec }}
                             </li>
                         {% endfor %}
                     </td>
                     <td>
-                        {% for aprim, asec in a %}
-                            <li><u>{{aprim}}</u>: {{asec}}</li>
+                        {% for aprim, asec, adesc, aref_list in a %}
+                            <li>
+                                <u class="questionmark" onmouseover='showPopup(this, "assumption-popup", "{{ aprim }}", "{{ asec }}", "{{ adesc }}", "{{ aref_list }}")' onmouseout='hidePopup("assumption-popup-container")'>
+                                    {{aprim}}
+                                </u>: {{asec}}
+                            </li>
                         {% endfor %} 
                     </td>
 

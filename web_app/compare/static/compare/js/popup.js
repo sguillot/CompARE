@@ -1,12 +1,11 @@
-function showModelPopup(element, mprim, msec, mdesc, mref_list) {
-
-    let references = mref_list.split(',');
+function showPopup(element, popupClass, prim, sec, desc, ref_list) {
+    let references = ref_list.split(',');
     // Create the HTML content for the pop-up
     let popupContent = `
-        <div class="model-popup">
-            <p><strong>Primary Dependency:</strong> ${mprim}</p>
-            <p><strong>Secondary Dependency:</strong> ${msec}</p>
-            <p><strong>Description:</strong> ${mdesc}</p>
+        <div class="${popupClass}">
+            <p><strong>${prim === "mprim" ? "Primary Dependency" : "Primary Assumption"}:</strong> ${prim}</p>
+            <p><strong>${sec === "msec" ? "Secondary Dependency" : "Secondary Assumption"}:</strong> ${sec}</p>
+            <p><strong>Description:</strong> ${desc}</p>
             <p><strong>References:</strong></p>
             <ul>
                 ${references.map(ref => `<li>${ref}</li>`).join('')}
@@ -16,7 +15,7 @@ function showModelPopup(element, mprim, msec, mdesc, mref_list) {
 
     // Create the pop-up element
     let popup = document.createElement('div');
-    popup.className = 'model-popup-container';
+    popup.className = `${popupClass}-container`;
     popup.innerHTML = popupContent;
 
     // Append pop-up to the body
@@ -35,9 +34,9 @@ function positionPopup(element, popup) {
     popup.style.left = rect.left + scrollLeft + 'px';
 }
 
-function hideModelPopup() {
+function hidePopup(className) {
     // Remove the pop-up element
-    let popup = document.querySelector('.model-popup-container');
+    let popup = document.querySelector('.' + className);
     if (popup) {
         popup.remove();
     }
