@@ -647,7 +647,46 @@ input.check{
   transition: 0.1s ease-in-out;
 }
 
-#sigmaContainer, #sigmaErrorsContainer, #filesContainer, #filesErrorsContainer, #subfoldersContainer {
+.plot-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.checkboxesContainer {
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.detail-container {
+  width:110px;
+  height:150px;
+}
+
+.container {
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  padding: 20px;
+  height:100%;
+  width:fit-content;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sub-container {
+  padding: 20px;
+  border-radius:10px;
+}
+
+.checkbox-label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.sub-container {
   border:1px solid black;
 }
 

@@ -21,20 +21,26 @@ Plot
         {% if html_graphs %}
             {{ html_graphs|safe }}
         {% endif %}
+
+    </div>
     
-        <div class="checkboxesContainer">
-            {% if extracted_contours != 1 %}
-                <div id="sigmaContainer">
+    <div class="checkboxesContainer">
+        {% if extracted_contours != 1 %}
+            <div id="contoursContainer" class="container">
+                <h3>Contours</h3>
+                <div id="sigmaContainer" class="sub-container">
                     <h3>Sigma Contours</h3>
                     {% for contour in extracted_contours %}
-                        <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
+                        <label class="checkbox-label">
+                            <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
+                        </label>
                     {% endfor %}
                 </div>
                 <br><br>
-            {% endif %}
-    
-            {% if filenames_contours != 0 %}
-                <div id="filesContainer">
+        {% endif %}
+
+        {% if filenames_contours != 0 %}
+                <div id="filesContainer" class="sub-container">
                     <h3>Contour Files</h3>
                     {% for filename_contour in filenames_contours %}
                         <label class="label-filename">
@@ -42,21 +48,23 @@ Plot
                         </label>
                     {% endfor %}
                 </div>
-                <br><br>
-            {% endif %}
+            </div>
+        {% endif %}
 
-            {% if errors_and_files != 0 %}
-                <div id="sigmaErrorsContainer">
+        {% if errors_and_files != 0 %}
+            <div id="errorsContainer" class="container">
+                <h3>Errors</h3>
+                <div id="sigmaErrorsContainer" class="sub-container">
                     <h3>Sigma Errors</h3>
                     {% for i in '12345' %}
-                        <label>
+                        <label class="checkbox-label">
                             <input class="sigma-errors-checkbox" type="checkbox" value="{{ i }}" checked>{{ i }}σ<br>
                         </label>
                     {% endfor %}
                 </div>
                 <br><br>
-
-                <div id="filesErrorsContainer">
+    
+                <div id="filesErrorsContainer" class="sub-container">
                     <h3>Error Files</h3>
                     {% for h5_filename, unique_color in errors_and_files %}
                         <label class="label-filename-errors">
@@ -64,20 +72,19 @@ Plot
                         </label>
                     {% endfor %}
                 </div>
-                <br><br>
-            {% endif %}
-    
-            <div id="subfoldersContainer">
-                <h3>EOS Models</h3>
-                {% for subfolder, unique_color in subfolders_and_colors %}
-                    <label class="label-subfolder">
-                        <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
-                    </label>
-                {% endfor %}
             </div>
+        {% endif %}
+
+        <div id="subfoldersContainer" class="container">
+            <h3>EOS Models</h3>
+            {% for subfolder, unique_color in subfolders_and_colors %}
+                <label class="label-subfolder">
+                    <input class="subfolder-checkbox" type="checkbox" value="{{ unique_color }}" checked>{{ subfolder }}<br>
+                </label>
+            {% endfor %}
         </div>
-    
     </div>
+    
 </div>
 <br><br>
 

@@ -111,17 +111,16 @@ Detail
         
                     <div class="checkboxesContainer">
                         {% if extracted_contours != 1 %}
-                            <div id="sigmaContainer">
+                            <div id="sigmaContainer" class="sub-container detail-container">
                                 <h3>Sigmas</h3>
                                 {% for contour in extracted_contours %}
                                     <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
                                 {% endfor %}
                             </div>
-                            <br><br>
                         {% endif %}
     
                         {% if subfolders_and_colors != 0 %}
-                            <div id="subfoldersContainer">
+                            <div id="subfoldersContainer" class="sub-container detail-container">
                                 <h3>EOS Models</h3>
                                 {% for subfolder, unique_color in subfolders_and_colors %}
                                     <label class="label-subfolder">
