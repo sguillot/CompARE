@@ -106,7 +106,7 @@ def plot_contours_from_h5(file_path):
             pdf = hf["data"]["Proba density"][:]
 
         # Plot the probability density
-        ax.plot(mass_scale, pdf, label=f'Mass: {mass}', color='#000000')
+        ax.plot(mass_scale, pdf, color='#000000')
 
         # Set labels and title
         ax.set_xlabel('Mass (Msun)')
@@ -115,6 +115,10 @@ def plot_contours_from_h5(file_path):
 
         # Add the plugin to display coordinates when hovering over the graph
         plugins.connect(fig, plugins.MousePosition(fontsize=14, fmt=".3f"))
+
+    elif "NS_Spin" in file_path and file_path.endswith("MeanErrors.h5"):
+
+        return 0, []        
 
     #elif file_path.endswith("Contours.h5"):
     #

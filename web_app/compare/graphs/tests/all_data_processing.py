@@ -46,7 +46,15 @@ def process_data_to_h5(directory):
             print(f"Processing MeanErrors file: {file_path}")
             pdf, mass_scale, sigma_values = process_meanerrors(file_path)
             h5 = f"{os.path.splitext(filename)[0]}.h5"
-            save_meanerrors_to_h5(h5, pdf, sigma_values, mass_scale)
+            save_meanerrors_nsmass_to_h5(h5, pdf, sigma_values, mass_scale)
+            print(f"Saved HDF5 file: {h5}")
+
+        elif filename.startswith("NS_Spin") and filename.endswith("MeanErrors.txt"):
+
+            print(f"Processing MeanErrors file: {file_path}")
+            pdf, frequency_scale, sigma_values = process_meanerrors(file_path)
+            h5 = f"{os.path.splitext(filename)[0]}.h5"
+            save_meanerrors_nsspin_to_h5(h5, pdf, sigma_values, frequency_scale)
             print(f"Saved HDF5 file: {h5}")
 
         #elif filename.endswith("Contours.txt"):
@@ -259,32 +267,32 @@ def save_mcmcsamples_to_h5(radius, mass, proba_density, contours, file_path):
 
 def process_meanerrors(file_path):
     """
-    This function processes mass and error data from a text file.
+    This function processes mass or frequency and error data from a text file.
 
     Args:
         file_path (str): The path of the text file containing mean errors data.
 
     Returns:
         pdf (array_like): Gaussian probability density values.
-        mass_scale (array_like): Mass values for the plot.
+        x_values_scale (array_like): Mass or frequency values for the plot.
         sigma_values (array_like): Sigma values from 1 to 5.
     """
     
     data = np.loadtxt(file_path, skiprows=1)
-    mass, error = data
-    sigma_values = np.array([[mass - error * i, mass + error * i] for i in range(1, 6)])
+    x_values, error = data
+    sigma_values = np.array([[x_values - error * i, x_values + error * i] for i in range(1, 6)])
 
-    # Use the latest sigma_values to define mass_scale
+    # Use the latest sigma_values to define x_values_scale
     last_sigma_values = sigma_values[-1]
-    min_mass = last_sigma_values[0]
-    max_mass = last_sigma_values[1]
+    min_x_values = last_sigma_values[0]
+    max_x_values = last_sigma_values[1]
     
-    mass_scale = np.linspace(max(0, min_mass), max_mass, 1000)
-    pdf = norm.pdf(mass_scale, loc=mass, scale=error)
+    x_values_scale = np.linspace(max(0, min_x_values), max_x_values, 1000)
+    pdf = norm.pdf(x_values_scale, loc=x_values, scale=error)
 
-    return pdf, mass_scale, sigma_values
+    return pdf, x_values_scale, sigma_values
 
-def save_meanerrors_to_h5(file_path, pdf, sigma_values, mass_scale):
+def save_meanerrors_nsmass_to_h5(file_path, pdf, sigma_values, mass_scale):
     """
     This function writes Gaussian probability density, sigma, and mass data into an HDF5 file.
 
@@ -299,6 +307,22 @@ def save_meanerrors_to_h5(file_path, pdf, sigma_values, mass_scale):
         data_group.create_dataset('Proba density', data=pdf)
         data_group.create_dataset('Mass (M☉)', data=sigma_values)
         data_group.create_dataset('Mass scale', data=mass_scale)
+
+def save_meanerrors_nsspin_to_h5(file_path, pdf, sigma_values, frequency_scale):
+    """
+    This function writes Gaussian probability density, sigma, and frequency data into an HDF5 file.
+
+    Args:
+        file_path (str): The name of the HDF5 file.
+        pdf (array_like): Gaussian probability density values.
+        sigma_values (array_like): Sigma values from 1 to 5.
+        frequency_scale (array_like): Frequency values for the plot.
+    """
+    with h5py.File(os.path.join('web_app/compare/static/h5/', file_path), 'w') as hf:
+        data_group = hf.create_group("data")
+        data_group.create_dataset('Proba density', data=pdf)
+        data_group.create_dataset('Sigma errors', data=sigma_values)
+        data_group.create_dataset('Frequency scale', data=frequency_scale)
 
 # -----| Data Processing - Chi2Contours |----- #
             
