@@ -570,7 +570,6 @@ def modify(request, id):
     for cov in constrainvar:
         listconstrainvar.append(cov[0])
 
-
     # We check for Post request
     if request.method == 'POST':
         # We check what table the user want to modify
@@ -633,37 +632,6 @@ def modify(request, id):
                     logfile.writelines(wri)
                     logfile.close()
 
-                # if the user clic on the add button
-                elif 'add' in request.POST:
-                    # We check if the name alreday exist  and linked it if it is the case
-                    if (NameNs.objects.filter(namedb=name, classdb=classNs,
-                                              namesimbad=nameSin, classsimbad=classSin,
-                                              ra=ra,declination=dec,localisationfile=loc)):
-                        nameExist = NameNs.objects.filter(namedb=name, classdb=classNs,
-                                                          namesimbad=nameSin, classsimbad=classSin,
-                                                          ra=ra, declination=dec, localisationfile=loc)
-                        nameExist = nameExist[0]
-                        ns_list.id_name = nameExist
-                        ns_list.save()
-                        messages.success(request, "jajajaja")
-                    # we add the name
-                    else:
-                        nameAdd = NameNs(namedb=name, classdb=classNs,
-                                         namesimbad=nameSin, classsimbad=classSin,
-                                         ra=ra, declination=dec,
-                                         localisationfile=loc, eventdate=event)
-                        nameAdd.save()
-                        ns_list.id_name = nameAdd
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    #to write in the logo file
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content: Name ', str(ns_list.id_name)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
             return redirect('modify', id)
 
         # We do the same things for all field of the table
@@ -704,29 +672,6 @@ def modify(request, id):
                     logfile.writelines(wri)
                     logfile.close()
 
-                elif 'add' in request.POST:
-                    if RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                            doi=doi,repositorydoi=repdoi ,datalink=datal):
-                        refExist = RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                                        doi=doi, repositorydoi=repdoi, datalink=datal)
-                        refExist = refExist[0]
-                        ns_list.id_ref = refExist
-                        ns_list.save()
-                        messages.success(request, "jojojojo")
-                    else:
-                        ref = RefNs(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                    doi=doi, repositorydoi=repdoi, atalink=datal)
-                        ref.save()
-                        ns_list.id_ref = ref
-                        ns_list.save()
-                        messages.success(request,"Yes")
-
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content: Ref ', str(ns_list.id_ref)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
             return redirect('modify', id)
 
         if 'method' in request.POST:
@@ -750,29 +695,6 @@ def modify(request, id):
                     logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content:', str(MethNS)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
-                elif 'add' in request.POST:
-                    if MethodNs.objects.filter(method=meth, method_specific=methS,
-                                               datadate=datad, processinfinfo=proceInfo):
-                        methodExist = MethodNs.objects.filter(method=meth, method_specific=methS,
-                                                              datadate=datad,processinfinfo =proceInfo)
-                        methodExist = methodExist[0]
-                        ns_list.id_method = methodExist
-                        ns_list.save()
-                        messages.success(request, "Yes")
-                    else:
-                        method = MethodNs(method=meth, method_specific=methS,
-                                          atadate=datad, processinfinfo=proceInfo)
-                        method.save()
-                        ns_list.id_method = method
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content:Method ', str(ns_list.id_method)+'\n\n']
                     logfile.writelines(wri)
                     logfile.close()
 
@@ -802,38 +724,12 @@ def modify(request, id):
 
                     messages.success(request,"Yes")
 
-                elif 'add' in request.POST:
-                    if ConstrainNs.objects.filter(constraintype=constrainT,
-                                                  constrainvariable=constrainVar,
-                                                  constrainversion=int(constrainV)):
-                        constrainExist = ConstrainNs.objects.filter(constraintype=constrainT,
-                                                                    constrainvariable=constrainVar,
-                                                                    constrainversion=int(constrainV))
-                        constrainExist = constrainExist[0]
-                        ns_list.id_constrain = constrainExist
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    else:
-                        constrain = ConstrainNs(constraintype=constrainT,
-                                                constrainvariable=constrainVar,
-                                                constrainversion=constrainV)
-                        constrain.save()
-                        ns_list.id_constrain = constrain
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content: ', str(ns_list.id_constrain)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
             return redirect('modify', id)
 
         if 'model' in request.POST:
 
             model = ModelNs.objects.get(id_model=request.POST.get('model'))
+            id_model = model.id_model
             depP = request.POST.get('dependenciesprimary')
             depS = request.POST.get('dependenciessecondary')
             depD = request.POST.get('dependenciesdescription')
@@ -851,54 +747,84 @@ def modify(request, id):
             if len(depR) < 1:
                 depR = None
 
-            # TODO: CHECK THIS ELSE 'ALONE' HERE
-            else:
-                if 'update' in request.POST:
-                    model.dependenciesprimary = depP
-                    model.dependenciessecondary = depS
-                    model.dependenciesdescription = depD
-                    model.dependenciesreferences = depR
-                    model.save()
-                    messages.success(request,"Yes")
+            if 'update' in request.POST:
+                model.dependenciesprimary = depP
+                model.dependenciessecondary = depS
+                model.dependenciesdescription = depD
+                model.dependenciesreferences = depR
+                model.save()
+                messages.success(request,"Yes")
 
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content:', str(model)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
+                        str(datetime.datetime.now())+'\n', 'Content:', str(model)+'\n\n']
+                logfile.writelines(wri)
+                logfile.close()
 
-                elif 'add' in request.POST:
-                    if(ModelNs.objects.filter(dependenciesprimary=depP,
-                                              dependenciessecondary=depS,
-                                              dependenciesdescription=depD,
-                                              dependenciesreferences=depR)):
-                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP,
-                                                            dependenciessecondary=depS,
-                                                            dependenciesdescription=depD,
-                                                            dependenciesreferences=depR)
-                        modelExist = modelExist[0]
-                        model.id_model = modelExist
-                        model.save()
+            elif 'delete' in request.POST:
+                ns_instance = ns_list  # Get the Ns instance from the view
 
-                    else:
-                        model = ModelNs(dependenciesprimary=depP,
-                                        dependenciessecondary=depS,
-                                        dependenciesdescription=depD,
-                                        dependenciesreferences=depR)
-                        model.save()
-                        messages.success(request,"Yes")
+                # Count the number of references to the model
+                references_count = NsToModel.objects.filter(id_model=model).count()
+
+                if references_count == 1:
+                    NsToModel.objects.filter(filename=ns_instance, id_model=model).delete()
+                    ModelNs.objects.filter(id_model=id_model).delete()
+                else:
+                    NsToModel.objects.filter(filename=ns_instance, id_model=model).delete()
+
+                messages.success(request, "Model dependency deleted successfully.")
+
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Delete:\n', 'User:', str(request.user.get_username())+'\n',
+                        'Date:', str(datetime.datetime.now())+'\n', 'Content:', str(model)+'\n\n']
+                logfile.writelines(wri)
+                logfile.close()
+
+            return redirect('modify', id)
+
+        if 'modelAdd' in request.POST:
+
+            if all(request.POST.get(field) for field in ['dependenciesprimary_new', 'dependenciessecondary_new', 'dependenciesdescription_new', 'dependenciesreferences_new']):
+                # Extract form data
+                depP_new = request.POST.get('dependenciesprimary_new')
+                depS_new = request.POST.get('dependenciessecondary_new')
+                depD_new = request.POST.get('dependenciesdescription_new')
+                depR_new = request.POST.get('dependenciesreferences_new')
+                
+                # Check if the new dependency already exists
+                if ModelNs.objects.filter(dependenciesprimary=depP_new,
+                                        dependenciessecondary=depS_new,
+                                        dependenciesdescription=depD_new,
+                                        dependenciesreferences=depR_new).exists():
+                    messages.error(request, "This model dependency already exists.")
+                else:
+                    # Create a new model dependency entry
+                    new_dependency = ModelNs(dependenciesprimary=depP_new, dependenciessecondary=depS_new, dependenciesdescription=depD_new, dependenciesreferences=depR_new)
+                    new_dependency.save()
+
+                    # Add a new entry in the NsToModel table
+                    ns_instance = ns_list  # Get the Ns instance from the view
+                    ns_to_model_entry = NsToModel(filename=ns_instance, id_model=new_dependency)
+                    ns_to_model_entry.save()
+
+                    messages.success(request, "New model dependency added successfully.")
 
                     logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n',
-                           'Date:',str(datetime.datetime.now())+'\n', 'Content: ', str(model)+'\n\n']
+                            'Date:',str(datetime.datetime.now())+'\n', 'Content: ', str(new_dependency)+'\n\n']
                     logfile.writelines(wri)
                     logfile.close()
+            else:
+                # If necessary fields are missing, display an error message
+                messages.error(request, "All fields are required to add a new model dependency.")
 
             return redirect('modify', id)
 
         if 'assumption' in request.POST:
 
             assumption = AssumptionsNs.objects.get(id_assumptions=request.POST.get('assumption'))
+            id_assumption = assumption.id_assumptions
             AssP = request.POST.get('assumptionsprimary')
             AssS = request.POST.get('assumptionssecondary')
             AssD = request.POST.get('assumptionsdescription')
@@ -916,48 +842,77 @@ def modify(request, id):
             if len(AssR) < 1:
                 AssR = None
 
-            # TODO: CHECK THIS ELSE 'ALONE' HERE
-            else:
-                if 'update' in request.POST:
-                    assumption.assumptionsprimary = AssP
-                    assumption.assumptionssecondary = AssS
-                    assumption.assumptionsdescription = AssD
-                    assumption.assumptionsreferences = AssR
-                    assumption.save()
-                    messages.success(request,"Yes")
+            if 'update' in request.POST:
+                assumption.assumptionsprimary = AssP
+                assumption.assumptionssecondary = AssS
+                assumption.assumptionsdescription = AssD
+                assumption.assumptionsreferences = AssR
+                assumption.save()
+                messages.success(request,"Yes")
 
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Modify:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
-                           str(datetime.datetime.now()) + '\n', 'Content:', str(assumption) + '\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Modify:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
+                        str(datetime.datetime.now()) + '\n', 'Content:', str(assumption) + '\n\n']
+                logfile.writelines(wri)
+                logfile.close()
 
-                elif 'add' in request.POST:
-                    if(AssumptionsNs.objects.filter(assumptionsprimary=AssP,
-                                                    assumptionssecondary=AssS,
-                                                    assumptionsdescription=AssD,
-                                                    assumptionsreferences=AssR)):
+            elif 'delete' in request.POST:
+                ns_instance = ns_list # Get the Ns instance from the view
 
-                        assumptionExist = AssumptionsNs.objects.filter(assumptionsprimary=AssP,
-                                                                       assumptionssecondary=AssS,
-                                                                       assumptionsdescription=AssD,
-                                                                       assumptionsreferences=AssR)
-                        assumptionExist = assumptionExist[0]
-                        assumption.id_assumptions = assumptionExist
-                        assumption.save()
-                    else:
-                        assumption = AssumptionsNs(assumptionsprimary=AssP,
-                                                   assumptionssecondary=AssS,
-                                                   assumptionsdescription=AssD,
-                                                   assumptionsreferences=AssR)
-                        assumption.save()
-                        messages.success(request,"Yes")
+                # Count the number of references to the assumption
+                references_count = NsToAssumptions.objects.filter(id_assumptions=assumption).count()
+
+                if references_count == 1:
+                    NsToAssumptions.objects.filter(filename=ns_instance, id_assumptions=assumption).delete()
+                    AssumptionsNs.objects.filter(id_assumptions=id_assumption).delete()
+                else:
+                    NsToAssumptions.objects.filter(filename=ns_instance, id_assumptions=assumption).delete()
+
+                messages.success(request, "Assumption deleted successfully.")
+
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Delete:\n', 'User:', str(request.user.get_username()) + '\n',
+                        'Date:', str(datetime.datetime.now()) + '\n', 'Content:', str(assumption) + '\n\n']
+                logfile.writelines(wri)
+                logfile.close()
+
+            return redirect('modify', id)
+
+        if 'assumptionAdd' in request.POST:
+
+            if all(request.POST.get(field) for field in ['assumptionsprimary_new', 'assumptionssecondary_new', 'assumptionsdescription_new', 'assumptionsreferences_new']):
+                # Extract form data
+                AssP_new = request.POST.get('assumptionsprimary_new')
+                AssS_new = request.POST.get('assumptionssecondary_new')
+                AssD_new = request.POST.get('assumptionsdescription_new')
+                AssR_new = request.POST.get('assumptionsreferences_new')
+
+                # Check if the new assumption already exists
+                if AssumptionsNs.objects.filter(assumptionsprimary=AssP_new,
+                                            assumptionssecondary=AssS_new,
+                                            assumptionsdescription=AssD_new,
+                                            assumptionsreferences=AssR_new).exists():
+                    messages.error(request, "This assumption already exists.")
+                else:
+                    # Create a new assumption entry
+                    new_assumption = AssumptionsNs(assumptionsprimary=AssP_new, assumptionssecondary=AssS_new, assumptionsdescription=AssD_new, assumptionsreferences=AssR_new)
+                    new_assumption.save()
+
+                    # Add a new entry in the NsToAssumptions table
+                    ns_instance = ns_list  # Get the Ns instance from the view
+                    ns_to_assumption_entry = NsToAssumptions(filename=ns_instance, id_assumptions=new_assumption)
+                    ns_to_assumption_entry.save()
+
+                    messages.success(request, "New assumption added successfully.")
 
                     logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
-                           str(datetime.datetime.now()) + '\n', 'Content:Assumptions ', str(assumption) + '\n\n']
+                            str(datetime.datetime.now()) + '\n', 'Content:Assumptions ', str(new_assumption) + '\n\n']
                     logfile.writelines(wri)
                     logfile.close()
+            else:
+                # If necessary fields are missing, display an error message
+                messages.error(request, "All fields are required to add a new assumption.")
 
             return redirect('modify', id)
 

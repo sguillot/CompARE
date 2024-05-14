@@ -42,7 +42,6 @@ Modify
                 <input type="date" name='event' class="enable-name modifyinput" value="{{queryall.id_name.eventdate}}" placeholder="{{queryall.id_name.eventdate}}" disabled>
                 <input type="hidden" name="name">
                 <input type="submit" name="update" class="enable-name updateBtn" value="Update" disabled>
-                <input type="submit" name="add" class="enable-name addNew" value="Add a new Name" disabled>
             </form>
         </div>
         <div class="info-name">
@@ -60,7 +59,6 @@ Modify
                     {% endif %}
                 {% endfor %}
             </ul>
-
         </div>
     </div>
     <hr>
@@ -86,7 +84,6 @@ Modify
                 <input type="text" name="datalink" class="enable-ref modifyinput" value="{{queryall.id_ref.datalink}}" placeholder="{{queryall.id_ref.datalink}}" disabled>
                 <input type="hidden" name="ref">
                 <input type="submit" name="update" class="enable-ref updateBtn" value="Update" disabled>
-                <input type="submit" name="add" class="enable-ref addNew" value="Add new reference" disabled>
             </form>
         </div>
         <div class="info-ref">
@@ -131,7 +128,6 @@ Modify
                 <textarea name="processinfinfo" class="enable-method modifyinput" placeholder="{{queryall.id_method.processinfinfo}}" disabled>{{queryall.id_method.processinfinfo}}</textarea>
                 <input type="hidden" name="method">
                 <input type="submit" name="update" class="enable-method updateBtn" value="Update" disabled>
-                <input type="submit" name="add" class="enable-method addNew" value="Add new method" disabled>
             </form>
             
         </div>
@@ -181,12 +177,8 @@ Modify
                         {% endif %}
                     {%endfor%}
                 </select>
-
-                <!--<input type="text" name="constrainT" class="enable-constrain" value="{{queryall.id_constrain.constraintype}}" placeholder="{{queryall.id_constrain.constraintype}}" disabled>-->
-                <!--<input type="text" name="constrainVar" class="enable-constrain" value="{{queryall.id_constrain.constrainvariable}}" placeholder="{{queryall.id_constrain.constrainvariable}}" disabled>-->
                 <input type="hidden" name="constrain">
                 <input type="submit" name="update" class="enable-constrain updateBtn" value="Update" disabled>
-                <input type="submit" name="add" class="enable-constrain addNew" value="Add new constraint" disabled>
             </form>
         </div>
         <div class="info-constrain">
@@ -209,6 +201,24 @@ Modify
     <hr>
     <div class="modify-model">
         <h3>Model dependencies:</h3>
+
+        <button onclick="showHide(this)" class="addModDep">Add new model dependency</button>
+        <div id="addModDep">
+            <form method="post">
+                {% csrf_token %}
+                <label>Dependencies Primary</label>
+                <input class="insertinput enabledinput" type="text" name="dependenciesprimary_new" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5">
+                <label>Dependencies Secondary</label>
+                <input class="insertinput enabledinput" type="text" name="dependenciessecondary_new" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5">
+                <label>Dependencies Description</label>
+                <textarea class="insertinput enabledinput" name="dependenciesdescription_new" id="dependenciesdescription" placeholder="Dependencies Description"></textarea>
+                <label>Dependencies References</label>
+                <textarea class="insertinput enabledinput" name="dependenciesreferences_new" id="dependenciesreferences" placeholder="Dependencies References"></textarea>
+                <input type="hidden" name="modelAdd" value="formAddModel">
+                <input type="submit" class="addMA" id="createDep" name="add" value="Add">
+            </form>
+        </div>
+
         <div class="form-model"> 
             {%for qmo in queryModel %}
                 {%for i in qmo %}
@@ -226,7 +236,7 @@ Modify
                             <textarea name="dependenciesreferences" class="method{{i.id_model}} modifyinput" placeholder="{{i.dependenciesreferences}}" disabled>{{i.dependenciesreferences}}</textarea>
                             <input type="hidden" name="model" value="{{i.id_model}}">
                             <input type="submit" class="method{{i.id_model}} updateBtn" name="update" value="Update" disabled>
-                            <input type="submit" class="method{{i.id_model}} addNew" name="add" value="Add new Model Dependency" disabled>
+                            <input type="submit" onclick="return confirm('Are you sure you want to delete this model dependency ?')" class="method{{i.id_model}} deleteBtn" name="delete" value="Delete" disabled>
                         </form>
                     </div>
                     <div class="info-model">
@@ -246,12 +256,28 @@ Modify
                 {% endfor %}
             {% endfor %}  
         </div>
-       
-
     </div>
     <hr>
     <div class="modify-assumptions">
         <h3>Assumptions:</h3>
+
+        <button onclick="showHide(this)" class="addAssumption">Add new assumption</button>
+        <div id="addAssumption">
+            <form method="post">
+                {% csrf_token %}
+                <label>Assumptions Primary</label>
+                <input class="insertinput enabledinput" type="text" name="assumptionsprimary_new" id="assumptionsprimary" placeholder="Assumptions Primary" maxlength="60" minlength="5">
+                <label>Assumptions Secondary</label>
+                <input class="insertinput enabledinput" type="text" name="assumptionssecondary_new" id="assumptionssecondary" placeholder="Assumptions Secondary" maxlength="60" minlength="5">
+                <label>Assumptions Description</label>
+                <textarea class="insertinput enabledinput" name="assumptionsdescription_new" id="assumptionsdescription" placeholder="Assumptions Description"></textarea>
+                <label>Assumptions References</label>
+                <textarea class="insertinput enabledinput" name="assumptionsreferences_new" id="assumptionsreferences" placeholder="Assumptions References"></textarea>
+                <input type="hidden" name="assumptionAdd" value="formAddAssumptions">
+                <input type="submit" class="addMA" id="createAss" name="add" value="Add">
+            </form>
+        </div>
+
         <div class="form-assumptions">
             {%for qass in queryAssumption %}
                 {%for j in qass %}
@@ -269,7 +295,7 @@ Modify
                             <textarea name="assumptionsreferences" class="assumption{{j.id_assumptions}} modifyinput" placeholder="{{j.assumptionsreferences}}" disabled>{{j.assumptionsreferences}}</textarea>
                             <input type="hidden" name="assumption" value="{{j.id_assumptions}}">
                             <input type="submit" class="assumption{{j.id_assumptions}} updateBtn" name="update" value="Update" disabled>
-                            <input type="submit" class="assumption{{j.id_assumptions}} addNew" name="add"  value="Add new assumption" disabled>
+                            <input type="submit" onclick="return confirm('Are you sure you want to delete this assumption ?')" class="assumption{{j.id_assumptions}} deleteBtn" name="delete" value="Delete" disabled>
                         </form>
                     </div>
                     <div class="info-assumptions">

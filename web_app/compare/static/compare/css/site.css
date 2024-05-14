@@ -464,7 +464,7 @@ input.check{
   text-align: center;
 }
 
-#addN, #addR {
+#addN, #addR, #addAssumption, #addModDep {
   display: none;
 }
 
@@ -489,7 +489,7 @@ input.check{
   margin-left:10px;
 }
 
-.submit-button, .load-button, .addN, .addR, .addMA, .removeMA, .createSRV, .updateBtn, .addNew {
+.submit-button, .load-button, .addN, .addR, .addMA, .removeMA, .createSRV, .updateBtn, .deleteBtn, .addAssumption, .addModDep {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -497,11 +497,11 @@ input.check{
   transition: background-color 0.3s ease;
 }
 
-.addMA, .removeMA, .createSRV, .updateBtn, .addNew {
+.addMA, .removeMA, .createSRV, .updateBtn, .deleteBtn, .addAssumption, .addModDep {
   margin: 0px 10px 20px 0px;
 }
 
-.addN, .addR, .addNew {
+.addN, .addR, .addAssumption, .addModDep {
   background-color: #007bff;
   color: #fff;
 }
@@ -516,17 +516,17 @@ input.check{
   color: #fff;
 }
 
-.removeMA {
+.removeMA, .deleteBtn {
   background-color: #dc3545;
   color: #fff;
 }
 
-.updateBtn:disabled, .addNew:disabled {
+.updateBtn:disabled, .deleteBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.addN:hover, .addR:hover, .addNew:hover {
+.addN:hover, .addR:hover, .addAssumption:hover, .addModDep:hover {
   background-color: #0056b3;
 }
 
@@ -538,7 +538,7 @@ input.check{
   background-color: #e0a800;
 }
 
-.removeMA:hover {
+.removeMA:hover, .deleteBtn:hover {
   background-color: #c82333;
 }
 
@@ -558,7 +558,8 @@ input.check{
 .nscontent label, .divsepar label, .methodcontent label, .constraincontent label, 
 .refcontent label, .modelcontent label, .asscontent label,
 .formfilename label, .btnadd label, .modify-name label,
-.form-ref label, .form-method label, .form-constrain label {
+.form-ref label, .form-method label, .form-constrain label,
+#addAssumption label, #addModDep label {
   font-weight: bold;
   display: block;
   margin-bottom: 5px;
