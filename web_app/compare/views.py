@@ -25,6 +25,8 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as logout_user
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 
 
 def home(request):
@@ -89,12 +91,10 @@ def visu_data(request):
     class_list = ["NS Spin", "Transiently_Accreting_NS", "NS Mass", "NS-NS mergers",
                   "PPM", "qLMXB", "Cold MSP", "Thermal INSs", "Type-I X-ray bursts"]
 
-    for ns in select_ns_all:
-        filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', ns.h5_filename)
-        if not os.path.exists(filepath):
-            ns.file_exists = False
-        else:
-            ns.file_exists = True
+    # Paging
+    paginator = Paginator(select_ns_all, 5)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
 
     # We check for GET request
     if request.method == 'GET':
@@ -298,38 +298,43 @@ def visu_data(request):
             return HttpResponse(json.dumps(filtered_list), content_type='application/json',)
 
         else:
-            # We add the model dependencies, assumptions and files of all NS
+            # We add the model dependencies, assumptions, files of all NS and their existence to a list
             list_ns_model_dependencies = []
             list_ns_assumptions = []
             list_ns_files = []
+            list_file_exists = []
 
-            for ns in select_ns_all:
-                # We make the file paths from the filenames (to be used by the django template)
+            for ns in page_obj:
+
+                filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', ns.h5_filename)
+                # We create file paths from file names (to be used by the Django model)
                 list_ns_files.append("h5/"+ns.h5_filename)
+                # We check if the files exist
+                list_file_exists.append(os.path.exists(filepath))
 
-                # We select the filenames linked to models
+                # We select the file names linked to the models
                 select_ns_model_dependencies = NsToModel.objects.select_related().filter(filename=ns.filename)
-                # We select the filenames linked to assumptions
+                # We select the file names linked to the hypotheses
                 select_ns_assumptions = NsToAssumptions.objects.select_related().filter(filename=ns.filename)
 
-                # Store the dependencies as a tuple in a single list
+                # Store dependencies as tuples in a single list
                 dependencies_list = []
                 for s in select_ns_model_dependencies:
                     dependencies_list.append((s.id_model.dependenciesprimary, s.id_model.dependenciessecondary, s.id_model.dependenciesdescription, s.id_model.dependenciesreferences))
                 list_ns_model_dependencies.append(dependencies_list)
 
-                # Store the assumptions as a tuple in a single list
+                # Let's store the hypotheses as tuples in a single list
                 assumptions_list = []
                 for s in select_ns_assumptions:
                     assumptions_list.append((s.id_assumptions.assumptionsprimary, s.id_assumptions.assumptionssecondary, s.id_assumptions.assumptionsdescription, s.id_assumptions.assumptionsreferences))
                 list_ns_assumptions.append(assumptions_list)
 
             # Zip all the data into a tuple
-            select_ns_all_zip = zip(select_ns_all,
+            select_ns_all_zip = zip(page_obj,
                                     list_ns_model_dependencies,
                                     list_ns_assumptions,
                                     list_ns_files,
-                                    [ns.file_exists for ns in select_ns_all])
+                                    list_file_exists)
             
             # Sorted alphabetically + avoids redundancy
             orderMethodDistinct = get_sorted_distinct_values(MethodNs.objects, 'method')
@@ -350,7 +355,12 @@ def visu_data(request):
                              "queryDepS": orderDepSecondaryDistinct,
                              "queryAss": orderAssPrimaryDistinct,
                              "queryAssS": orderAssSecondaryDistinct,
+                             "page_obj": page_obj,
                              }
+            
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                table_html = render_to_string('compare/visu_data.html', {'queryall': select_ns_all_zip, 'page_obj': page_obj})
+                return JsonResponse({'table': table_html})
 
             # Send the dictionary to the template
             return render(request, "compare/visu_data.html", select_all_ns)

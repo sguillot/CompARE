@@ -236,6 +236,41 @@ input.check{
   padding:2px 0px 2px 0px;
 }
 
+/* paging */
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pagination a, .pagination .disabled {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 0 2px;
+  color: #333;
+  border: 1px solid #ccc;
+  text-decoration: none;
+}
+
+.pagination a:hover {
+  background: #f0f0f0;
+}
+
+.pagination .current {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+  padding: 6px 11px;
+}
+
+.pagination .prev, .pagination .next {
+  font-weight: bold;
+}
+
+.pagination .disabled {
+  color: #999;
+  cursor: not-allowed;
+}
+
 /* detail page */
 
 .bodydetail{

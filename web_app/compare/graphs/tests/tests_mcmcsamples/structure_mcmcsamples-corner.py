@@ -12,7 +12,9 @@ rayon = data[:, 1]
 bin_size = [0.1, 0.05]
 
 num_bins_masse = int((max(masse) - min(masse)) / bin_size[0])
-num_bins_rayon = int((max(rayon) - min(rayon)) / bin_size[1])
+print(num_bins_masse)
+num_bins_rayon = int((max(rayon) - min(rayon)) / bin_size[1]) 
+print(num_bins_rayon)
 
 # Générer le nuage de points avec corner.py et spécifier les niveaux de confiance
 figure = corner.corner(data, bins=[num_bins_masse, num_bins_rayon], quantiles=(0.16, 0.84), levels=(0.68, 0.95, 0.9999), contour_kwargs={"colors":['red', 'green', 'blue']})
