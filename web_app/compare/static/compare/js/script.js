@@ -271,10 +271,15 @@ function ajaxRequest(checkList , select , search){
     success: function(data) {
 
       $("#firstTable tr").remove();
-      $("#secondTable tr").remove();
+
+      if(data.length !== data[0].countns) {
+        document.querySelector('.pagination').style.display = 'none';
+      } else {
+        document.querySelector('.pagination').style.display = 'block';
+      }
 
       // Get all the elements that we need
-      let table = document.getElementById("secondTable");
+      let table = document.getElementById("firstTable");
       
       let selectIds = ["list_methods", "list_variable", "list_constrain_type", "list_dep_primary", "list_dep_secondary", "list_assumptions_primary", "list_assumptions_secondary"];
 

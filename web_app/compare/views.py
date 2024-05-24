@@ -87,6 +87,7 @@ def visu_data(request):
     # We select all the Ns from the database without models and assumptions but
     # with "ref" ,"name" ,"constrain" and "method" with method select_related
     select_ns_all = Ns.objects.select_related().all().order_by('filename')
+    count_ns = select_ns_all.count()
 
     class_list = ["NS Spin", "Transiently_Accreting_NS", "NS Mass", "NS-NS mergers",
                   "PPM", "qLMXB", "Cold MSP", "Thermal INSs", "Type-I X-ray bursts"]
@@ -230,7 +231,8 @@ def visu_data(request):
                            'constrainvariable': str(ns.id_constrain.constrainvariable),
                            'doi': ns.id_ref.doi,
                            'author': ns.id_ref.author,
-                           'year': ns.id_ref.refyear
+                           'year': ns.id_ref.refyear,
+                           'countns': count_ns
                            }
 
                 # We select the filenames linked to model dependencies and add all the model dependencies to a list
@@ -303,6 +305,11 @@ def visu_data(request):
             list_ns_assumptions = []
             list_ns_files = []
             list_file_exists = []
+
+            # Pagination for filtered results
+            paginator = Paginator(select_ns_all, 5)  # 5 entries per page
+            page_number = request.GET.get('page', 1)
+            page_obj = paginator.get_page(page_number)
 
             for ns in page_obj:
 

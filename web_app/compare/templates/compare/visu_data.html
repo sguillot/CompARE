@@ -240,8 +240,6 @@ Visu_data
                     </tr>
                 </thead>
 
-                <tbody id="secondTable"></tbody>
-
                 <tbody id="firstTable">
                     {% for q , m , a, datalink, file_exists in queryall %}
                     <tr>
@@ -320,11 +318,17 @@ Visu_data
                 'page': page
             },
             success: function(data) {
-                $('#firstTable').html($(data.table).find('#firstTable').html());
-                $('.pagination').html($(data.table).find('.pagination').html());
+
+                if(data.table != null) {
+                    $('#firstTable').html($(data.table).find('#firstTable').html());
+                    $('.pagination').html($(data.table).find('.pagination').html());
+                } else {
+                    $('#firstTable').html($(data.table_filtered).find('#firstTable').html());
+                    $('.pagination').html($(data.table_filtered).find('.pagination').html());
+                }
             }
         });
     }
-    </script>
+</script>
 
 {% endblock %}
