@@ -8,102 +8,105 @@ Visu_data
 
 <div class="visu">
 
-<div class="side_menu">
+    <div class="side_menu">
 
-    <div class="title-dclasses">
-        <h2>Database classes</h2>
+        <div class="title-dclasses data-column">
+            <h2>Database Classes</h2>
+        </div>
+
+        <form class="form data-column">
+
+            <div>
+                <input type="checkbox" name="Cold_MSP" value="Cold MSP" class="check">
+                <label for="Cold_MSPs">Cold MSP</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="NS_Mass" value="NS Mass" class="check">
+                <label for="NS_Mass">NS Mass</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="NS-NS Mergers" value="NS-NS mergers" class="check">
+                <label for="NS-NS Mergers">NS-NS Mergers</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="NS_Spin" value="NS Spin"class="check">
+                <label for="NS_Spin">NS Spin</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="PPM" value="PPM" class="check">
+                <label for="PPM">PPM</label>
+            </div>
+            
+            <div>
+                <input type="checkbox" name="qLMXB" value="qLMXB" class="check">
+                <label for="qLMXB">qLMXB</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="Thermal_INSs" value="Thermal INSs" class="check">
+                <label for="Thermal_INSs">Thermal INSs</label>  
+            </div>
+
+            <div>
+                <input type="checkbox" name="Transiently_Accreting_NS" value="Transiently_Accreting_NS" class="check">
+                <label for="Transiently_Accreting_NS">Transiently Accreting NS</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="Type-I_X-ray_bursts" value="Type-I X-ray bursts" class="check">
+                <label for="Type-I_X-ray_bursts">Type-I X-ray bursts</label>
+            </div>
+            
+        </form>
     </div>
 
-    <form class="form">
-        <input type="checkbox" name="NS_Spin" value="NS Spin"class="check">
-        <label for="NS_Spin">NS Spin</label>
-       
-        <br>
-
-        <input type="checkbox" name="Transiently_Accreting_NS" value="Transiently_Accreting_NS" class="check" >
-        <label for="Transiently_Accreting_NS">Transiently Accreting NS</label>
-       
-        <br>
-
-        <input type="checkbox" name="NS_Mass" value="NS Mass" class="check">
-        <label for="NS_Mass">NS Mass</label>
-       
-        <br>
-
-        <input type="checkbox" name="NS-NS_mergers" value="NS-NS mergers" class="check">
-        <label for="NS-NS_mergers">NS-NS_mergers</label>
+    <div class="content">
         
-        <br>
+        <div class="filter">
+            <div class="content-filter">
 
-        <input type="checkbox" name="PPM" value="PPM" class="check">
-        <label for="PPM">PPM</label>
-        
-        <br>
+                <button id="show" class="multiple" onclick="hideShow(this)"> More Filters</button>
 
-        <input type="checkbox" name="qLMXB" value="qLMXB" class="check">
-        <label for="qLMXB">qLMXB</label>
-        
-        <br>
+                <div class="search">
+                    <input type="text" id="Search" name="Search" placeholder="Search">
+                    <input type="image" id="btn" src="{% static 'compare/images/search.svg' %}" onclick="searchFilter()">
+                </div>
 
-        <input type="checkbox" name="Cold_MSP" value="Cold MSP" class="check" >
-        <label for="Cold_MSPs">Cold MSP</label>
-       
-        <br>
-
-        <input type="checkbox" name="Thermal_INSs" value="Thermal INSs" class="check">
-        <label for="Thermal_INSs">Thermal INSs</label>  
-        
-        <br>
-
-        <input type="checkbox" name="Type-I_X-ray_bursts" value="Type-I X-ray bursts" class="check">
-        <label for="Type-I_X-ray_bursts">Type-I X-ray bursts</label>
-        
-    </form>
-</div>
-
-
-<div class="content">
-    
-    <div class="filter">
-        <div class="content-filter">
-
-            <button id="show" class="multiple" onclick="hideShow(this)"> More filters</button>
-
-            <div class="search">
-                <input type="text" id="Search" name="Search" placeholder="Search">
-                <input type="image" id="btn" src="{% static 'compare/search.svg' %}" onclick="searchFilter()">
+                <div class="button">
+                    <button id="dwnlF" onclick="downloadFiles()">Download Files</button>
+                    <button id="dwnlB" onclick="bibtexFile()">Download Bibtex</button>
+                    <button id="showP" onclick="showPlot()">Show Plot</button>
+                </div>
             </div>
-
-            <div class="button">
-                <button id="dwnlF" onclick="downloadFiles()">Download Files</button>
-                <button id="dwnlB" onclick="bibtexFile()">Download Bibtex</button>
-            </div>
-        </div>
             <div id="multiple">
                 <div class="multiple-content">
                     <div class="flexSelect">
                         <label for="list_methods">Method</label>
                         <select name="list_methods" id="list_methods" multiple>
-                            {% for qm in queryMeth|dictsort:"method" %}
-                                <option class="Meth" value="{{qm.method}}">{{qm.method}}</option>
+                            {% for qm in queryMeth %}
+                                <option class="Meth" value="{{qm}}">{{qm}}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="flexSelect">
-                        <label for="list_variable">Constrain Variable</label>
+                        <label for="list_variable">Constraint Variable</label>
                         <select name="list_variable" id="list_variable" multiple>
-                            {% for qv in queryConV|dictsort:"constrainvariable" %}
-                                <option class="ConsV" value="{{qv.constrainvariable}}">{{qv.constrainvariable}}</option>
+                            {% for qv in queryConV %}
+                                <option class="ConsV" value="{{qv}}">{{qv}}</option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="flexSelect">
-                        <label for="list_constrain_type">Constrain Type</label>
+                        <label for="list_constrain_type">Constraint Type</label>
                         <select name="list_constrain_type" id="list_constrain_type" multiple>
-                            {% for qt in queryConT|dictsort:"constraintype" %}
-                                <option class="ConsT" value="{{qt.constraintype}}">{{qt.constraintype}}</option>
+                            {% for qt in queryConT %}
+                                <option class="ConsT" value="{{qt}}">{{qt}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -112,7 +115,7 @@ Visu_data
                         <label for="list_dep_primary">Model Primary</label>
                         <select name="list_dep_primary" id="list_dep_primary" multiple>
                             {% for qd in queryDep %}
-                                <option class="Dep" value="{{qd.dependenciesprimary}}">{{qd.dependenciesprimary}}</option>
+                                <option class="Dep" value="{{qd}}">{{qd}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -121,7 +124,7 @@ Visu_data
                         <label for="list_dep_secondary">Model Secondary</label>
                         <select name="list_dep_secondary" id="list_dep_secondary" multiple>
                             {% for qds in queryDepS %}
-                                <option class="DepS" value="{{qds.dependenciessecondary}}">{{qds.dependenciessecondary}}</option>
+                                <option class="DepS" value="{{qds}}">{{qds}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -130,7 +133,7 @@ Visu_data
                         <label for="list_assumptions_primary">Assumptions Primary</label>
                         <select name="list_assumptions_primary" id="list_assumptions_primary" multiple>
                             {% for qa in queryAss %}
-                                <option class="Ass" value="{{qa.assumptionsprimary}}">{{qa.assumptionsprimary}}</option>
+                                <option class="Ass" value="{{qa}}">{{qa}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -139,78 +142,155 @@ Visu_data
                         <label for="list_assumptions_secondary">Assumptions Secondary</label>
                         <select name="list_assumptions_secondary" id="list_assumptions_secondary" multiple>
                             {% for qas in queryAssS %}
-                                <option class="Ass2" value="{{qas.assumptionssecondary}}">{{qas.assumptionssecondary}}</option>
+                                <option class="Ass2" value="{{qas}}">{{qas}}</option>
                             {% endfor %}
                         </select>
                     </div>
+
                     <div class="button-vld">
-                        <button id="vld" onclick="searchFilter()">Valider</button>
+                        <button id="vld" onclick="searchFilter()">Confirm</button>
+                        <button id="reset" onclick="resetFilters()">Reset Filters</button>
                     </div>
                 </div>
-                
-            
+            </div>
         </div>
-    </div>
 
-    <div class="tab">
-        <table>
-            <thead>
-                <tr>
-                    <th>More info</th>
-                    <th>Source name</th>
-                    <th>Database Class</th>
-                    <th>Method</th>
-                    <th>Method details</th>
-                    <!--<th>Constraint Version</th>-->
-                    <th>Constraint Variable</th>
-                    <th>Model dependencies</th>
-                    <th>Analysis assumptions</th>
-                    <th>Reference</th>
-                    <th>Download</th>
-                    <th><img src="{% static 'compare/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/square.svg' %}" onclick="unselectall()"></th>
-                </tr>
-            </thead>
+        <br>
 
-            <tbody id="secondTable"></tbody>
+        <div class="tab">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="details-column">More Info</th>
+                        <th class="source-column">
+                            <div class="column-header">
+                                <span>Source Name</span>
+                                <div class="sort-icons">
+                                    <span class="sort-icon" data-column="1" onclick="sortTable(1, this)">↕</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="data-column">
+                            <div class="column-header">
+                                <span>Database Class</span>
+                                <div class="sort-icons">
+                                    <span class="sort-icon" data-column="2" onclick="sortTable(2, this)">↕</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="method-column">
+                            <div class="column-header">
+                                <span>Method</span>
+                                <div class="sort-icons">
+                                    <span class="sort-icon" data-column="3" onclick="sortTable(3, this)">↕</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="mdetails-column">
+                            <div class="column-header">
+                                <span>Method Details</span>
+                                <div class="sort-icons">
+                                    <span class="sort-icon" data-column="4" onclick="sortTable(4, this)">↕</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="variable-column">
+                            <div class="column-header">
+                                <span>Constraint Variable</span>
+                                <div class="sort-icons">
+                                    <span class="sort-icon" data-column="5" onclick="sortTable(5, this)">↕</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="dependency-column">
+                            <div class="column-header">
+                                <span>Model Dependencies</span>
+                                <div class="sort-icons">
+                                    <span class="sort-icon" data-column="6" onclick="sortTable(6, this)">↕</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="assumption-column">
+                            <div class="column-header">
+                                <span>Analysis Assumptions</span>
+                                <div class="sort-icons">
+                                    <span class="sort-icon" data-column="7" onclick="sortTable(7, this)">↕</span>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="reference-column">
+                            Reference
+                        </th>
+                        <th class="download-column">Download</th>
+                        <th class="checkbox-column"><img src="{% static 'compare/images/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/images/square.svg' %}" onclick="unselectall()"></th>
+                    </tr>
+                </thead>
+                
+                <tbody id="firstTable">
+                    {% for q , m , a, datalink, file_exists in queryall %}
+                    <tr>
+                        <td class="details-column"><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/images/plus.svg' %}" alt="icon more" width=30em /></a></td>
+                        <td class="source-column">{{ q.id_name.namedb }}</td>
+                        <td class="data-column">{{ q.id_name.classdb }}</td>
+                        <td class="method-column">{{ q.id_method.method }}</td>
+                        <td class="mdetails-column">{{ q.id_method.method_specific }}</td>
+                        <td class="variable-column">{{ q.id_constrain.constrainvariable }}<br>(v. {{ q.id_constrain.constrainversion }})</td>
+                        <td class="dependency-column">
+                            {% for mprim, msec, mdesc, mref_list in m %}
+                                <li>
+                                    <u class="questionmark" onmouseover='showPopup(this, "model-popup", "{{ mprim }}", "{{ msec }}", "{{ mdesc }}", "{{ mref_list }}", "mprim", "msec")' onmouseout='hidePopup("model-popup-container")'>
+                                        {{ mprim }}
+                                    </u>: {{ msec }}
+                                </li>
+                            {% endfor %}
+                        </td>
+                        <td class="assumption-column">
+                            {% for aprim, asec, adesc, aref_list in a %}
+                                <li>
+                                    <u class="questionmark" onmouseover='showPopup(this, "assumption-popup", "{{ aprim }}", "{{ asec }}", "{{ adesc }}", "{{ aref_list }}", "aprim", "asec")' onmouseout='hidePopup("assumption-popup-container")'>
+                                        {{aprim}}
+                                    </u>: {{asec}}
+                                </li>
+                            {% endfor %} 
+                        </td>
+                        <td class="reference-column"><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
+                        <td class="download-column">
+                            {% if file_exists %}
+                                <a href="{% static datalink %}" download="{{q.h5_filename}}">
+                                    <img src="{% static 'compare/images/download.svg' %}" alt="icon download" width=30em />
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td class="checkbox-column"><input type="checkbox" value='{{q.h5_filename}}' class="dwnl" name="che"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-            <tbody id="firstTable">
-                {% for q , m , a, datalink, file_exists in queryall %}
-                <tr>
-                    <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/plus.svg' %}" alt="icon more" width=30em /></a></td>
-                    <td>{{ q.id_name.namedb }}</td>
-                    <td>{{ q.id_name.classdb }}</td>
-                    <td>{{ q.id_method.method }}</td>
-                    <td>{{ q.id_method.method_specific }}</td>
-                    <!-- <td>{{ q.id_constrain.constrainversion }}</td>-->
-                    <td>{{ q.id_constrain.constrainvariable }}<br>(v. {{ q.id_constrain.constrainversion }})</td>
-                    <td>
-                        {% for mprim, msec in m %}
-                            <li><u>{{mprim}}</u>: {{msec}}</li>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for aprim, asec in a %}
-                            <li><u>{{aprim}}</u>: {{asec}}</li>
-                        {% endfor %} 
-                    </td>
-
-                    <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
-                    <td>
-                        {% if file_exists %}
-                            <a href="{% static datalink %}" download="{{q.filename}}">
-                                <img src="{% static 'compare/download.svg' %}" alt="icon download" width=30em />
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td><input type="checkbox" value='{{q.filename}}' class="dwnl" name="che"></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="#" class="prev" onclick="loadPage('{{ page_obj.previous_page_number }}')">&laquo;</a>
+            {% else %}
+                <span class="disabled">&laquo;</span>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="current">{{ num }}</span>
+                {% else %}
+                    <a href="#" onclick="loadPage('{{ num }}')">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+                <a href="#" class="next" onclick="loadPage('{{ page_obj.next_page_number }}')">&raquo;</a>
+            {% else %}
+                <span class="disabled">&raquo;</span>
+            {% endif %}
+        </div>
+        
     </div>
 </div>
-</div>
-
-
 
 {% endblock %}

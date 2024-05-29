@@ -135,7 +135,6 @@ dmypy.json
 *.gz
 *.tgz
 *.tar.gz
-*.dat
 
 # Pycharm
 .idea/

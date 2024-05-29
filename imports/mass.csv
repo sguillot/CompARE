@@ -73,4 +73,5 @@ RefBibtex,"@ARTICLE{2018ApJS..235...37A,
 RefDOI,10.3847/2041-8213/acda9a,10.3847/1538-4365/aab5b0,10.3847/2041-8213/ac03b8
 DataRepositoryDOI,None,None,None
 DataLink,None,None,None
-FileName,NS_Mass-PSRJ1614-2230-NANOgrav15yr-mass-shapiro-2.txt,NS_Mass-PSRJ1614-2230-NANOgrav11yr-mass-shapiro-1.txt,NS_Mass-PSRJ0740+6620-2020-mass-shapiro-1.txt
+FileName,NS_Mass_PSRJ1614-2230_NANOgrav15yr_mass_shapiro_2_MeanErrors.txt,NS_Mass_PSRJ1614-2230_NANOgrav11yr_mass_shapiro_1_MeanErrors.txt,NS_Mass_PSRJ0740+6620_2020_mass_shapiro_1_MeanErrors.txt
+H5FileName,NS_Mass_PSRJ1614-2230_NANOgrav15yr_mass_shapiro_2_MeanErrors.h5,NS_Mass_PSRJ1614-2230_NANOgrav11yr_mass_shapiro_1_MeanErrors.h5,NS_Mass_PSRJ0740+6620_2020_mass_shapiro_1_MeanErrors.h5

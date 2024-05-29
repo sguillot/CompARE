@@ -120,6 +120,7 @@ class ConstrainNs(models.Model):
 class Ns(models.Model):
     # Field names are made lowercase
     filename = models.CharField(db_column='FileName', primary_key=True, max_length=100)
+    h5_filename = models.CharField(db_column='H5FileName', max_length=100)
     id_ref = models.ForeignKey(RefNs, on_delete=models.CASCADE, db_column='id_ref', blank=True, null=True)
     id_name = models.ForeignKey(NameNs, on_delete=models.CASCADE, db_column='id_Name', blank=True, null=True)
     id_method = models.ForeignKey(MethodNs, on_delete=models.CASCADE, db_column='id_Method', blank=True, null=True)

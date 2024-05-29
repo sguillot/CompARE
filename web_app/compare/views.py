@@ -2,6 +2,7 @@ import datetime
 import io
 import json
 import os
+import shutil
 import zipfile
 from django.conf import settings
 import pandas as pd
@@ -11,13 +12,21 @@ from decimal import Decimal
 from compare.models import Ns, NsToModel, NsToAssumptions, MethodNs, AssumptionsNs, ModelNs, ConstrainNs, NameNs, RefNs
 from compare.compare_utils import formatting_csv
 
+from .graphs.generate_graph import plot_contours_from_h5
+from .graphs.generate_multiple_graphs import plot_contours_from_checkboxes
+from .graphs.extract_paths import extract_contour_number
+from .graphs.data_processing import process_data_to_h5, create_temp_directory, remove_temp_directory, create_h5_directory
+
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.db.models import Q
+from django.db.models import Count
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as logout_user
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 
 
 def home(request):
@@ -55,22 +64,38 @@ def keyword_filter(select_ns_prefiltered, all_keywords, keyword):
 
     return select_ns_filtered
 
+def get_distinct_values(queryset, field_name):
+    values_list = queryset.values_list(field_name, flat=True).order_by(field_name)
+    distinct_values = []
+    for value in values_list:
+        if value not in distinct_values:
+            distinct_values.append(value)
+    return distinct_values
+
+def get_sorted_distinct_values(queryset, field_name):
+    values_list = queryset.values_list(field_name, flat=True)
+    values_list_lower = list(values_list)
+    sorted_values_lower = sorted(values_list_lower, key=lambda x: x.lower())
+    distinct_values = []
+    for value in sorted_values_lower:
+        if value not in distinct_values:
+            distinct_values.append(value)
+    return [value for value in distinct_values]
 
 def visu_data(request):
 
     # We select all the Ns from the database without models and assumptions but
     # with "ref" ,"name" ,"constrain" and "method" with method select_related
     select_ns_all = Ns.objects.select_related().all().order_by('filename')
+    count_ns = select_ns_all.count()
 
     class_list = ["NS Spin", "Transiently_Accreting_NS", "NS Mass", "NS-NS mergers",
                   "PPM", "qLMXB", "Cold MSP", "Thermal INSs", "Type-I X-ray bursts"]
 
-    for ns in select_ns_all:
-        filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', ns.filename)
-        if not os.path.exists(filepath):
-            ns.file_exists = False
-        else:
-            ns.file_exists = True
+    # Paging
+    paginator = Paginator(select_ns_all, 5)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
 
     # We check for GET request
     if request.method == 'GET':
@@ -90,12 +115,12 @@ def visu_data(request):
 
             with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
                 # Add each downloaded file to the ZIP file folder
-                for filename in to_download:
-                    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', filename)
+                for h5_filename in to_download:
+                    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
                     if os.path.exists(filepath):
-                        zip_file.write(filepath, arcname=filename)
+                        zip_file.write(filepath, arcname=h5_filename)
                     else:
-                        return HttpResponseNotFound(f"File not found: {filename}")
+                        return HttpResponseNotFound(f"File not found: {h5_filename}")
 
                 zip_file.printdir()
 
@@ -107,16 +132,22 @@ def visu_data(request):
 
         # For the selection of BibTex info to download
         if bibtex_select:
-            # Convertir la chaîne JSON en liste Python
+            # Convert JSON string to Python list
             list_bibtex = json.loads(bibtex_select)
 
-            # Récupérer les informations Bibtex sélectionnées
-            selected_bibtex = select_ns_all.filter(filename__in=list_bibtex).values_list('id_ref__bibtex', flat=True)
+            # Retrieve selected records
+            selected_records = select_ns_all.filter(h5_filename__in=list_bibtex)
 
-            # Concaténer les Bibtex sélectionnés
+            # Retrieve the filenames from selected records
+            file_names = [record.filename for record in selected_records]
+
+            # Retrieve selected Bibtex information
+            selected_bibtex = select_ns_all.filter(filename__in=file_names).values_list('id_ref__bibtex', flat=True)
+
+            # Concatenate selected Bibtex
             bibtex_content = '\n\n'.join(selected_bibtex)
 
-            # Retourner le contenu Bibtex en tant que réponse HTTP avec le type MIME approprié
+            # Return the Bibtex content as an HTTP response
             response = HttpResponse(bibtex_content, content_type='text/plain')
             response['Content-Disposition'] = 'attachment; filename="Bibtex.txt"'
             return response
@@ -174,12 +205,23 @@ def visu_data(request):
             if keywords['list_assumptions_secondary']:
                 select_ns_all = keyword_filter(select_ns_all, keywords, 'list_assumptions_secondary')
 
+            # For the H5 file
+            h5_filename_list = Ns.objects.filter(filename__in=[ns.filename for ns in select_ns_all]).values_list('h5_filename', flat=True)
+            result_h5 = []
+
+            for h5_filename in h5_filename_list:
+                filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+                file_exists = os.path.exists(filepath_h5)
+                result_h5.append(file_exists)
+
             # Once the filtering is done, we put the necessary info of selected NS (select_ns_all) in a filtered_list
             filtered_list = []
-            for ns in select_ns_all:
+            for i, ns in enumerate(select_ns_all):
                 # We put in the list only the attributes shown in the table into a dictionary
                 ns_info = {'namedb': ns.id_name.namedb,
                            'filename': ns.filename,
+                           'h5_filename': h5_filename_list[i],
+                           'result_h5': result_h5[i],
                            'classdb': ns.id_name.classdb,
                            'method': ns.id_method.method,
                            'method_specific': ns.id_method.method_specific,
@@ -189,28 +231,67 @@ def visu_data(request):
                            'constrainvariable': str(ns.id_constrain.constrainvariable),
                            'doi': ns.id_ref.doi,
                            'author': ns.id_ref.author,
-                           'year': ns.id_ref.refyear
+                           'year': ns.id_ref.refyear,
+                           'countns': count_ns
                            }
 
                 # We select the filenames linked to model dependencies and add all the model dependencies to a list
                 select_ns_model = NsToModel.objects.select_related().filter(filename=ns.filename)
-                list_model_dependencies = []
+                list_model_dependencies, list_model_dependencies_primary, list_model_dependencies_secondary = [], [], []
                 for snm in select_ns_model:
                     # We pre-format the string of model dependencies (prim. and sec.)
-                    list_model_dependencies.append("<li><u>{}</u>: {}</li>".format(snm.id_model.dependenciesprimary,
-                                                                                   snm.id_model.dependenciessecondary))
-                    # The pre-formatted list is added to the dictionary
-                    ns_info['model'] = list_model_dependencies
+                    list_model_dependencies.append("<li><u class='questionmark' onmouseover='showPopup(this, \"model-popup\", \"{}\", \"{}\", \"{}\", \"{}\", \"mprim\", \"msec\")' onmouseout='hidePopup(\"model-popup-container\")'>{}</u>: {}</li>".format(
+                        snm.id_model.dependenciesprimary,
+                        snm.id_model.dependenciessecondary,
+                        snm.id_model.dependenciesdescription,
+                        snm.id_model.dependenciesreferences,
+                        snm.id_model.dependenciesprimary,
+                        snm.id_model.dependenciessecondary
+                    ))
+
+                    list_model_dependencies_primary.append(snm.id_model.dependenciesprimary)
+                    list_model_dependencies_secondary.append(snm.id_model.dependenciessecondary)
+                
+                # Check if all the values in the list are None or "None".
+                if all(val is None or val == "None" for val in list_model_dependencies_primary):
+                    list_model_dependencies_primary = ["None"]
+
+                if all(val is None or val == "None" for val in list_model_dependencies_secondary):
+                    list_model_dependencies_secondary = ["None"]
+
+                # The pre-formatted list is added to the dictionary
+                ns_info['model'] = list_model_dependencies
+                ns_info['modelprimary'] = list_model_dependencies_primary
+                ns_info['modelsecondary'] = list_model_dependencies_secondary
 
                 # We select the filenames linked to assumptions and add all the models to a list
                 select_ns_ass = NsToAssumptions.objects.select_related().filter(filename=ns.filename)
-                list_assumptions = []
+                list_assumptions, list_assumptionsprimary, list_assumptionssecondary = [], [], []
                 for snm in select_ns_ass:
                     # we get the assumption (prim. and sec.) and put it in a string and after the dictionary of the NS
-                    list_assumptions.append("<li><u>{}</u>: {}</li>".format(snm.id_assumptions.assumptionsprimary,
-                                                                            snm.id_assumptions.assumptionssecondary))
-                    # The pre-formatted list is added to the dictionary
-                    ns_info['assumptions'] = list_assumptions
+                    list_assumptions.append("<li><u class='questionmark' onmouseover='showPopup(this, \"assumption-popup\", \"{}\", \"{}\", \"{}\", \"{}\", \"aprim\", \"asec\")' onmouseout='hidePopup(\"assumption-popup-container\")'>{}</u>: {}</li>".format(
+                        snm.id_assumptions.assumptionsprimary,
+                        snm.id_assumptions.assumptionssecondary,
+                        snm.id_assumptions.assumptionsdescription,
+                        snm.id_assumptions.assumptionsreferences,
+                        snm.id_assumptions.assumptionsprimary,
+                        snm.id_assumptions.assumptionssecondary
+                    ))
+
+                    list_assumptionsprimary.append(snm.id_assumptions.assumptionsprimary)
+                    list_assumptionssecondary.append(snm.id_assumptions.assumptionssecondary)
+
+                # Check if all the values in the list are None or "None".
+                if all(val is None or val == "None" for val in list_assumptionsprimary):
+                    list_assumptionsprimary = ["None"]
+
+                if all(val is None or val == "None" for val in list_assumptionssecondary):
+                    list_assumptionssecondary = ["None"]
+
+                # The pre-formatted list is added to the dictionary
+                ns_info['assumptions'] = list_assumptions
+                ns_info['assumptionsprimary'] = list_assumptionsprimary
+                ns_info['assumptionssecondary'] = list_assumptionssecondary
 
                 # We add the dictionary of the ns to the filtered_list of all ns
                 filtered_list.append(ns_info)
@@ -219,55 +300,77 @@ def visu_data(request):
             return HttpResponse(json.dumps(filtered_list), content_type='application/json',)
 
         else:
-            # We add the model dependencies, assumptions and files of all NS
+            # We add the model dependencies, assumptions, files of all NS and their existence to a list
             list_ns_model_dependencies = []
             list_ns_assumptions = []
             list_ns_files = []
+            list_file_exists = []
 
-            for ns in select_ns_all:
-                # We make the file paths from the filenames (to be used by the django template)
-                list_ns_files.append("data/"+ns.filename)
+            # Pagination for filtered results
+            paginator = Paginator(select_ns_all, 5)  # 5 entries per page
+            page_number = request.GET.get('page', 1)
+            page_obj = paginator.get_page(page_number)
 
-                # We select the filenames linked to models
+            for ns in page_obj:
+
+                filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', ns.h5_filename)
+                # We create file paths from file names (to be used by the Django model)
+                list_ns_files.append("h5/"+ns.h5_filename)
+                # We check if the files exist
+                list_file_exists.append(os.path.exists(filepath))
+
+                # We select the file names linked to the models
                 select_ns_model_dependencies = NsToModel.objects.select_related().filter(filename=ns.filename)
-                # We select the filenames linked to assumptions
+                # We select the file names linked to the hypotheses
                 select_ns_assumptions = NsToAssumptions.objects.select_related().filter(filename=ns.filename)
 
-                list_temp_prim = []
-                list_temp_sec = []
+                # Store dependencies as tuples in a single list
+                dependencies_list = []
                 for s in select_ns_model_dependencies:
-                    list_temp_prim.append(s.id_model.dependenciesprimary)
-                    list_temp_sec.append(s.id_model.dependenciessecondary)
-                list_ns_model_dependencies.append(zip(list_temp_prim, list_temp_sec))
+                    dependencies_list.append((s.id_model.dependenciesprimary, s.id_model.dependenciessecondary, s.id_model.dependenciesdescription, s.id_model.dependenciesreferences))
+                list_ns_model_dependencies.append(dependencies_list)
 
-                list_temp_prim = []
-                list_temp_sec = []
+                # Let's store the hypotheses as tuples in a single list
+                assumptions_list = []
                 for s in select_ns_assumptions:
-                    list_temp_prim.append(s.id_assumptions.assumptionsprimary)
-                    list_temp_sec.append(s.id_assumptions.assumptionssecondary)
-                list_ns_assumptions.append(zip(list_temp_prim, list_temp_sec))
+                    assumptions_list.append((s.id_assumptions.assumptionsprimary, s.id_assumptions.assumptionssecondary, s.id_assumptions.assumptionsdescription, s.id_assumptions.assumptionsreferences))
+                list_ns_assumptions.append(assumptions_list)
 
             # Zip all the data into a tuple
-            select_ns_all_zip = zip(select_ns_all,
+            select_ns_all_zip = zip(page_obj,
                                     list_ns_model_dependencies,
                                     list_ns_assumptions,
                                     list_ns_files,
-                                    [ns.file_exists for ns in select_ns_all])
+                                    list_file_exists)
+            
+            # Sorted alphabetically + avoids redundancy
+            orderMethodDistinct = get_sorted_distinct_values(MethodNs.objects, 'method')
+            orderConstraintVariableDistinct = get_sorted_distinct_values(ConstrainNs.objects, 'constrainvariable')
+            orderConstraintTypeDistinct = get_sorted_distinct_values(ConstrainNs.objects, 'constraintype')
+
+            orderDepPrimaryDistinct = get_distinct_values(ModelNs.objects, 'dependenciesprimary')
+            orderDepSecondaryDistinct = get_distinct_values(ModelNs.objects, 'dependenciessecondary')
+            orderAssPrimaryDistinct = get_distinct_values(AssumptionsNs.objects, 'assumptionsprimary')
+            orderAssSecondaryDistinct = get_distinct_values(AssumptionsNs.objects, 'assumptionssecondary')
 
             # We select the data that will appear in the table, and put into a dictionary
             select_all_ns = {"queryall": select_ns_all_zip,
-                             "queryMeth": MethodNs.objects.values('method').distinct(),
-                             "queryConV": ConstrainNs.objects.values('constrainvariable').distinct(),
-                             "queryConT": ConstrainNs.objects.values('constraintype').distinct(),
-                             "queryDep": ModelNs.objects.values('dependenciesprimary').distinct(),
-                             "queryDepS": ModelNs.objects.values('dependenciessecondary').distinct(),
-                             "queryAss": AssumptionsNs.objects.values('assumptionsprimary').distinct(),
-                             "queryAssS": AssumptionsNs.objects.values('assumptionssecondary').distinct()
+                             "queryMeth": orderMethodDistinct,
+                             "queryConV": orderConstraintVariableDistinct,
+                             "queryConT": orderConstraintTypeDistinct,
+                             "queryDep": orderDepPrimaryDistinct,
+                             "queryDepS": orderDepSecondaryDistinct,
+                             "queryAss": orderAssPrimaryDistinct,
+                             "queryAssS": orderAssSecondaryDistinct,
+                             "page_obj": page_obj,
                              }
+            
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                table_html = render_to_string('compare/visu_data.html', {'queryall': select_ns_all_zip, 'page_obj': page_obj})
+                return JsonResponse({'table': table_html})
 
             # Send the dictionary to the template
             return render(request, "compare/visu_data.html", select_all_ns)
-
 
 def detail(request, id):
 
@@ -284,10 +387,46 @@ def detail(request, id):
 
         # Removing the file from the database
         file.delete()
-        return HttpResponse(json.dumps('yes'), content_type='application/json',)
+        return HttpResponse(json.dumps('yes'), content_type='application/json')
 
     # We retrieve all the data linked to the id(filename) of the NS in a query set
     ns_list = Ns.objects.select_related().get(filename=id)
+
+    h5_filename = ns_list.h5_filename
+    filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+
+    file_exists = os.path.exists(filepath_h5)
+
+    contour_plot, subfolders_and_colors, alert_message = None, None, None
+    extracted_contours = []
+
+    if file_exists:
+        contour_plot, unique_colors = plot_contours_from_h5(filepath_h5)
+
+        if contour_plot == 0:
+            alert_message = "The H5 file does not contain the necessary data to generate a graph."
+        else:
+            contour_data = extract_contour_number(contour_plot)
+            contour_data_list = contour_data.split(",") 
+            number_elements = len(contour_data_list) 
+
+            if number_elements > 1:
+                extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
+                extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+            else:
+                extracted_contours = 1
+
+            # Get subfolders in EOS folder & colors used in the plot
+            eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
+            subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
+
+            # Combine these two lists
+            if len(unique_colors) > 0 and len(subfolders) > 0:
+                subfolders_and_colors = zip(subfolders, unique_colors)
+            else:
+                subfolders_and_colors = 0
+    else:
+        alert_message = "The H5 file cannot be found. Impossible to generate graph."
 
     # We retrieve all the models dependencies linked to the id(filename) of the NS
     ns_model_dependencies = NsToModel.objects.select_related('id_model').filter(filename=id)
@@ -298,7 +437,7 @@ def detail(request, id):
     # Trick to link to ADS page (need to replace the &, for ex in A&A)
     ns_list.id_ref.shortlink = ns_list.id_ref.short.replace("&", "%26")
 
-    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'data', id)
+    filepath = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
     file_exists = os.path.exists(filepath)
 
     for mod in ns_model_dependencies:
@@ -321,10 +460,83 @@ def detail(request, id):
     select = {"queryall": ns_list,
               "queryMo": ns_model_dependencies,
               "queryAs": ns_assumptions,
-              "file_exists": file_exists}
+              "alert_message": alert_message,
+              "file_exists": file_exists,
+              "contour_plot": contour_plot,
+              "filename": h5_filename,
+              "extracted_contours": extracted_contours,
+              "subfolders_and_colors": subfolders_and_colors}
 
     return render(request, 'compare/detail.html', select)
 
+def generate_plot(request):
+    if request.method == 'GET' and 'files[]' in request.GET:
+        files = request.GET.getlist('files[]')
+
+        html_graphs, h5_filepath_array, h5_filename_array, extracted_contours = [], [], [], []
+        h5_filename_array_contours, h5_filename_array_errors = [], []
+        
+        for h5_filename in files:
+            # H5 file recovery based on file name from the database
+            ns_list = Ns.objects.select_related().get(h5_filename=h5_filename)
+            h5_filename = ns_list.h5_filename
+            filepath_h5 = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+            
+            # Check if the corresponding H5 file exists
+            if os.path.exists(filepath_h5):
+                h5_filepath_array.append(filepath_h5)
+                h5_filename_array.append(h5_filename)
+            else:
+                alert_message = "The H5 file cannot be found. Impossible to generate graph." 
+
+        for files in h5_filename_array:
+            if "NS_Mass" in files and files.endswith("MeanErrors.h5"):
+                h5_filename_array_errors.append(files)
+            elif "NS_Spin" in files and files.endswith("MeanErrors.h5"):
+                pass
+            else:
+                h5_filename_array_contours.append(files)
+
+        if len(h5_filename_array_contours) == 0:
+            h5_filename_array_contours = 0
+
+        # If the table contains at least one element, plot the graph and extract the relevant information
+        if len(h5_filepath_array) > 0:
+            contour_plot_html, unique_colors_eos, unique_colors_errors = plot_contours_from_checkboxes(h5_filepath_array)
+            html_graphs.append(contour_plot_html)
+
+            contour_data = extract_contour_number(contour_plot_html)
+            contour_data_list = contour_data.split(",") 
+            number_elements = len(contour_data_list)
+
+            if number_elements > 1:
+                extracted_contours.extend([contour.strip("'") for contour in contour_data.strip("[]").split(", ")])
+                extracted_contours = [contour.replace('"', '') for contour in extracted_contours]
+            else:
+                extracted_contours = 1
+
+            # Get subfolders in EOS folder & colors used in the plot
+            eos_folder = os.path.join(settings.STATIC_ROOT, 'static', 'eos_radius_mass')
+            subfolders = [subfolder for subfolder in os.listdir(eos_folder) if os.path.isdir(os.path.join(eos_folder, subfolder))]
+
+            # Get H5 error filenames
+            if(len(h5_filename_array_errors) > 0 and len(unique_colors_errors) > 0): 
+                errors_and_files = zip(h5_filename_array_errors, unique_colors_errors)
+            else:
+                errors_and_files = 0
+
+            # Combine these two lists
+            subfolders_and_colors = zip(subfolders, unique_colors_eos)
+        else:
+            return render(request, 'compare/plot.html', {'alert_message': alert_message})
+        
+        context = {'html_graphs': html_graphs[0],
+                   'extracted_contours': extracted_contours,
+                   'filenames_contours': h5_filename_array_contours,
+                   'errors_and_files': errors_and_files,
+                   'subfolders_and_colors': subfolders_and_colors}
+        
+        return render(request, 'compare/plot.html', context)
 
 # TODO:  Next one to check and reformat
 @login_required
@@ -375,7 +587,6 @@ def modify(request, id):
     for cov in constrainvar:
         listconstrainvar.append(cov[0])
 
-
     # We check for Post request
     if request.method == 'POST':
         # We check what table the user want to modify
@@ -386,7 +597,6 @@ def modify(request, id):
 
             name = request.POST.get('namens')
             classNs = nameNS.classdb
-            name = request.POST.get('namens')
 
             if len(name) <= 0 or len(classNs) <= 0:
                 messages.error(request, "No")
@@ -439,37 +649,6 @@ def modify(request, id):
                     logfile.writelines(wri)
                     logfile.close()
 
-                # if the user clic on the add button
-                elif 'add' in request.POST:
-                    # We check if the name alreday exist  and linked it if it is the case
-                    if (NameNs.objects.filter(namedb=name, classdb=classNs,
-                                              namesimbad=nameSin, classsimbad=classSin,
-                                              ra=ra,declination=dec,localisationfile=loc)):
-                        nameExist = NameNs.objects.filter(namedb=name, classdb=classNs,
-                                                          namesimbad=nameSin, classsimbad=classSin,
-                                                          ra=ra, declination=dec, localisationfile=loc)
-                        nameExist = nameExist[0]
-                        ns_list.id_name = nameExist
-                        ns_list.save()
-                        messages.success(request, "jajajaja")
-                    # we add the name
-                    else:
-                        nameAdd = NameNs(namedb=name, classdb=classNs,
-                                         namesimbad=nameSin, classsimbad=classSin,
-                                         ra=ra, declination=dec,
-                                         localisationfile=loc, eventdate=event)
-                        nameAdd.save()
-                        ns_list.id_name = nameAdd
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    #to write in the logo file
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content: Name ', str(ns_list.id_name)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
             return redirect('modify', id)
 
         # We do the same things for all field of the table
@@ -510,29 +689,6 @@ def modify(request, id):
                     logfile.writelines(wri)
                     logfile.close()
 
-                elif 'add' in request.POST:
-                    if RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                            doi=doi,repositorydoi=repdoi ,datalink=datal):
-                        refExist = RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                                        doi=doi, repositorydoi=repdoi, datalink=datal)
-                        refExist = refExist[0]
-                        ns_list.id_ref = refExist
-                        ns_list.save()
-                        messages.success(request, "jojojojo")
-                    else:
-                        ref = RefNs(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                    doi=doi, repositorydoi=repdoi, atalink=datal)
-                        ref.save()
-                        ns_list.id_ref = ref
-                        ns_list.save()
-                        messages.success(request,"Yes")
-
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content: Ref ', str(ns_list.id_ref)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
             return redirect('modify', id)
 
         if 'method' in request.POST:
@@ -556,29 +712,6 @@ def modify(request, id):
                     logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
                            str(datetime.datetime.now())+'\n', 'Content:', str(MethNS)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
-                elif 'add' in request.POST:
-                    if MethodNs.objects.filter(method=meth, method_specific=methS,
-                                               datadate=datad, processinfinfo=proceInfo):
-                        methodExist = MethodNs.objects.filter(method=meth, method_specific=methS,
-                                                              datadate=datad,processinfinfo =proceInfo)
-                        methodExist = methodExist[0]
-                        ns_list.id_method = methodExist
-                        ns_list.save()
-                        messages.success(request, "Yes")
-                    else:
-                        method = MethodNs(method=meth, method_specific=methS,
-                                          atadate=datad, processinfinfo=proceInfo)
-                        method.save()
-                        ns_list.id_method = method
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content:Method ', str(ns_list.id_method)+'\n\n']
                     logfile.writelines(wri)
                     logfile.close()
 
@@ -608,38 +741,12 @@ def modify(request, id):
 
                     messages.success(request,"Yes")
 
-                elif 'add' in request.POST:
-                    if ConstrainNs.objects.filter(constraintype=constrainT,
-                                                  constrainvariable=constrainVar,
-                                                  constrainversion=int(constrainV)):
-                        constrainExist = ConstrainNs.objects.filter(constraintype=constrainT,
-                                                                    constrainvariable=constrainVar,
-                                                                    constrainversion=int(constrainV))
-                        constrainExist = constrainExist[0]
-                        ns_list.id_constrain = constrainExist
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    else:
-                        constrain = ConstrainNs(constraintype=constrainT,
-                                                constrainvariable=constrainVar,
-                                                constrainversion=constrainV)
-                        constrain.save()
-                        ns_list.id_constrain = constrain
-                        ns_list.save()
-                        messages.success(request, "Yes")
-
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content: ', str(ns_list.id_constrain)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
-
             return redirect('modify', id)
 
         if 'model' in request.POST:
 
             model = ModelNs.objects.get(id_model=request.POST.get('model'))
+            id_model = model.id_model
             depP = request.POST.get('dependenciesprimary')
             depS = request.POST.get('dependenciessecondary')
             depD = request.POST.get('dependenciesdescription')
@@ -657,54 +764,84 @@ def modify(request, id):
             if len(depR) < 1:
                 depR = None
 
-            # TODO: CHECK THIS ELSE 'ALONE' HERE
-            else:
-                if 'update' in request.POST:
-                    model.dependenciesprimary = depP
-                    model.dependenciessecondary = depS
-                    model.dependenciesdescription = depD
-                    model.dependenciesreferences = depR
-                    model.save()
-                    messages.success(request,"Yes")
+            if 'update' in request.POST:
+                model.dependenciesprimary = depP
+                model.dependenciessecondary = depS
+                model.dependenciesdescription = depD
+                model.dependenciesreferences = depR
+                model.save()
+                messages.success(request,"Yes")
 
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content:', str(model)+'\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Modify:\n', 'User:', str(request.user.get_username())+'\n', 'Date:',
+                        str(datetime.datetime.now())+'\n', 'Content:', str(model)+'\n\n']
+                logfile.writelines(wri)
+                logfile.close()
 
-                elif 'add' in request.POST:
-                    if(ModelNs.objects.filter(dependenciesprimary=depP,
-                                              dependenciessecondary=depS,
-                                              dependenciesdescription=depD,
-                                              dependenciesreferences=depR)):
-                        modelExist = ModelNs.objects.filter(dependenciesprimary=depP,
-                                                            dependenciessecondary=depS,
-                                                            dependenciesdescription=depD,
-                                                            dependenciesreferences=depR)
-                        modelExist = modelExist[0]
-                        model.id_model = modelExist
-                        model.save()
+            elif 'delete' in request.POST:
+                ns_instance = ns_list  # Get the Ns instance from the view
 
-                    else:
-                        model = ModelNs(dependenciesprimary=depP,
-                                        dependenciessecondary=depS,
-                                        dependenciesdescription=depD,
-                                        dependenciesreferences=depR)
-                        model.save()
-                        messages.success(request,"Yes")
+                # Count the number of references to the model
+                references_count = NsToModel.objects.filter(id_model=model).count()
+
+                if references_count == 1:
+                    NsToModel.objects.filter(filename=ns_instance, id_model=model).delete()
+                    ModelNs.objects.filter(id_model=id_model).delete()
+                else:
+                    NsToModel.objects.filter(filename=ns_instance, id_model=model).delete()
+
+                messages.success(request, "Model dependency deleted successfully.")
+
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Delete:\n', 'User:', str(request.user.get_username())+'\n',
+                        'Date:', str(datetime.datetime.now())+'\n', 'Content:', str(model)+'\n\n']
+                logfile.writelines(wri)
+                logfile.close()
+
+            return redirect('modify', id)
+
+        if 'modelAdd' in request.POST:
+
+            if all(request.POST.get(field) for field in ['dependenciesprimary_new', 'dependenciessecondary_new', 'dependenciesdescription_new', 'dependenciesreferences_new']):
+                # Extract form data
+                depP_new = request.POST.get('dependenciesprimary_new')
+                depS_new = request.POST.get('dependenciessecondary_new')
+                depD_new = request.POST.get('dependenciesdescription_new')
+                depR_new = request.POST.get('dependenciesreferences_new')
+                
+                # Check if the new dependency already exists
+                if ModelNs.objects.filter(dependenciesprimary=depP_new,
+                                        dependenciessecondary=depS_new,
+                                        dependenciesdescription=depD_new,
+                                        dependenciesreferences=depR_new).exists():
+                    messages.error(request, "This model dependency already exists.")
+                else:
+                    # Create a new model dependency entry
+                    new_dependency = ModelNs(dependenciesprimary=depP_new, dependenciessecondary=depS_new, dependenciesdescription=depD_new, dependenciesreferences=depR_new)
+                    new_dependency.save()
+
+                    # Add a new entry in the NsToModel table
+                    ns_instance = ns_list  # Get the Ns instance from the view
+                    ns_to_model_entry = NsToModel(filename=ns_instance, id_model=new_dependency)
+                    ns_to_model_entry.save()
+
+                    messages.success(request, "New model dependency added successfully.")
 
                     logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username())+'\n',
-                           'Date:',str(datetime.datetime.now())+'\n', 'Content: ', str(model)+'\n\n']
+                            'Date:',str(datetime.datetime.now())+'\n', 'Content: ', str(new_dependency)+'\n\n']
                     logfile.writelines(wri)
                     logfile.close()
+            else:
+                # If necessary fields are missing, display an error message
+                messages.error(request, "All fields are required to add a new model dependency.")
 
             return redirect('modify', id)
 
         if 'assumption' in request.POST:
 
             assumption = AssumptionsNs.objects.get(id_assumptions=request.POST.get('assumption'))
+            id_assumption = assumption.id_assumptions
             AssP = request.POST.get('assumptionsprimary')
             AssS = request.POST.get('assumptionssecondary')
             AssD = request.POST.get('assumptionsdescription')
@@ -722,48 +859,77 @@ def modify(request, id):
             if len(AssR) < 1:
                 AssR = None
 
-            # TODO: CHECK THIS ELSE 'ALONE' HERE
-            else:
-                if 'update' in request.POST:
-                    assumption.assumptionsprimary = AssP
-                    assumption.assumptionssecondary = AssS
-                    assumption.assumptionsdescription = AssD
-                    assumption.assumptionsreferences = AssR
-                    assumption.save()
-                    messages.success(request,"Yes")
+            if 'update' in request.POST:
+                assumption.assumptionsprimary = AssP
+                assumption.assumptionssecondary = AssS
+                assumption.assumptionsdescription = AssD
+                assumption.assumptionsreferences = AssR
+                assumption.save()
+                messages.success(request,"Yes")
 
-                    logfile = open('compare/static/compare/log.txt', "a")
-                    wri = ['Modify:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
-                           str(datetime.datetime.now()) + '\n', 'Content:', str(assumption) + '\n\n']
-                    logfile.writelines(wri)
-                    logfile.close()
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Modify:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
+                        str(datetime.datetime.now()) + '\n', 'Content:', str(assumption) + '\n\n']
+                logfile.writelines(wri)
+                logfile.close()
 
-                elif 'add' in request.POST:
-                    if(AssumptionsNs.objects.filter(assumptionsprimary=AssP,
-                                                    assumptionssecondary=AssS,
-                                                    assumptionsdescription=AssD,
-                                                    assumptionsreferences=AssR)):
+            elif 'delete' in request.POST:
+                ns_instance = ns_list # Get the Ns instance from the view
 
-                        assumptionExist = AssumptionsNs.objects.filter(assumptionsprimary=AssP,
-                                                                       assumptionssecondary=AssS,
-                                                                       assumptionsdescription=AssD,
-                                                                       assumptionsreferences=AssR)
-                        assumptionExist = assumptionExist[0]
-                        assumption.id_assumptions = assumptionExist
-                        assumption.save()
-                    else:
-                        assumption = AssumptionsNs(assumptionsprimary=AssP,
-                                                   assumptionssecondary=AssS,
-                                                   assumptionsdescription=AssD,
-                                                   assumptionsreferences=AssR)
-                        assumption.save()
-                        messages.success(request,"Yes")
+                # Count the number of references to the assumption
+                references_count = NsToAssumptions.objects.filter(id_assumptions=assumption).count()
+
+                if references_count == 1:
+                    NsToAssumptions.objects.filter(filename=ns_instance, id_assumptions=assumption).delete()
+                    AssumptionsNs.objects.filter(id_assumptions=id_assumption).delete()
+                else:
+                    NsToAssumptions.objects.filter(filename=ns_instance, id_assumptions=assumption).delete()
+
+                messages.success(request, "Assumption deleted successfully.")
+
+                logfile = open('compare/static/compare/log.txt', "a")
+                wri = ['Delete:\n', 'User:', str(request.user.get_username()) + '\n',
+                        'Date:', str(datetime.datetime.now()) + '\n', 'Content:', str(assumption) + '\n\n']
+                logfile.writelines(wri)
+                logfile.close()
+
+            return redirect('modify', id)
+
+        if 'assumptionAdd' in request.POST:
+
+            if all(request.POST.get(field) for field in ['assumptionsprimary_new', 'assumptionssecondary_new', 'assumptionsdescription_new', 'assumptionsreferences_new']):
+                # Extract form data
+                AssP_new = request.POST.get('assumptionsprimary_new')
+                AssS_new = request.POST.get('assumptionssecondary_new')
+                AssD_new = request.POST.get('assumptionsdescription_new')
+                AssR_new = request.POST.get('assumptionsreferences_new')
+
+                # Check if the new assumption already exists
+                if AssumptionsNs.objects.filter(assumptionsprimary=AssP_new,
+                                            assumptionssecondary=AssS_new,
+                                            assumptionsdescription=AssD_new,
+                                            assumptionsreferences=AssR_new).exists():
+                    messages.error(request, "This assumption already exists.")
+                else:
+                    # Create a new assumption entry
+                    new_assumption = AssumptionsNs(assumptionsprimary=AssP_new, assumptionssecondary=AssS_new, assumptionsdescription=AssD_new, assumptionsreferences=AssR_new)
+                    new_assumption.save()
+
+                    # Add a new entry in the NsToAssumptions table
+                    ns_instance = ns_list  # Get the Ns instance from the view
+                    ns_to_assumption_entry = NsToAssumptions(filename=ns_instance, id_assumptions=new_assumption)
+                    ns_to_assumption_entry.save()
+
+                    messages.success(request, "New assumption added successfully.")
 
                     logfile = open('compare/static/compare/log.txt', "a")
                     wri = ['Add:\n', 'User:', str(request.user.get_username()) + '\n', 'Date:',
-                           str(datetime.datetime.now()) + '\n', 'Content:Assumptions ', str(assumption) + '\n\n']
+                            str(datetime.datetime.now()) + '\n', 'Content:Assumptions ', str(new_assumption) + '\n\n']
                     logfile.writelines(wri)
                     logfile.close()
+            else:
+                # If necessary fields are missing, display an error message
+                messages.error(request, "All fields are required to add a new assumption.")
 
             return redirect('modify', id)
 
@@ -872,6 +1038,8 @@ def insert_data(request):
 
                     # Model dependencies and assumptions are places in lists
                     filename = d['FileName'][i]
+
+                    h5filename = d['H5FileName'][i]
 
                     listmo = d['ModelDependenciesPrimary'][i].split(",")
 
@@ -1095,6 +1263,7 @@ def insert_data(request):
 
                     # we create the new NS
                     file = Ns(filename=filename,
+                              h5_filename=h5filename,
                               id_ref=idR, id_name=idN,
                               id_method=idM, id_constrain=idC
                               )
@@ -1196,60 +1365,101 @@ def insert_data(request):
                         mes3 += "{} ({})  -  ".format(not_in, not_inserted[not_in])
                     messages.success(request, mes3)
 
-        # for insertion manual we check what the user wants to insert
-        elif (request.POST.get('hid') == 'formAddName' ):
+    if (request.FILES.get('filetoload')):
 
-            # verifications of the value
-            na = request.POST.get('name')
-            classdb = request.POST.get('class')
+        # We get the name of the file
+        datafile = request.FILES['filetoload']
 
-            if len(na) <= 0 or len(classdb) <= 0:
-                messages.error(request, "L'insertion de Name n'est pas correcte")
+        if datafile:
+
+            # Check file format
+            if not datafile.name.endswith(('.txt', '.npy')):
+                message = "The file format must be .txt or .npy."
+                return HttpResponse(json.dumps(message), content_type='application/json',)
+
+            # Recover file name without extension
+            message = os.path.splitext(datafile.name)[0]
+
+            # Check file name without extension
+            valid_names = ["MCMCSamples", "ProbaDistrib", "Quantiles", "MeanErrors", "PosteriorSamples", "Contours"]
+            if not any(message.endswith(name) for name in valid_names):
+                message = "The file does not have the correct nomenclature."
+                return HttpResponse(json.dumps(message), content_type='application/json',)
+
+            create_temp_directory()
+
+            destination_path = os.path.join(settings.STATIC_ROOT, 'temp', datafile.name)
+            check_path = os.path.join(settings.STATIC_ROOT, 'static', 'data')
+
+            # Get the list of files in the check_path directory
+            files_in_check_path = os.listdir(check_path)
+
+            # Check if datafile.name exists in the files_in_check_path list
+            if datafile.name in files_in_check_path:
+                message = "The file already exists."
+                return HttpResponse(json.dumps(message), content_type='application/json',)
+
+            with open(destination_path, 'wb+') as destination:
+                for chunk in datafile.chunks():
+                    destination.write(chunk)
+
+            # Call the process_data_to_h5 function with the full file path
+            process_data_to_h5(destination_path)
+
+    # for insertion manual we check what the user wants to insert
+    if (request.POST.get('hid') == 'formAddName' ):
+
+        # verifications of the value
+        na = request.POST.get('name')
+        classdb = request.POST.get('class')
+
+        if len(na) <= 0 or len(classdb) <= 0:
+            messages.error(request, "Name insertion not correct")
+        else:
+            nameS = request.POST.get('nameS')
+            if len(nameS) < 1:
+                nameS = None
+
+            classS = request.POST.get('classS')
+            if len(classS) < 1:
+                classS = None
+
+            r = request.POST.get('ra')
+            if len(r) > 1:
+                r = Decimal(r)
             else:
-                nameS = request.POST.get('nameS')
-                if len(nameS) < 1:
-                    nameS = None
+                r = None
 
-                classS = request.POST.get('classS')
-                if len(classS) < 1:
-                    classS = None
+            dec = request.POST.get('dec')
+            if len(dec)>1:
+                dec = Decimal(dec)
+            else:
+                dec = None
 
-                r = request.POST.get('ra')
-                if len(r) > 1:
-                    r = Decimal(r)
-                else:
-                    r = None
+            loc = request.POST.get('localisationfile')
+            if len(loc) < 1:
+                loc = None
 
-                dec = request.POST.get('dec')
-                if len(dec)>1:
-                    dec = Decimal(dec)
-                else:
-                    dec = None
+            dat = request.POST.get('eventdate')
+            if len(dat) < 1:
+                dat = None
 
-                loc = request.POST.get('localisationfile')
-                if len(loc) < 1:
-                    loc = None
+            if NameNs.objects.filter(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
+                                        ra=r, declination=dec, localisationfile=loc, eventdate=dat):
+                mess = "Name already exists"
+                messages.error(request,"Name already exists")
+            else:
+                # We create the new name
+                name = NameNs(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
+                                ra=r, declination=dec, localisationfile=loc, eventdate=dat)
+                name.save()
 
-                dat = request.POST.get('eventdate')
-                if len(dat) < 1:
-                    dat = None
-
-                if NameNs.objects.filter(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
-                                         ra=r, declination=dec, localisationfile=loc, eventdate=dat):
-                    mess = "Name already exists"
-                    messages.error(request,"Name already exists")
-                else:
-                    # We create the new name
-                    name = NameNs(namedb=na, classdb=classdb, namesimbad=nameS, classsimbad=classS,
-                                  ra=r, declination=dec, localisationfile=loc, eventdate=dat)
-                    name.save()
-
-                    #to write in the log file
-                    fichierlog = open('compare/static/compare/log.txt', "a")
-                    wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
-                           str(datetime.datetime.now())+'\n', 'Content:', str(name)+'\n\n']
-                    fichierlog.writelines(wri)
-                    fichierlog.close()
+                #to write in the log file
+                fichierlog = open('compare/static/compare/log.txt', "a")
+                wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
+                        str(datetime.datetime.now())+'\n', 'Content:', str(name)+'\n\n']
+                fichierlog.writelines(wri)
+                fichierlog.close()
 
     # same things for ref
     if (request.POST.get('hid') == 'formAddRef' ):
@@ -1261,7 +1471,7 @@ def insert_data(request):
         doi = request.POST.get('doi')
 
         if len(auth) <= 0 or len(year) <= 0 or len(short) <= 0 or len(bibtex) <= 0 or len(doi) <= 0:
-            messages.error(request,"L'insertion de Ref n'est pas correct")
+            messages.error(request,"Ref insertion not correct")
         else:
             repdoi = request.POST.get('repositorydoi')
             if len(repdoi) < 1:
@@ -1293,21 +1503,21 @@ def insert_data(request):
 
         # TODO:  Fix these conditions:  for ex with:   insert['filename'] is ''
         if (len(insert['filename']) <= 0):
-            mess = "/!\ ERROR /!\: Please enter a Filename"
+            mess = "ERROR : Please enter a Filename"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         elif (insert['name'] == "opt") or (insert['ref']== 'opt'):
-            mess = "/!\ ERROR /!\: Please select a Name or/and a Ref"
+            mess = "ERROR : Please select a Name or/and a Ref"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         elif (len(insert['method']['methodS']) <= 0) or \
              (len(insert['method']['methodD']) <=0 ) or \
              (len(insert['method']['methodP']) <=0 ):
-            mess = "/!\ ERROR /!\: Please enter a valid Method"
+            mess = "ERROR : Please enter a valid Method"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         elif len(insert['constrain']['constrainVer']) <= 0:
-            mess = "/!\ ERROR /!\: Please enter a valid Constrain"
+            mess = "ERROR : Please enter a valid Constrain"
             return HttpResponse(json.dumps(mess), content_type='application/json',)
 
         else:
@@ -1359,7 +1569,7 @@ def insert_data(request):
                 fichierlog.close()
 
             # We create the new ns with all the field
-            ns = Ns(filename=insert['filename'],
+            ns = Ns(filename=insert['filename'], h5_filename=insert['h5filename'],
                     id_ref=ref, id_name=name,
                     id_method=methodId, id_constrain=constrainId)
             ns.save()
@@ -1368,7 +1578,7 @@ def insert_data(request):
 
             ns = Ns.objects.get(filename=insert['filename'])
             # for all the model we verify the value and create the object ,
-            # if alreday exiqt we linked it , same as the others
+            # if already exist we linked it, same as the others
             for mod in insert['model']:
 
                 if len(insert['model'][mod][0]) < 1:
@@ -1425,7 +1635,7 @@ def insert_data(request):
                 if len(insert['assumptions'][ass][2]) < 1:
                     insert['assumptions'][ass][2] = None
 
-                if len(insert['massumptionsodel'][ass][3]) < 1:
+                if len(insert['assumptions'][ass][3]) < 1:
                     insert['assumptions'][ass][3] = None
 
                 if (AssumptionsNs.objects.filter(assumptionsprimary=insert['assumptions'][ass][0],
@@ -1455,6 +1665,29 @@ def insert_data(request):
                 nsass = NsToAssumptions(filename=ns, id_assumptions=assumptionsId)
                 nsass.save()
 
+        create_h5_directory()
+
+        temp_path = os.path.join(settings.STATIC_ROOT, 'temp')
+
+        for filename in os.listdir(temp_path):
+            if filename.endswith(('.txt', '.npy')):
+                txt_npy_filepath = os.path.join(temp_path, filename)
+                txt_npy_filename = filename
+                data_path = os.path.join(settings.STATIC_ROOT, 'static', 'data', txt_npy_filename)
+
+            if filename.endswith('.h5'):
+                h5_filepath = os.path.join(temp_path, filename)
+                h5_filename = filename
+                h5_path = os.path.join(settings.STATIC_ROOT, 'static', 'h5', h5_filename)
+
+        if os.path.isfile(txt_npy_filepath):
+            shutil.move(txt_npy_filepath, data_path)
+
+        if os.path.isfile(h5_filepath):
+            shutil.move(h5_filepath, h5_path)
+
+        remove_temp_directory()
+
         fichierlog = open('compare/static/compare/log.txt', "a")
         wri = ['User:', str(request.user.get_username())+'\n', 'Date:',
                str(datetime.datetime.now())+'\n', 'Content:', str(ns)+'\n\n']
@@ -1464,13 +1697,12 @@ def insert_data(request):
         redirect = 'add'
         return HttpResponse(json.dumps(redirect), content_type='application/json',)
 
-    # We select the value for the dropdown list
-    group = request.user.groups.values_list('name', flat=True)
-    groupList = list(group)
-
     queryall = Ns.objects.select_related().all()
-    queryname = NameNs.objects.filter(classdb__in=group)
+
     queryref = RefNs.objects.all().distinct()
+
+    queryname = NameNs.objects.all().distinct()
+    count_by_classdb = queryname.values('classdb').annotate(distinct_class_db_count=Count('classdb', distinct=True))
 
     methodoptions = MethodNs.method.field.choices
     listmethod = []
@@ -1489,11 +1721,12 @@ def insert_data(request):
 
     query = {"queryall": queryall,
              "queryname": queryname,
+             "count_by_name_and_classdb": count_by_classdb,
              'queryref': queryref,
-             'groupList': groupList,
              'listmethod': listmethod,
              'listconstrain': listconstrain,
              'listconstrainvar': listconstrainvar}
+
     return render(request, "compare/insert.html", query)
 
 

@@ -15,20 +15,8 @@ ConstrainVariable,M-R,M-R
 ConstrainType,MCMC samples,MCMC samples
 ConstrainVersion,1,1
 ,,
-ModelDependenciesPrimary,"atmosphere,
-absorption,
-redenning,
-hot spots model","atmosphere,
-absorption,
-redenning,
-hot spots model"
-ModelDependenciesSecondary,"Gonzalez2019,
-tbabs,
-Clayton2003,
-2 blackbodies","Gonzalez2019,
-tbabs,
-Clayton2003,
-ignored"
+ModelDependenciesPrimary,"atmosphere,absorption,redenning,hot spots model","atmosphere,absorption,redenning,hot spots model"
+ModelDependenciesSecondary,"Gonzalez2019,tbabs,Clayton2003,2 blackbodies","Gonzalez2019,tbabs,Clayton2003,ignored"
 ModelDependencyDescription,"The atmosphere model used in this analysis was calculated for low-temperature atmosphere (<10^5.5 K) and includes the effect of plasma.
 
 The absorption of X-rays was calculated using absorption tables based on the tbabs model of Wilms et al. 2000 (updated in 2016).
@@ -55,28 +43,8 @@ ModelDependencyReferences,"2019MNRAS.490.5848G
 2003ApJ...585..464C
 
 2019MNRAS.490.5848G "
-AssumptionsPrimary,"Atmosphere Composition,
-Magnetic field,
-Rotation,
-Emitting fraction,
-Interstellar medium,
-Prior, Prior, Prior","Atmosphere Composition,
-Magnetic field,
-Rotation,
-Emitting fraction,
-Interstellar medium,
-Prior, Prior"
-AssumptionsSecondary,"hydrogen,
-non-magnetic,
-non-rotating,
-uniform full surface,
-solar abundances,
-distance prior, mass prior, reddening prior","helium,
-non-magnetic,
-non-rotating,
-uniform full surface,
-solar abundances,
-distance prior, mass prior"
+AssumptionsPrimary,"Atmosphere Composition,Magnetic field,Rotation,Emitting fraction,Interstellar medium,Prior,Prior,Prior","Atmosphere Composition,Magnetic field,Rotation,Emitting fraction,Interstellar medium,Prior,Prior"
+AssumptionsSecondary,"hydrogen,non-magnetic,non-rotating,uniform full surface,solar abundances,distance prior,mass prior,reddening prior","helium,non-magnetic,non-rotating,uniform full surface,solar abundances,distance prior,mass prior"
 AssumptionsDescription,"At the surface of a neutron star, elements stratify on time scales of minutes/hours leaving the lightest on top (Romani 1987). Also, the thickness of the last scattering layer of a NS is on the order of a few cm. Therefore, it is common to assume a single composition, being that of the lightest element. Hydrogen is therefore a reasonable assumption for the composition, especially for a NS that has accreted matter from a companion star. Other effects are in competition and may put some uncertainties on the surface composition, namely, accretion from the interstellar medium, diffuse nuclear burning of light of H into He (Chang & Bildsten 2003, 2004), and spallation of heavier elements into lighter ones (Bildsten et al. 1992).
 
 This analyses also assume emission from a low-magnetic field neutron stars (as typically measured for MSPs, specifically B_dip ~ 2.8e8 G for PSR J0437-4715). The atmosphere model is that of a non-magnetised atmosphere, which is a good approximation as B-field effect (modified opacities) become important above 1e10 G (Kaminker et al., 1983; Zavlin et al., 1996). However, this neglects potential high-magnetic loop near the NS surface.
@@ -177,4 +145,5 @@ archivePrefix = {arXiv},
 RefDOI,10.1093/mnras/stz2941,10.1093/mnras/stz2941
 DataRepositoryDOI,None,None
 DataLink,None,None
-FileName,Cold_MSP-PSRJ0437-4715-2019-massradius-hydrogen-1.npy,Cold_MSP-PSRJ0437-4715-2019-massradius-helium-1.npy
+FileName,Cold_MSP_PSRJ0437-4715_2019_massradius_hydrogen_1_MCMCSamples.npy,Cold_MSP_PSRJ0437-4715_2019_massradius_helium_1_MCMCSamples.npy
+H5FileName,Cold_MSP_PSRJ0437-4715_2019_massradius_hydrogen_1_MCMCSamples.h5,Cold_MSP_PSRJ0437-4715_2019_massradius_helium_1_MCMCSamples.h5

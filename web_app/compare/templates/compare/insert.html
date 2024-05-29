@@ -10,7 +10,7 @@ Add
     {% endfor %}
 {% endif %}
 
-<br><br>
+<br>
 
 <div id="errorInsert">
     <p id='test'></p>
@@ -18,9 +18,8 @@ Add
 
 <div class="allcontent">
 
-
     <div class="nscontent">
-        <label><u>Multiple simulataneous additions (automatic, via CSV file)</u></label><br>
+        <label><u>Multiple simultaneous additions (automatic, via CSV file)</u></label><br>
         <form method="post" enctype="multipart/form-data" class="upload-form">
             {% csrf_token %}
             <input type="file" name="myfile" class="file-input">
@@ -32,15 +31,26 @@ Add
     <div class="nscontent">
         <label><u>Single addition (manual)</u></label><br>
 
+        <label>Text or numpy file</label><br>
+
+        <p class="messageForLoad"><i>Upload your file first to add its features later.</i></p>
+
+        <form method="post" enctype="multipart/form-data" class="upload-form-file">
+            {% csrf_token %}
+            <input type="file" name="datafile" class="file-input" id="file-load">
+            <button type="submit" class="load-button" onclick="loadFile(event)">Load</button>
+        </form>
+
         <div class="formfilename">
             <label>File name</label>
-            <input class="insertinput" type="text" name="filename" placeholder="File Name" id="filename" maxlength="100" minlength="5">
+            <input class="insertinput" id="filename" type="text" name="filename" placeholder="File Name" id="filename" maxlength="100" minlength="5">
+            <input type="hidden" name="h5filename" id="h5filename" value="h5">
         </div>
     </div>
 
     <div class="namecontent">
         <div class="divslct">
-            <select class="insertinput" name="name" id="nList"  onchange="changeFuncName(value)">
+            <select class="insertinput enabledinput" name="name" id="nList" onchange="changeFuncName(value)" disabled>
                 <option value="opt">Select an existing source</option>
                 {% for n in queryname %}
                     <option value="{{n.id_name}}">{{n.namedb}}</option>
@@ -84,9 +94,9 @@ Add
                             <div class="divsepar">
                                 <label>Class</label>
                                 <select class="insertinput" name="class">
-                                    {% for grp in groupList %}
-                                        <option value="{{grp}}">{{grp}}</option>
-                                    {%endfor%}
+                                    {% for item in count_by_name_and_classdb %}
+                                        <option value="{{item.classdb}}">{{item.classdb}}</option>
+                                    {% endfor %}
                                 </select>    
                             </div> 
                             <div class="divsepar">
@@ -129,17 +139,17 @@ Add
             <form action='' id="test" method="POST">
                 {% csrf_token %}
                 <label>Method</label>
-                <select class="insertinput" name="method" id="selMethN">
+                <select class="insertinput enabledinput" name="method" id="selMethN" disabled>
                     {% for lm in listmethod %}
                         <option value="{{lm}}">{{lm}}</option>
                     {%endfor%}
                 </select>
                 <label>Method Specific</label>
-                <textarea class="insertinput" name="methodspe" placeholder="Method Specific" id="methSpe"></textarea>
+                <textarea class="insertinput enabledinput" name="methodspe" placeholder="Method Specific" id="methSpe" disabled></textarea>
                 <label>Data Date</label>
-                <input class="insertinput" type="text" name="datadate" id="methodD" placeholder="Data Date" maxlength="70" minlength="5">
+                <input class="insertinput enabledinput" type="text" name="datadate" id="methodD" placeholder="Data Date" maxlength="70" minlength="5" disabled>
                 <label>Processing Info</label>
-                <input class="insertinput" type="text" name="processinfinfo" id="methodP" placeholder="Processing Info">
+                <input class="insertinput enabledinput" type="text" name="processinfinfo" id="methodP" placeholder="Processing Info" disabled>
                 <input class="insertinput" type="hidden" name="hid" value="formAddMethod">
             </form>
         </div>
@@ -153,19 +163,19 @@ Add
             <form action='' id="test" method="POST">
                 {% csrf_token %}
                 <label>Constraint Type</label>
-                <select class="insertinput" name="constraint" id="selConsT">
+                <select class="insertinput enabledinput" name="constraint" id="selConsT" disabled>
                     {% for lc in listconstrain %}
                         <option value="{{lc}}">{{lc}}</option>
                     {%endfor%}
                 </select>
                 <label>Constraint Variable</label>
-                <select class="insertinput" name="constrainvar" id="selConsV">
+                <select class="insertinput enabledinput" name="constrainvar" id="selConsV" disabled>
                     {% for lcv in listconstrainvar %}
                         <option value="{{lcv}}">{{lcv}}</option>
                     {%endfor%}
                 </select>
                 <label>Constraint Version</label>
-                <input class="insertinput" type="number" name="constrainv" id="consVers" placeholder="Constraint Version">
+                <input class="insertinput enabledinput" type="number" name="constrainv" id="consVers" placeholder="Constraint Version" disabled>
                 <input type="hidden" name="hid" value="formAddConstrain">
             </form>
         </div>
@@ -231,16 +241,16 @@ Add
         <label><u>Model dependencies</u></label><br>
         <div id="addMo">
             <label>Dependencies Primary</label>
-            <input class="insertinput" type="text" name="dependenciesprimary" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5">
+            <input class="insertinput enabledinput" type="text" name="dependenciesprimary" id="dependenciesprimary" placeholder="Dependencies Primary" maxlength="60" minlength="5" disabled>
             <label>Dependencies Secondary</label>
-            <input class="insertinput" type="text" name="dependenciessecondary" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5">
+            <input class="insertinput enabledinput" type="text" name="dependenciessecondary" id="dependenciessecondary" placeholder="Dependencies Secondary" maxlength="60" minlength="5" disabled>
             <label>Dependencies Description</label>
-            <textarea class="insertinput" name="dependenciesdescription" id="dependenciesdescription" placeholder="Dependencies Description"></textarea>
+            <textarea class="insertinput enabledinput" name="dependenciesdescription" id="dependenciesdescription" placeholder="Dependencies Description" disabled></textarea>
             <label>Dependencies References</label>
-            <textarea class="insertinput" name="dependenciesreferences" id="dependenciesreferences" placeholder="Dependencies References"></textarea>
+            <textarea class="insertinput enabledinput" name="dependenciesreferences" id="dependenciesreferences" placeholder="Dependencies References" disabled></textarea>
             <input type="hidden" name="hiddep" value="formAddModel">
-            <button class="addMA" onclick="inTableMod()">Add</button>
-            <button class="removeMA" onclick="returndep()" class="addMo">Remove</button>
+            <button class="addMA" id="createDep" onclick="inTableMod()" disabled>Add</button>
+            <button class="removeMA" id="deleteDep" onclick="returndep()" class="addMo" disabled>Remove</button>
             <div class="table-modeldep">
                 <table>
                     <thead>
@@ -263,16 +273,16 @@ Add
         <label><u>Assumptions</u></label><br>
         <div id="addA">
             <label>Assumptions Primary</label>
-            <input class="insertinput" type="text" name="assumptionsprimary" id="assumptionsprimary" placeholder="Assumptions Primary" maxlength="60" minlength="5">
+            <input class="insertinput enabledinput" type="text" name="assumptionsprimary" id="assumptionsprimary" placeholder="Assumptions Primary" maxlength="60" minlength="5" disabled>
             <label>Assumptions Secondary</label>
-            <input class="insertinput" type="text" name="assumptionssecondary" id="assumptionssecondary" placeholder="Assumptions Secondary" maxlength="60" minlength="5">
+            <input class="insertinput enabledinput" type="text" name="assumptionssecondary" id="assumptionssecondary" placeholder="Assumptions Secondary" maxlength="60" minlength="5" disabled>
             <label>Assumptions Description</label>
-            <textarea class="insertinput" name="assumptionsdescription"  id="assumptionsdescription" placeholder="Assumptions Description"></textarea>
+            <textarea class="insertinput enabledinput" name="assumptionsdescription"  id="assumptionsdescription" placeholder="Assumptions Description" disabled></textarea>
             <label>Assumptions References</label>
-            <textarea class="insertinput" name="assumptionsreferences" id="assumptionsreferences" placeholder="Assumptions References"></textarea>
+            <textarea class="insertinput enabledinput" name="assumptionsreferences" id="assumptionsreferences" placeholder="Assumptions References" disabled></textarea>
             <input type="hidden" name="hidass" value="formAddAssumptions">
-            <button class="addMA" onclick="inTableAss()">Add</button>
-            <button class="removeMA" onclick="returnass()" class="addA" >Remove</button>
+            <button class="addMA" id="createAss" onclick="inTableAss()" disabled>Add</button>
+            <button class="removeMA" id="deleteAss" onclick="returnass()" class="addA" disabled>Remove</button>
             <div class="table-modeldep">
                 <table>
                     <thead>
@@ -294,7 +304,7 @@ Add
 
     <div class="validation-button">
         When done, click here:
-        <button class="createSRV" type="submit" onclick="createNs()">Validate</button>
+        <button class="createSRV enabledinput" id="validFormButton" type="submit" onclick="createNs()" disabled>Validate</button>
     </div>
 </div>
 {% endblock %}
