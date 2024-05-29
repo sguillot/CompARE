@@ -161,7 +161,13 @@ $('.sigma-errors-checkbox').change(function() {
     });
 });
 
-// Function to handle checkbox change event
+/**
+ * Returns a function to handle the change event of checkboxes.
+ * Modifies the stroke color of paths in SVG groups based on checkbox values.
+ *
+ * @param {string} selector - The selector for the checkboxes to be handled.
+ * @returns {Function} A function to handle the change event of checkboxes.
+ */
 function handleCheckboxChange(selector) {
     return function() {
         // Retrieve RGB color from the checkbox value

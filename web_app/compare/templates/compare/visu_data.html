@@ -10,53 +10,56 @@ Visu_data
 
     <div class="side_menu">
 
-        <div class="title-dclasses">
+        <div class="title-dclasses data-column">
             <h2>Database Classes</h2>
         </div>
 
-        <form class="form">
-            <input type="checkbox" name="Cold_MSP" value="Cold MSP" class="check" >
-            <label for="Cold_MSPs">Cold MSP</label>
-        
-            <br>
+        <form class="form data-column">
 
-            <input type="checkbox" name="NS_Mass" value="NS Mass" class="check">
-            <label for="NS_Mass">NS Mass</label>
-        
-            <br>
+            <div>
+                <input type="checkbox" name="Cold_MSP" value="Cold MSP" class="check">
+                <label for="Cold_MSPs">Cold MSP</label>
+            </div>
 
-            <input type="checkbox" name="NS-NS Mergers" value="NS-NS mergers" class="check">
-            <label for="NS-NS Mergers">NS-NS Mergers</label>
+            <div>
+                <input type="checkbox" name="NS_Mass" value="NS Mass" class="check">
+                <label for="NS_Mass">NS Mass</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="NS-NS Mergers" value="NS-NS mergers" class="check">
+                <label for="NS-NS Mergers">NS-NS Mergers</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="NS_Spin" value="NS Spin"class="check">
+                <label for="NS_Spin">NS Spin</label>
+            </div>
+
+            <div>
+                <input type="checkbox" name="PPM" value="PPM" class="check">
+                <label for="PPM">PPM</label>
+            </div>
             
-            <br>
+            <div>
+                <input type="checkbox" name="qLMXB" value="qLMXB" class="check">
+                <label for="qLMXB">qLMXB</label>
+            </div>
 
-            <input type="checkbox" name="NS_Spin" value="NS Spin"class="check">
-            <label for="NS_Spin">NS Spin</label>
-        
-            <br>
+            <div>
+                <input type="checkbox" name="Thermal_INSs" value="Thermal INSs" class="check">
+                <label for="Thermal_INSs">Thermal INSs</label>  
+            </div>
 
-            <input type="checkbox" name="PPM" value="PPM" class="check">
-            <label for="PPM">PPM</label>
-            
-            <br>
+            <div>
+                <input type="checkbox" name="Transiently_Accreting_NS" value="Transiently_Accreting_NS" class="check">
+                <label for="Transiently_Accreting_NS">Transiently Accreting NS</label>
+            </div>
 
-            <input type="checkbox" name="qLMXB" value="qLMXB" class="check">
-            <label for="qLMXB">qLMXB</label>
-            
-            <br>
-
-            <input type="checkbox" name="Thermal_INSs" value="Thermal INSs" class="check">
-            <label for="Thermal_INSs">Thermal INSs</label>  
-            
-            <br>
-
-            <input type="checkbox" name="Transiently_Accreting_NS" value="Transiently_Accreting_NS" class="check" >
-            <label for="Transiently_Accreting_NS">Transiently Accreting NS</label>
-        
-            <br>
-
-            <input type="checkbox" name="Type-I_X-ray_bursts" value="Type-I X-ray bursts" class="check">
-            <label for="Type-I_X-ray_bursts">Type-I X-ray bursts</label>
+            <div>
+                <input type="checkbox" name="Type-I_X-ray_bursts" value="Type-I X-ray bursts" class="check">
+                <label for="Type-I_X-ray_bursts">Type-I X-ray bursts</label>
+            </div>
             
         </form>
     </div>
@@ -79,77 +82,76 @@ Visu_data
                     <button id="showP" onclick="showPlot()">Show Plot</button>
                 </div>
             </div>
-                <div id="multiple">
-                    <div class="multiple-content">
-                        <div class="flexSelect">
-                            <label for="list_methods">Method</label>
-                            <select name="list_methods" id="list_methods" multiple>
-                                {% for qm in queryMeth %}
-                                    <option class="Meth" value="{{qm}}">{{qm}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="flexSelect">
-                            <label for="list_variable">Constraint Variable</label>
-                            <select name="list_variable" id="list_variable" multiple>
-                                {% for qv in queryConV %}
-                                    <option class="ConsV" value="{{qv}}">{{qv}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="flexSelect">
-                            <label for="list_constrain_type">Constraint Type</label>
-                            <select name="list_constrain_type" id="list_constrain_type" multiple>
-                                {% for qt in queryConT %}
-                                    <option class="ConsT" value="{{qt}}">{{qt}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="flexSelect">
-                            <label for="list_dep_primary">Model Primary</label>
-                            <select name="list_dep_primary" id="list_dep_primary" multiple>
-                                {% for qd in queryDep %}
-                                    <option class="Dep" value="{{qd}}">{{qd}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="flexSelect">
-                            <label for="list_dep_secondary">Model Secondary</label>
-                            <select name="list_dep_secondary" id="list_dep_secondary" multiple>
-                                {% for qds in queryDepS %}
-                                    <option class="DepS" value="{{qds}}">{{qds}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="flexSelect">
-                            <label for="list_assumptions_primary">Assumptions Primary</label>
-                            <select name="list_assumptions_primary" id="list_assumptions_primary" multiple>
-                                {% for qa in queryAss %}
-                                    <option class="Ass" value="{{qa}}">{{qa}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="flexSelect">
-                            <label for="list_assumptions_secondary">Assumptions Secondary</label>
-                            <select name="list_assumptions_secondary" id="list_assumptions_secondary" multiple>
-                                {% for qas in queryAssS %}
-                                    <option class="Ass2" value="{{qas}}">{{qas}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="button-vld">
-                            <button id="vld" onclick="searchFilter()">Confirm</button>
-                            <button id="reset" onclick="resetFilters()">Reset Filters</button>
-                        </div>
+            <div id="multiple">
+                <div class="multiple-content">
+                    <div class="flexSelect">
+                        <label for="list_methods">Method</label>
+                        <select name="list_methods" id="list_methods" multiple>
+                            {% for qm in queryMeth %}
+                                <option class="Meth" value="{{qm}}">{{qm}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    
-                
+
+                    <div class="flexSelect">
+                        <label for="list_variable">Constraint Variable</label>
+                        <select name="list_variable" id="list_variable" multiple>
+                            {% for qv in queryConV %}
+                                <option class="ConsV" value="{{qv}}">{{qv}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="flexSelect">
+                        <label for="list_constrain_type">Constraint Type</label>
+                        <select name="list_constrain_type" id="list_constrain_type" multiple>
+                            {% for qt in queryConT %}
+                                <option class="ConsT" value="{{qt}}">{{qt}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="flexSelect">
+                        <label for="list_dep_primary">Model Primary</label>
+                        <select name="list_dep_primary" id="list_dep_primary" multiple>
+                            {% for qd in queryDep %}
+                                <option class="Dep" value="{{qd}}">{{qd}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="flexSelect">
+                        <label for="list_dep_secondary">Model Secondary</label>
+                        <select name="list_dep_secondary" id="list_dep_secondary" multiple>
+                            {% for qds in queryDepS %}
+                                <option class="DepS" value="{{qds}}">{{qds}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="flexSelect">
+                        <label for="list_assumptions_primary">Assumptions Primary</label>
+                        <select name="list_assumptions_primary" id="list_assumptions_primary" multiple>
+                            {% for qa in queryAss %}
+                                <option class="Ass" value="{{qa}}">{{qa}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="flexSelect">
+                        <label for="list_assumptions_secondary">Assumptions Secondary</label>
+                        <select name="list_assumptions_secondary" id="list_assumptions_secondary" multiple>
+                            {% for qas in queryAssS %}
+                                <option class="Ass2" value="{{qas}}">{{qas}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="button-vld">
+                        <button id="vld" onclick="searchFilter()">Confirm</button>
+                        <button id="reset" onclick="resetFilters()">Reset Filters</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -159,8 +161,8 @@ Visu_data
             <table>
                 <thead>
                     <tr>
-                        <th>More Info</th>
-                        <th>
+                        <th class="details-column">More Info</th>
+                        <th class="source-column">
                             <div class="column-header">
                                 <span>Source Name</span>
                                 <div class="sort-icons">
@@ -168,7 +170,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="data-column">
                             <div class="column-header">
                                 <span>Database Class</span>
                                 <div class="sort-icons">
@@ -176,7 +178,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="method-column">
                             <div class="column-header">
                                 <span>Method</span>
                                 <div class="sort-icons">
@@ -184,7 +186,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="mdetails-column">
                             <div class="column-header">
                                 <span>Method Details</span>
                                 <div class="sort-icons">
@@ -192,7 +194,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="type-column">
                             <div class="column-header">
                                 <span>Constraint Type</span>
                                 <div class="sort-icons">
@@ -200,7 +202,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="version-column">
                             <div class="column-header">
                                 <span>Constraint Version</span>
                                 <div class="sort-icons">
@@ -208,7 +210,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="variable-column">
                             <div class="column-header">
                                 <span>Constraint Variable</span>
                                 <div class="sort-icons">
@@ -216,7 +218,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="dependency-column">
                             <div class="column-header">
                                 <span>Model Dependencies</span>
                                 <div class="sort-icons">
@@ -224,7 +226,7 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="assumption-column">
                             <div class="column-header">
                                 <span>Analysis Assumptions</span>
                                 <div class="sort-icons">
@@ -232,26 +234,26 @@ Visu_data
                                 </div>
                             </div>
                         </th>
-                        <th>
+                        <th class="reference-column">
                             Reference
                         </th>
-                        <th>Download</th>
-                        <th><img src="{% static 'compare/images/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/images/square.svg' %}" onclick="unselectall()"></th>
+                        <th class="download-column">Download</th>
+                        <th class="checkbox-column"><img src="{% static 'compare/images/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/images/square.svg' %}" onclick="unselectall()"></th>
                     </tr>
                 </thead>
 
                 <tbody id="firstTable">
                     {% for q , m , a, datalink, file_exists in queryall %}
                     <tr>
-                        <td><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/images/plus.svg' %}" alt="icon more" width=30em /></a></td>
-                        <td>{{ q.id_name.namedb }}</td>
-                        <td>{{ q.id_name.classdb }}</td>
-                        <td>{{ q.id_method.method }}</td>
-                        <td>{{ q.id_method.method_specific }}</td>
-                        <td>{{ q.id_constrain.constraintype }}</td>
-                        <td>{{ q.id_constrain.constrainversion }}</td>
-                        <td>{{ q.id_constrain.constrainvariable }}</td>
-                        <td>
+                        <td class="details-column"><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/images/plus.svg' %}" alt="icon more" width=30em /></a></td>
+                        <td class="source-column">{{ q.id_name.namedb }}</td>
+                        <td class="data-column">{{ q.id_name.classdb }}</td>
+                        <td class="method-column">{{ q.id_method.method }}</td>
+                        <td class="mdetails-column">{{ q.id_method.method_specific }}</td>
+                        <td class="type-column">{{ q.id_constrain.constraintype }}</td>
+                        <td class="version-column">{{ q.id_constrain.constrainversion }}</td>
+                        <td class="variable-column">{{ q.id_constrain.constrainvariable }}</td>
+                        <td class="dependency-column">
                             {% for mprim, msec, mdesc, mref_list in m %}
                                 <li>
                                     <u class="questionmark" onmouseover='showPopup(this, "model-popup", "{{ mprim }}", "{{ msec }}", "{{ mdesc }}", "{{ mref_list }}", "mprim", "msec")' onmouseout='hidePopup("model-popup-container")'>
@@ -260,7 +262,7 @@ Visu_data
                                 </li>
                             {% endfor %}
                         </td>
-                        <td>
+                        <td class="assumption-column">
                             {% for aprim, asec, adesc, aref_list in a %}
                                 <li>
                                     <u class="questionmark" onmouseover='showPopup(this, "assumption-popup", "{{ aprim }}", "{{ asec }}", "{{ adesc }}", "{{ aref_list }}", "aprim", "asec")' onmouseout='hidePopup("assumption-popup-container")'>
@@ -269,16 +271,15 @@ Visu_data
                                 </li>
                             {% endfor %} 
                         </td>
-
-                        <td><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
-                        <td>
+                        <td class="reference-column"><a href="https://doi.org/{{q.id_ref.doi}}" target="_blank">{{q.id_ref.author}} {{ q.id_ref.refyear}}</a></td>
+                        <td class="download-column">
                             {% if file_exists %}
                                 <a href="{% static datalink %}" download="{{q.h5_filename}}">
                                     <img src="{% static 'compare/images/download.svg' %}" alt="icon download" width=30em />
                                 </a>
                             {% endif %}
                         </td>
-                        <td><input type="checkbox" value='{{q.h5_filename}}' class="dwnl" name="che"></td>
+                        <td class="checkbox-column"><input type="checkbox" value='{{q.h5_filename}}' class="dwnl" name="che"></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -309,26 +310,5 @@ Visu_data
         
     </div>
 </div>
-
-<script>
-    function loadPage(page) {
-        $.ajax({
-            url: '',  // Utilise l'URL actuelle
-            data: {
-                'page': page
-            },
-            success: function(data) {
-
-                if(data.table != null) {
-                    $('#firstTable').html($(data.table).find('#firstTable').html());
-                    $('.pagination').html($(data.table).find('.pagination').html());
-                } else {
-                    $('#firstTable').html($(data.table_filtered).find('#firstTable').html());
-                    $('.pagination').html($(data.table_filtered).find('.pagination').html());
-                }
-            }
-        });
-    }
-</script>
 
 {% endblock %}

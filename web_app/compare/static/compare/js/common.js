@@ -1,6 +1,10 @@
 window.onload = function() {
 
-    // Function to apply color to subfolder text
+    /**
+     * Applies color to elements with the specified class name.
+     *
+     * @param {string} className - The class name of elements to which color will be applied.
+     */
     function applyColorToElements(className) {
         $('.' + className).each(function(index) {
             var rgbValue = $(this).find('input').val();
@@ -8,7 +12,10 @@ window.onload = function() {
         });
     }
 
-    // Function to apply color to contour file name text
+    /**
+     * Applies color to contour filenames based on the stroke color of corresponding paths.
+     * Retrieves all <g> groups from the graph and sets the color of label-filename elements accordingly.
+     */
     function applyColorToContourFilenames() {
         // Retrieve all <g> groups from the graph
         var groups = $('#plot-container').find('g.mpld3-paths > g');

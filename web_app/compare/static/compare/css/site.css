@@ -8,18 +8,30 @@
   display:flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  margin-top:10px;
   border-bottom: #085295 10px solid;
 }
 
-.navbar a {
+.navbar-Compare {
+  margin:10px 0 10px 40px;
+}
+
+.navbar-links a {
   text-decoration: none;
   color: #062B5A;
   padding: 20px 0 20px;  
 }
 
-.navbar-Compare {
-  font-size:3.2em;
+.navbar-links {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  flex-grow: 1;
+}
+
+.hamburger-menu {
+  cursor: pointer;
+  display: none; 
 }
 
 footer{
@@ -31,8 +43,7 @@ footer p{
   color:#fff;
 }
 
-/* visualisation table */
-
+/* Visualisation table */
 .visu{
   display: flex;
   flex-wrap: wrap;
@@ -40,6 +51,7 @@ footer p{
 
 .side_menu{
   background-color: #085295;
+  padding-bottom: 10px;
   width: 20%;
 }
 
@@ -50,6 +62,7 @@ footer p{
 
 .form{
   padding:15px 0px 15px 0px;
+  border-radius: 10px;
   background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), #062B5A, rgba(255, 255, 255, 0)), linear-gradient(to top, rgba(255, 255, 255, 0), #062B5A, rgba(255, 255, 255, 0));
   color: #ffffff;
   font-size: 1.3em;
@@ -70,8 +83,7 @@ input.check{
   align-items: center;
 }
 
-/* filter panel */
-
+/* Filter panel */
 .filter{
   background-image: linear-gradient(to bottom, #085295, #062B5A);
   display: flex;
@@ -156,6 +168,7 @@ input.check{
 #multiple{
   display: none;
   background-color: #085295;
+  border-radius:10px;
 }
 
 .multiple-content{
@@ -182,28 +195,7 @@ input.check{
   padding-top: 50px;
 }
 
-.column-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.sort-icons {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  background-color:#cbd4db;
-  border-radius:5px;
-  padding:2px;
-  margin-left:5px;
-}
-
-.sort-icons:hover {
-  background-color:white;
-}
-
-/* table */
-
+/* Table */
 .tab{
   width: 95%;
   background-color: #ffffff;
@@ -236,7 +228,27 @@ input.check{
   padding:2px 0px 2px 0px;
 }
 
-/* paging */
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sort-icons {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background-color:#cbd4db;
+  border-radius:5px;
+  padding:2px;
+  margin-left:5px;
+}
+
+.sort-icons:hover {
+  background-color:white;
+}
+
+/* Pagination */
 .pagination {
   text-align: center;
   margin-top: 20px;
@@ -271,8 +283,7 @@ input.check{
   cursor: not-allowed;
 }
 
-/* detail page */
-
+/* Detail page */
 .bodydetail{
   background-color: #ffffff;
   display: flex;
@@ -376,7 +387,7 @@ input.check{
   
 .divname, .divmethod, .divref, .divconstrain{
   width: 45%;
-  padding: 2%;
+  padding: 0 2% 0 2%;
   font-size: 1.3em;
 }
 
@@ -403,8 +414,7 @@ input.check{
   color:red;
 }
 
-/* login page */
-
+/* Login page */
 .box-login{
   background-color: #ffffff;
   display: flex;
@@ -451,8 +461,7 @@ input.check{
   font-size: 1.6em;
 }
 
-/* add & modify form */
-
+/* Add & modify form */
 .allcontent, .modify-page {
   max-width: 60%;
   margin: 0 auto;
@@ -627,8 +636,7 @@ input.check{
   border-radius: 0.25rem;
 }
 
-/* info, home & plot page */
-
+/* Info, home & plot page */
 .email, .team, .citation, .acknowledgments, .homepage {
 	padding: 1%;
 	font-size: 1.5em;
@@ -694,7 +702,6 @@ input.check{
   display: flex;
   align-items:center;
   justify-content: center;
-  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -703,13 +710,21 @@ input.check{
   height:150px;
 }
 
-.container {
+.container, .container-eos {
   border: 2px solid #3498db;
   border-radius: 8px;
   padding: 20px;
   height:100%;
   width:fit-content;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  padding:20px;
+}
+
+.container-eos {
+  padding:5px;
 }
 
 .sub-container {
@@ -745,4 +760,181 @@ input.check{
 
 .questionmark {
   cursor:help;
+}
+
+/** Responsive design **/
+@media (max-width: 1900px) {
+  /* Visu_data page */
+  .side_menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .title-dclasses {
+    text-align: center;
+  }
+
+  .form {
+    display:grid;
+    grid-template-columns: repeat(5, 2fr);
+  }
+
+  .content {
+    display:block;
+  }
+
+  .filter {
+    padding:0 0 10px 0;
+  }
+
+  .tab th, .tab td {
+    width: auto;
+  }
+
+  .column-header {
+    flex-direction: row; 
+  }
+
+  .sort-icons {
+    margin-left: 10px;
+  }
+
+  .multiple-content {
+    padding-right: 10px;
+  }
+
+  .button-vld {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:15px 0 15px 0;
+  }
+
+  .side_menu, .title-dclasses, .content, .filter, .tab, .tab table, .button-vld button {
+    width:100%;
+  }
+
+  /* Modify, details, home & info page */
+  .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2 {
+    font-size: 30px;
+  }
+
+  .divmodel, .divassumptions, .divcompact {
+    width: 100%;
+    margin-bottom:10px;
+  }
+}
+
+@media (max-width: 1700px) {
+  /* Visu_data page */
+  .navbar-links {
+    font-size:30px;
+  }
+
+  .multiple-content {
+    display:grid;
+    grid-template-columns: repeat(5, 2fr);
+  }
+
+  .button-vld {
+    display:flex;
+    align-items: center;
+  }
+
+  .button-vld button {
+    width:70%;
+  }
+
+  #vld {
+    margin-right:0px;
+  }
+
+  .tab td, .tab th {
+    font-size:14px;
+  }
+  
+  /* Add & modify page */
+  .allcontent, .modify-page {
+    max-width:80%;
+  }
+}
+
+@media (max-width: 1400px) {
+  /* Visu_data page */
+  .navbar {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width:100%;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 20%;
+    height:100%;
+    text-align: center;
+    position: absolute;
+    top:10px;
+    left: 0;
+    background-color: #ffffff;
+  }
+
+  .navbar-links a {
+    font-size:25px;
+    width: 100%;
+  }
+
+  .hamburger-menu {
+    display: block; 
+    float:left;
+    margin-left:20px;
+    font-size:1.5em;
+  }
+
+  .navbar-Compare {
+    margin-left:auto;
+    height:80px;
+    width: 200px; 
+    margin-right:20px;
+  }
+
+  .container-logo {
+    display: flex;
+    margin-left:auto;
+  }
+
+  #img-compare {
+    width:100%;
+    height:100%;
+  }
+
+  .form {
+    display:grid;
+    grid-template-columns: repeat(3, 2fr);
+  }
+
+  .form div label {
+    font-size:18px;
+  }
+
+  input.check {
+    width:25px;
+    height:25px;
+  }
+
+  .multiple-content {
+    display:grid;
+    grid-template-columns: repeat(4, 2fr);
+  }
+
+  /* Add, modify, home, info & details page */
+  .allcontent, .modify-page {
+    max-width:90%;
+  }
+
+  .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .acknowledgments h3 {
+    font-size: 25px;
+  }
 }

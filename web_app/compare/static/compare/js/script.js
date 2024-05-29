@@ -1,12 +1,17 @@
-   
-  /*
-  When a checkboxes of a side panel is checked 
-  We get checkboxes checked
-  We get all filter 
-  We call the AjaxRequest function 
-  */
+// Execute the function once on page load
+document.addEventListener("DOMContentLoaded", adjustNavbarDisplay);
+
+// Listen to the window resizing event
+window.addEventListener("resize", adjustNavbarDisplay);
+
+/** 
+ * When a checkboxes of a side panel is checked 
+ * We get checkboxes checked
+ * We get all filter 
+ * We call the AjaxRequest function 
+ */
 $(document).ready(function(){
-    var checkList = []
+    var checkList = [];
     $(document).on("click", 'input.check[type="checkbox"]', function(){
       var value = $(this).val();
       if($(this).is(":checked")){
@@ -23,11 +28,45 @@ $(document).ready(function(){
     })
 })
 
+/**
+ * Adjusts the display of the navigation bar based on the screen size.
+ */
+function adjustNavbarDisplay() {
+  // Retrieves the navigation links element
+  var links = document.getElementById("navbar-links");
+  // Adjusts display based on screen width
+  if (window.innerWidth > 1400) {
+      links.style.display = 'flex';
+  } else {
+      links.style.display = 'none';
+  }
+}
 
-/* 
-Select all checked checkboxes off the table 
-Return a list
-*/
+/**
+ * Toggles the visibility of the menu in the navbar.
+ */
+function toggleMenu() {
+  var navbar = document.querySelector('.navbar');
+  var links = document.querySelector(".navbar-links");
+  var hamburger = document.getElementById("hamburger-menu");
+
+  if (links.style.display === "flex") {
+    // Hides the menu and adjusts hamburger position
+    links.style.display = "none";
+    navbar.insertBefore(hamburger, document.querySelector('.navbar-Compare'));
+    hamburger.style.marginLeft = "20px";
+  } else {
+    // Displays the menu and adjusts hamburger position
+    links.insertBefore(hamburger, links.firstChild);
+    hamburger.style.margin = "0px 0px 10px 0px";
+    links.style.display = "flex";
+  }
+}
+
+/** 
+ * Select all checked checkboxes off the table 
+ * Return a list of their values
+ */
 function getCheckboxesTab(){
   var checkboxes = document.querySelectorAll('input[type="checkbox"].dwnl:checked');
   var values = [];
@@ -37,10 +76,10 @@ function getCheckboxesTab(){
   return(values);
 }
 
-/* 
-Select all checked checkboxes off the side panel 
-Return a list
-*/
+/**
+ * Select all checked checkboxes off the side panel 
+ * Return a list
+ */
 function getCheckboxesFilter(){
   var checkboxes = document.querySelectorAll('input[type="checkbox"].check:checked');
   var values = [];
@@ -50,20 +89,19 @@ function getCheckboxesFilter(){
   return(values);
 }
 
-/*
-Get the value of the searchBar 
-Return a string 
-*/
+/** 
+ * Get the value of the searchBar 
+ * Return a string 
+ */
 function getSearch(){
   var searchString = document.getElementById('Search').value;
   return (searchString);
 }
 
-
-/*
-Get the value of all the selectBox
-Return a list of dictionnary 
-*/
+/** 
+ * Get the value of all the selectBox
+ * Return a list of dictionnary 
+ */
 function getSelect(){
   var selectorValues = {}
   const ListOptions = ["list_methods","list_variable","list_constrain_type",
@@ -82,10 +120,10 @@ function getSelect(){
 }
 
 
-/*
-Get the value of checkboxes checked
-We sent to the views the filename and it downloads the selected files
-*/
+/**
+ * Get the value of checkboxes checked
+ * We sent to the views the filename and it downloads the selected files
+ */
 function downloadFiles() {
   var checkboxes = document.querySelectorAll('.dwnl:checked');
   if (checkboxes.length === 0) {
@@ -119,9 +157,13 @@ function downloadFiles() {
   });
 }
 
-/*
-Get the h5_filename which allows to download the file
-*/
+/**
+ * Initiates the download of a file with the specified filename.
+ * Creates an anchor element, sets the download URL and filename, 
+ * and triggers a click event to start the download.
+ *
+ * @param {string} h5_filename - The name of the file to be downloaded.
+ */
 function downloadFilename(h5_filename) {
   var link = document.createElement('a');
   link.href = '/static/h5/' + h5_filename;
@@ -129,12 +171,12 @@ function downloadFilename(h5_filename) {
   link.click();
 }
 
-/*
-Get the value of checkboxes checked
-We sent to the views the filename 
-We get bibtex
-Download the file created
-*/
+/** 
+ * Get the value of checkboxes checked
+ * We sent to the views the filename 
+ * We get bibtex
+ * Download the file created
+ */
 function bibtexFile() {
   var values = getCheckboxesTab();
   if (values.length === 0) {
@@ -170,9 +212,9 @@ function bibtexFile() {
   });
 }
 
-/*
-Show one or more plots depending on the selected files (checkboxes)
-*/
+/**
+ * Show one or more plots depending on the selected files (checkboxes)
+ */
 function showPlot() {
   var selectedFiles = getCheckboxesTab();
     
@@ -200,10 +242,10 @@ function showPlot() {
   });
 }
 
-/*
-Resets the display of previously selected filters
-Returns the table display to its initial state
-*/
+/**
+ * Resets the display of previously selected filters
+ * Returns the table display to its initial state
+ */
 function resetFilters() {
   // Reset checkboxes
   var checkboxes = document.querySelectorAll('input[type="checkbox"].check:checked');
@@ -226,11 +268,11 @@ function resetFilters() {
 }
 
 
-/* 
-when user click on the magnifier
-Select all filter
-We call the ajaxRequest function
-*/
+/**
+ * When user click on the magnifier
+ * Select all filter
+ * We call the ajaxRequest function
+ */
 function searchFilter(){
   var searchCheck = getCheckboxesFilter();
   var select = getSelect();
@@ -238,6 +280,13 @@ function searchFilter(){
   ajaxRequest(searchCheck , select , search);
 }
 
+/**
+ * Populates a <select> element with unique options.
+ * Checks each option for duplicates and adds them if they don't already exist.
+ *
+ * @param {HTMLSelectElement} select - The <select> element to fill.
+ * @param {Array<string>} options - The array of options to be added.
+ */
 function populateSelect(select, options) {
 
   // Then add the sorted options to the selector
@@ -249,6 +298,12 @@ function populateSelect(select, options) {
   });
 }
 
+/**
+ * Sorts the options of a given <select> element in alphabetical order.
+ * The sorting is done based on locale comparison with French settings.
+ *
+ * @param {HTMLSelectElement} select - The <select> element whose options need to be sorted.
+ */
 function sortSelect(select) {
   var options = Array.from(select.options).map(option => option.value);
   options.sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
@@ -258,6 +313,36 @@ function sortSelect(select) {
   });
 }
 
+/**
+ * Loads a specific page via an AJAX request.
+ * Updates the content of the table and pagination elements based on the response.
+ *
+ * @param {number} page - The page number to be loaded.
+ */
+function loadPage(page) {
+  $.ajax({
+      url: '', 
+      data: {
+          'page': page
+      },
+      success: function(data) {
+
+          if(data.table != null) {
+              $('#firstTable').html($(data.table).find('#firstTable').html());
+              $('.pagination').html($(data.table).find('.pagination').html());
+          }
+      }
+  });
+}
+
+/**
+ * Sends an AJAX GET request with the provided checklist, selected options, and search string.
+ * Updates the table and pagination elements based on the response data.
+ *
+ * @param {Array} checkList - An array of selected checkbox values.
+ * @param {Object} select - The selected options.
+ * @param {string} search - The search string.
+ */
 function ajaxRequest(checkList , select , search){
   var jsonCheckList = JSON.stringify(checkList);
   var stringSearch = search;
@@ -369,6 +454,12 @@ function ajaxRequest(checkList , select , search){
   })
 }
 
+/**
+ * Toggles the display of a div element between 'block' and 'none'.
+ * The target div is identified by its class name.
+ *
+ * @param {HTMLElement} div - The div element whose display is to be toggled.
+ */
 function hideShow(div) {
   var iddiv = document.getElementById(div.className)
     if (iddiv.style.display !== 'block') {
@@ -379,6 +470,10 @@ function hideShow(div) {
     }
 }
 
+/**
+ * Selects all checkboxes with the name 'che'.
+ * Sets their checked property to true.
+ */
 function selectall(){
   var tabcheck = document.getElementsByName("che")
   for (var i = 0; i < tabcheck.length; i++) {
@@ -386,6 +481,10 @@ function selectall(){
   }
 }
 
+/**
+ * Unselects all checkboxes with the name 'che'.
+ * Sets their checked property to false.
+ */
 function unselectall(){
   var tabcheck = document.getElementsByName("che")
   for (var i = 0; i < tabcheck.length; i++) {
@@ -393,9 +492,15 @@ function unselectall(){
   }
 }
 
+// Details
 
-//details
-
+/**
+ * Retrieves the value of a specified cookie by name.
+ * Searches through the document's cookies and returns the value if found.
+ *
+ * @param {string} name - The name of the cookie to retrieve.
+ * @returns {string|null} The value of the cookie if found, or null if not found.
+ */
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -412,6 +517,11 @@ function getCookie(name) {
   return cookieValue;
 }
 
+/**
+ * Confirms the deletion of a file and sends an AJAX POST request to delete it.
+ * Prompts the user for confirmation, retrieves the CSRF token, and sends the filename for deletion.
+ * If the deletion is successful, redirects the user to the parent directory.
+ */
 function confirmDelete(){
   const csrftoken = getCookie('csrftoken');
   var filename = document.getElementById('btnremove').value
@@ -431,8 +541,13 @@ function confirmDelete(){
   }
 }
 
-//modify
+// Modify
 
+/**
+ * Enables all input elements with the same class name as the provided element.
+ *
+ * @param {HTMLElement} id - An element whose class name is used to select inputs to be enabled.
+ */
 function enable(id) {
   var inp =document.getElementsByClassName(id.className);
   for (let index = 0; index < inp.length; index++) {

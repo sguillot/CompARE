@@ -1,3 +1,9 @@
+/**
+ * Retrieves the value of a cookie by its name.
+ *
+ * @param {string} name - The name of the cookie to retrieve.
+ * @returns {string|null} The value of the cookie, or null if the cookie is not found.
+ */
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -14,6 +20,11 @@ function getCookie(name) {
     return cookieValue;
 }
 
+/**
+ * Toggles the display of a specified HTML element.
+ *
+ * @param {HTMLElement} div - The HTML element to show or hide.
+ */
 function showHide(div){
     var iddiv = document.getElementById(div.className);
     if (iddiv.style.display !== 'block') {
@@ -22,22 +33,31 @@ function showHide(div){
     else {
         iddiv.style.display = 'none';
     }
-
 }
 
+/**
+ * Deletes the last row of the model table.
+ */
 function returndep(){
     document.getElementById('modelTable').deleteRow(-1)
 }
 
+/**
+ * Deletes the last row of the assumption table.
+ */
 function returnass(){
     document.getElementById('assumptionTable').deleteRow(-1)
 }
 
-
+/**
+ * Updates the table rows based on the selected value.
+ *
+ * @param {string} value - The selected value.
+ */
 function changeFuncName(value){
     if(value === 'opt'){
         return
-    }else{
+    } else {
         $.ajax({
             url: '',
             type: 'GET',
@@ -78,10 +98,15 @@ function changeFuncName(value){
     }
 }
 
+/**
+ * Updates the table rows based on the selected reference value.
+ *
+ * @param {string} value - The selected reference value.
+ */
 function changeFuncRef(value){
     if(value === 'opt'){
         return
-    }else{
+    } else {
         $.ajax({
             url: '',
             type: 'GET',
@@ -112,8 +137,12 @@ function changeFuncRef(value){
     }
 }
 
+/**
+ * Loads a file via AJAX request.
+ *
+ * @param {Event} event - The event object.
+ */
 function loadFile(event){
-
     // Prevents page reloading
     event.preventDefault(); 
 
@@ -154,8 +183,10 @@ function loadFile(event){
     });
 }
 
+/**
+ * Enables input elements.
+ */
 function enableInputs() {
-
     document.getElementById('createDep').disabled = false; 
     document.getElementById('deleteDep').disabled = false; 
     document.getElementById('createAss').disabled = false;
@@ -167,6 +198,10 @@ function enableInputs() {
     });
 }
 
+
+/**
+ * Creates a new neutron star entry.
+ */
 function createNs(){
     insertvalue={}
     insertvalue['filename']=document.getElementById('filename').value
@@ -198,8 +233,13 @@ function createNs(){
 
 }
 
+/**
+ * Converts a table into a dictionary object.
+ *
+ * @param {string} tab - The ID of the table element.
+ * @returns {Object} The table data in dictionary format.
+ */
 function selecttab(tab){
-    
     var tabdict = {}
     for (let i = 0; i <document.getElementById(tab).rows.length; i++) {
         var select = []
@@ -211,8 +251,10 @@ function selecttab(tab){
     return tabdict
 }
 
+/**
+ * Creates a new row in the assumption table.
+ */
 function inTableAss(){
-
     let table = document.getElementById("assumptionTable")
 
     dataprimary =  document.getElementById('assumptionsprimary').value
@@ -238,11 +280,12 @@ function inTableAss(){
     document.getElementById('assumptionssecondary').value = ''
     document.getElementById('assumptionsdescription').value = ''
     document.getElementById('assumptionsreferences').value = ''
-
 }
 
+/**
+ * Creates a new row in the model table.
+ */
 function inTableMod(){
-
     let table = document.getElementById("modelTable")
 
     let dataprimary =  document.getElementById('dependenciesprimary').value
@@ -268,9 +311,13 @@ function inTableMod(){
     document.getElementById('dependenciessecondary').value = ''
     document.getElementById('dependenciesdescription').value = ''
     document.getElementById('dependenciesreferences').value = ''
-
 }
 
+/**
+ * Retrieves the selected constraints.
+ *
+ * @returns {Object} The selected constraints.
+ */
 function getConstrain(){
     var conslist = {}
     conslist['constrainT']=document.getElementById('selConsT').value
@@ -279,6 +326,11 @@ function getConstrain(){
     return conslist
 }
 
+/**
+ * Retrieves the selected method details.
+ *
+ * @returns {Object} The selected method details.
+ */
 function getMethod() {
     var methlist = {}
     methlist['methodN']=document.getElementById('selMethN').value
