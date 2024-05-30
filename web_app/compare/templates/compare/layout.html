@@ -28,8 +28,8 @@
         <a href="{% url 'insert' %}" class="navbar-brand">Add entry</a>
         <a href="{% url 'info' %}" class="navbar-brand">More info</a>
         {% if user.is_authenticated %}
-            <span>Welcome {{ user.get_username }} &emsp;
-                <a href="{% url 'logout' %}" class="navbar-brand">Logout</a></span>
+            <span class="span-login">Welcome {{ user.get_username }}</span>
+            <a href="{% url 'logout' %}" class="navbar-brand">Logout</a>
         {% else %}
             <a href="{% url 'login' %}" class="navbar-brand">Login</a>
         {% endif %}

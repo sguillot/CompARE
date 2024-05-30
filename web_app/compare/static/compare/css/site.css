@@ -817,13 +817,26 @@ input.check{
   }
 
   /* Modify, details, home & info page */
-  .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2 {
+  .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2, .span-login {
     font-size: 30px;
   }
 
   .divmodel, .divassumptions, .divcompact {
     width: 100%;
     margin-bottom:10px;
+  }
+
+  .divcompact {
+    display:grid;
+    grid-template-columns: repeat(2, 2fr);
+  }
+
+  .divname, .divmethod, .divref, .divconstrain, .alert-container {
+    width:80%;
+  }
+
+  .alert-container, .plot-detail {
+    grid-column: span 2;
   }
 }
 
@@ -851,7 +864,7 @@ input.check{
     margin-right:0px;
   }
 
-  .tab td, .tab th {
+  .tab td, .tab th, .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
     font-size:14px;
   }
   
@@ -872,18 +885,18 @@ input.check{
 
   .navbar-links {
     flex-direction: column;
-    width: 20%;
+    width:20%;
     height:100%;
     text-align: center;
     position: absolute;
     top:10px;
-    left: 0;
+    left:0;
     background-color: #ffffff;
   }
 
   .navbar-links a {
     font-size:25px;
-    width: 100%;
+    width:100%;
   }
 
   .hamburger-menu {
@@ -896,7 +909,7 @@ input.check{
   .navbar-Compare {
     margin-left:auto;
     height:80px;
-    width: 200px; 
+    width:200px; 
     margin-right:20px;
   }
 
@@ -934,7 +947,253 @@ input.check{
     max-width:90%;
   }
 
-  .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .acknowledgments h3 {
-    font-size: 25px;
+  .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .acknowledgments h3, .span-login {
+    font-size:25px;
+  }
+
+  .plot-page {
+    padding:0px;
+  }
+
+  /* Plot page */
+  .checkboxesContainer {
+    flex-direction:column;
+    align-items:center;
+  }
+}
+
+@media (max-width: 1100px) {
+  /* All pages */
+  .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, 
+  .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, 
+  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2 {
+    font-size:20px;
+  }
+
+  .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
+  .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
+  .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
+  #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
+  .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, #addModDep label, #addAssumption label {
+    font-size:18px;
+  }
+
+  /* Visu_data page */
+  .mdetails-column, .reference-column {
+    display:none;
+  }
+
+  .content-filter {
+    display:grid;
+    grid-template-columns: repeat(1, 2fr);
+    grid-template-areas: 
+      "search"
+      "showing";
+    margin-bottom:10px;
+  }
+
+  .search {
+    grid-area:search;
+    grid-column: span 2;
+  }
+
+  #show {
+    grid-area:showing;
+    width:90%;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .button {
+    width:100%;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .button button {
+    margin:0 10px 0 10px;
+  }
+
+  .multiple-content {
+    display:grid;
+    grid-template-columns: repeat(3, 2fr);
+  }
+}
+
+@media (max-width: 950px) {
+  /* Visu_data page */
+  .dependency-column {
+    display:none;
+  }
+}
+
+@media (max-width: 800px) {
+  /* All pages */
+  .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3,
+  .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
+  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
+  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+    font-size:18px;
+  }
+
+  .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
+  .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
+  .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
+  #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
+  .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
+  #addModDep label, #addAssumption label {
+    font-size:16px;
+  }
+
+  /* Visu_data page */
+  .form, .multiple-content {
+    display:grid;
+    grid-template-columns: repeat(2, 2fr);
+  }
+
+  /* TO CHANGE ? */
+  .method-column {
+    display:none;
+  }
+}
+
+@media (max-width: 700px) {
+  /* All pages */
+  .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .error,
+  .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
+  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
+  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+    font-size:16px;
+  }
+
+  .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
+  .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
+  .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
+  #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
+  .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
+  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label {
+    font-size:14px;
+  }
+
+  /* Visu_data page */
+  .content-filter {
+    grid-template-areas: 
+      "search"
+      "buttons"
+      "showing";
+  }
+
+  #show {
+    grid-column: span 2;
+  }
+
+  .button {
+    grid-area:buttons;
+    padding-bottom: 20px;
+  }
+
+  #plot-container svg {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .tab td, .tab th, .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
+    font-size:12px;
+  }
+
+  /* TO CHANGE ? */
+  .variable-column {
+    display:none;
+  }
+}
+
+@media (max-width: 600px) {
+  /* All pages */
+  .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .error,
+  .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
+  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
+  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+    font-size:14px;
+  }
+
+  .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
+  .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
+  .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
+  #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
+  .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
+  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
+  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #showP, #show, #vld, 
+  #reset, .ConsV, .Meth, .ConsT, .Dep, .DepS, .Ass, .Ass2, .filter #Search, .modifyinput, .enabledinput, .insertinput, .file-input {
+    font-size:12px;
+  }
+
+  /* TO CHANGE ? */
+  .data-column {
+    display:none;
+  }
+}
+
+@media (max-width: 500px) {
+  /* All pages */
+  .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .messageForLoad, 
+  .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
+  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3, .error,
+  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+    font-size:12px;
+  }
+
+  .modify-page h1, .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
+  .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
+  .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
+  #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
+  .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
+  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
+  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #showP, #show, #vld, 
+  #reset, .ConsV, .Meth, .ConsT, .Dep, .DepS, .Ass, .Ass2, .filter #Search, .modifyinput, .enabledinput, .insertinput, .file-input, .tab td, .tab th,
+  .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
+    font-size:10px;
+  }
+
+  /* Visu_data page */
+  .multiple-content {
+    display:grid;
+    grid-template-columns: repeat(1, 2fr);
+  }
+
+  #vld {
+    margin-bottom:10px;
+  }
+
+  .navbar-Compare {
+    height:60px;
+    width:140px;
+  }
+
+  .hamburger-menu {
+    font-size:1.3em;
+  }
+
+  .dwnl-image, .plus-image {
+    width:20px;
+    height:20px;
+  }
+}
+
+@media (max-width: 400px) {
+  /* All pages */
+  .plus-image, .dwnl-image, .checkbox-image {
+    width:15px;
+    height:15px;
+  }
+
+  .tab td, .tab th, .titlefile h2, .modify-page h1, .info-name a, .info-ref a, .info-method a, .info-constrain a, .form-model a, .form-assumptions a,
+  .label-filename, .label-filename-errors, .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
+    font-size:9px;
+  }
+
+  .container {
+    padding:10px;
   }
 }

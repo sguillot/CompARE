@@ -10,11 +10,11 @@ Visu_data
 
     <div class="side_menu">
 
-        <div class="title-dclasses data-column">
+        <div class="title-dclasses">
             <h2>Database Classes</h2>
         </div>
 
-        <form class="form data-column">
+        <form class="form">
 
             <div>
                 <input type="checkbox" name="Cold_MSP" value="Cold MSP" class="check">
@@ -222,14 +222,14 @@ Visu_data
                             Reference
                         </th>
                         <th class="download-column">Download</th>
-                        <th class="checkbox-column"><img src="{% static 'compare/images/check.svg' %}" onclick="selectall()"><img src="{% static 'compare/images/square.svg' %}" onclick="unselectall()"></th>
+                        <th class="checkbox-column"><img class="checkbox-image" src="{% static 'compare/images/check.svg' %}" onclick="selectall()"><img class="checkbox-image" src="{% static 'compare/images/square.svg' %}" onclick="unselectall()"></th>
                     </tr>
                 </thead>
                 
                 <tbody id="firstTable">
                     {% for q , m , a, datalink, file_exists in queryall %}
                     <tr>
-                        <td class="details-column"><a href="{% url 'detail' q.filename %}" target="_blank"><img src="{% static 'compare/images/plus.svg' %}" alt="icon more" width=30em /></a></td>
+                        <td class="details-column"><a href="{% url 'detail' q.filename %}" target="_blank"><img class="plus-image" src="{% static 'compare/images/plus.svg' %}" alt="icon more" width=30em /></a></td>
                         <td class="source-column">{{ q.id_name.namedb }}</td>
                         <td class="data-column">{{ q.id_name.classdb }}</td>
                         <td class="method-column">{{ q.id_method.method }}</td>
@@ -257,11 +257,11 @@ Visu_data
                         <td class="download-column">
                             {% if file_exists %}
                                 <a href="{% static datalink %}" download="{{q.h5_filename}}">
-                                    <img src="{% static 'compare/images/download.svg' %}" alt="icon download" width=30em />
+                                    <img class="dwnl-image" src="{% static 'compare/images/download.svg' %}" alt="icon download" width=30em />
                                 </a>
                             {% endif %}
                         </td>
-                        <td class="checkbox-column"><input type="checkbox" value='{{q.h5_filename}}' class="dwnl" name="che"></td>
+                        <td class="checkbox-column"><input type="checkbox" value='{{q.h5_filename}}' class="dwnl checkbox-image" name="che"></td>
                     </tr>
                     {% endfor %}
                 </tbody>

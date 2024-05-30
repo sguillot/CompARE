@@ -1,9 +1,3 @@
-// Execute the function once on page load
-document.addEventListener("DOMContentLoaded", adjustNavbarDisplay);
-
-// Listen to the window resizing event
-window.addEventListener("resize", adjustNavbarDisplay);
-
 /** 
  * When a checkboxes of a side panel is checked 
  * We get checkboxes checked
@@ -28,6 +22,17 @@ $(document).ready(function(){
     })
 })
 
+/** 
+ * Function to adjust SVG figures
+ */ 
+function adjustSVGFigures() {
+  var svgs = document.querySelectorAll('.mpld3-figure');
+  svgs.forEach(function(svg) {
+      svg.setAttribute('preserveAspectRatio', 'xMinYMin meet');
+      svg.setAttribute('viewBox', '0 0 640 480');
+  });
+}
+
 /**
  * Adjusts the display of the navigation bar based on the screen size.
  */
@@ -40,6 +45,14 @@ function adjustNavbarDisplay() {
   } else {
       links.style.display = 'none';
   }
+}
+
+/**
+ * Function to handle all adjustments
+ */
+function handleAdjustments() {
+  adjustSVGFigures();
+  adjustNavbarDisplay();
 }
 
 /**
@@ -287,13 +300,13 @@ function searchFilter(){
  * @param {HTMLSelectElement} select - The <select> element to fill.
  * @param {Array<string>} options - The array of options to be added.
  */
-function populateSelect(select, options) {
+function populateSelect(select, options, className) {
 
   // Then add the sorted options to the selector
   options.forEach(option => {
     // Check if the option already exists in the selector
     if (!select.querySelector("option[value='" + option + "']")) {
-      select.innerHTML += "<option value='" + option + "'>" + option + "</option>";
+      select.innerHTML += "<option class='" + className + "' value='" + option + "'>" + option + "</option>";
     }
   });
 }
@@ -304,12 +317,12 @@ function populateSelect(select, options) {
  *
  * @param {HTMLSelectElement} select - The <select> element whose options need to be sorted.
  */
-function sortSelect(select) {
+function sortSelect(select, className) {
   var options = Array.from(select.options).map(option => option.value);
   options.sort((a, b) => a.localeCompare(b, 'fr', { sensitivity: 'base' }));
   select.innerHTML = '';
   options.forEach(option => {
-    select.innerHTML += "<option value='" + option + "'>" + option + "</option>";
+    select.innerHTML += "<option class='" + className + "' value='" + option + "'>" + option + "</option>";
   });
 }
 
@@ -378,45 +391,52 @@ function ajaxRequest(checkList , select , search){
       // Filter dynamically the values
       data.forEach(d => {
         // For the "more filters" menu
-        populateSelect(list_methods, [d.method]);
-        populateSelect(list_variable, [d.constrainvariable]);
-        populateSelect(list_constrain_type, [d.constraintype]);
-        populateSelect(list_dep_primary, d.modelprimary);
-        populateSelect(list_dep_secondary, d.modelsecondary);
-        populateSelect(list_assumptions_primary, d.assumptionsprimary);
-        populateSelect(list_assumptions_secondary, d.assumptionssecondary);
+        populateSelect(list_methods, [d.method], 'Meth');
+        populateSelect(list_variable, [d.constrainvariable], 'ConsV');
+        populateSelect(list_constrain_type, [d.constraintype], 'ConsT');
+        populateSelect(list_dep_primary, d.modelprimary, 'Dep');
+        populateSelect(list_dep_secondary, d.modelsecondary, 'DepS');
+        populateSelect(list_assumptions_primary, d.assumptionsprimary, 'Ass');
+        populateSelect(list_assumptions_secondary, d.assumptionssecondary, 'Ass2');
 
         // Sort the select options alphabetically
-        sortSelect(list_methods);
-        sortSelect(list_variable);
-        sortSelect(list_constrain_type);
-        sortSelect(list_dep_primary);
-        sortSelect(list_dep_secondary);
-        sortSelect(list_assumptions_primary);
-        sortSelect(list_assumptions_secondary);
+        sortSelect(list_methods, 'Meth');
+        sortSelect(list_variable, 'ConsV');
+        sortSelect(list_constrain_type, 'ConsT');
+        sortSelect(list_dep_primary, 'Dep');
+        sortSelect(list_dep_secondary, 'DepS');
+        sortSelect(list_assumptions_primary, 'Ass');
+        sortSelect(list_assumptions_secondary, 'Ass2');
 
         // For the table
         let row  = table.insertRow();
         let more = row.insertCell(0);
         // We generate the part of the static URL before the specified path
-        more.innerHTML = "<a href=detail/" + d.filename + " target='_blank'><img src='" + baseStaticURL + "compare/images/plus.svg' alt='icon more' width='30em' /></a>";
+        more.innerHTML = "<a href=detail/" + d.filename + " target='_blank'><img class='plus-image' src='" + baseStaticURL + "compare/images/plus.svg' alt='icon more' width='30em' /></a>";
+        more.classList.add('details-column');
 
         let name = row.insertCell(1);
         name.innerHTML = d.namedb;
+        name.classList.add('source-column');
               
         let classdb = row.insertCell(2);
         classdb.innerHTML = d.classdb;
+        classdb.classList.add('data-column');
 
         let method = row.insertCell(3);
         method.innerHTML = d.method;
+        method.classList.add('method-column');
 
         let methodspe = row.insertCell(4);
         methodspe.innerHTML = d.method_specific;
+        methodspe.classList.add('mdetails-column');
 
         let constrainvar = row.insertCell(5)
-        constrainvar.innerHTML = d.constrainvariable + "</br>(v. " + d.constrainversion + ")"
+        constrainvar.innerHTML = d.constrainvariable + "</br>(v. " + d.constrainversion + ")";
+        constrainvar.classList.add('variable-column');
 
         let model = row.insertCell(6);
+        model.classList.add('dependency-column');
         if (typeof d.model !== 'undefined') {
           d.model.forEach(mod_text => {
           model.insertAdjacentHTML("beforeend",mod_text);
@@ -424,6 +444,7 @@ function ajaxRequest(checkList , select , search){
         }
         
         let assump = row.insertCell(7);
+        assump.classList.add('assumption-column');
         if (typeof d.assumptions != 'undefined') {
           d.assumptions.forEach(ass_text => {
             assump.insertAdjacentHTML("beforeend", ass_text);
@@ -431,17 +452,20 @@ function ajaxRequest(checkList , select , search){
         }
 
         let ref = row.insertCell(8);
+        ref.classList.add('reference-column');
         ref.innerHTML = "<a href=https://doi.org/"+d.doi+" target='_blank'>"+ d.author +" "+ d.year +"</a>";
 
         let download = row.insertCell(9);
+        download.classList.add('download-column');
       
         if(d.result_h5 === true) {
           // We also generate the part of the static URL before the specified path
-          download.innerHTML = "<a href='" + baseStaticURL + "h5/" + d.h5_filename + "' download='" + d.h5_filename + "'>" + "<img src='" + baseStaticURL + "compare/images/download.svg' alt='icon download' width='30em' />" + "</a>";
+          download.innerHTML = "<a href='" + baseStaticURL + "h5/" + d.h5_filename + "' download='" + d.h5_filename + "'>" + "<img class='dwnl-image' src='" + baseStaticURL + "compare/images/download.svg' alt='icon download' width='30em' />" + "</a>";
         }
 
         let checkdo = row.insertCell(10);
-        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.h5_filename+" class='dwnl' name='che'> </td>";
+        checkdo.classList.add('checkbox-column');
+        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.h5_filename+" class='dwnl checkbox-image' name='che'> </td>";
 
       })
     }
@@ -548,3 +572,9 @@ function enable(id) {
     inp[index].disabled = false;
   }
 }
+
+// Execute the function once on page load
+document.addEventListener("DOMContentLoaded", handleAdjustments);
+
+// Listen to the window resizing event
+window.addEventListener("resize", handleAdjustments);
