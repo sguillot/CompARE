@@ -30,8 +30,8 @@ for i in range(len(density)):
 # Plot
 plt.figure(figsize=(8, 6))
 plt.imshow(density_grid, extent=[R.min(), R.max(), M.min(), M.max()], cmap='viridis', origin='lower', aspect='auto')
-plt.colorbar(label='Probabilité de densité')
+plt.colorbar(label='Densité de probabilités')
 plt.xlabel('Rayon (km)')
 plt.ylabel('Masse (Msun)')
-plt.title('Grille 2D de probabilité de densité')
+plt.title('Grille 2D de probabilités')
 plt.show()

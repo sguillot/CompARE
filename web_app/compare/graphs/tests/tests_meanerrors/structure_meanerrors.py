@@ -127,15 +127,15 @@ def generate_plot_nsmass(pdf, mass_scale, mass, error):
 
 # Exemple d'utilisation des fonctions
 filename_nsmass = 'web_app/compare/static/data/NS_Mass_PSRJ1614-2230_NANOgrav11yr_mass_shapiro_1_MeanErrors.txt'
-filename_nsspin = 'web_app/compare/static/data/NS_Spin_PSRJ1748-2446ad_2005_spin_1_MeanErrors.txt'
+#filename_nsspin = 'web_app/compare/static/data/NS_Spin_PSRJ1748-2446ad_2005_spin_1_MeanErrors.txt'
 
 # Traitement des données
 data, pdf, mass_scale, sigma_values = process_meanerrors_nsmass(filename_nsmass)
-data, pdf, frequency_scale, sigma_values = process_meanerrors_nsspin(filename_nsspin)
+#data, pdf, frequency_scale, sigma_values = process_meanerrors_nsspin(filename_nsspin)
 
 # Sauvegarde des données dans un fichier HDF5
 save_meanerrors_nsmass_to_h5(filename_nsmass.replace('.txt', '.h5'), pdf, sigma_values, mass_scale)
-save_meanerrors_nsspin_to_h5(filename_nsspin.replace('.txt', '.h5'), pdf, sigma_values, frequency_scale)
+#save_meanerrors_nsspin_to_h5(filename_nsspin.replace('.txt', '.h5'), pdf, sigma_values, frequency_scale)
 
 # Génération et affichage du graphique
 generate_plot_nsmass(pdf, mass_scale, data[0], data[1])
