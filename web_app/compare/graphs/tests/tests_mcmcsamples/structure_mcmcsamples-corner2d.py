@@ -22,14 +22,10 @@ hist, x_edges, y_edges = np.histogram2d(masse, rayon, bins=[num_bins_masse, num_
 
 # /!\ Proba density => juste à faire le rapport entre les probabilités trouvées et la masse et le rayon
 total_points = np.sum(hist)
-print(total_points)
 probabilities = hist / total_points
-print(probabilities)
 
 # Créer l'histogramme 2D avec Corner
 figure = corner.hist2d(masse, rayon, contour_kwargs={'colors': contour_colors}, levels=[0.68, 0.95, 0.9999], bins=[num_bins_masse, num_bins_rayon])
-
-print(figure)
 
 # Ajouter des labels aux axes
 plt.xlabel('Rayon (km)')

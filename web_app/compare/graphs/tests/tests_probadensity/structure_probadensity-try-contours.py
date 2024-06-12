@@ -50,7 +50,6 @@ for i, level in enumerate(confidence_levels):
     # Pour chaque chemin, accéder aux coordonnées des points et les ajouter à la liste
     for path in paths:
         coordinates = path.vertices
-        print(coordinates)
         contour_coordinates.append(coordinates)
 
 # Réutiliser contour_coordinates, stocker dans un txt et voir si ce sont les mêmes contours que ceux de la figure
@@ -61,6 +60,6 @@ for i, level in enumerate(confidence_levels):
 #plt.colorbar(label='Probabilité de densité')
 plt.xlabel('Rayon (km)')
 plt.ylabel('Masse (Msun)')
-plt.title('Grille 2D de densité de probabilité pour la masse et le rayon')
+plt.title('Grille 2D de densité de probabilités pour la masse et le rayon')
 
 plt.show()
