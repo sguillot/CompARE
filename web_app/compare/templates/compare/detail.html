@@ -113,12 +113,14 @@ Detail
                         {{ contour_plot|safe }}
                     {% endif %}
         
-                    <div class="checkboxesContainer">
+                    <div class="checkboxesContainerDetail">
                         {% if extracted_contours != 1 %}
                             <div id="sigmaContainer" class="sub-container detail-container">
                                 <h3>Sigmas</h3>
                                 {% for contour in extracted_contours %}
-                                    <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
+                                    <label class="label-contour">
+                                        <input class="color-checkbox" type="checkbox" value="{{ contour }}" checked>{{ forloop.revcounter }}σ<br>
+                                    </label>
                                 {% endfor %}
                             </div>
                         {% endif %}

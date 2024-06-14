@@ -30,10 +30,42 @@ from django.template.loader import render_to_string
 
 
 def home(request):
+    """
+    Displays the home page.
+
+    This function renders the home page of the web application using the "compare/home.html" template.
+
+    Args:
+        request (HttpRequest): The HttpRequest object that contains the request metadata.
+
+    Returns:
+        HttpResponse: The HttpResponse object that renders the "compare/home.html" template.
+    """
     return render(request, "compare/home.html")
 
 
 def keyword_filter(select_ns_prefiltered, all_keywords, keyword):
+    """
+    Filters a list of neutron stars (NS) based on a given keyword.
+
+    This function takes a list of pre-filtered NS, a collection of keywords, and a specific keyword.
+    It returns a filtered list of NS that match the criteria specified by the keyword.
+
+    Args:
+        select_ns_prefiltered (QuerySet): Pre-filtered list of NS.
+        all_keywords (dict): Dictionary containing keywords with their associated dependencies or assumptions.
+        keyword (str): Specific keyword for filtering. Can be one of the following:
+        - "list_dep_primary"
+        - "list_dep_secondary"
+        - "list_assumptions_primary"
+        - "list_assumptions_secondary"
+
+    Returns:
+        QuerySet: Filtered list of NS matching the keyword criteria.
+
+    Reasons:
+        ValueError: If the provided keyword is not recognized.
+    """
     # Get all the NS filenames from the pre-filtered NS list select_ns_all
     prefiltered_ns = []
     for ns in select_ns_prefiltered:
@@ -65,6 +97,19 @@ def keyword_filter(select_ns_prefiltered, all_keywords, keyword):
     return select_ns_filtered
 
 def get_distinct_values(queryset, field_name):
+    """
+    Retrieves distinct values ​​of a specific field in a queryset.
+
+    This function extracts distinct values ​​from a given field in a queryset,
+    while maintaining the original order of values ​​in the queryset.
+
+    Args:
+        queryset (QuerySet): The Django queryset to extract values ​​from.
+        field_name (str): The name of the field whose values ​​should be extracted.
+
+    Returns:
+        list: A list of distinct values ​​for the specified field.
+    """
     values_list = queryset.values_list(field_name, flat=True).order_by(field_name)
     distinct_values = []
     for value in values_list:
@@ -73,6 +118,19 @@ def get_distinct_values(queryset, field_name):
     return distinct_values
 
 def get_sorted_distinct_values(queryset, field_name):
+    """
+    Retrieves the sorted distinct values ​​of a specific field in a queryset.
+
+    This function extracts distinct values ​​from a given field in a queryset,
+    sorts them case-insensitively, then returns the sorted list of distinct values.
+
+    Args:
+        queryset (QuerySet): The Django queryset to extract values ​​from.
+        field_name (str): The name of the field whose values ​​should be extracted.
+
+    Returns:
+        list: A list of sorted distinct values ​​of the specified field.
+    """
     values_list = queryset.values_list(field_name, flat=True)
     values_list_lower = list(values_list)
     sorted_values_lower = sorted(values_list_lower, key=lambda x: x.lower())
@@ -83,7 +141,22 @@ def get_sorted_distinct_values(queryset, field_name):
     return [value for value in distinct_values]
 
 def visu_data(request):
+    """
+    Handles neutron star (NS) data visualization and file download management.
 
+    This function processes GET requests to filter, search, and download neutron star information.
+    It supports pagination, checkbox selection, text searches, keyword filters,
+    as well as downloading BibTex files and information.
+
+    Args:
+        request (HttpRequest): The HttpRequest object containing the request metadata.
+
+    Returns:
+        HttpResponse: An HTTP response containing the rendered HTML page or filtered JSON data.
+
+    Reasons:
+        HttpResponseNotFound: If a file requested for download is not found.
+    """
     # We select all the Ns from the database without models and assumptions but
     # with "ref" ,"name" ,"constrain" and "method" with method select_related
     select_ns_all = Ns.objects.select_related().all().order_by('filename')
@@ -373,7 +446,22 @@ def visu_data(request):
             return render(request, "compare/visu_data.html", select_all_ns)
 
 def detail(request, id):
+    """
+    Manages the details view for a specific entry in the Ns database.
 
+    This view allows you to view the details of a specific entry in the Ns database.
+    It also handles deletion of the entry via a POST form.
+    For associated H5 files, it attempts to generate edge graphs and link dependencies
+    and associated assumptions. If the graphics generation fails or the file is missing,
+    an alert message is displayed.
+
+    Args:
+        request: The HttpRequest object representing the current HTTP request.
+        id: The identifier (filename) of the Ns entry to display.
+
+    Returns:
+        HttpResponse: The HTTP response containing the details page rendering or a JSON response for POST actions.
+    """
     # For deletion of entry (button "Remove" in details.html)
     if request.method == 'POST':
         filename = json.loads(request.POST.get('filename'))
@@ -470,6 +558,19 @@ def detail(request, id):
     return render(request, 'compare/detail.html', select)
 
 def generate_plot(request):
+    """
+    Handles the generation and display of charts based on selected H5 files.
+
+    This view retrieves the selected H5 files via a GET request, checks their existence,
+    generates the corresponding graphs, and extracts the relevant information for display.
+    The graphics and information are then displayed on the rendering page.
+
+    Args:
+        request: The HttpRequest object representing the current HTTP request.
+
+    Returns:
+        HttpResponse: The HTTP response containing the rendering of the graphics page.
+    """
     if request.method == 'GET' and 'files[]' in request.GET:
         files = request.GET.getlist('files[]')
 
@@ -541,6 +642,22 @@ def generate_plot(request):
 # TODO:  Next one to check and reformat
 @login_required
 def modify(request, id):
+    """
+    Handles the modification of database entries linked to a specific NS file.
+
+    This view allows you to retrieve information associated with a specific NS file,
+    to display them on a modification page, and to manage the modifications made
+    via POST requests. Changes can affect different aspects of the file NS, 
+    such as name, references, methods, constraints, models, and hypotheses. 
+    Changes are saved to the database and written in a log file.
+
+    Args:
+        request: The HttpRequest object representing the current HTTP request.
+        id (str): The identifier of the NS file to modify.
+
+    Returns:
+        HttpResponse: The HTTP response containing the rendering of the modification page.
+    """
 
     ns_list = Ns.objects.select_related().get(filename=id)
 
@@ -951,8 +1068,23 @@ def modify(request, id):
 
     return render(request, "compare/modify.html", select)
 
-
 def login(request):
+    """
+    Handles the login functionality for the application.
+
+    This function checks if the request method is POST. If it is, it attempts to authenticate the user
+    with the provided username and password. If the authentication is successful, the user is logged in
+    and redirected to the 'insert' page. If the authentication fails, an error message is displayed and
+    the user is redirected back to the login page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: A redirect to the 'insert' page if authentication is successful.
+                      A redirect to the 'login' page with an error message if authentication fails.
+                      A rendered login page if the request method is not POST.
+    """
     # We check if a POST request is send
     if request.method == 'POST':
         # We get the username and the password of the inputs fields
@@ -972,16 +1104,50 @@ def login(request):
     else:
         return render(request, "compare/login.html")
 
-
 def logout(request):
+    """
+    Handles the logout functionality for the application.
+
+    This function logs out the currently authenticated user and redirects them to the 'visu' page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: A redirect to the 'visu' page after logging out.
+    """
     # We log out and redirect to the data table page
     logout_user(request)
     return redirect('visu')
 
-
 @login_required
 def insert_data(request):
+    """
+    Handles the insertion of data into various database tables based on user inputs.
 
+    This function manages both GET and POST requests:
+    - GET requests are used to fetch specific data based on user selections.
+    - POST requests handle the insertion of data from CSV files, manual form submissions, and file uploads.
+
+    For GET requests:
+    - Handles requests to fetch specific data for dropdown menus (names and references).
+
+    For POST requests:
+    - Handles CSV file uploads, parsing the file, performing data validation,
+      and inserting valid records into the database.
+    - Handles manual form submissions for adding new names and references to the database.
+    - Validates and processes user inputs to insert new data entries for `Ns`, `NameNs`, `RefNs`,
+      `MethodNs`, `ConstrainNs`, `ModelNs`, `AssumptionsNs`, and their respective relationship tables.
+
+    Additions are saved to the database and written in a log file.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the 'compare/insert.html' template with updated query results
+                      or JSON responses for specific error messages or successful insertions.
+    """
     # We check if a Get request is sent from the user (get for the selectlist for nama and ref)
     if request.method == 'GET':
         idName = request.GET.get('idname', '')
@@ -1729,6 +1895,17 @@ def insert_data(request):
 
     return render(request, "compare/insert.html", query)
 
-
 def info(request):
+    """
+    Renders the 'compare/info.html' template.
+
+    This view function simply renders the specified HTML template, which typically
+    contains informational content or instructions for the user.
+
+    Args:
+        request (HttpRequest): The request object sent by the user.
+
+    Returns:
+        HttpResponse: Rendered HTML response using the 'compare/info.html' template.
+    """
     return render(request, "compare/info.html", )

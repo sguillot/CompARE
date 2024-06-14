@@ -94,6 +94,22 @@ function toggleMenu() {
   }
 }
 
+/**
+ * Toggles the state of the entries based on the button's current text.
+ */
+function toggleEntries() {
+  var button = $('#entries-button');
+  
+  if (button.text() === "Show all entries") {
+    $('input[type="checkbox"].check').prop('checked', true);
+    document.querySelector('.pagination').style.display = 'none';
+    button.text("Return to initial state");
+    ajaxRequest(getCheckboxesFilter(), getSelect(), getSearch());
+  } else if (button.text() === "Return to initial state") {
+    window.location.href = "/visu/";
+  }
+}
+
 /** 
  * Select all checked checkboxes off the table 
  * Return a list of their values
@@ -297,8 +313,14 @@ function resetFilters() {
 
   // Click on the validation button to reset the table
   document.getElementById('vld').click();
-}
 
+  // Hide the pagination
+  document.querySelector('.pagination').style.display = 'none';
+
+  // Change the button text
+  var button = $('#entries-button');
+  button.text("Return to initial state");
+}
 
 /**
  * When user click on the magnifier
@@ -413,7 +435,9 @@ function ajaxRequest(checkList , select , search){
       if(data.length !== data[0].countns) {
         document.querySelector('.pagination').style.display = 'none';
       } else {
-        document.querySelector('.pagination').style.display = 'block';
+        // Change the button text
+        var button = $('#entries-button');
+        button.text("Return to initial state");
       }
 
       // Get all the elements that we need

@@ -173,6 +173,15 @@ input.check{
 }
 
 /*
+  Flexbox layout for the entries-container class
+*/
+.entries-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 
+
+/*
   Styles for the button within the filter panel 
 */
 .filter #btn{
@@ -201,13 +210,27 @@ input.check{
 /* 
   Styles for various buttons, including cursor, background, size, font, border, color, and border-radius 
 */
-#dwnlF, #dwnlB, #showP, #show, #vld, #log, #reset{
+#dwnlF, #dwnlB, #showP, #show, #vld, #log, #reset {
   cursor:pointer;
   background-color: #fff;
   height: 40px;
   font-size: 0.9em;
   border:none;
   color: #062B5A;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+/* 
+  Styles for the entries button, including cursor, background, size, font, border, color, weight, and border-radius 
+*/
+#entries-button {
+  cursor:pointer;
+  background-color: #062B5A;
+  height: 40px;
+  font-size: 0.9em;
+  border:none;
+  color: #fff;
   font-weight: bold;
   border-radius: 2px;
 }
@@ -246,6 +269,14 @@ input.check{
 */
 #dwnlF:hover, #dwnlB:hover, #showP:hover, #show:hover, #log:hover{
   background-color: #062B5A;
+}
+
+/*
+  Hover background color and text color for the #entries-button
+*/
+#entries-button:hover {
+  background-color: #fff;
+  color:#062B5A;
 }
 
 /* 
@@ -1067,14 +1098,21 @@ input.check{
 }
 
 /* 
-  Flexbox layout for checkboxes container 
+  Flexbox layout for checkboxes containers 
 */
 .checkboxesContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items:center;
   justify-content: center;
   gap: 20px;
+}
+
+.checkboxesContainerDetail {
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content: center;
 }
 
 /* 
@@ -1083,6 +1121,7 @@ input.check{
 .detail-container {
   width:110px;
   height:150px;
+  margin-bottom:10px;
 }
 
 /* 
@@ -1583,6 +1622,24 @@ input.check{
   .dependency-column {
     display:none;
   }
+
+  /*
+    Reajustment of the direction of the plot container
+  */
+  .plot-detail > #plot-container {
+    flex-direction:column;
+  }
+
+  .checkboxesContainerDetail {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .detail-container {
+    margin-right:10px;
+  }
 }
 
 @media (max-width: 800px) {
@@ -1594,7 +1651,7 @@ input.check{
   .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3,
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
   .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
     font-size:18px;
   }
 
@@ -1637,7 +1694,7 @@ input.check{
   .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .error,
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
   .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
     font-size:16px;
   }
 
@@ -1649,7 +1706,7 @@ input.check{
   .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
   #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
   .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
-  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label {
+  .checkbox-label, .label-filename, .label-filename-errors, .label-contour, .label-subfolder, #addModDep label, #addAssumption label {
     font-size:14px;
   }
 
@@ -1714,7 +1771,7 @@ input.check{
   .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .error,
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
   .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
     font-size:14px;
   }
 
@@ -1726,8 +1783,8 @@ input.check{
   .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
   #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
   .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
-  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
-  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #showP, #show, #vld, 
+  .checkbox-label, .label-filename, .label-filename-errors, .label-contour, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
+  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #entries-button, #showP, #show, #vld, 
   #reset, .ConsV, .Meth, .ConsT, .Dep, .DepS, .Ass, .Ass2, .filter #Search, .modifyinput, .enabledinput, .insertinput, .file-input {
     font-size:12px;
   }
@@ -1749,7 +1806,7 @@ input.check{
   .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .messageForLoad, 
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
   .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3, .error,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
     font-size:12px;
   }
 
@@ -1761,8 +1818,8 @@ input.check{
   .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
   #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
   .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
-  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
-  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #showP, #show, #vld, 
+  .checkbox-label, .label-filename, .label-filename-errors, .label-contour, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
+  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #entries-button, #showP, #show, #vld, 
   #reset, .ConsV, .Meth, .ConsT, .Dep, .DepS, .Ass, .Ass2, .filter #Search, .modifyinput, .enabledinput, .insertinput, .file-input, .tab td, .tab th,
   .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
     font-size:10px;
