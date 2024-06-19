@@ -28,7 +28,6 @@ from django.contrib.auth import logout as logout_user
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 
-
 def home(request):
     """
     Displays the home page.
@@ -1909,3 +1908,17 @@ def info(request):
         HttpResponse: Rendered HTML response using the 'compare/info.html' template.
     """
     return render(request, "compare/info.html", )
+
+def constraints(request):
+    """
+    Displays the constraints page.
+
+    This function returns the user to the constraints page, indicating the specificity of each constraint.
+
+    Args:
+        request (HttpRequest): The HttpRequest object that contains the request metadata.
+
+    Returns:
+        HttpResponse: The HttpResponse object that renders the "compare/home.html" template.
+    """
+    return render(request, "compare/constraints.html")

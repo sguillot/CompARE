@@ -10,6 +10,7 @@
         var baseStaticURL = "{% static '' %}";
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/1f1ef13669.js" crossorigin="anonymous"></script>
     <script src="{% static 'compare/js/script.js' %}"></script>
     <script src="{% static 'compare/js/scriptAdd.js' %}"></script>
     <script src="{% static 'compare/js/popup.js' %}"></script>
@@ -25,6 +26,7 @@
     <div class="navbar-links" id="navbar-links">
         <a href="{% url 'home' %}" class="navbar-brand">Home page</a>
         <a href="{% url 'visu' %}" class="navbar-brand">Data table</a>
+        <a href="{% url 'constraints' %}" class="navbar-brand">Constraints</a>
         <a href="{% url 'insert' %}" class="navbar-brand">Add entry</a>
         <a href="{% url 'info' %}" class="navbar-brand">More info</a>
         {% if user.is_authenticated %}
