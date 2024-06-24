@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy import optimize
 
 # Charger les données à partir du fichier
-data = np.loadtxt("web_app/compare/static/data/qLMXB_M13_qLMXB_2018_massradius_hydrogen_1_ProbaDistrib.txt", comments='#')
+data = np.loadtxt("web_app/compare/static/data/qLMXB_M13_qLMXB_2018_massradius_helium_1_ProbaDistrib.txt", comments='#')
 
 # Extraire les valeurs de rayon, de masse et de probabilité de densité
 R = data[:, 0]
@@ -28,10 +28,10 @@ contour_levels = []
 max_pdf = np.max(density)
 
 # Niveaux de confiance
-confidence_levels = [0.68, 0.95, 0.9999]
+confidence_levels = [0.682689492137086, 0.954499736103642, 0.997300203936740, 0.999936657516334, 0.999999426696856]
 
 # Couleurs
-colors = ['blue', 'green', 'red']
+colors = ['blue', 'green', 'red', 'black', 'purple']
 
 # Initialiser une liste pour stocker les coordonnées des contours
 contour_coordinates = []
@@ -50,7 +50,6 @@ for i, level in enumerate(confidence_levels):
     # Pour chaque chemin, accéder aux coordonnées des points et les ajouter à la liste
     for path in paths:
         coordinates = path.vertices
-        print(coordinates)
         contour_coordinates.append(coordinates)
 
 # Réutiliser contour_coordinates, stocker dans un txt et voir si ce sont les mêmes contours que ceux de la figure
@@ -61,6 +60,6 @@ for i, level in enumerate(confidence_levels):
 #plt.colorbar(label='Probabilité de densité')
 plt.xlabel('Rayon (km)')
 plt.ylabel('Masse (Msun)')
-plt.title('Grille 2D de probabilité de densité pour la masse et le rayon')
+plt.title('Grille 2D de densité de probabilités pour la masse et le rayon')
 
 plt.show()

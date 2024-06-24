@@ -1,7 +1,13 @@
+/* 
+  Applies a global font to all elements
+*/
 *{
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 
+  Styles for the main navigation bar
+*/
 .navbar {
   background-color: #ffffff;
   font-size: 2em;
@@ -12,16 +18,25 @@
   border-bottom: #085295 10px solid;
 }
 
+/* 
+  Specific styles for the 'navbar-Compare' element within the navigation bar 
+*/
 .navbar-Compare {
   margin:10px 0 10px 40px;
 }
 
+/* 
+  Styles for links inside elements with the 'navbar-links' class
+*/
 .navbar-links a {
   text-decoration: none;
   color: #062B5A;
   padding: 20px 0 20px;  
 }
 
+/*
+  Flexbox layout for the navigation bar links
+*/
 .navbar-links {
   flex-direction: row;
   align-items: center;
@@ -29,37 +44,59 @@
   flex-grow: 1;
 }
 
+/*
+  Styles for the hamburger menu (mainly used for mobile interfaces)
+*/
 .hamburger-menu {
   cursor: pointer;
   display: none; 
 }
 
+/* 
+  Styles for the footer, initially hidden
+*/
 footer{
   background-color: #000000;
   display: none;
 }
 
+/* 
+  Text color for paragraphs within the footer
+*/
 footer p{
   color:#fff;
 }
 
-/* Visualisation table */
+/*------------------------------| Visualisation table |------------------------------*/
+
+/*
+  Flexbox layout for the visualisation table with wrapping
+*/
 .visu{
   display: flex;
   flex-wrap: wrap;
 }
 
+/*
+  Styles for the side menu, including background color and width
+*/
 .side_menu{
   background-color: #085295;
   padding-bottom: 10px;
   width: 20%;
 }
 
+/*
+  Center-alignes text and white color for titles within dclasses
+*/
 .title-dclasses {
   text-align: center;
   color:white;
 }
 
+/*
+  Styles for forms, including padding, border radius, background gradient, and font size
+*/
 .form{
   padding:15px 0px 15px 0px;
   border-radius: 10px;
@@ -68,6 +105,9 @@ footer p{
   font-size: 1.3em;
 }
 
+/*
+  Styles for checkboxes, including cursor, size and alignment
+*/
 input.check{
   cursor:pointer;
   width: 30px;
@@ -75,6 +115,9 @@ input.check{
   align-items: center;
 }
 
+/*
+  Flexbox layout for content section, including width, direction, wrapping and alignment
+*/
 .content{
   width: 80%;
   display: flex;
@@ -83,7 +126,11 @@ input.check{
   align-items: center;
 }
 
-/* Filter panel */
+/*------------------------------| Filter panel |------------------------------*/
+
+/* 
+  Styles for filter panel, including background gradient, layout, color, padding, and alignment 
+*/
 .filter{
   background-image: linear-gradient(to bottom, #085295, #062B5A);
   display: flex;
@@ -93,8 +140,11 @@ input.check{
   align-items: center;
   flex-direction: column;
   justify-content: flex-end;
-
 }
+
+/*
+  Styles for the search input within the filter panel
+*/
 .filter #Search{
   height: 40px;
   width: 500px;
@@ -104,11 +154,17 @@ input.check{
   padding-left: 7px;
 }
 
+/*
+  Flexbox layout for content within the filter panel
+*/
 .content-filter{
   display: flex;
   align-items: center;
 }
 
+/*
+  Flexbox layout for the search section, including padding
+*/
 .search{
   display: flex;
 	justify-content: center;
@@ -116,6 +172,18 @@ input.check{
   padding: 20px;
 }
 
+/*
+  Flexbox layout for the entries-container class
+*/
+.entries-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 
+
+/*
+  Styles for the button within the filter panel 
+*/
 .filter #btn{
   background-color: #baccdb;
   padding: 10px;
@@ -123,17 +191,26 @@ input.check{
   border-radius: 0px 150px 150px 0px;
 }
 
+/* 
+  Width for the button 
+*/
 #btn {
   width: 10%;
 }
 
+/* 
+  Flexbox layout for button groups, including width and spacing 
+*/
 .button{
   display: flex;  
   width: 60%;
   justify-content: space-around;
 }
 
-#dwnlF, #dwnlB, #showP, #show, #vld, #log, #reset{
+/* 
+  Styles for various buttons, including cursor, background, size, font, border, color, and border-radius 
+*/
+#dwnlF, #dwnlB, #showP, #show, #vld, #log, #reset {
   cursor:pointer;
   background-color: #fff;
   height: 40px;
@@ -144,45 +221,94 @@ input.check{
   border-radius: 2px;
 }
 
+/* 
+  Styles for the entries button, including cursor, background, size, font, border, color, weight, and border-radius 
+*/
+#entries-button {
+  cursor:pointer;
+  background-color: #062B5A;
+  height: 40px;
+  font-size: 0.9em;
+  border:none;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+/* 
+  Specific margin for the #vld button 
+*/
 #vld {
   margin-right:35px;
 }
 
+/* 
+  Hover effects for buttons, including color change and transition 
+*/
 #vld:hover, #dwnlF:hover, #dwnlB:hover, #showP:hover, #show:hover, #log:hover, #reset:hover{
   color: white;
   transition:0.1s ease-in-out;
 }
 
+/* 
+  Hover background color for the #vld button 
+*/
 #vld:hover {
   background-color: #0a851b;
 }
 
+/* 
+  Hover background color for the #reset button 
+*/
 #reset:hover {
   background-color:#721c24;
 }
 
+/* 
+  Hover background color for other buttons 
+*/
 #dwnlF:hover, #dwnlB:hover, #showP:hover, #show:hover, #log:hover{
   background-color: #062B5A;
 }
 
+/*
+  Hover background color and text color for the #entries-button
+*/
+#entries-button:hover {
+  background-color: #fff;
+  color:#062B5A;
+}
+
+/* 
+  Styles for the #multiple element, initially hidden 
+*/
 #multiple{
   display: none;
   background-color: #085295;
   border-radius:10px;
 }
 
+/* 
+  Flexbox layout for multiple content, with wrapping 
+*/
 .multiple-content{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
+/* 
+  Styles for select elements within .multiple-content 
+*/
 .multiple-content select{
   width: 200px;
   height: 100px;
   overflow-y: auto;
 }
 
+/* 
+  Flexbox layout for .flexSelect within .multiple-content, including padding and font size 
+*/
 .multiple-content .flexSelect{
   display: flex;
   flex-direction: column;
@@ -191,27 +317,43 @@ input.check{
   font-size: 1.2em;
 }
 
+/* 
+  Top padding for .button-vld 
+*/
 .button-vld{
   padding-top: 50px;
 }
 
-/* Table */
+/*------------------------------| Table |------------------------------*/
+
+/* 
+  Styles for the .tab container, including width, background, and border 
+*/
 .tab{
   width: 95%;
   background-color: #ffffff;
   border: #062B5A 2px solid; 
 }
 
+/* 
+  Styles for tables within .tab, including border collapse and text alignment 
+*/
 .tab table{
   border-collapse: collapse;
   text-align: center;
 }
 
+/* 
+  Styles for table headers (th) within .tab 
+*/
 .tab th{
   background-color: #baccdb;
   color: #062b5a;
 }
 
+/* 
+  Common styles for table headers and cells, including borders and padding 
+*/
 .tab th, .tab td{
   border-width: 1px; 
   border-bottom: #062B5A 1px solid;
@@ -219,21 +361,33 @@ input.check{
   padding: 9px;
 }
 
+/* 
+  Specific right border for table headers 
+*/
 .tab th{
   border-right: #062B5A 1px solid;
 }
 
+/* 
+  Styles for list items within .tab 
+*/
 .tab li{
   list-style: none;
   padding:2px 0px 2px 0px;
 }
 
+/* 
+  Flexbox layout for column headers, aligning items and distributing space 
+*/
 .column-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+/* 
+  Styles for sort icons, including layout, cursor, background, border-radius, padding, and margin 
+*/
 .sort-icons {
   display: flex;
   flex-direction: column;
@@ -244,16 +398,26 @@ input.check{
   margin-left:5px;
 }
 
+/* 
+  Hover effect for sort icons 
+*/
 .sort-icons:hover {
   background-color:white;
 }
 
-/* Pagination */
+/*------------------------------| Pagination |------------------------------*/
+
+/* 
+  Center-aligns pagination and adds top margin 
+*/
 .pagination {
   text-align: center;
   margin-top: 20px;
 }
 
+/* 
+  Styles for pagination links and disabled state, including padding, margin, color, border, and no text decoration 
+*/
 .pagination a, .pagination .disabled {
   display: inline-block;
   padding: 5px 10px;
@@ -263,10 +427,16 @@ input.check{
   text-decoration: none;
 }
 
+/* 
+  Hover effect for pagination links 
+*/
 .pagination a:hover {
   background: #f0f0f0;
 }
 
+/* 
+  Styles for the current page link in pagination 
+*/
 .pagination .current {
   background: #007bff;
   color: #fff;
@@ -274,16 +444,26 @@ input.check{
   padding: 6px 11px;
 }
 
+/* 
+  Bold font for previous and next links in pagination 
+*/
 .pagination .prev, .pagination .next {
   font-weight: bold;
 }
 
+/* 
+  Styles for disabled pagination links 
+*/
 .pagination .disabled {
   color: #999;
   cursor: not-allowed;
 }
 
-/* Detail page */
+/*------------------------------| Detail page |------------------------------*/
+
+/* 
+  Flexbox layout for body detail section, including background color and alignment 
+*/
 .bodydetail{
   background-color: #ffffff;
   display: flex;
@@ -291,6 +471,9 @@ input.check{
   align-items: center;
 }
 
+/* 
+  Flexbox layout for title file section, including text color and alignment 
+*/
 .titlefile{
   color: #000000;
   display: flex;
@@ -298,10 +481,16 @@ input.check{
   align-items: center;
 }
 
+/* 
+  Large font size for the h1 element within title file 
+*/
 .titlefile h1{
   font-size: 4em;
 }
 
+/* 
+  Styles for buttons, including cursor, size, padding, margin, border radius, no border, text color, font weight, and font size 
+*/
 .btn button {
   cursor: pointer;
   width:110px;
@@ -314,33 +503,54 @@ input.check{
   font-size: 1.2em;
 }
 
+/* 
+  Background color for the download button 
+*/
 #btndwnl {
   background-color: #44c767;
 }
 
+/* 
+  Hover effect for the download button 
+*/
 #btndwnl:hover {
   background-color: #35964e;
   transition: 0.1s ease-in-out;
 }
 
+/* 
+  Background color for the remove button 
+*/
 #btnremove {
   background-color: #c74444;
 }
 
+/* 
+  Hover effect for the remove button 
+*/
 #btnremove:hover {
   background-color: #963535;
   transition: 0.1s ease-in-out;
 }
 
+/* 
+  Background color for the modify button 
+*/
 #btnmodify {
   background-color: #c78544;
 }
 
+/* 
+  Hover effect for the modify button 
+*/
 #btnmodify:hover {
   background-color: #966235;
   transition: 0.1s ease-in-out;
 }
 
+/* 
+  Flexbox layout for content file section, including wrapping, spacing, and padding 
+*/
 .contentfile{
   display: flex;
   flex-wrap: wrap;
@@ -348,6 +558,9 @@ input.check{
   padding: 2%;
 }
 
+/* 
+  Styles for model and assumptions divs, including width, padding, background color, border, and text alignment 
+*/
 .divmodel, .divassumptions{
   width: 25%;
   padding-left: 0.2%;
@@ -357,25 +570,40 @@ input.check{
   text-align: justify;
 }
 
+/* 
+  Padding for unordered lists within model and assumptions divs 
+*/
 .divmodel ul, .divassumptions  ul{
   padding:0px 10px 0px 10px;
 }
 
+/* 
+  List item styles within model and assumptions divs, including no list style and font size 
+*/
 .divmodel li, .divassumptions  li{
   list-style-type:none;
   font-size: 1.3em;
 }
 
+/* 
+  Bold font for spans within model and assumptions divs 
+*/
 .divmodel span, .divassumptions span{
   font-weight: bold;
 }
 
+/* 
+  Styles for description divs within model and assumptions, including padding and margin 
+*/
 .divmodeldesc, .divassumptionsdesc {
   padding-top: 5px;
   text-justify: distribute;
   margin-left:10px;
 }
 
+/* 
+  Flexbox layout for compact div, including wrapping, width, background color, spacing, and border 
+*/
 .divcompact{
   display: flex;
   flex-wrap: wrap;
@@ -385,16 +613,25 @@ input.check{
   border-style: solid;
 }
   
+/* 
+  Styles for name, method, reference, and constrain divs, including width, padding, and font size 
+*/
 .divname, .divmethod, .divref, .divconstrain{
   width: 45%;
   padding: 0 2% 0 2%;
   font-size: 1.3em;
 }
 
+/* 
+  Pointer cursor for details within reference div 
+*/
 .divref > details {
   cursor:pointer;
 }
   
+/* 
+  Styles for category titles, including font size, alignment, font weight, background color, and border radius 
+*/
 .titlecat{
   font-size: 2em;
   text-align: center;
@@ -403,18 +640,28 @@ input.check{
   border-radius: 2em;
 }
 
+/* 
+  Flexbox layout for plot container within plot detail, including alignment and direction 
+*/
 .plot-detail > #plot-container {
   display:flex;
   align-items:center;
   flex-direction:row;
 }
 
+/* 
+  Styles for alert container, including left margin and text color 
+*/
 .alert-container {
   margin-left:20px;
   color:red;
 }
 
-/* Login page */
+/*------------------------------| Login page |------------------------------*/
+
+/* 
+  Styles for the login box, including background color, flexbox layout, center alignment, and padding 
+*/
 .box-login{
   background-color: #ffffff;
   display: flex;
@@ -422,10 +669,16 @@ input.check{
   padding: 100px;
 }
 
+/* 
+  Text color for h1 elements within the login box 
+*/
 .box-login h1 {
   color:#ffffff;
 }
 
+/* 
+  Flexbox layout for the login section, including width, padding, background color, and alignment 
+*/
 .lgn{
   width: 50%;
   padding-top: 50px;
@@ -436,24 +689,40 @@ input.check{
   align-items: center;
 }
 
+/* 
+  Flexbox layout for user and password sections, including background color and margin 
+*/
 .user, .psw {
   background-color: #baccdb;
   display: flex;
   margin-bottom: 35px;
 }
 
+/* 
+  No border for input elements within img-person and img-lock 
+*/
 .img-person input, .img-lock input{
   border:none;
 }
 
+/* 
+  Font size for input elements within user and password sections 
+*/
 .user input, .psw input{
   font-size: 1.3em;
 }
+
+/* 
+  Styles for images within img-person and img-lock, including width and padding 
+*/
 .img-person img, .img-lock img{
   width: 20px;
   padding: 10px;
 }
 
+/* 
+  Flexbox layout for button log, including column direction, center alignment, and font size 
+*/
 .btn-log{
   display: flex;
   flex-direction: column;
@@ -461,7 +730,11 @@ input.check{
   font-size: 1.6em;
 }
 
-/* Add & modify form */
+/*------------------------------| Add & modify form |------------------------------*/
+
+/* 
+  Styles for all content and modify page sections, including width, margin, padding, background color, border radius, box shadow, and font size 
+*/
 .allcontent, .modify-page {
   max-width: 60%;
   margin: 0 auto;
@@ -473,55 +746,88 @@ input.check{
   font-size: 1.3em;
 }
 
+/* 
+  Top margin for paragraphs within all content and modify page sections 
+*/
 .allcontent p, .modify-page p {
   margin-top: 1px;
 }
 
+/* 
+  Bottom margin for various form and content sections 
+*/
 .upload-form, .upload-form-file, .nscontent, .namecontent, .inputadd, .inputRef, 
 .constraincontent, .refcontent, .modelcontent, .asscontent, .form-name,
 .form-ref, .form-method, .form-constrain {
   margin-bottom: 20px;
 }
 
+/* 
+  Flexbox layout for upload forms, including center alignment 
+*/
 .upload-form, .upload-form-file {
   display:flex;
   justify-content: center;
 }
 
+/* 
+  Top margin and center alignment for validation button 
+*/
 .validation-button {
   margin-top: 20px;
   text-align: center; 
 }
 
+/* 
+  Horizontal scroll for tables within source, reference, and model dependencies sections 
+*/
 .table-source, .table-reference, .table-modeldep {
   overflow-x: auto;
 }
 
+/* 
+  Full width and border collapse for tables within source, reference, and model dependencies sections 
+*/
 .table-source table, .table-reference table, .table-modeldep table {
   width: 100%;
   border-collapse: collapse;
 }
 
+/* 
+  Styles for table headers and cells within various table sections, including border, padding, and text alignment 
+*/
 .table-source th, .table-source td, .table-reference th, .table-reference td, .table-modeldep th, .table-modeldep td, .table-assumption th, .table-assumption td{
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
 }
 
+/* 
+  Hide elements with IDs addN, addR, addAssumption, and addModDep 
+*/
 #addN, #addR, #addAssumption, #addModDep {
   display: none;
 }
 
+/* 
+  Bottom margin for div separator 
+*/
 .divsepar {
   margin-bottom: 10px;
 }
 
+/* 
+  Flexbox layout for input add and input reference sections, including padding 
+*/
 .inputadd, .inputRef{
   display: flex;
   flex-direction: column;
   padding: 10px;
 }
 
+/* 
+  Styles for file input, including padding, border, border radius, and width 
+*/
 .file-input {
   padding: 10px;
   border: 1px solid #ccc;
@@ -529,10 +835,16 @@ input.check{
   width: 70%;
 }
 
+/* 
+  Left margin for submit and load buttons 
+*/
 .submit-button, .load-button {
   margin-left:10px;
 }
 
+/* 
+  Styles for various buttons, including padding, no border, border radius, cursor, and background color transition 
+*/
 .submit-button, .load-button, .addN, .addR, .addMA, .removeMA, .createSRV, .updateBtn, .deleteBtn, .addAssumption, .addModDep {
   padding: 10px 20px;
   border: none;
@@ -541,64 +853,106 @@ input.check{
   transition: background-color 0.3s ease;
 }
 
+/* 
+  Margin for add, remove, create, update, delete, assumption, and model dependency buttons 
+*/
 .addMA, .removeMA, .createSRV, .updateBtn, .deleteBtn, .addAssumption, .addModDep {
   margin: 0px 10px 20px 0px;
 }
 
+/* 
+  Background and text color for add buttons 
+*/
 .addN, .addR, .addAssumption, .addModDep {
   background-color: #007bff;
   color: #fff;
 }
 
+/* 
+  Background and text color for submit, addMA, and createSRV buttons 
+*/
 .submit-button, .addMA, .createSRV {
   background-color: #28a745;
   color: #fff;
 }
 
+/* 
+  Background and text color for update and load buttons 
+*/
 .updateBtn, .load-button {
   background-color: #ffc107;
   color: #fff;
 }
 
+/* 
+  Background and text color for removeMA and delete buttons 
+*/
 .removeMA, .deleteBtn {
   background-color: #dc3545;
   color: #fff;
 }
 
+/* 
+  Styles for disabled update and delete buttons, including opacity and cursor 
+*/
 .updateBtn:disabled, .deleteBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* 
+  Hover effect for add buttons 
+*/
 .addN:hover, .addR:hover, .addAssumption:hover, .addModDep:hover {
   background-color: #0056b3;
 }
 
+/* 
+  Hover effect for submit, addMA, and createSRV buttons 
+*/
 .submit-button:hover, .addMA:hover, .createSRV:hover {
   background-color: #218838;
 }
 
+/* 
+  Hover effect for update and load buttons 
+*/
 .updateBtn:hover, .load-button:hover {
   background-color: #e0a800;
 }
 
+/* 
+  Hover effect for removeMA and delete buttons 
+*/
 .removeMA:hover, .deleteBtn:hover {
   background-color: #c82333;
 }
 
+/* 
+  Top margin for add button and add reference 
+*/
 .btnadd, .addRef {
   margin-top: 20px;
 }
 
+/* 
+  Font size for load message 
+*/
 .messageForLoad {
   font-size: 14px;
 }
 
+/* 
+  Styles for disabled create, delete, and form validation buttons 
+*/
 #createDep:disabled, #deleteDep:disabled, #createAss:disabled, #deleteAss:disabled, #validFormButton:disabled{
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* 
+  Styles for labels, including font weight, display, and bottom margin 
+*/
 .nscontent label, .divsepar label, .methodcontent label, .constraincontent label, 
 .refcontent label, .modelcontent label, .asscontent label,
 .formfilename label, .btnadd label, .modify-name label,
@@ -609,6 +963,9 @@ input.check{
   margin-bottom: 5px;
 }
 
+/* 
+  Styles for insert and modify input fields, including width, padding, border, border radius, margin, and box-sizing 
+*/
 .insertinput, .modifyinput {
   width: 100%;
   padding: 10px;
@@ -618,14 +975,25 @@ input.check{
   box-sizing: border-box;
 }
 
+/* 
+  Focus styles for insert and modify input fields, including border color and box shadow 
+*/
 .insertinput:focus, .modifyinput:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-#errorInsert, .err{display: none;}
+/* 
+  Hide error insert and error elements 
+*/
+#errorInsert, .err {
+  display: none;
+}
 
+/* 
+  Styles for error messages, including text color, background color, border color, padding, margin, border, and border radius 
+*/
 .error, #errorInsert p, .err{
   color: #721c24;
   background-color: #f8d7da;
@@ -636,44 +1004,69 @@ input.check{
   border-radius: 0.25rem;
 }
 
-/* Info, home & plot page */
+/*------------------------------| Info, home & plot page |------------------------------*/
+
+/* 
+  Styles for various sections including email, team, citation, acknowledgments, and homepage 
+*/
 .email, .team, .citation, .acknowledgments, .homepage {
 	padding: 1%;
 	font-size: 1.5em;
   text-align:justify;
 }
 
+/* 
+  Table styles including width, border-collapse, and centering 
+*/
 .tab-team {
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
 }
 
+/* 
+  Table width and centering 
+*/
 .tab-team table {
   width: 70%;
   margin:0 auto;
 }
 
+/* 
+  Table cell padding, border, and text alignment 
+*/
 .tab-team td {
   padding: 10px;
   border: 1px solid #ccc;
   text-align: center;
 }
 
+/* 
+  Alternate row background color 
+*/
 .tab-team tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
+/* 
+  Hover effect for table rows 
+*/
 .tab-team tbody tr:hover {
   background-color: #ddd;
 }
 
+/* 
+  Flexbox layout for plot container and go-back container 
+*/
 .plot-page > #plot-container, #go-back-container {
   display:flex;
   align-items: center;
   justify-content: center;
 }
 
+/* 
+  Styles for go-back button 
+*/
 #go-back {
   text-decoration: none;
   cursor:pointer;
@@ -685,12 +1078,18 @@ input.check{
   border-radius: 2px;
 }
 
+/* 
+  Hover effect for go-back button
+*/
 #go-back:hover {
   background-color:#fff;
   color:#062B5A;
   transition: 0.1s ease-in-out;
 }
 
+/* 
+  Styles for plot page including width, max-width, margin, and padding 
+*/
 .plot-page {
   width: 100%;
   max-width: 1200px;
@@ -698,18 +1097,36 @@ input.check{
   padding: 20px;
 }
 
+/* 
+  Flexbox layout for checkboxes containers 
+*/
 .checkboxesContainer {
   display: flex;
+  flex-direction: row;
   align-items:center;
   justify-content: center;
   gap: 20px;
 }
 
+.checkboxesContainerDetail {
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content: center;
+}
+
+/* 
+  Styles for detail container 
+*/
 .detail-container {
   width:110px;
   height:150px;
+  margin-bottom:10px;
 }
 
+/* 
+  Styles for container and container-eos including border, border-radius, padding, height, width, and box-shadow 
+*/
 .container, .container-eos {
   border: 2px solid #3498db;
   border-radius: 8px;
@@ -719,26 +1136,42 @@ input.check{
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* 
+  Additional padding for container 
+*/
 .container {
   padding:20px;
 }
 
+/* 
+  Padding for container-eos 
+*/
 .container-eos {
   padding:5px;
 }
 
+/* 
+  Styles for sub-container including padding, border-radius, and border 
+*/
 .sub-container {
   padding: 20px;
   border-radius:10px;
   border:1px solid black;
 }
 
+/* 
+  Styles for checkbox labels including display and margin 
+*/
 .checkbox-label {
   display: block;
   margin-bottom: 5px;
 }
 
-/* Model & assumption pop-up */
+/*------------------------------| Model & assumption pop-up |------------------------------*/
+
+/* 
+  Styles for model and assumption pop-up containers 
+*/
 .model-popup-container, .assumption-popup-container {
   position: absolute;
   background-color: white;
@@ -748,23 +1181,37 @@ input.check{
   z-index: 1000; /* Ensure pop-up is above other elements */
 }
 
+/* 
+  Styles for unordered lists within pop-ups 
+*/
 .model-popup ul, .assumption-popup ul {
   padding-left: 20px;
   margin: 0;
 }
 
+/* 
+  Styles for list items within pop-ups 
+*/
 .model-popup li, .assumption-popup li {
   list-style-type: none;
   margin: 5px 0;
 }
 
+/* 
+  Cursor style for question mark 
+*/
 .questionmark {
   cursor:help;
 }
 
-/** Responsive design **/
+/*------------------------------| Responsive design |------------------------------*/
+
 @media (max-width: 1900px) {
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+
+  /* 
+    Styles for side menu on smaller screens 
+  */
   .side_menu {
     display: flex;
     flex-direction: row;
@@ -772,39 +1219,66 @@ input.check{
     justify-content: center;
   }
 
+  /* 
+    Center align title-dclasses on smaller screens 
+  */
   .title-dclasses {
     text-align: center;
   }
 
+  /* 
+    Grid layout for form on smaller screens 
+  */
   .form {
     display:grid;
     grid-template-columns: repeat(5, 2fr);
   }
 
+  /* 
+    Block display for content on smaller screens 
+  */
   .content {
     display:block;
   }
 
+  /* 
+    Padding adjustment for filter section on smaller screens 
+  */
   .filter {
     padding:0 0 10px 0;
   }
 
+  /* 
+    Auto width for table cells on smaller screens 
+  */
   .tab th, .tab td {
     width: auto;
   }
 
+  /* 
+    Row direction for column header on smaller screens 
+  */
   .column-header {
     flex-direction: row; 
   }
 
+  /* 
+    Margin adjustment for sort icons on smaller screens 
+  */
   .sort-icons {
     margin-left: 10px;
   }
 
+  /* 
+    Padding adjustment for multiple content on smaller screens 
+  */
   .multiple-content {
     padding-right: 10px;
   }
 
+  /* 
+    Flex layout adjustment for button validation section on smaller screens 
+  */
   .button-vld {
     display:flex;
     flex-direction: column;
@@ -812,70 +1286,116 @@ input.check{
     padding:15px 0 15px 0;
   }
 
+  /* 
+    Full width adjustment for various sections on smaller screens 
+  */
   .side_menu, .title-dclasses, .content, .filter, .tab, .tab table, .button-vld button {
     width:100%;
   }
 
-  /* Modify, details, home & info page */
+  /*------------------------------| Modify, details, home & info page |------------------------------*/
+
+  /* 
+    Font size adjustment for headers on smaller screens 
+  */
   .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2, .span-login {
     font-size: 30px;
   }
 
+  /* 
+    Full width adjustment for model, assumptions, and compact divs on smaller screens 
+  */
   .divmodel, .divassumptions, .divcompact {
     width: 100%;
     margin-bottom:10px;
   }
 
+  /* 
+    Adjust grid layout for divcompact 
+  */
   .divcompact {
     display:grid;
     grid-template-columns: repeat(2, 2fr);
   }
 
+  /* 
+    Adjust width for divname, divmethod, divref, divconstrain, and alert-container 
+  */
   .divname, .divmethod, .divref, .divconstrain, .alert-container {
     width:80%;
   }
 
+  /* 
+    Set grid-column to span 2 for alert-container and plot-detail 
+  */
   .alert-container, .plot-detail {
     grid-column: span 2;
   }
 }
 
 @media (max-width: 1700px) {
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+
+  /* 
+    Adjust font-size for navbar-links 
+  */
   .navbar-links {
     font-size:30px;
   }
 
+  /* 
+    Adjust grid layout for multiple-content 
+  */
   .multiple-content {
     display:grid;
     grid-template-columns: repeat(5, 2fr);
   }
 
+  /* 
+    Align items in button-vld 
+  */
   .button-vld {
     display:flex;
     align-items: center;
   }
 
+  /* 
+    Set width for button inside button-vld 
+  */
   .button-vld button {
     width:70%;
   }
 
+  /* 
+    Adjust margin for #vld 
+  */
   #vld {
     margin-right:0px;
   }
 
+  /* 
+    Adjust font-size for tab, assumption-popup, and model-popup 
+  */
   .tab td, .tab th, .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
     font-size:14px;
   }
   
-  /* Add & modify page */
+  /*------------------------------| Add & modify page |------------------------------*/
+
+  /* 
+    Adjust max-width for allcontent and modify-page 
+  */
   .allcontent, .modify-page {
     max-width:80%;
   }
 }
 
 @media (max-width: 1400px) {
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+
+  /* 
+    Adjust layout for navbar 
+  */
   .navbar {
     display:flex;
     flex-direction: row;
@@ -883,6 +1403,9 @@ input.check{
     width:100%;
   }
 
+  /* 
+    Adjust layout for navbar-links 
+  */
   .navbar-links {
     flex-direction: column;
     width:20%;
@@ -894,11 +1417,17 @@ input.check{
     background-color: #ffffff;
   }
 
+  /* 
+    Adjust font-size and width for navbar-links a 
+  */
   .navbar-links a {
     font-size:25px;
     width:100%;
   }
 
+  /* 
+    Adjust layout for hamburger-menu 
+  */
   .hamburger-menu {
     display: block; 
     float:left;
@@ -906,6 +1435,9 @@ input.check{
     font-size:1.5em;
   }
 
+  /* 
+    Adjust layout for navbar-Compare 
+  */
   .navbar-Compare {
     margin-left:auto;
     height:80px;
@@ -913,49 +1445,81 @@ input.check{
     margin-right:20px;
   }
 
+  /* 
+    Adjust layout for container-logo 
+  */
   .container-logo {
     display: flex;
     margin-left:auto;
   }
 
+  /* 
+    Adjust width and height for img-compare 
+  */
   #img-compare {
     width:100%;
     height:100%;
   }
 
+  /* 
+    Adjust grid layout for form 
+  */
   .form {
     display:grid;
     grid-template-columns: repeat(3, 2fr);
   }
 
+  /* 
+    Adjust font-size for labels inside form 
+  */
   .form div label {
     font-size:18px;
   }
 
+  /* 
+    Adjust width and height for input.check 
+  */
   input.check {
     width:25px;
     height:25px;
   }
 
+  /* 
+    Adjust grid layout for multiple-content 
+  */
   .multiple-content {
     display:grid;
     grid-template-columns: repeat(4, 2fr);
   }
 
-  /* Add, modify, home, info & details page */
+  /*------------------------------| Add, modify, home, info & details page |------------------------------*/
+  
+  /* 
+    Adjust grid layout for multiple-content 
+  */
   .allcontent, .modify-page {
     max-width:90%;
   }
 
+  /* 
+    Adjust font-size for headers 
+  */
   .modify-page h1, .titlefile h1, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .acknowledgments h3, .span-login {
     font-size:25px;
   }
 
+  /*------------------------------| Plot page |------------------------------*/
+  
+  /* 
+    Adjust padding for plot-page 
+  */
   .plot-page {
     padding:0px;
   }
-
-  /* Plot page */
+  
+  /* 
+    Adjust flex-direction and align-items for checkboxesContainer 
+  */
   .checkboxesContainer {
     flex-direction:column;
     align-items:center;
@@ -963,13 +1527,20 @@ input.check{
 }
 
 @media (max-width: 1100px) {
-  /* All pages */
+  /*------------------------------| All pages |------------------------------*/
+
+  /* 
+    Set font size to 20px for headings, titles, and links 
+  */
   .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, 
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, 
   .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2 {
     font-size:20px;
   }
 
+  /* 
+    Set font size to 18px for paragraphs, labels, and form elements 
+  */
   .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
   .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
   .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
@@ -978,11 +1549,18 @@ input.check{
     font-size:18px;
   }
 
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+
+  /* 
+    Hide columns on smaller screens 
+  */
   .mdetails-column, .reference-column {
     display:none;
   }
 
+  /* 
+    Adjust layout for content-filter 
+  */
   .content-filter {
     display:grid;
     grid-template-columns: repeat(1, 2fr);
@@ -992,11 +1570,17 @@ input.check{
     margin-bottom:10px;
   }
 
+  /* 
+    Adjust layout for search field 
+  */
   .search {
     grid-area:search;
     grid-column: span 2;
   }
 
+  /* 
+    Adjustments for showing area 
+  */
   #show {
     grid-area:showing;
     width:90%;
@@ -1004,16 +1588,25 @@ input.check{
     justify-self: center;
   }
 
+  /* 
+    Adjustments for buttons 
+  */
   .button {
     width:100%;
     align-self: center;
     justify-self: center;
   }
 
+  /* 
+    Margin for buttons inside .button class 
+  */
   .button button {
     margin:0 10px 0 10px;
   }
 
+  /* 
+    Grid layout adjustments for multiple-content 
+  */
   .multiple-content {
     display:grid;
     grid-template-columns: repeat(3, 2fr);
@@ -1021,21 +1614,50 @@ input.check{
 }
 
 @media (max-width: 950px) {
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+
+  /* 
+    Hide dependency column 
+  */
   .dependency-column {
     display:none;
+  }
+
+  /*
+    Reajustment of the direction of the plot container
+  */
+  .plot-detail > #plot-container {
+    flex-direction:column;
+  }
+
+  .checkboxesContainerDetail {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .detail-container {
+    margin-right:10px;
   }
 }
 
 @media (max-width: 800px) {
-  /* All pages */
+  /*------------------------------| All pages |------------------------------*/
+
+  /* 
+    Font size adjustments for various elements 
+  */
   .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3,
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
   .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
     font-size:18px;
   }
 
+  /* 
+    Font size set to 16px for specified elements 
+  */
   .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
   .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
   .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
@@ -1045,37 +1667,54 @@ input.check{
     font-size:16px;
   }
 
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+
+  /* 
+    Adjustments for form and multiple-content 
+  */
   .form, .multiple-content {
     display:grid;
     grid-template-columns: repeat(2, 2fr);
   }
 
-  /* TO CHANGE ? */
+  /* 
+    Hide method column 
+  */
   .method-column {
     display:none;
   }
 }
 
 @media (max-width: 700px) {
-  /* All pages */
+  /*------------------------------| All pages |------------------------------*/
+  
+  /* 
+    Font size adjustments for specified elements 
+  */
   .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .error,
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
   .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
     font-size:16px;
   }
 
+  /* 
+    Font size adjustments for specified elements 
+  */
   .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
   .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
   .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
   #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
   .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
-  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label {
+  .checkbox-label, .label-filename, .label-filename-errors, .label-contour, .label-subfolder, #addModDep label, #addAssumption label {
     font-size:14px;
   }
 
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+  
+  /* 
+    Layout adjustments for content-filter 
+  */
   .content-filter {
     grid-template-areas: 
       "search"
@@ -1083,15 +1722,24 @@ input.check{
       "showing";
   }
 
+  /* 
+    Adjustments for show area in responsive design 
+  */
   #show {
     grid-column: span 2;
   }
 
+  /* 
+    Adjustments for buttons in responsive design 
+  */
   .button {
     grid-area:buttons;
     padding-bottom: 20px;
   }
 
+  /* 
+    SVG adjustments 
+  */
   #plot-container svg {
     top: 0;
     left: 0;
@@ -1099,82 +1747,119 @@ input.check{
     height: 100%;
   }
 
+  /* 
+    Font size adjustments for specified elements 
+  */
   .tab td, .tab th, .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
     font-size:12px;
   }
 
-  /* TO CHANGE ? */
-  .variable-column {
-    display:none;
-  }
-}
-
-@media (max-width: 600px) {
-  /* All pages */
-  .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .error,
-  .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
-  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
-    font-size:14px;
-  }
-
-  .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
-  .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
-  .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
-  #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
-  .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
-  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
-  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #showP, #show, #vld, 
-  #reset, .ConsV, .Meth, .ConsT, .Dep, .DepS, .Ass, .Ass2, .filter #Search, .modifyinput, .enabledinput, .insertinput, .file-input {
-    font-size:12px;
-  }
-
-  /* TO CHANGE ? */
+  /* 
+    Hide data column 
+  */
   .data-column {
     display:none;
   }
 }
 
-@media (max-width: 500px) {
-  /* All pages */
-  .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .messageForLoad, 
+@media (max-width: 600px) {
+  /*------------------------------| All pages |------------------------------*/
+
+  /* 
+    Font size adjustments for specified elements 
+  */
+  .modify-page h1, .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .error,
   .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
-  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3, .error,
-  #subfoldersContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3,
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+    font-size:14px;
+  }
+
+  /* 
+    Font size adjustments for specified elements 
+  */
+  .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
+  .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
+  .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
+  #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
+  .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
+  .checkbox-label, .label-filename, .label-filename-errors, .label-contour, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
+  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #entries-button, #showP, #show, #vld, 
+  #reset, .ConsV, .Meth, .ConsT, .Dep, .DepS, .Ass, .Ass2, .filter #Search, .modifyinput, .enabledinput, .insertinput, .file-input {
     font-size:12px;
   }
 
+  /* 
+    Hide variable column 
+  */
+  .variable-column {
+    display:none;
+  }
+}
+
+@media (max-width: 500px) {
+  /*------------------------------| All pages |------------------------------*/
+
+  /* 
+    Font size adjustments for specified elements 
+  */
+  .titlefile h1, .titlefile h2, .models-span, .assumptions-span, .titlecat, .modify-name h3, .modify-ref h3, .modify-method h3, .messageForLoad, 
+  .modify-constrain h3, .modify-assumptions h3, .modify-model h3, .titlecat, .homepage h1, .homepage h2, .email h3, .team h3, .citation h3, .validation-button span, 
+  .acknowledgments h3, .span-login, .navbar-links a, .title-dclasses h2, .flexSelect label, .filter #Search, #contoursContainer h3, #errorsContainer h3, .error,
+  #subfoldersContainer h3, #sigmaContainer h3, .nscontent label, .btnadd label, .methodcontent label, .constraincontent label, .refcontent label, .modelcontent label, .asscontent label {
+    font-size:12px;
+  }
+
+  /* 
+    Font size adjustments for specified elements 
+  */
   .modify-page h1, .homepage p, .email p, .team p, .citation p, .acknowledgments p, .tab-team td, .info-name p, .info-name a, .form-name label, .form-ref label, 
   .form-method label, .info-ref p, .info-ref a, .info-method p, .form-constrain label, .info-constrain p, .info-constrain a, .form-model p, 
   .form-model a, .form-assumptions p, .form-assumptions a, #extension-file, .formfilename label, .table-source table, .nameadd label, #addM label, 
   #addC label, .table-reference table, .inputadd label, #addMo label, .table-modeldep table, #addA label, .divmodeldesc, .divassumptionsdesc, 
   .source-div p, .method-div p, .ref-div p, .ref-div details, .constraint-div p, .form div label, #btndwnl, #btnmodify, #btnremove, .edit-paragraph,
-  .checkbox-label, .label-filename, .label-filename-errors, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
-  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #showP, #show, #vld, 
+  .checkbox-label, .label-filename, .label-filename-errors, .label-contour, .label-subfolder, #addModDep label, #addAssumption label, .updateBtn, .deleteBtn, .addModDep, 
+  .addAssumption, #createDep, #createAss, .submit-button, .load-button, .addN, .createSRV, .addR, .removeMA, #go-back, #dwnlF, #dwnlB, #entries-button, #showP, #show, #vld, 
   #reset, .ConsV, .Meth, .ConsT, .Dep, .DepS, .Ass, .Ass2, .filter #Search, .modifyinput, .enabledinput, .insertinput, .file-input, .tab td, .tab th,
   .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
     font-size:10px;
   }
 
-  /* Visu_data page */
+  /*------------------------------| Visu_data page |------------------------------*/
+  
+  /* 
+    Adjustments for multiple-content 
+  */
   .multiple-content {
     display:grid;
     grid-template-columns: repeat(1, 2fr);
   }
 
+  /* 
+    Margin bottom adjustment for #vld 
+  */
   #vld {
     margin-bottom:10px;
   }
 
+  /* 
+    Styles for navbar-Compare 
+  */
   .navbar-Compare {
     height:60px;
     width:140px;
   }
 
+  /* 
+    Font size adjustment for hamburger-menu 
+  */
   .hamburger-menu {
     font-size:1.3em;
   }
 
+  /* 
+    Size adjustments for image classes 
+  */
   .dwnl-image, .plus-image {
     width:20px;
     height:20px;
@@ -1182,17 +1867,27 @@ input.check{
 }
 
 @media (max-width: 400px) {
-  /* All pages */
+  /*------------------------------| All pages |------------------------------*/
+
+  /* 
+    Size adjustments for image classes 
+  */
   .plus-image, .dwnl-image, .checkbox-image {
     width:15px;
     height:15px;
   }
 
+  /* 
+    Font size adjustments for specified elements 
+  */
   .tab td, .tab th, .titlefile h2, .modify-page h1, .info-name a, .info-ref a, .info-method a, .info-constrain a, .form-model a, .form-assumptions a,
   .label-filename, .label-filename-errors, .assumption-popup p, .assumption-popup ul, .model-popup p, .model-popup ul {
     font-size:9px;
   }
 
+  /* 
+    Padding adjustment for container 
+  */
   .container {
     padding:10px;
   }

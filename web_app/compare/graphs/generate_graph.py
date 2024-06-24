@@ -11,6 +11,31 @@ import matplotlib
 matplotlib.use('agg')
 
 def plot_contours_from_h5(file_path):
+    """
+    Plot contours and Gaussian distributions from data stored in HDF5 files.
+
+    Depending on the file type identified by `file_path`, this function performs
+    different plotting tasks:
+    - For files ending with "ProbaDistrib.h5" or "MCMCSamples.h5", it plots contour
+      plots from the extracted data.
+    - For files containing "NS_Mass" and ending with "MeanErrors.h5", it plots
+      probability density plots (Gaussian distributions).
+    - For files containing "NS_Spin" and ending with "MeanErrors.h5", it returns
+      an empty list and no HTML object.
+
+    Args:
+        file_path (str): Path to the HDF5 file containing the data.
+
+    Returns:
+        str or int, list: If plotting is performed, returns HTML representation
+        of the plot and unique colors used. If specific conditions are met,
+        returns early with 0 and an empty list.
+
+    Notes:
+        This function utilizes Matplotlib and MPLD3 for plotting and HTML export.
+        It relies on specific data structure within HDF5 files as outlined in the
+        code.
+    """
 
     if file_path.endswith("ProbaDistrib.h5") or file_path.endswith("MCMCSamples.h5"):
 

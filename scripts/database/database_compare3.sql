@@ -224,7 +224,7 @@ DROP TABLE IF EXISTS `constrain_ns`;
 CREATE TABLE `constrain_ns` (
   `id_Constrain` int NOT NULL AUTO_INCREMENT,
   `ConstrainType` enum('MCMC samples','Posterior samples','Quantiles','mean +/- 1 sigma','Probability distribution','Chi2 contours') NOT NULL,
-  `constrainvariable` enum('M','R','M-R','F','L','M-L') NOT NULL,
+  `constrainvariable` enum('M','R','M-R','F','L','M-L', 'R-T', 'M/R', 'M-Rinf') NOT NULL,
   `ConstrainVersion` int NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_Constrain`)
 ) ENGINE=InnoDB AUTO_INCREMENT=307 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

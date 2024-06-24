@@ -261,12 +261,14 @@ Visu_data
                                 </a>
                             {% endif %}
                         </td>
-                        <td class="checkbox-column"><input type="checkbox" value='{{q.h5_filename}}' class="dwnl checkbox-image" name="che"></td>
+                        <td class="checkbox-column"><input type="checkbox" value='{{q.h5_filename}}' class="dwnl" name="che"></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+
+        <br><br><br>
 
         <div class="pagination">
             {% if page_obj.has_previous %}
@@ -289,6 +291,14 @@ Visu_data
                 <span class="disabled">&raquo;</span>
             {% endif %}
         </div>
+
+        <br><br><br>
+
+        <div class="entries-container">
+            <button id="entries-button" onclick="toggleEntries()">Show all entries</button>
+        </div>
+
+        <br><br><br>
         
     </div>
 </div>

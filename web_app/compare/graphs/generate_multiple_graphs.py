@@ -11,6 +11,31 @@ import matplotlib
 matplotlib.use('agg')
 
 def plot_contours_from_checkboxes(selected_filepaths):
+    """
+    Plot contours and mean errors from selected HDF5 files.
+
+    This function generates a matplotlib figure displaying contours and mean error lines
+    based on selected HDF5 files. Depending on the file type identified in `selected_filepaths`,
+    the function performs different plotting tasks:
+    - For files ending with "ProbaDistrib.h5" or "MCMCSamples.h5", it extracts and plots contour
+      data.
+    - For files containing "NS_Mass" and ending with "MeanErrors.h5", it extracts and plots mean
+      error data.
+    - Additionally, it plots curves from .dat files found in subfolders of a predefined EOS data
+      folder.
+    
+    Args:
+        selected_filepaths (list): List of file paths to HDF5 files and .dat files.
+
+    Returns:
+        str, list, int: HTML representation of the plot, list of unique RGB colors used for EOS
+        data plots, and either 0 or list of unique RGB colors used for mean error plots.
+
+    Notes:
+        This function utilizes Matplotlib, MPLD3, and HDF5 data handling via h5py.
+        It expects specific data structures and naming conventions in HDF5 files for
+        contour and mean error plotting.
+    """
     # Create a new matplotlib figure
     fig, ax = plt.subplots()
 

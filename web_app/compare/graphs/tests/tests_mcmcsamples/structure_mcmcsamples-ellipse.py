@@ -52,20 +52,20 @@ def plot_with_confidence_ellipses(file_path):
     #plt.scatter(centre_masse, centre_rayon, c='r', marker='o', s=50, label='Centre du nuage de points')
 
     # Tracer les ellipses de confiance
-    #colors = ['g', 'm', 'c']  # Couleurs pour les contours
-    #for i, sigma in enumerate(sigmas):
-    #    width, height = 2 * sigma * np.sqrt(values)
-    #    print(f'Largeur ellipse {conf_levels[i]*100:.2f}% :', width)
-    #    print(f'Hauteur ellipse {conf_levels[i]*100:.2f}% :', height)
-    #    ellipse = Ellipse(xy=(centre_masse, centre_rayon), width=width, height=height, angle=angle, edgecolor=colors[i], lw=2, fill=False, label=f'{conf_levels[i]*100:.2f}%')
-    #    print('Ellipse :', ellipse)
-    #    # Ne tracer l'ellipse que dans les limites des données
-    #    ellipse.set_clip_box(plt.gca().bbox)
-    #    plt.gca().add_patch(ellipse)
+    colors = ['g', 'm', 'c']  # Couleurs pour les contours
+    for i, sigma in enumerate(sigmas):
+        width, height = 2 * sigma * np.sqrt(values)
+        print(f'Largeur ellipse {conf_levels[i]*100:.2f}% :', width)
+        print(f'Hauteur ellipse {conf_levels[i]*100:.2f}% :', height)
+        ellipse = Ellipse(xy=(centre_masse, centre_rayon), width=width, height=height, angle=angle, edgecolor=colors[i], lw=2, fill=False, label=f'{conf_levels[i]*100:.2f}%')
+        print('Ellipse :', ellipse)
+        # Ne tracer l'ellipse que dans les limites des données
+        ellipse.set_clip_box(plt.gca().bbox)
+        plt.gca().add_patch(ellipse)
 
     plt.xlabel('Rayon (km)')
     plt.ylabel('Masse (Msun)')
-    plt.title('Nuage de points avec contours de niveaux de confiance')
+    plt.title('Nuage de points')
     plt.legend()
 
     # Définir les limites du graphe en fonction des données

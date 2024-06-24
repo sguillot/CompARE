@@ -1,3 +1,6 @@
+// Object to store checkbox status
+var checkboxState = {};
+
 /** 
  * When a checkboxes of a side panel is checked 
  * We get checkboxes checked
@@ -21,6 +24,21 @@ $(document).ready(function(){
       ajaxRequest(checkList , select , search);
     })
 })
+
+/**
+ * This part of the code runs when the DOM is fully loaded.
+ * It adds an event handler that listens for changes in the state
+ * checkboxes with the 'dwnl' class.
+ * When a checkbox is checked or unchecked, its state is recorded
+ * in a 'checkboxState' object, using the file name as a key.
+ */
+$(document).ready(function() {
+  $(document).on('change', '.dwnl', function() {
+    var filename = $(this).val(); 
+    var isChecked = $(this).prop('checked'); 
+    checkboxState[filename] = isChecked;
+  });
+});
 
 /** 
  * Function to adjust SVG figures
@@ -76,17 +94,34 @@ function toggleMenu() {
   }
 }
 
+/**
+ * Toggles the state of the entries based on the button's current text.
+ */
+function toggleEntries() {
+  var button = $('#entries-button');
+  
+  if (button.text() === "Show all entries") {
+    $('input[type="checkbox"].check').prop('checked', true);
+    document.querySelector('.pagination').style.display = 'none';
+    button.text("Return to initial state");
+    ajaxRequest(getCheckboxesFilter(), getSelect(), getSearch());
+  } else if (button.text() === "Return to initial state") {
+    window.location.href = "/visu/";
+  }
+}
+
 /** 
  * Select all checked checkboxes off the table 
  * Return a list of their values
  */
-function getCheckboxesTab(){
-  var checkboxes = document.querySelectorAll('input[type="checkbox"].dwnl:checked');
+function getCheckboxesTab() {
   var values = [];
-  checkboxes.forEach((checkbox) => {
-    values.push(checkbox.value);
-  });
-  return(values);
+  for (var filename in checkboxState) {
+    if (checkboxState.hasOwnProperty(filename) && checkboxState[filename]) {
+      values.push(filename);
+    }
+  }
+  return values;
 }
 
 /**
@@ -278,8 +313,14 @@ function resetFilters() {
 
   // Click on the validation button to reset the table
   document.getElementById('vld').click();
-}
 
+  // Hide the pagination
+  document.querySelector('.pagination').style.display = 'none';
+
+  // Change the button text
+  var button = $('#entries-button');
+  button.text("Return to initial state");
+}
 
 /**
  * When user click on the magnifier
@@ -343,8 +384,29 @@ function loadPage(page) {
           if(data.table != null) {
               $('#firstTable').html($(data.table).find('#firstTable').html());
               $('.pagination').html($(data.table).find('.pagination').html());
+
+              restoreCheckboxState();
           }
       }
+  });
+}
+
+/**
+ * This function is responsible for restoring the state of checkboxes
+ * according to the values stored in the 'checkboxState' object.
+ * It scans all checkboxes with the '.dwnl' class and checks
+ * if their state has been previously saved. If so, it restores the checkbox's
+ * checkbox state accordingly.
+ */
+function restoreCheckboxState() {
+  // Browse each checkbox
+  $('.dwnl').each(function() {
+    var filename = $(this).val();
+    // Check whether this checkbox has a saved state
+    if (checkboxState.hasOwnProperty(filename)) {
+      // Restore checkbox status
+      $(this).prop('checked', checkboxState[filename]);
+    }
   });
 }
 
@@ -373,7 +435,9 @@ function ajaxRequest(checkList , select , search){
       if(data.length !== data[0].countns) {
         document.querySelector('.pagination').style.display = 'none';
       } else {
-        document.querySelector('.pagination').style.display = 'block';
+        // Change the button text
+        var button = $('#entries-button');
+        button.text("Return to initial state");
       }
 
       // Get all the elements that we need
@@ -465,7 +529,7 @@ function ajaxRequest(checkList , select , search){
 
         let checkdo = row.insertCell(10);
         checkdo.classList.add('checkbox-column');
-        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.h5_filename+" class='dwnl checkbox-image' name='che'> </td>";
+        checkdo.innerHTML = "<td><input type='checkbox' value="+ d.h5_filename+" class='dwnl' name='che'> </td>";
 
       })
     }

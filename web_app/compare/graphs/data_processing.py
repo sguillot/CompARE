@@ -39,9 +39,6 @@ def process_data_to_h5(file_path):
     Args:
         file_path (str): The path of the data file to be processed.
     """
-
-    print(os.path.basename(file_path))
-
     if file_path.endswith("ProbaDistrib.txt"):
 
         print(f"Processing ProbaDistrib file: {file_path}")
