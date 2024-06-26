@@ -138,6 +138,21 @@ If this does not work, try installing individually the packages listed in `requi
 [//]: # (PORT = Mysql Port &#40;default used by mysql is 3306&#41;)
 
 
+### How and when execute `main.py`
+
+The `main.py` script is designed to generate a set of HDF5 files from source data files. These HDF5 files are then used within the application to create various graphs.
+
+- Before running the script, make sure you have all the necessary Python extensions installed. These dependencies are essential for the script to function correctly.
+- Ensure that you have a local copy of the project and have installed the database locally too. This means you should have all the files and directories of the project accessible on your local machine, as well as the database linked to your web application.
+- Open your terminal or command prompt and navigate to the directory where the `main.py` script is located and execute the `main.py` script.
+
+You can do this by entering the following command: 
+    
+    cd path/to/CompARE/scripts/
+    python main.py
+
+After running the script, you will find the generated HDF5 files in the following directory: `web_app/compare/static/h5`.
+
 ### Run the web app server and open the web app interface
 
 In a terminal:
