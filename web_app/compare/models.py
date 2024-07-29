@@ -104,6 +104,9 @@ class ConstrainNs(models.Model):
                      ("F", "F"),
                      ("L", "L"),
                      ("M-L", "M-L"),
+                     ("R-T", "R-T"),
+                     ("M/R", "M/R"),
+                     ("M-Rinf", "M-Rinf"),
                      ]
 
     # Field names are made lowercase

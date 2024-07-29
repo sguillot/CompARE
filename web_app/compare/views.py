@@ -1415,7 +1415,7 @@ def insert_data(request):
                         datal = None
 
                     if RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
-                                            doi=doi,repositorydoi=repdoi ,datalink=datal):
+                                            doi=doi,repositorydoi=repdoi, datalink=datal):
                         idR = RefNs.objects.filter(author=auth, refyear=year, short=short, bibtex=bibtex,
                                                    doi=doi, repositorydoi=repdoi, datalink=datal)
                         idR = idR[0]
@@ -1424,7 +1424,6 @@ def insert_data(request):
                                     doi=doi, repositorydoi=repdoi, datalink=datal)
                         ref.save()
                         idR = RefNs.objects.latest('id_ref')
-
 
                     # we create the new NS
                     file = Ns(filename=filename,
