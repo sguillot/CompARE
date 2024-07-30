@@ -1260,23 +1260,31 @@ def insert_data(request):
                     elif((len(listmo) != len(listmosec)) or
                          (len(listmo) != len(listmodesc)) or
                          (len(listmo) != len(listmodepref))):
-                        not_inserted[filename] = "mismatch in input model dependencies: " \
-                                                 "{} primary, {} secondary, {} descriptions, " \
-                                                 "and {} references".format(len(listmo),
-                                                                            len(listmosec),
-                                                                            len(listmodesc),
-                                                                            len(listassref))
+
+                        if any(' \n' in mo for mo in listmo) or any(' \n' in mo for mo in listmosec):
+                            not_inserted[filename] = "input CSV contains ' \\n' in Model Primary or Secondary"
+                        else:
+                            not_inserted[filename] = "mismatch in input model dependencies: " \
+                                                     "{} primary, {} secondary, {} descriptions, " \
+                                                     "and {} references".format(len(listmo),
+                                                                                len(listmosec),
+                                                                                len(listmodesc),
+                                                                                len(listassref))
                         continue
 
                     elif((len(listass) != len(listasssec)) or
                          (len(listass) != len(listassdesc)) or
                          (len(listass) != len(listassref))):
-                        not_inserted[filename] = "has a mismatch in input assumptions " \
-                                                 "{} primary, {} secondary, {} descriptions, " \
-                                                 "and {} references".format(len(listass),
-                                                                            len(listasssec),
-                                                                            len(listassdesc),
-                                                                            len(listassref))
+
+                        if any(' \n' in ass for ass in listass) or any(' \n' in ass for ass in listasssec):
+                            not_inserted[filename] = "input CSV contains ' \\n' in Assumptions Primary or Secondary"
+                        else:
+                            not_inserted[filename] = "has a mismatch in input assumptions " \
+                                                     "{} primary, {} secondary, {} descriptions, " \
+                                                     "and {} references".format(len(listass),
+                                                                                len(listasssec),
+                                                                                len(listassdesc),
+                                                                                len(listassref))
                         continue
 
                     elif str(d['Method'][i]) not in me:
