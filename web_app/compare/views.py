@@ -1206,9 +1206,9 @@ def insert_data(request):
 
                     h5filename = d['H5FileName'][i]
 
-                    listmo = d['ModelDependenciesPrimary'][i].split(",")
+                    listmo = d['ModelDependenciesPrimary'][i].split(",\n")
 
-                    listmosec = d['ModelDependenciesSecondary'][i].split(",")
+                    listmosec = d['ModelDependenciesSecondary'][i].split(",\n")
 
                     listmodesc = d['ModelDependencyDescription'][i].split("\n")
                     listmodesc = [i for i in listmodesc if i]
@@ -1220,9 +1220,9 @@ def insert_data(request):
                     if len(listmodepref) == 0:
                         listmodepref = ['']  # Just a hack to avoid an empty list if there are no description provided
 
-                    listass = d['AssumptionsPrimary'][i].split(",")
+                    listass = d['AssumptionsPrimary'][i].split(",\n")
 
-                    listasssec = d['AssumptionsSecondary'][i].split(",")
+                    listasssec = d['AssumptionsSecondary'][i].split(",\n")
 
                     listassdesc = d['AssumptionsDescription'][i].split("\n")
                     listassdesc = [i for i in listassdesc if i]
@@ -1270,13 +1270,13 @@ def insert_data(request):
 
                     elif((len(listass) != len(listasssec)) or
                          (len(listass) != len(listassdesc)) or
-                         (len(listass) != len(listassdesc))):
+                         (len(listass) != len(listassref))):
                         not_inserted[filename] = "has a mismatch in input assumptions " \
                                                  "{} primary, {} secondary, {} descriptions, " \
                                                  "and {} references".format(len(listass),
                                                                             len(listasssec),
                                                                             len(listassdesc),
-                                                                            len(listassdesc))
+                                                                            len(listassref))
                         continue
 
                     elif str(d['Method'][i]) not in me:
