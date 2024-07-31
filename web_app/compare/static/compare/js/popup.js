@@ -11,8 +11,7 @@
  * @param {string} primLabel - The label for the primary item (either "mprim" or another value).
  * @param {string} secLabel - The label for the secondary item (either "msec" or another value).
  */
-function showPopup(element, popupClass, prim, sec, desc, ref_list, primLabel, secLabel) {
-    let references = ref_list.split(',');
+function showPopup(element, popupClass, prim, sec, desc, primLabel, secLabel) {
 
     // Determine which labels to display based on attribute names
     let primLabelText = primLabel === "mprim" ? "Primary Dependency" : "Primary Assumption";
@@ -24,10 +23,6 @@ function showPopup(element, popupClass, prim, sec, desc, ref_list, primLabel, se
             <p><strong>${primLabelText}:</strong> ${prim}</p>
             <p><strong>${secLabelText}:</strong> ${sec}</p>
             <p><strong>Description:</strong> ${desc}</p>
-            <p><strong>References:</strong></p>
-            <ul>
-                ${references.map(ref => `<li>${ref}</li>`).join('')}
-            </ul>
         </div>
     `;
 
